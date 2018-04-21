@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.party.PartyFileInApplication">
+	<resultMap id="PartyFileInApplication" type="com.hotent.makshi.model.party.PartyFileInApplication">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="user_num" column="F_USER_NUM" jdbcType="VARCHAR"/>
+		<result property="party_num" column="F_PARTY_NUM" jdbcType="VARCHAR"/>
+		<result property="contact_situation" column="F_CONTACT_SITUATION" jdbcType="VARCHAR"/>
+		<result property="account" column="F_ACCOUNT" jdbcType="VARCHAR"/>
+		<result property="out_contact" column="F_OUT_CONTACT" jdbcType="VARCHAR"/>
+		<result property="join_party_date" column="F_JOIN_PARTY_DATE" jdbcType="DATE"/>
+		<result property="out_tel" column="F_OUT_TEL" jdbcType="VARCHAR"/>
+		<result property="regular_date" column="F_REGULAR_DATE" jdbcType="DATE"/>
+		<result property="in_contact" column="F_IN_CONTACT" jdbcType="VARCHAR"/>
+		<result property="join_party_where" column="F_JOIN_PARTY_WHERE" jdbcType="VARCHAR"/>
+		<result property="in_tel" column="F_IN_TEL" jdbcType="VARCHAR"/>
+		<result property="regular_where" column="F_REGULAR_WHERE" jdbcType="VARCHAR"/>
+		<result property="place_of_influx" column="F_PLACE_OF_INFLUX" jdbcType="VARCHAR"/>
+		<result property="introducer" column="F_INTRODUCER" jdbcType="VARCHAR"/>
+		<result property="lost_date" column="F_LOST_DATE" jdbcType="DATE"/>
+		<result property="branch" column="F_BRANCH" jdbcType="VARCHAR"/>
+		<result property="abroad_date" column="F_ABROAD_DATE" jdbcType="DATE"/>
+		<result property="join_branch_date" column="F_JOIN_BRANCH_DATE" jdbcType="DATE"/>
+		<result property="abroad_reason" column="F_ABROAD_REASON" jdbcType="VARCHAR"/>
+		<result property="party_post" column="F_PARTY_POST" jdbcType="VARCHAR"/>
+		<result property="abroad_situation" column="F_ABROAD_SITUATION" jdbcType="VARCHAR"/>
+		<result property="org_relationship" column="F_ORG_RELATIONSHIP" jdbcType="VARCHAR"/>
+		<result property="party_handling" column="F_PARTY_HANDLING" jdbcType="VARCHAR"/>
+		<result property="out_date" column="F_OUT_DATE" jdbcType="DATE"/>
+		<result property="return_date" column="F_RETURN_DATE" jdbcType="DATE"/>
+		<result property="outgoing_flow" column="F_OUTGOING_FLOW" jdbcType="VARCHAR"/>
+		<result property="restore_org_life" column="F_RESTORE_ORG_LIFE" jdbcType="VARCHAR"/>
+		<result property="out_type" column="F_OUT_TYPE" jdbcType="VARCHAR"/>
+		<result property="reviewer" column="F_REVIEWER" jdbcType="VARCHAR"/>
+		<result property="out_reason" column="F_OUT_REASON" jdbcType="VARCHAR"/>
+		<result property="branch_review" column="F_BRANCH_REVIEW" jdbcType="VARCHAR"/>
+		<result property="activity_num" column="F_ACTIVITY_NUM" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_USER_NUM,F_PARTY_NUM,F_CONTACT_SITUATION,F_ACCOUNT,F_OUT_CONTACT,F_JOIN_PARTY_DATE,F_OUT_TEL,F_REGULAR_DATE,F_IN_CONTACT,F_JOIN_PARTY_WHERE,F_IN_TEL,F_REGULAR_WHERE,F_PLACE_OF_INFLUX,F_INTRODUCER,F_LOST_DATE,F_BRANCH,F_ABROAD_DATE,F_JOIN_BRANCH_DATE,F_ABROAD_REASON,F_PARTY_POST,F_ABROAD_SITUATION,F_ORG_RELATIONSHIP,F_PARTY_HANDLING,F_OUT_DATE,F_RETURN_DATE,F_OUTGOING_FLOW,F_RESTORE_ORG_LIFE,F_OUT_TYPE,F_REVIEWER,F_OUT_REASON,F_BRANCH_REVIEW,F_ACTIVITY_NUM
+	</sql>
+	<sql id="wfColumns">
+		ID,F_USER_NUM,F_PARTY_NUM,F_CONTACT_SITUATION,F_ACCOUNT,F_OUT_CONTACT,F_JOIN_PARTY_DATE,F_OUT_TEL,F_REGULAR_DATE,F_IN_CONTACT,F_JOIN_PARTY_WHERE,F_IN_TEL,F_REGULAR_WHERE,F_PLACE_OF_INFLUX,F_INTRODUCER,F_LOST_DATE,F_BRANCH,F_ABROAD_DATE,F_JOIN_BRANCH_DATE,F_ABROAD_REASON,F_PARTY_POST,F_ABROAD_SITUATION,F_ORG_RELATIONSHIP,F_PARTY_HANDLING,F_OUT_DATE,F_RETURN_DATE,F_OUTGOING_FLOW,F_RESTORE_ORG_LIFE,F_OUT_TYPE,F_REVIEWER,F_OUT_REASON,F_BRANCH_REVIEW,F_ACTIVITY_NUM
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(user_num)"> AND F_USER_NUM  LIKE '%${user_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(party_num)"> AND F_PARTY_NUM  LIKE '%${party_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(contact_situation)"> AND F_CONTACT_SITUATION  LIKE '%${contact_situation}%'  </if>
+			<if test="@Ognl@isNotEmpty(account)"> AND F_ACCOUNT  LIKE '%${account}%'  </if>
+			<if test="@Ognl@isNotEmpty(out_contact)"> AND F_OUT_CONTACT  LIKE '%${out_contact}%'  </if>
+			<if test="@Ognl@isNotEmpty(join_party_date)"> AND F_JOIN_PARTY_DATE  =#{join_party_date} </if>
+			<if test="@Ognl@isNotEmpty(beginjoin_party_date)"> AND F_JOIN_PARTY_DATE  >=#{beginjoin_party_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endjoin_party_date)"> AND F_JOIN_PARTY_DATE <![CDATA[ <=#{endjoin_party_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(out_tel)"> AND F_OUT_TEL  LIKE '%${out_tel}%'  </if>
+			<if test="@Ognl@isNotEmpty(regular_date)"> AND F_REGULAR_DATE  =#{regular_date} </if>
+			<if test="@Ognl@isNotEmpty(beginregular_date)"> AND F_REGULAR_DATE  >=#{beginregular_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endregular_date)"> AND F_REGULAR_DATE <![CDATA[ <=#{endregular_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(in_contact)"> AND F_IN_CONTACT  LIKE '%${in_contact}%'  </if>
+			<if test="@Ognl@isNotEmpty(join_party_where)"> AND F_JOIN_PARTY_WHERE  LIKE '%${join_party_where}%'  </if>
+			<if test="@Ognl@isNotEmpty(in_tel)"> AND F_IN_TEL  LIKE '%${in_tel}%'  </if>
+			<if test="@Ognl@isNotEmpty(regular_where)"> AND F_REGULAR_WHERE  LIKE '%${regular_where}%'  </if>
+			<if test="@Ognl@isNotEmpty(place_of_influx)"> AND F_PLACE_OF_INFLUX  LIKE '%${place_of_influx}%'  </if>
+			<if test="@Ognl@isNotEmpty(introducer)"> AND F_INTRODUCER  LIKE '%${introducer}%'  </if>
+			<if test="@Ognl@isNotEmpty(lost_date)"> AND F_LOST_DATE  =#{lost_date} </if>
+			<if test="@Ognl@isNotEmpty(beginlost_date)"> AND F_LOST_DATE  >=#{beginlost_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endlost_date)"> AND F_LOST_DATE <![CDATA[ <=#{endlost_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(branch)"> AND F_BRANCH  LIKE '%${branch}%'  </if>
+			<if test="@Ognl@isNotEmpty(abroad_date)"> AND F_ABROAD_DATE  =#{abroad_date} </if>
+			<if test="@Ognl@isNotEmpty(beginabroad_date)"> AND F_ABROAD_DATE  >=#{beginabroad_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endabroad_date)"> AND F_ABROAD_DATE <![CDATA[ <=#{endabroad_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(join_branch_date)"> AND F_JOIN_BRANCH_DATE  =#{join_branch_date} </if>
+			<if test="@Ognl@isNotEmpty(beginjoin_branch_date)"> AND F_JOIN_BRANCH_DATE  >=#{beginjoin_branch_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endjoin_branch_date)"> AND F_JOIN_BRANCH_DATE <![CDATA[ <=#{endjoin_branch_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(abroad_reason)"> AND F_ABROAD_REASON  LIKE '%${abroad_reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(party_post)"> AND F_PARTY_POST  LIKE '%${party_post}%'  </if>
+			<if test="@Ognl@isNotEmpty(abroad_situation)"> AND F_ABROAD_SITUATION  LIKE '%${abroad_situation}%'  </if>
+			<if test="@Ognl@isNotEmpty(org_relationship)"> AND F_ORG_RELATIONSHIP  LIKE '%${org_relationship}%'  </if>
+			<if test="@Ognl@isNotEmpty(party_handling)"> AND F_PARTY_HANDLING  LIKE '%${party_handling}%'  </if>
+			<if test="@Ognl@isNotEmpty(out_date)"> AND F_OUT_DATE  =#{out_date} </if>
+			<if test="@Ognl@isNotEmpty(beginout_date)"> AND F_OUT_DATE  >=#{beginout_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endout_date)"> AND F_OUT_DATE <![CDATA[ <=#{endout_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(return_date)"> AND F_RETURN_DATE  =#{return_date} </if>
+			<if test="@Ognl@isNotEmpty(beginreturn_date)"> AND F_RETURN_DATE  >=#{beginreturn_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endreturn_date)"> AND F_RETURN_DATE <![CDATA[ <=#{endreturn_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(outgoing_flow)"> AND F_OUTGOING_FLOW  LIKE '%${outgoing_flow}%'  </if>
+			<if test="@Ognl@isNotEmpty(restore_org_life)"> AND F_RESTORE_ORG_LIFE  LIKE '%${restore_org_life}%'  </if>
+			<if test="@Ognl@isNotEmpty(out_type)"> AND F_OUT_TYPE  LIKE '%${out_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(reviewer)"> AND F_REVIEWER  LIKE '%${reviewer}%'  </if>
+			<if test="@Ognl@isNotEmpty(out_reason)"> AND F_OUT_REASON  LIKE '%${out_reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(branch_review)"> AND F_BRANCH_REVIEW  LIKE '%${branch_review}%'  </if>
+			<if test="@Ognl@isNotEmpty(activity_num)"> AND F_ACTIVITY_NUM  LIKE '%${activity_num}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.party.PartyFileInApplication">
+		INSERT INTO W_PARTY_FILE_IN_APPLICATION
+		(ID,
+		F_USER_NUM,F_PARTY_NUM,F_CONTACT_SITUATION,F_ACCOUNT,F_OUT_CONTACT,F_JOIN_PARTY_DATE,F_OUT_TEL,F_REGULAR_DATE,F_IN_CONTACT,F_JOIN_PARTY_WHERE,F_IN_TEL,F_REGULAR_WHERE,F_PLACE_OF_INFLUX,F_INTRODUCER,F_LOST_DATE,F_BRANCH,F_ABROAD_DATE,F_JOIN_BRANCH_DATE,F_ABROAD_REASON,F_PARTY_POST,F_ABROAD_SITUATION,F_ORG_RELATIONSHIP,F_PARTY_HANDLING,F_OUT_DATE,F_RETURN_DATE,F_OUTGOING_FLOW,F_RESTORE_ORG_LIFE,F_OUT_TYPE,F_REVIEWER,F_OUT_REASON,F_BRANCH_REVIEW,F_ACTIVITY_NUM)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{user_num,jdbcType=VARCHAR}, #{party_num,jdbcType=VARCHAR}, #{contact_situation,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{out_contact,jdbcType=VARCHAR}, #{join_party_date,jdbcType=DATE}, #{out_tel,jdbcType=VARCHAR}, #{regular_date,jdbcType=DATE}, #{in_contact,jdbcType=VARCHAR}, #{join_party_where,jdbcType=VARCHAR}, #{in_tel,jdbcType=VARCHAR}, #{regular_where,jdbcType=VARCHAR}, #{place_of_influx,jdbcType=VARCHAR}, #{introducer,jdbcType=VARCHAR}, #{lost_date,jdbcType=DATE}, #{branch,jdbcType=VARCHAR}, #{abroad_date,jdbcType=DATE}, #{join_branch_date,jdbcType=DATE}, #{abroad_reason,jdbcType=VARCHAR}, #{party_post,jdbcType=VARCHAR}, #{abroad_situation,jdbcType=VARCHAR}, #{org_relationship,jdbcType=VARCHAR}, #{party_handling,jdbcType=VARCHAR}, #{out_date,jdbcType=DATE}, #{return_date,jdbcType=DATE}, #{outgoing_flow,jdbcType=VARCHAR}, #{restore_org_life,jdbcType=VARCHAR}, #{out_type,jdbcType=VARCHAR}, #{reviewer,jdbcType=VARCHAR}, #{out_reason,jdbcType=VARCHAR}, #{branch_review,jdbcType=VARCHAR}, #{activity_num,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_PARTY_FILE_IN_APPLICATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.party.PartyFileInApplication">
+		UPDATE W_PARTY_FILE_IN_APPLICATION SET
+		F_USER_NUM=#{user_num,jdbcType=VARCHAR},
+		F_PARTY_NUM=#{party_num,jdbcType=VARCHAR},
+		F_CONTACT_SITUATION=#{contact_situation,jdbcType=VARCHAR},
+		F_ACCOUNT=#{account,jdbcType=VARCHAR},
+		F_OUT_CONTACT=#{out_contact,jdbcType=VARCHAR},
+		F_JOIN_PARTY_DATE=#{join_party_date,jdbcType=DATE},
+		F_OUT_TEL=#{out_tel,jdbcType=VARCHAR},
+		F_REGULAR_DATE=#{regular_date,jdbcType=DATE},
+		F_IN_CONTACT=#{in_contact,jdbcType=VARCHAR},
+		F_JOIN_PARTY_WHERE=#{join_party_where,jdbcType=VARCHAR},
+		F_IN_TEL=#{in_tel,jdbcType=VARCHAR},
+		F_REGULAR_WHERE=#{regular_where,jdbcType=VARCHAR},
+		F_PLACE_OF_INFLUX=#{place_of_influx,jdbcType=VARCHAR},
+		F_INTRODUCER=#{introducer,jdbcType=VARCHAR},
+		F_LOST_DATE=#{lost_date,jdbcType=DATE},
+		F_BRANCH=#{branch,jdbcType=VARCHAR},
+		F_ABROAD_DATE=#{abroad_date,jdbcType=DATE},
+		F_JOIN_BRANCH_DATE=#{join_branch_date,jdbcType=DATE},
+		F_ABROAD_REASON=#{abroad_reason,jdbcType=VARCHAR},
+		F_PARTY_POST=#{party_post,jdbcType=VARCHAR},
+		F_ABROAD_SITUATION=#{abroad_situation,jdbcType=VARCHAR},
+		F_ORG_RELATIONSHIP=#{org_relationship,jdbcType=VARCHAR},
+		F_PARTY_HANDLING=#{party_handling,jdbcType=VARCHAR},
+		F_OUT_DATE=#{out_date,jdbcType=DATE},
+		F_RETURN_DATE=#{return_date,jdbcType=DATE},
+		F_OUTGOING_FLOW=#{outgoing_flow,jdbcType=VARCHAR},
+		F_RESTORE_ORG_LIFE=#{restore_org_life,jdbcType=VARCHAR},
+		F_OUT_TYPE=#{out_type,jdbcType=VARCHAR},
+		F_REVIEWER=#{reviewer,jdbcType=VARCHAR},
+		F_OUT_REASON=#{out_reason,jdbcType=VARCHAR},
+		F_BRANCH_REVIEW=#{branch_review,jdbcType=VARCHAR},
+		F_ACTIVITY_NUM=#{activity_num,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="PartyFileInApplication">
+		SELECT <include refid="columns"/>
+		FROM W_PARTY_FILE_IN_APPLICATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="PartyFileInApplication">
+		SELECT <include refid="columns"/>
+		FROM W_PARTY_FILE_IN_APPLICATION   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

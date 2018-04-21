@@ -1,0 +1,15 @@
+<span>
+	<div ng-if="permission=='w' || permission=='b'">
+		<div class="custom-selector" ng-repeat="item in names">
+			 <span>${item}</span>
+			 <a class="btn btn-xs  fa-remove"  title="删除" ng-click="remove($index)"></a>
+		</div>
+		<a class="btn btn-sm btn-primary fa-search" ng-click="showDialog()">选择</a>		
+	</div>
+	<div ng-if="permission=='r' || permission=='rp'">
+		<span ng-repeat="item in names" class="custom-selector custom-selector-r" style="margin: 0;">${item}</span>
+	</div>
+	<div ng-if="permission=='button'">
+		<a class="btn btn-sm btn-primary " ng-click="showDialog()">经手合同</a>
+	</div>
+</span>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.honor.GroupHonor">
+	<resultMap id="GroupHonor" type="com.hotent.makshi.model.honor.GroupHonor">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="honor_num" column="F_HONOR_NUM" jdbcType="VARCHAR"/>
+		<result property="honor_name" column="F_HONOR_NAME" jdbcType="VARCHAR"/>
+		<result property="honor_level" column="F_HONOR_LEVEL" jdbcType="VARCHAR"/>
+		<result property="award_project" column="F_AWARD_PROJECT" jdbcType="VARCHAR"/>
+		<result property="issuing_authority" column="F_ISSUING_AUTHORITY" jdbcType="VARCHAR"/>
+		<result property="issuing_date" column="F_ISSUING_DATE" jdbcType="VARCHAR"/>
+		<result property="get_type" column="F_GET_TYPE" jdbcType="VARCHAR"/>
+		<result property="file" column="F_FILE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_HONOR_NUM,F_HONOR_NAME,F_HONOR_LEVEL,F_AWARD_PROJECT,F_ISSUING_AUTHORITY,F_ISSUING_DATE,F_GET_TYPE,F_FILE
+	</sql>
+	<sql id="wfColumns">
+		ID,F_HONOR_NUM,F_HONOR_NAME,F_HONOR_LEVEL,F_AWARD_PROJECT,F_ISSUING_AUTHORITY,F_ISSUING_DATE,F_GET_TYPE,F_FILE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(honor_num)"> AND F_HONOR_NUM  LIKE '%${honor_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(honor_name)"> AND F_HONOR_NAME  LIKE '%${honor_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(honor_level)"> AND F_HONOR_LEVEL  LIKE '%${honor_level}%'  </if>
+			<if test="@Ognl@isNotEmpty(award_project)"> AND F_AWARD_PROJECT  LIKE '%${award_project}%'  </if>
+			<if test="@Ognl@isNotEmpty(issuing_authority)"> AND F_ISSUING_AUTHORITY  LIKE '%${issuing_authority}%'  </if>
+			<if test="@Ognl@isNotEmpty(issuing_date)"> AND F_ISSUING_DATE  =#{issuing_date} </if>
+			<if test="@Ognl@isNotEmpty(beginissuing_date)"> AND F_ISSUING_DATE  >=#{beginissuing_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endissuing_date)"> AND F_ISSUING_DATE <![CDATA[ <=#{endissuing_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(get_type)"> AND F_GET_TYPE  LIKE '%${get_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(file)"> AND F_FILE  LIKE '%${file}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.honor.GroupHonor">
+		INSERT INTO W_GROUP_HONOR
+		(ID,
+		F_HONOR_NUM,F_HONOR_NAME,F_HONOR_LEVEL,F_AWARD_PROJECT,F_ISSUING_AUTHORITY,F_ISSUING_DATE,F_GET_TYPE,F_FILE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{honor_num,jdbcType=VARCHAR}, #{honor_name,jdbcType=VARCHAR}, #{honor_level,jdbcType=VARCHAR}, #{award_project,jdbcType=VARCHAR}, #{issuing_authority,jdbcType=VARCHAR}, #{issuing_date,jdbcType=VARCHAR}, #{get_type,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_GROUP_HONOR 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.honor.GroupHonor">
+		UPDATE W_GROUP_HONOR SET
+		F_HONOR_NUM=#{honor_num,jdbcType=VARCHAR},
+		F_HONOR_NAME=#{honor_name,jdbcType=VARCHAR},
+		F_HONOR_LEVEL=#{honor_level,jdbcType=VARCHAR},
+		F_AWARD_PROJECT=#{award_project,jdbcType=VARCHAR},
+		F_ISSUING_AUTHORITY=#{issuing_authority,jdbcType=VARCHAR},
+		F_ISSUING_DATE=#{issuing_date,jdbcType=VARCHAR},
+		F_GET_TYPE=#{get_type,jdbcType=VARCHAR},
+		F_FILE=#{file,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="GroupHonor">
+		SELECT <include refid="columns"/>
+		FROM W_GROUP_HONOR
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="GroupHonor">
+		SELECT <include refid="columns"/>
+		FROM W_GROUP_HONOR   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

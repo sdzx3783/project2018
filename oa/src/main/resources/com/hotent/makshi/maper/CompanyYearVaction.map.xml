@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.vacation.CompanyYearVaction">
+	<resultMap id="CompanyYearVaction" type="com.hotent.makshi.model.vacation.CompanyYearVaction">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="creatorID" column="F_CREATORID" jdbcType="VARCHAR"/>
+		<result property="updatorID" column="F_UPDATORID" jdbcType="VARCHAR"/>
+		<result property="year" column="F_YEAR" jdbcType="VARCHAR"/>
+		<result property="days" column="F_DAYS" jdbcType="DOUBLE"/>
+		<result property="ctime" column="F_CTIME" jdbcType="DATE"/>
+		<result property="utime" column="F_UTIME" jdbcType="DATE"/>
+		<result property="creator" column="F_CREATOR" jdbcType="VARCHAR"/>
+		<result property="updator" column="F_UPDATOR" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_CREATORID,F_UPDATORID,F_YEAR,F_DAYS,F_CTIME,F_UTIME,F_CREATOR,F_UPDATOR
+	</sql>
+	<sql id="wfColumns">
+		ID,F_CREATORID,F_UPDATORID,F_YEAR,F_DAYS,F_CTIME,F_UTIME,F_CREATOR,F_UPDATOR
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(creatorID)"> AND F_CREATORID  LIKE '%${creatorID}%'  </if>
+			<if test="@Ognl@isNotEmpty(updatorID)"> AND F_UPDATORID  LIKE '%${updatorID}%'  </if>
+			<if test="@Ognl@isNotEmpty(year)"> AND F_YEAR  LIKE '%${year}%'  </if>
+			<if test="@Ognl@isNotEmpty(days)"> AND F_DAYS  =#{days} </if>
+			<if test="@Ognl@isNotEmpty(ctime)"> AND F_CTIME  =#{ctime} </if>
+			<if test="@Ognl@isNotEmpty(beginctime)"> AND F_CTIME  >=#{beginctime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endctime)"> AND F_CTIME <![CDATA[ <=#{endctime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(utime)"> AND F_UTIME  =#{utime} </if>
+			<if test="@Ognl@isNotEmpty(beginutime)"> AND F_UTIME  >=#{beginutime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endutime)"> AND F_UTIME <![CDATA[ <=#{endutime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(creator)"> AND F_CREATOR  LIKE '%${creator}%'  </if>
+			<if test="@Ognl@isNotEmpty(updator)"> AND F_UPDATOR  LIKE '%${updator}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.vacation.CompanyYearVaction">
+		INSERT INTO W_COMPANY_YEAR_VACTION
+		(ID,
+		F_CREATORID,F_UPDATORID,F_YEAR,F_DAYS,F_CTIME,F_UTIME,F_CREATOR,F_UPDATOR)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{creatorID,jdbcType=VARCHAR}, #{updatorID,jdbcType=VARCHAR}, #{year,jdbcType=VARCHAR}, #{days,jdbcType=DOUBLE}, #{ctime,jdbcType=DATE}, #{utime,jdbcType=DATE}, #{creator,jdbcType=VARCHAR}, #{updator,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_COMPANY_YEAR_VACTION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.vacation.CompanyYearVaction">
+		UPDATE W_COMPANY_YEAR_VACTION SET
+		F_CREATORID=#{creatorID,jdbcType=VARCHAR},
+		F_UPDATORID=#{updatorID,jdbcType=VARCHAR},
+		F_YEAR=#{year,jdbcType=VARCHAR},
+		F_DAYS=#{days,jdbcType=DOUBLE},
+		F_CTIME=#{ctime,jdbcType=DATE},
+		F_UTIME=#{utime,jdbcType=DATE},
+		F_CREATOR=#{creator,jdbcType=VARCHAR},
+		F_UPDATOR=#{updator,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="CompanyYearVaction">
+		SELECT <include refid="columns"/>
+		FROM W_COMPANY_YEAR_VACTION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getByYear"  resultMap="CompanyYearVaction">
+		SELECT <include refid="columns"/>
+		FROM W_COMPANY_YEAR_VACTION
+		WHERE
+		F_year=#{year}
+	</select>
+	
+	<select id="getAll" resultMap="CompanyYearVaction">
+		SELECT <include refid="columns"/>
+		FROM W_COMPANY_YEAR_VACTION   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

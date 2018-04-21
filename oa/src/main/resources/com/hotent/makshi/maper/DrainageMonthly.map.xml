@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.operation.DrainageMonthly">
+	<resultMap id="DrainageMonthly" type="com.hotent.makshi.model.operation.DrainageMonthly">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="editerID" column="F_EDITERID" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="item" column="F_ITEM" jdbcType="VARCHAR"/>
+		<result property="grop" column="F_GROP" jdbcType="VARCHAR"/>
+		<result property="month" column="F_MONTH" jdbcType="VARCHAR"/>
+		<result property="editer" column="F_EDITER" jdbcType="VARCHAR"/>
+		<result property="edit_date" column="F_EDIT_DATE" jdbcType="DATE"/>
+		<result property="remarks" column="F_REMARKS" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.operation.DrainageMonthly" id="ExtDrainageMonthly" extends="DrainageMonthly">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_EDITERID,F_NAME,F_ITEM,F_GROP,F_MONTH,F_EDITER,F_EDIT_DATE,F_REMARKS,F_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_EDITERID,F_NAME,F_ITEM,F_GROP,F_MONTH,F_EDITER,F_EDIT_DATE,F_REMARKS,F_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+		finish = 1 AND deleted = 0
+			<if test="@Ognl@isNotEmpty(editerID)"> AND F_EDITERID  LIKE '%${editerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(item)"> AND F_ITEM  LIKE '%${item}%'  </if>
+			<!-- <if test="@Ognl@isNotEmpty(grop)"> AND F_GROP  LIKE '%${grop}%'  </if> -->
+			<if test="@Ognl@isNotEmpty(month)"> AND F_MONTH  LIKE '%${month}%'  </if>
+			<if test="@Ognl@isNotEmpty(editer)"> AND F_EDITER  LIKE '%${editer}%'  </if>
+			<if test="@Ognl@isNotEmpty(edit_date)"> AND F_EDIT_DATE  =#{edit_date} </if>
+			<if test="@Ognl@isNotEmpty(beginedit_date)"> AND F_EDIT_DATE  >=#{beginedit_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endedit_date)"> AND F_EDIT_DATE <![CDATA[ <=#{endedit_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(remarks)"> AND F_REMARKS  LIKE '%${remarks}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.operation.DrainageMonthly">
+		INSERT INTO W_DRAINAGE_MONTHLY
+		(ID,
+		F_EDITERID,F_NAME,F_ITEM,F_GROP,F_MONTH,F_EDITER,F_EDIT_DATE,F_REMARKS,F_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{editerID,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{item,jdbcType=VARCHAR}, #{grop,jdbcType=VARCHAR}, #{month,jdbcType=VARCHAR}, #{editer,jdbcType=VARCHAR}, #{edit_date,jdbcType=DATE}, #{remarks,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		UPDATE W_DRAINAGE_MONTHLY SET
+		DELETED = 1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.operation.DrainageMonthly">
+		UPDATE W_DRAINAGE_MONTHLY SET
+		F_EDITERID=#{editerID,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_ITEM=#{item,jdbcType=VARCHAR},
+		F_GROP=#{grop,jdbcType=VARCHAR},
+		F_MONTH=#{month,jdbcType=VARCHAR},
+		F_EDITER=#{editer,jdbcType=VARCHAR},
+		F_EDIT_DATE=#{edit_date,jdbcType=DATE},
+		F_REMARKS=#{remarks,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="DrainageMonthly">
+		SELECT <include refid="columns"/>
+		FROM W_DRAINAGE_MONTHLY
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="DrainageMonthly">
+		SELECT <include refid="columns"/>
+		FROM W_DRAINAGE_MONTHLY   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="DrainageMonthly">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_DRAINAGE_MONTHLY A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtDrainageMonthly">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_DRAINAGE_MONTHLY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_DRAINAGE_MONTHLY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_DRAINAGE_MONTHLY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_DRAINAGE_MONTHLY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_DRAINAGE_MONTHLY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="DrainageMonthly">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_DRAINAGE_MONTHLY A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

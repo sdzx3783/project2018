@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.river.HdProgrammeApproval">
+	<resultMap id="HdProgrammeApproval" type="com.hotent.makshi.model.river.HdProgrammeApproval">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="nameID" column="F_NAMEID" jdbcType="VARCHAR"/>
+		<result property="project_leaderID" column="F_PROJECT_LEADERID" jdbcType="VARCHAR"/>
+		<result property="department_headsID" column="F_DEPARTMENT_HEADSID" jdbcType="VARCHAR"/>
+		<result property="finalCheckerID" column="F_FINALCHECKERID" jdbcType="VARCHAR"/>
+		
+		<result property="stage_name" column="F_STAGE_NAME" jdbcType="VARCHAR"/>
+		<result property="date" column="F_DATE" jdbcType="DATE"/>
+		<result property="program_name" column="F_PROGRAM_NAME" jdbcType="VARCHAR"/>
+		<result property="content" column="F_CONTENT" jdbcType="VARCHAR"/>
+		<result property="note" column="F_NOTE" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="project_leader" column="F_PROJECT_LEADER" jdbcType="VARCHAR"/>
+		<result property="department_heads" column="F_DEPARTMENT_HEADS" jdbcType="VARCHAR"/>
+		<result property="isNeedCheck" column="F_ISNEEDCHECK" jdbcType="VARCHAR"/>
+		<result property="finalChecker" column="F_FINALCHECKER" jdbcType="VARCHAR"/>
+		<result property="projectTaskId" column="F_PROJECTTASKID" jdbcType="VARCHAR"/>
+	
+	    <result property="id1" column="ID1" jdbcType="NUMERIC"/>
+	    <result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+	    <result property="task_name" column="F_TASK_NAME" jdbcType="VARCHAR"/>
+	    <result property="project_name" column="F_PROJECT_NAME" jdbcType="VARCHAR"/>
+	    <result property="date" column="F_DATE" jdbcType="DATE"/>
+	    <result property="type" column="type" jdbcType="VARCHAR"/>
+	    
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.river.HdProgrammeApproval" id="ExtHdProgrammeApproval" extends="HdProgrammeApproval">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_NAMEID,F_PROJECT_LEADERID,F_DEPARTMENT_HEADSID,F_FINALCHECKERID,F_PROJECT_NAME,F_STAGE_NAME,F_TASK_NAME,F_NAME,F_DATE,F_PROGRAM_NAME,F_CONTENT,F_NOTE,F_ATTACHMENT,F_PROJECT_LEADER,F_DEPARTMENT_HEADS,F_ISNEEDCHECK,F_FINALCHECKER,F_PROJECTTASKID
+	</sql>
+	<sql id="wfColumns">
+		ID,F_NAMEID,F_PROJECT_LEADERID,F_DEPARTMENT_HEADSID,F_FINALCHECKERID,F_PROJECT_NAME,F_STAGE_NAME,F_TASK_NAME,F_NAME,F_DATE,F_PROGRAM_NAME,F_CONTENT,F_NOTE,F_ATTACHMENT,F_PROJECT_LEADER,F_DEPARTMENT_HEADS,F_ISNEEDCHECK,F_FINALCHECKER,F_PROJECTTASKID
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(nameID)"> AND F_NAMEID  LIKE '%${nameID}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_leaderID)"> AND F_PROJECT_LEADERID  LIKE '%${project_leaderID}%'  </if>
+			<if test="@Ognl@isNotEmpty(department_headsID)"> AND F_DEPARTMENT_HEADSID  LIKE '%${department_headsID}%'  </if>
+			<if test="@Ognl@isNotEmpty(finalCheckerID)"> AND F_FINALCHECKERID  LIKE '%${finalCheckerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(stage_name)"> AND F_STAGE_NAME  LIKE '%${stage_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(date)"> AND F_DATE  =#{date} </if>
+			<if test="@Ognl@isNotEmpty(begindate)"> AND F_DATE  >=#{begindate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(enddate)"> AND F_DATE <![CDATA[ <=#{enddate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(program_name)"> AND F_PROGRAM_NAME  LIKE '%${program_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(content)"> AND F_CONTENT  LIKE '%${content}%'  </if>
+			<if test="@Ognl@isNotEmpty(note)"> AND F_NOTE  LIKE '%${note}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_leader)"> AND F_PROJECT_LEADER  LIKE '%${project_leader}%'  </if>
+			<if test="@Ognl@isNotEmpty(department_heads)"> AND F_DEPARTMENT_HEADS  LIKE '%${department_heads}%'  </if>
+			<if test="@Ognl@isNotEmpty(isNeedCheck)"> AND F_ISNEEDCHECK  LIKE '%${isNeedCheck}%'  </if>
+			<if test="@Ognl@isNotEmpty(finalChecker)"> AND F_FINALCHECKER  LIKE '%${finalChecker}%'  </if>
+			
+			<if test="@Ognl@isNotEmpty(name)"> AND c.charge  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(task_name)"> AND c.taskname  LIKE '%${task_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_name)"> AND a.name  LIKE '%${project_name}%'  </if>
+		        
+		</where>
+	</sql>
+     <!-- 查询管养类项目阶段任务 -->
+     <select id="getSelect" parameterType="java.lang.Long" resultMap="HdProgrammeApproval">                  
+                    SELECT
+						 d. NAME type,
+						 c.charge F_NAME,
+						 c.taskname F_TASK_NAME,
+						 a. NAME F_PROJECT_NAME,
+						 c.startTime F_DATE,
+						 c.id id1
+						FROM
+						 w_project a,
+						 w_classify_library d,
+						 w_project_stage b,
+						 w_project_stage_task c
+						WHERE
+						 a.classifyLibraryId = d.id
+						AND a.id = b.proId and c.taskType=1
+						AND c.proStageId = b.id
+						AND (
+						  d.id = 20000001800009
+						 OR d.id = 20000001800012
+						)
+						AND (
+						 stageName = '月汇报'
+						 OR stageName = '工作报告'
+						 OR stageName = '内部检查'
+						 OR stageName = '方案审批'
+						)
+						and EXISTS(
+						 SELECT COUNT(*) ct from w_project_stage_task_field wf where c.id=wf.task_id and wf.isdelete=0 
+						 GROUP BY wf.ctime HAVING ct>0
+						)
+						and c.isDelete=0
+						
+						<if test="@Ognl@isNotEmpty(name)"> AND c.charge  LIKE '%${name}%'  </if>
+			            <if test="@Ognl@isNotEmpty(task_name)"> AND c.taskname  LIKE '%${task_name}%'  </if>
+			            <if test="@Ognl@isNotEmpty(project_name)"> AND a.name  LIKE '%${project_name}%'  </if>
+						UNION
+						
+						SELECT
+						 d. NAME type,
+						 c.charge F_NAME,
+						 c.taskname F_TASK_NAME,
+						 a. NAME F_PROJECT_NAME,
+						 c.startTime F_DATE,
+						 c.id id1
+						FROM
+						 w_project a,
+						 w_classify_library d,
+						 w_project_stage b,
+						 w_project_stage_task c
+						WHERE
+						 a.classifyLibraryId = d.id
+						AND a.id = b.proId and c.taskType=3 and CHAR_LENGTH(c.flowrunid)>0
+						AND c.proStageId = b.id
+						AND (
+						 d.id = 20000001800009
+						 OR d.id = 20000001800012
+						)
+						AND (
+						 stageName = '月汇报'
+						 OR stageName = '工作报告'
+						 OR stageName = '内部检查'
+						 OR stageName = '方案审批'
+						)
+						and c.isDelete=0
+						
+						<if test="@Ognl@isNotEmpty(name)"> AND c.charge  LIKE '%${name}%'  </if>
+			            <if test="@Ognl@isNotEmpty(task_name)"> AND c.taskname  LIKE '%${task_name}%'  </if>
+			            <if test="@Ognl@isNotEmpty(project_name)"> AND a.name  LIKE '%${project_name}%'  </if>
+						UNION
+						
+						SELECT
+						 d. NAME type,
+						 c.charge F_NAME,
+						 c.taskname F_TASK_NAME,
+						 a. NAME F_PROJECT_NAME,
+						 c.startTime F_DATE,
+						 c.id id1
+						FROM
+						 w_project a,
+						 w_classify_library d,
+						 w_project_stage b,
+						 w_project_stage_task c
+						WHERE
+						 a.classifyLibraryId = d.id
+						AND a.id = b.proId and c.taskType=2 and CHAR_LENGTH(c.uploadfile)>0
+						AND c.proStageId = b.id
+						AND (
+						 d.id = 20000001800009
+						 OR d.id = 20000001800012
+						)
+						AND (
+						 stageName = '月汇报'
+						 OR stageName = '工作报告'
+						 OR stageName = '内部检查'
+						 OR stageName = '方案审批'
+						)
+						and c.isDelete=0
+						
+                      <if test="@Ognl@isNotEmpty(name)"> AND c.charge  LIKE '%${name}%'  </if>
+			          <if test="@Ognl@isNotEmpty(task_name)"> AND c.taskname  LIKE '%${task_name}%'  </if>
+			          <if test="@Ognl@isNotEmpty(project_name)"> AND a.name  LIKE '%${project_name}%'  </if>
+		              <if test="@Ognl@isNotEmpty(orderField)">
+		              order by ${orderField} ${orderSeq}
+		              </if>
+		             
+                                 
+     </select>
+     
+     
+	<insert id="add" parameterType="com.hotent.makshi.model.river.HdProgrammeApproval">
+		INSERT INTO W_HD_PROGRAMME_APPROVAL
+		(ID,
+		F_NAMEID,F_PROJECT_LEADERID,F_DEPARTMENT_HEADSID,F_FINALCHECKERID,F_PROJECT_NAME,F_STAGE_NAME,F_TASK_NAME,F_NAME,F_DATE,F_PROGRAM_NAME,F_CONTENT,F_NOTE,F_ATTACHMENT,F_PROJECT_LEADER,F_DEPARTMENT_HEADS,F_ISNEEDCHECK,F_FINALCHECKER,F_PROJECTTASKID)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{nameID,jdbcType=VARCHAR}, #{project_leaderID,jdbcType=VARCHAR}, #{department_headsID,jdbcType=VARCHAR}, #{finalCheckerID,jdbcType=VARCHAR}, #{project_name,jdbcType=VARCHAR}, #{stage_name,jdbcType=VARCHAR}, #{task_name,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{date,jdbcType=DATE}, #{program_name,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, #{project_leader,jdbcType=VARCHAR}, #{department_heads,jdbcType=VARCHAR}, #{isNeedCheck,jdbcType=VARCHAR}, #{finalChecker,jdbcType=VARCHAR}, #{projectTaskId,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_HD_PROGRAMME_APPROVAL 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.river.HdProgrammeApproval">
+		UPDATE W_HD_PROGRAMME_APPROVAL SET
+		F_NAMEID=#{nameID,jdbcType=VARCHAR},
+		F_PROJECT_LEADERID=#{project_leaderID,jdbcType=VARCHAR},
+		F_DEPARTMENT_HEADSID=#{department_headsID,jdbcType=VARCHAR},
+		F_FINALCHECKERID=#{finalCheckerID,jdbcType=VARCHAR},
+		F_PROJECT_NAME=#{project_name,jdbcType=VARCHAR},
+		F_STAGE_NAME=#{stage_name,jdbcType=VARCHAR},
+		F_TASK_NAME=#{task_name,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_DATE=#{date,jdbcType=DATE},
+		F_PROGRAM_NAME=#{program_name,jdbcType=VARCHAR},
+		F_CONTENT=#{content,jdbcType=VARCHAR},
+		F_NOTE=#{note,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_PROJECT_LEADER=#{project_leader,jdbcType=VARCHAR},
+		F_DEPARTMENT_HEADS=#{department_heads,jdbcType=VARCHAR},
+		F_ISNEEDCHECK=#{isNeedCheck,jdbcType=VARCHAR},
+		F_FINALCHECKER=#{finalChecker,jdbcType=VARCHAR},
+		F_PROJECTTASKID=#{projectTaskId,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="HdProgrammeApproval">
+		SELECT <include refid="columns"/>
+		FROM W_HD_PROGRAMME_APPROVAL
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="HdProgrammeApproval">
+		SELECT <include refid="columns"/>
+		FROM W_HD_PROGRAMME_APPROVAL   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="HdProgrammeApproval">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HD_PROGRAMME_APPROVAL A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtHdProgrammeApproval">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_PROGRAMME_APPROVAL A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_PROGRAMME_APPROVAL A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_PROGRAMME_APPROVAL A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_PROGRAMME_APPROVAL A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_PROGRAMME_APPROVAL A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="HdProgrammeApproval">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HD_PROGRAMME_APPROVAL A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

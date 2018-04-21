@@ -1,0 +1,1119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.gates.Executive">
+	<resultMap id="Executive" type="com.hotent.makshi.model.gates.Executive">
+		 <result property="orgId" column="orgid" jdbcType="VARCHAR"/>
+		 <result property="orgName" column="orgname" jdbcType="VARCHAR"/>
+		 <result property="boy" column="boy" jdbcType="INTEGER"/>
+		 <result property="girl" column="girl" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<resultMap id="ExecutiveOrg" type="com.hotent.makshi.model.gates.ExecutiveOrg">
+		 <result property="orgId" column="orgid" jdbcType="VARCHAR"/>
+		 <result property="orgName" column="orgname" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	
+	<select id="getOrgsBySplitLevel" parameterType="map" resultMap="ExecutiveOrg">
+		select p.orgid,p.orgname from sys_org p where length(p.path)-length(replace(p.path,'.','')) = #{level} and p.ISDELETE=0
+	</select>
+	
+	<select id="getDepartmentPeople" parameterType="map" resultMap="Executive">
+		select orgid,orgname, max(case when sex=1 then c end) as boy,max(case when sex=0 then c end) as girl from (
+			select count(1) c, sex , ${orgid} orgid, (select orgname from sys_org w where w.orgid=#{orgid}) as orgname from sys_user u where u.USERID in (
+			     select distinct(t.USERID) from sys_user_pos t where t.ISDELETE=0 and t.ISPRIMARY = 1 and t.ORGID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0)
+			) and u.USERSTATUS not in ('实习','离职')  and (u.RESIGNATIONDATE is null or u.RESIGNATIONDATE = '') group by u.SEX
+		)tt
+		
+		<!--  select orgname,orgid, max(case when sex=1 then c end) as boy,max(case when sex=0 then c end) as girl from (
+		  select count(1) c, sex ,${orgid} orgid,(select orgname from sys_org w where w.orgid=#{orgid}) as orgname from sys_user_pos t inner join sys_user u
+		  on t.USERID = u.USERID
+		  where t.ISDELETE=0 and t.ORGID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0) 
+		  and u.USERSTATUS not in ('实习','离职') group by u.SEX
+		)tt -->
+
+	</select>
+	<!-- 获取大部门这个部门的人数，不包含子部门的人数 -->
+	<select id="getDepartmentMaxPeople" parameterType="map" resultMap="Executive">
+	     select orgid,orgname, max(case when sex=1 then c end) as boy,max(case when sex=0 then c end) as girl from (
+			select count(1) c, sex , ${orgid} orgid, (select orgname from sys_org w where w.orgid=#{orgid}) as orgname from sys_user u where u.USERID in (
+			     select distinct(t.USERID) from sys_user_pos t where t.ISDELETE=0 and t.ISPRIMARY = 1 and t.ORGID = #{orgid}
+			) and u.USERSTATUS not in ('实习','离职')  and (u.RESIGNATIONDATE is null or u.RESIGNATIONDATE = '') group by u.SEX
+		)tt
+		
+		<!--  select orgname,orgid, max(case when sex=1 then c end) as boy,max(case when sex=0 then c end) as girl from (
+		  select count(1) c, sex ,${orgid} orgid,(select orgname from sys_org w where w.orgid=#{orgid}) as orgname from sys_user_pos t inner join sys_user u
+		  on t.USERID = u.USERID
+		  where t.ISDELETE=0 and t.ORGID = #{orgid}
+		  and u.USERSTATUS not in ('实习','离职') group by u.SEX
+		)tt -->
+
+	</select>
+	
+	<resultMap id="ExecutiveContract" type="com.hotent.makshi.model.gates.ExecutiveContract">
+		 <result property="orgId" column="f_contract_departmentid" jdbcType="VARCHAR"/>
+		 <result property="orgName" column="f_contract_department" jdbcType="VARCHAR"/>
+		 <result property="f_contract_money1" column="f_contract_money1" jdbcType="DOUBLE"/>
+		 <result property="f_contract_money2" column="f_contract_money2" jdbcType="DOUBLE"/>
+		 <result property="f_contract_money3" column="f_contract_money3" jdbcType="DOUBLE"/>
+		 <result property="f_contract_money4" column="f_contract_money4" jdbcType="DOUBLE"/>
+		 <result property="f_contract_money5" column="f_contract_money5" jdbcType="DOUBLE"/>
+		 <result property="f_total" column="f_total" jdbcType="DOUBLE"/>
+	</resultMap>
+	
+	<select id="getContractTjByYears" parameterType="map" resultMap="ExecutiveContract">
+		select f_contract_department,f_contract_departmentid,f_contract_money1,f_contract_money2,
+		f_contract_money3,f_contract_money4,f_contract_money5,
+		(f_contract_money1+f_contract_money2+f_contract_money3+f_contract_money4+f_contract_money5) f_total 
+		from (
+		select f_contract_department,f_contract_departmentid,
+		ifnull(max(case when f_time=${time1} then f_contract_money end),0) f_contract_money1 ,
+		ifnull(max(case when f_time=${time2} then f_contract_money end),0) f_contract_money2 ,
+		ifnull(max(case when f_time=${time3} then f_contract_money end),0) f_contract_money3 ,
+		ifnull(max(case when f_time=${time4} then f_contract_money end),0) f_contract_money4 ,
+		ifnull(max(case when f_time=${time5} then f_contract_money end),0) f_contract_money5 
+		from
+		(
+		<!-- select  f_contract_department,f_contract_departmentid ,left(f_singing_time,4) f_time,count(1) f_total ,sum(F_contract_money) as f_contract_money
+		from W_CONTRACTINFO t where t.F_contract_type = 0 and t.F_singing_time !=''and t.F_singing_time is not null
+		 and left(f_singing_time,4) BETWEEN #{time5} and #{time1}
+		 group by left(f_singing_time,4),f_contract_department order by f_contract_department,left(f_singing_time,4) desc  -->
+		 
+		 select  (select orgname from sys_org q where t.F_contract_departmentID=q.orgid)f_contract_department,f_contract_departmentid ,
+			left(f_singing_time,4) f_time,count(1) f_total ,
+			sum(F_contract_money) as f_contract_money
+			from W_CONTRACTINFO t where t.F_contract_type = 0 
+			 and t.F_singing_time !=''and t.F_singing_time is not null
+			 and left(f_singing_time,4) BETWEEN #{time5} and #{time1}
+			and f_contract_departmentid !='' and f_contract_departmentid is not null
+			<if test="orgid != null and orgid != ''">
+				and f_contract_departmentid = #{orgid}
+			</if>
+			
+			 group by left(f_singing_time,4),f_contract_departmentid order by f_contract_departmentid,left(f_singing_time,4) desc 
+		 
+		)tt group by f_contract_department
+		)ww
+	</select>
+	
+	 <select id="getContractBillingByYears" parameterType="map" resultMap="ExecutiveContract">
+		select f_contract_department,f_contract_departmentid,f_contract_money1,f_contract_money2,
+			f_contract_money3,f_contract_money4,f_contract_money5,
+			(f_contract_money1+f_contract_money2+f_contract_money3+f_contract_money4+f_contract_money5) f_total 
+			from (
+				select   
+				(select orgname from sys_org q where tt.f_contract_departmentid=q.orgid)f_contract_department,
+				f_contract_departmentid,
+				ifnull(max(case when f_time=${time1} then F_arrival_money end),0) f_contract_money1 ,
+				ifnull(max(case when f_time=${time2} then F_arrival_money end),0) f_contract_money2 ,
+				ifnull(max(case when f_time=${time3} then F_arrival_money end),0) f_contract_money3 ,
+				ifnull(max(case when f_time=${time4} then F_arrival_money end),0) f_contract_money4 ,
+				ifnull(max(case when f_time=${time5} then F_arrival_money end),0) f_contract_money5 
+				from
+				(
+					select 
+						f_contract_departmentid ,
+						year(q.F_payment_date) f_time,
+						sum(F_arrival_money) F_arrival_money
+					 	from w_contract_billing_record q left join W_CONTRACTINFO t on q.REFID = t.ID
+					 	where t.f_contract_departmentid !='' and t.f_contract_departmentid is not null and year(q.F_payment_date) BETWEEN  #{time5} and #{time1}
+						<if test="orgid != null and orgid != ''">
+							and f_contract_departmentid = #{orgid}
+						</if>
+					 	group by year(q.F_payment_date),f_contract_departmentid order by f_contract_departmentid,year(q.F_payment_date) desc 
+				)tt group by f_contract_departmentid
+			)ww;
+	 </select>
+	
+	<resultMap id="ExecutiveAsset" type="com.hotent.makshi.model.gates.ExecutiveAsset">
+		 <result property="department_id" column="department_id" jdbcType="VARCHAR"/>
+		 <result property="department" column="department" jdbcType="VARCHAR"/>
+		 <result property="asset_code" column="asset_code" jdbcType="VARCHAR"/>
+		 <result property="asset_total" column="asset_total" jdbcType="DOUBLE"/>
+	</resultMap>
+	
+	<select id="getAssetCodes" resultType="java.lang.String">
+		select substring(F_asset_code,locate(']',F_asset_code)+1) as asset_code from w_asset_registration group by F_asset_code
+	</select>
+	
+	<select id="getAssetByOrgId" parameterType="map"  resultMap="ExecutiveAsset">
+		select ${orgid} as department_id,(select orgname from sys_org where orgid=#{orgid}) department, count(1) asset_total, 
+		substring(F_asset_code,locate(']',F_asset_code)+1) as asset_code from w_asset_registration t where  
+		t.F_use_departmentID in  (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0) 
+		group by t.F_asset_code
+		order by t.F_use_department desc
+	</select>
+	
+	<select id="getAssetMaxByOrgId" parameterType="map"  resultMap="ExecutiveAsset">
+		select ${orgid} as department_id,(select orgname from sys_org where orgid=#{orgid}) department, count(1) asset_total, 
+		substring(F_asset_code,locate(']',F_asset_code)+1) as asset_code from w_asset_registration t where
+		t.F_use_departmentID = #{orgid}
+		group by t.F_asset_code
+		order by t.F_use_department desc
+	</select>
+	
+	<select id="getRentHouseByOrgId" parameterType="map"  resultMap="ExecutiveAsset" >
+		 select ${orgid} as  department_id,(select orgname from sys_org where orgid=#{orgid} ) department, count(1) asset_total
+ 		from W_RENT_HOUSE_REGISTRATION t where   t.F_departmentID in  (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0) 
+	</select>
+	
+	<select id="getRentHouseMaxByOrgId" parameterType="map"  resultMap="ExecutiveAsset" >
+		 select ${orgid} as  department_id,(select orgname from sys_org where orgid=#{orgid} ) department, count(1) asset_total
+ 		from W_RENT_HOUSE_REGISTRATION t where   t.F_departmentID = #{orgid}
+	</select>
+	
+	
+	<resultMap type="com.hotent.makshi.model.gates.ExecutiveCertificate" id="ExecutiveCertificate">
+		<result property="certificate_total" column="certificate_total" jdbcType="VARCHAR"/>
+		<result property="type" column="type" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="getCertificateStatistics" resultMap="ExecutiveCertificate">
+		select  count(1) as certificate_total,  f_ctype as type from W_COMPANY_QUALIFICATION_CERTIFICATE t where t.F_status=0 and t.F_isdelete=0 group by f_ctype order by f_ctype asc
+	</select>
+	
+	
+	<resultMap id="ExecutiveAge" type="com.hotent.makshi.model.gates.ExecutiveAge">
+		 <result property="orgId" column="orgid" jdbcType="VARCHAR"/>
+		 <result property="orgName" column="orgname" jdbcType="VARCHAR"/>
+		 <result property="totals" column="totals" jdbcType="INTEGER"/>
+		 <result property="totals1" column="totals1" jdbcType="INTEGER"/>
+		 <result property="totals2" column="totals2" jdbcType="INTEGER"/>
+		 <result property="totals3" column="totals3" jdbcType="INTEGER"/>
+		 <result property="totals4" column="totals4" jdbcType="INTEGER"/>
+		 <result property="totals5" column="totals5" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="getPeopleAgesByOrgId" parameterType="map" resultMap="ExecutiveAge">
+		select ${orgid} orgid,(select orgname from sys_org w where w.orgid=#{orgid}) as orgname ,
+			 count(if(w.ages<![CDATA[<=]]>30,true,null)) totals1, count(if((30<![CDATA[<]]>w.ages and w.ages <![CDATA[<=]]>40),true,null)) totals2,
+			 count(if((40<![CDATA[<]]>w.ages and w.ages <![CDATA[<=]]>50),true,null)) totals3, count(if((50<![CDATA[<]]>w.ages and w.ages <![CDATA[<=]]>60),true,null)) totals4,
+			 count(if((w.ages >60),true,null)) totals5
+			 from sys_user u inner join 
+			 (
+			select distinct(t.USERID),q.ages from sys_user_pos t inner join ( 
+			   select distinct(F_userId)userId ,(${cutYear}-left(t.F_birthday,4)) ages from W_USER_INFOMATION t   where t.F_birthday != '' and t.F_birthday is not null
+			 )q on t.USERID = q.userId 
+			 where t.ISDELETE=0 and t.ISPRIMARY = 1 and t.ORGID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0) order by q.ages desc
+			)w on u.USERID = w.userid where u.USERSTATUS not in ('实习','离职')  and (u.RESIGNATIONDATE is null or u.RESIGNATIONDATE = '')
+	</select>
+	
+	<select id="getPeopleAgesMaxByOrgId" parameterType="map" resultMap="ExecutiveAge">
+		select ${orgid} orgid,(select orgname from sys_org w where w.orgid=#{orgid}) as orgname ,
+			 count(if(w.ages<![CDATA[<=]]>30,true,null)) totals1, count(if((30<![CDATA[<]]>w.ages and w.ages <![CDATA[<=]]>40),true,null)) totals2,
+			 count(if((40<![CDATA[<]]>w.ages and w.ages <![CDATA[<=]]>50),true,null)) totals3, count(if((50<![CDATA[<]]>w.ages and w.ages <![CDATA[<=]]>60),true,null)) totals4,
+			 count(if((w.ages >60),true,null)) totals5
+			 from sys_user u inner join 
+			 (
+			select distinct(t.USERID),q.ages from sys_user_pos t inner join ( 
+			   select distinct(F_userId)userId ,(${cutYear}-left(t.F_birthday,4)) ages from W_USER_INFOMATION t   where t.F_birthday != '' and t.F_birthday is not null
+			 )q on t.USERID = q.userId 
+			 where t.ISDELETE=0 and t.ISPRIMARY = 1 and t.ORGID = #{orgid} order by q.ages desc
+			)w on u.USERID = w.userid where u.USERSTATUS not in ('实习','离职')  and (u.RESIGNATIONDATE is null or u.RESIGNATIONDATE = '')
+	</select>
+	
+	<select id="getPeopleBetAgesByOrgId" parameterType="map" resultMap="ExecutiveAge">
+	select 
+		${orgid} orgid,(select orgname from sys_org w where w.orgid=#{orgid}) as orgname ,
+		<choose>
+			<when test="agesMin != null and agesMin != '' and agesMax != null and agesMax != ''">
+				count(if((${agesMin}<![CDATA[<]]>w.ages and w.ages <![CDATA[<=]]>${agesMax}),true,null)) totals2,
+			</when>
+			<when test="agesMin != null and agesMin != ''">
+				count(if((${agesMin}<![CDATA[<]]>w.ages),true,null)) totals2,
+			</when>
+			<when test="agesMax != null and agesMax != ''">
+				count(if((w.ages<![CDATA[<=]]>${agesMax}),true,null)) totals2,
+			</when>
+		</choose>
+		count(1) totals  
+			 from sys_user u inner join 
+			 (
+			select distinct(t.USERID),q.ages from sys_user_pos t inner join ( 
+			   select distinct(F_userId)userId ,(${cutYear}-left(t.F_birthday,4)) ages from W_USER_INFOMATION t   where t.F_birthday != ''
+			    and t.F_birthday is not null
+			 )q on t.USERID = q.userId 
+			 where t.ISDELETE=0 and t.ISPRIMARY = 1 and t.ORGID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0) 
+			 order by q.ages desc
+	)w on u.USERID = w.userid where u.USERSTATUS not in ('实习','离职')  and (u.RESIGNATIONDATE is null or u.RESIGNATIONDATE = '')
+	</select>
+	
+	<select id="getPeopleBetAgesMaxByOrgId" parameterType="map" resultMap="ExecutiveAge">
+	select 
+		${orgid} orgid,(select orgname from sys_org w where w.orgid=#{orgid}) as orgname ,
+		<choose>
+			<when test="agesMin != null and agesMin != '' and agesMax != null and agesMax != ''">
+				count(if((${agesMin}<![CDATA[<]]>w.ages and w.ages <![CDATA[<=]]>${agesMax}),true,null)) totals2,
+			</when>
+			<when test="agesMin != null and agesMin != ''">
+				count(if((${agesMin}<![CDATA[<]]>w.ages),true,null)) totals2,
+			</when>
+			<when test="agesMax != null and agesMax != ''">
+				count(if((w.ages<![CDATA[<=]]>${agesMax}),true,null)) totals2,
+			</when>
+		</choose>
+		count(1) totals  
+			 from sys_user u inner join 
+			 (
+			select distinct(t.USERID),q.ages from sys_user_pos t inner join ( 
+			   select distinct(F_userId)userId ,(${cutYear}-left(t.F_birthday,4)) ages from W_USER_INFOMATION t   where t.F_birthday != ''
+			    and t.F_birthday is not null
+			 )q on t.USERID = q.userId 
+			 where t.ISDELETE=0 and t.ISPRIMARY = 1 and t.ORGID = #{orgid}
+			 order by q.ages desc
+	)w on u.USERID = w.userid where u.USERSTATUS not in ('实习','离职')  and (u.RESIGNATIONDATE is null or u.RESIGNATIONDATE = '')
+	</select>
+	
+	
+	<resultMap id="ExecutiveEducation" type="com.hotent.makshi.model.gates.ExecutiveEducation">
+		 <result property="orgId" column="orgid" jdbcType="VARCHAR"/>
+		 <result property="orgName" column="orgname" jdbcType="VARCHAR"/>
+		 <result property="totals1" column="totals1" jdbcType="INTEGER"/>
+		 <result property="totals2" column="totals2" jdbcType="INTEGER"/>
+		 <result property="totals3" column="totals3" jdbcType="INTEGER"/>
+		 <result property="totals4" column="totals4" jdbcType="INTEGER"/>
+		 <result property="totals" column="totals" jdbcType="INTEGER"/>
+	</resultMap>
+	<select id="getPeopleEducationByOrgId" parameterType="map" resultMap="ExecutiveEducation">
+		select 
+		${orgid} orgid,
+		(select orgname from sys_org r where r.orgid=#{orgid}) as orgname,
+		count(1) totals,
+		count(if(((LOCATE('硕士', w.F_education)>0) or (LOCATE('博士', w.F_education)>0)  or (LOCATE('研究生', w.F_education)>0)) ,true,null)) totals1, 
+		count(if((LOCATE('本科', w.F_education)>0),true,null)) totals2, 
+		count(if((LOCATE('大专', w.F_education)>0),true,null)) totals3, 
+		count(if((LOCATE('中专', w.F_education)>0),true,null)) totals4 
+		from sys_user u inner join 
+		 (
+		select distinct(t.USERID),q.F_education from sys_user_pos t inner join ( 
+		   select distinct(F_userId)userId ,F_education from W_USER_INFOMATION t  <!--  where t.F_education != '' and t.F_education is not null -->
+		 )q on t.USERID = q.userId 
+		 where t.ISDELETE=0 and  t.ISPRIMARY = 1 and t.ORGID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0)  
+		)w on u.USERID = w.userid where u.USERSTATUS not in ('实习','离职')  and (u.RESIGNATIONDATE is null or u.RESIGNATIONDATE = '')
+	</select>
+	
+	<select id="getPeopleEducationMaxByOrgId" parameterType="map" resultMap="ExecutiveEducation">
+		select 
+		${orgid} orgid,
+		(select orgname from sys_org r where r.orgid=#{orgid}) as orgname,
+		count(1) totals,
+		count(if(((LOCATE('硕士', w.F_education)>0) or (LOCATE('博士', w.F_education)>0)  or (LOCATE('研究生', w.F_education)>0)) ,true,null)) totals1, 
+		count(if((LOCATE('本科', w.F_education)>0),true,null)) totals2, 
+		count(if((LOCATE('大专', w.F_education)>0),true,null)) totals3, 
+		count(if((LOCATE('中专', w.F_education)>0),true,null)) totals4 
+		from sys_user u inner join 
+		 (
+		select distinct(t.USERID),q.F_education from sys_user_pos t inner join ( 
+		   select distinct(F_userId)userId ,F_education from W_USER_INFOMATION t   <!-- where t.F_education != '' and t.F_education is not null -->
+		 )q on t.USERID = q.userId 
+		 where t.ISDELETE=0 and  t.ISPRIMARY = 1 and t.ORGID = #{orgid}
+		)w on u.USERID = w.userid where u.USERSTATUS not in ('实习','离职')  and (u.RESIGNATIONDATE is null or u.RESIGNATIONDATE = '')
+	</select>
+	
+	
+	<resultMap id="ExecutiveProfessional" type="com.hotent.makshi.model.gates.ExecutiveProfessional">
+		 <result property="orgId" column="orgid" jdbcType="VARCHAR"/>
+		 <result property="orgName" column="orgname" jdbcType="VARCHAR"/>
+		 <result property="totals1" column="totals1" jdbcType="INTEGER"/>
+		 <result property="totals2" column="totals2" jdbcType="INTEGER"/>
+		 <result property="totals3" column="totals3" jdbcType="INTEGER"/>
+		 <result property="totals4" column="totals4" jdbcType="INTEGER"/>
+		 <result property="totals" column="totals" jdbcType="INTEGER"/>
+	</resultMap>
+	<select id="getPeopleProfessionalByOrgId" parameterType="map" resultMap="ExecutiveProfessional">
+		<!-- select 
+		${orgid} orgid,
+		(select orgname from sys_org r where r.orgid=#{orgid}) as orgname,
+		count(if( (LOCATE('其他', w.f_name)>0),true,null)) totals5,
+		count(if( (LOCATE('初级', w.f_name)>0),true,null)) totals4,
+		count(if( (LOCATE('中级', w.f_name)>0),true,null)) totals3,
+		count(if( (LOCATE('高级', w.f_name)>0),true,null)) totals2,
+		count(if( (LOCATE('教高', w.f_name)>0),true,null)) totals1
+		from sys_user u inner join 
+		 (
+		select distinct(t.USERID),q.f_name from sys_user_pos t inner join ( 
+		    select f_name,w.F_userId as userId from W_ENTRY_PROFESSIONAL t 
+		    inner join W_USER_INFOMATION w on t.REFID = w.ID where t.f_name is not null and t.f_name !='' and t.F_name !='无'  
+		 )q on t.USERID = q.userId 
+		 where t.ISDELETE=0 and  t.ISPRIMARY = 1 and t.ORGID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0)  
+		)w  on u.USERID = w.userid where u.USERSTATUS not in ('实习','离职');
+		 -->
+		select 
+		${orgid} orgid,
+		(select orgname from sys_org r where r.orgid=#{orgid}) as orgname,
+		count(1) totals,
+		count(if( ((LOCATE('初级', w.f_name)>0) or (LOCATE('助理工程师', w.f_name)>0)) ,true,null)) totals4,
+		count(if( ((LOCATE('中级', w.f_name)>0) or (LOCATE('工程师', w.f_name)>0)),true,null)) totals3,
+		count(if( (LOCATE('高级', w.f_name)>0 or LOCATE('高工', w.f_name)>0),true,null)) totals2,
+		count(if( (LOCATE('教高', w.f_name)>0),true,null)) totals1
+		from sys_user u inner join 
+		 (
+		   select distinct(t.USERID),q.f_name from sys_user_pos t inner join ( 
+ 		     select F_positional f_name, t.f_userid userid FROM W_USER_INFOMATION t <!-- where F_positional != '' and F_positional is not null  -->
+		 )q 
+                   on t.USERID = q.userId 
+		   where t.ISDELETE=0 and  t.ISPRIMARY = 1 and t.ORGID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0)  
+		)w  on u.USERID = w.userid where u.USERSTATUS not in ('实习','离职')  and (u.RESIGNATIONDATE is null or u.RESIGNATIONDATE = '')
+	</select>
+	<select id="getPeopleProfessionalMaxByOrgId" parameterType="map" resultMap="ExecutiveProfessional">
+		<!-- select 
+		${orgid} orgid,
+		(select orgname from sys_org r where r.orgid=#{orgid}) as orgname,
+		count(if( (LOCATE('其他', w.f_name)>0),true,null)) totals5,
+		count(if( (LOCATE('初级', w.f_name)>0),true,null)) totals4,
+		count(if( (LOCATE('中级', w.f_name)>0),true,null)) totals3,
+		count(if( (LOCATE('高级', w.f_name)>0),true,null)) totals2,
+		count(if( (LOCATE('教高', w.f_name)>0),true,null)) totals1
+		from sys_user u inner join 
+		 (
+		select distinct(t.USERID),q.f_name from sys_user_pos t inner join ( 
+		    select f_name,w.F_userId as userId from W_ENTRY_PROFESSIONAL t 
+		    inner join W_USER_INFOMATION w on t.REFID = w.ID where t.f_name is not null and t.f_name !='' and t.F_name !='无'  
+		 )q on t.USERID = q.userId 
+		 where t.ISDELETE=0 and  t.ISPRIMARY = 1 and t.ORGID = #{orgid}
+		)w  on u.USERID = w.userid where u.USERSTATUS not in ('实习','离职')
+		 -->
+		
+		select 
+		${orgid} orgid,
+		(select orgname from sys_org r where r.orgid=#{orgid}) as orgname,
+		count(1) totals,
+		<!-- count(if( (LOCATE('其他', w.f_name)>0),true,null)) totals5, -->
+		count(if( ((LOCATE('初级', w.f_name)>0) or (LOCATE('助理工程师', w.f_name)>0)) ,true,null)) totals4,
+		count(if( ((LOCATE('中级', w.f_name)>0) or (LOCATE('工程师', w.f_name)>0)),true,null)) totals3,
+		count(if( (LOCATE('高级', w.f_name)>0 or LOCATE('高工', w.f_name)>0),true,null)) totals2,
+		count(if( (LOCATE('教高', w.f_name)>0),true,null)) totals1
+		from sys_user u inner join 
+		 (
+		   select distinct(t.USERID),q.f_name from sys_user_pos t inner join ( 
+ 		     select F_positional f_name, t.f_userid userid FROM W_USER_INFOMATION t <!-- where F_positional != '' and F_positional is not null  -->
+		 )q 
+                   on t.USERID = q.userId 
+		   where t.ISDELETE=0 and  t.ISPRIMARY = 1 and t.ORGID = #{orgid}
+		)w  on u.USERID = w.userid where u.USERSTATUS not in ('实习','离职')  and (u.RESIGNATIONDATE is null or u.RESIGNATIONDATE = '')
+	</select>
+	
+	
+	
+	<resultMap id="ExecutivePeopleDetail" type="com.hotent.makshi.model.gates.ExecutivePeopleDetail">
+		 <result property="orgId" column="orgid" jdbcType="VARCHAR"/>
+		 <result property="orgName" column="orgname" jdbcType="VARCHAR"/>
+		 <result property="userId" column="userId" jdbcType="VARCHAR"/>
+		 <result property="jobno" column="jobno" jdbcType="VARCHAR"/>
+		 <result property="name" column="name" jdbcType="VARCHAR"/>
+		 <result property="sex" column="sex" jdbcType="INTEGER"/>
+		 <result property="ages" column="ages" jdbcType="INTEGER"/>
+		 <result property="education" column="education" jdbcType="VARCHAR"/>
+		 <result property="positional" column="positional" jdbcType="VARCHAR"/>
+		 <result property="positionalMajor" column="positionalMajor" jdbcType="VARCHAR"/>
+		 <result property="posid" column="posid" jdbcType="VARCHAR"/>
+		 <result property="posname" column="posname" jdbcType="VARCHAR"/>
+		 <result property="entrydate" column="entrydate" jdbcType="VARCHAR"/>
+		 <result property="school" column="school" jdbcType="VARCHAR"/>
+		 <result property="schoolMajor" column="schoolMajor" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	
+	<sql id="getDepartmentDetailPeople">
+		select * from (
+	    	select u.USERID userId, account jobno, u.FULLNAME name, u.sex , 
+		         (${cutYear}-left(w.F_birthday,4)) ages,
+                (  
+	              CASE  
+	              WHEN LOCATE('中专', w.F_education)>0 THEN '中专' 
+	              WHEN LOCATE('大专', w.F_education)>0 THEN '大专' 
+	              WHEN LOCATE('本科', w.F_education)>0 THEN '本科' 
+	              WHEN (LOCATE('硕士', w.F_education)>0 or LOCATE('博士', w.F_education)>0 or LOCATE('研究生', w.F_education)>0) THEN '硕士' 
+	              ELSE '其他' END 
+	            ) education,
+                (
+	              CASE  
+	              WHEN (LOCATE('初级', w.F_positional)>0 or LOCATE('助理工程师', w.F_positional)>0) THEN '初级' 
+	              WHEN (LOCATE('中级', w.F_positional)>0 or LOCATE('工程师', w.F_positional)>0) THEN '中级' 
+	              WHEN (LOCATE('高级', w.F_positional)>0 or LOCATE('高工', w.F_positional)>0) THEN '高级' 
+	              WHEN LOCATE('教高', w.F_positional)>0 THEN '教高' 
+	              ELSE '其他' END 
+	            ) positional,
+	            w.f_positional_major positionalMajor,
+	            n.posid,
+                n.posname,
+                left(u.ENTRYDATE,10) entrydate ,
+                w.F_graduate_school school, 
+				w.F_major schoolMajor,
+                ${orgid} orgid,
+		        (select orgname from sys_org w where w.orgid=#{orgid}) as orgname 
+		        
+		        from sys_user u 
+             
+                left join W_USER_INFOMATION w on u.USERID = w.F_userId
+                
+				inner join (
+					select m.POSNAME  posname,m.POSID posid,r.USERID  from sys_user_pos r left join  sys_pos m on r.posid=m.posid where r.ISPRIMARY=1 and  r.ISDELETE=0 
+					<choose>
+						<when test="null != querygo and querygo == 1">
+							and r.ORGID = #{orgid}
+						</when>
+						<otherwise>
+							and r.ORGID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0)
+						</otherwise>
+					</choose>
+				)n on u.USERID = n.userid
+				 where u.USERSTATUS not in ('实习','离职') and (u.RESIGNATIONDATE is null or u.RESIGNATIONDATE = '')
+				 
+		 )tt
+		 <where>
+			<if test="null != jobno and jobno != ''">
+				and tt.jobno = #{jobno}
+			</if>
+			<if test="null != name and name != ''">
+				and tt.name like #{name}
+			</if>
+			<if test="null != sex and sex != ''">
+				and tt.sex = #{sex}
+			</if>
+			<if test="null != education and education != ''">
+				and tt.education = #{education}
+			</if>
+			<if test="null != posname and posname != ''">
+				and tt.posname like #{posname}
+			</if>
+			<if test="null != positional and positional != ''">
+				and tt.positional = #{positional}
+			</if>
+			<if test="null != positionalMajor and positionalMajor != ''">
+				and tt.positionalMajor like #{positionalMajor}
+			</if>
+			<if test="null != posid and posid != ''">
+				and tt.posid = #{posid}
+			</if>
+			<if test="null != agesMin and agesMin != ''">
+				and tt.ages > #{agesMin}
+			</if>
+			<if test="null != agesMax and agesMax != ''">
+				and tt.ages <![CDATA[<=]]> #{agesMax}
+			</if>
+			<if test="null != entrydateStart and entrydateStart != ''">
+				and tt.entrydate >= #{entrydateStart}
+			</if>
+			<if test="null != entrydateEnd and entrydateEnd != ''">
+				and tt.entrydate <![CDATA[<=]]> #{entrydateEnd}
+			</if>
+			<if test="null != school and school != ''">
+				and tt.school like #{school}
+			</if>
+		 </where>
+		order by CAST(substring(tt.jobno,2) as SIGNED)  asc
+	</sql>
+	
+	<select id="getDepartmentDetailPeopleCount" parameterType="map" resultType="java.lang.Integer">
+		select count(1) from (<include refid="getDepartmentDetailPeople"></include>) zz
+	</select>
+	
+	<select id="getDepartmentDetailPeoplePage" parameterType="map" resultMap="ExecutivePeopleDetail">
+	    select * from (<include refid="getDepartmentDetailPeople"></include>) zz limit #{begNum},#{pageSize}
+	</select>
+	
+	
+	<sql id="getDetailContract">
+		select id,F_contract_num,F_contract_name,F_contracttype,F_contract_status,F_contract_money, F_first_party, 
+			F_contract_department,F_contract_departmentID,F_project_department,F_contract_handler,F_contract_authorized_person,F_singing_time,
+			F_start_time,F_end_time
+		from W_CONTRACTINFO 
+		<where>
+		        and F_contract_type = 0
+			<if test="null != contracttype and contracttype !=''">
+				and F_contracttype = #{contracttype}
+			</if>
+			<if test="null != contracttype1 and contracttype1 !=''">
+				and F_type = #{contracttype1}
+			</if>
+			<if test="null != contract_status and contract_status !=''">
+				and F_contract_status = #{contract_status}
+			</if>
+			<if test="null != contract_num and contract_num !=''">
+				and F_contract_num like #{contract_num}
+			</if>
+			<if test="null != contract_name and contract_name !=''">
+				and F_contract_name like #{contract_name}
+			</if>
+			<if test="null != first_party and first_party !=''">
+				and F_first_party like #{first_party}
+			</if>
+			<if test="null != orgId and orgId !=''">
+				and F_contract_departmentID = #{orgId}
+			</if>
+			<if test="null != project_department and project_department !=''">
+				and F_project_department like #{project_department}
+			</if>
+			<if test="null != contract_handler and contract_handler !=''">
+				and F_contract_handler like #{contract_handler}
+			</if>
+			<if test="null != singingStart and singingStart != ''">
+				and F_singing_time >= #{singingStart}
+			</if>
+			<if test="null != singingEnd and singingEnd != ''">
+				and F_singing_time <![CDATA[<=]]> #{singingEnd}
+			</if>
+			<if test="null != moneyMin and moneyMin != ''">
+				and F_contract_money >= #{moneyMin}
+			</if>
+			<if test="null != moneyMax and moneyMax != ''">
+				and F_contract_money <![CDATA[<=]]> #{moneyMax}
+			</if>
+		</where>
+	</sql>
+	
+	<resultMap id="ExecutiveContractinfoDetail" type="com.hotent.makshi.model.gates.ExecutiveContractinfoDetail">
+		<result property="contract_id" column="id" jdbcType="VARCHAR"/>
+		<result property="contract_num" column="F_CONTRACT_NUM" jdbcType="VARCHAR"/>
+		<result property="contract_name" column="F_CONTRACT_NAME" jdbcType="VARCHAR"/>
+		<result property="contracttype" column="F_CONTRACTTYPE" jdbcType="VARCHAR"/>
+		<result property="contract_status" column="F_CONTRACT_STATUS" jdbcType="VARCHAR"/>
+		<result property="contract_money" column="F_CONTRACT_MONEY" jdbcType="DOUBLE"/>
+		<result property="first_party" column="F_FIRST_PARTY" jdbcType="VARCHAR"/>
+		<result property="contract_department" column="F_CONTRACT_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="contract_departmentID" column="F_CONTRACT_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="project_department" column="F_project_department" jdbcType="VARCHAR"/>
+		<result property="contract_handler" column="F_CONTRACT_HANDLER" jdbcType="VARCHAR"/>
+		<result property="contract_authorized_person" column="F_CONTRACT_AUTHORIZED_PERSON" jdbcType="VARCHAR"/>
+		<result property="singing_time" column="F_SINGING_TIME" jdbcType="VARCHAR"/>
+		<result property="start_time" column="F_START_TIME" jdbcType="VARCHAR"/>
+		<result property="end_time" column="F_END_TIME" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="getDetailContractCount" parameterType="map" resultType="java.lang.Integer">
+		select count(1) from (<include refid="getDetailContract"></include>) zz
+	</select>
+	
+	<select id="getDetailContractPage" parameterType="map" resultMap="ExecutiveContractinfoDetail">
+	    select * from (<include refid="getDetailContract"></include>) zz limit #{begNum},#{pageSize}
+	</select>
+	
+	
+	<resultMap id="ExecutiveStaffMonth" type="com.hotent.makshi.model.gates.ExecutiveStaffMonth">
+		<result property="orgId" column="orgid" jdbcType="VARCHAR"/>
+		<result property="orgName" column="orgname" jdbcType="VARCHAR"/>
+		<result property="perMonthTotal" column="perMonthTotal" jdbcType="INTEGER"/>
+		<result property="cutMonthTotal" column="cutMonthTotal" jdbcType="INTEGER"/>
+		<result property="goMonthNum" column="goMonthNum" jdbcType="INTEGER"/>
+		<result property="inMonthNum" column="inMonthNum" jdbcType="INTEGER"/>
+		<result property="foMonthNum" column="foMonthNum" jdbcType="INTEGER"/>
+		<result property="transaction" column="transaction" jdbcType="INTEGER"/>
+		<result property="salaryMonthNum" column="salaryMonthNum" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="getStaffByMonth" parameterType="map" resultMap="ExecutiveStaffMonth">
+	
+		select 
+			${orgid} orgid,
+		    (select orgname from sys_org w where w.orgid=#{orgid}) as orgname ,
+		    count(if((  (uu.entdate <![CDATA[<]]> #{queryMonth} or uu.entdate is null) and uu.USERSTATUS != '实习' and (uu.godate is null or uu.godate >= #{queryMonth})  ),true,null)) 'perMonthTotal',
+			count(if((  (uu.entdate <![CDATA[<=]]>#{queryMonth} or uu.entdate is null) and uu.USERSTATUS != '实习' and (uu.godate is null or uu.godate > #{queryMonth})  ),true,null)) 'cutMonthTotal', 
+			 
+			count(if((uu.godate=#{queryMonth} and uu.USERSTATUS != '实习'),true,null)) 'goMonthNum',
+			count(if((uu.entdate=#{queryMonth} and uu.USERSTATUS != '实习'),true,null)) 'inMonthNum',
+			count(if((uu.fodate=#{queryMonth}),true,null)) 'foMonthNum',
+			(SELECT count(1) FROM W_DEPARTMENT_TRANSFER   a   where a.F_in_departmentID in(select p.orgid from sys_org p where p.path like #{orgid1} 
+			and p.ISDELETE=0) and a.F_out_month=#{queryMonth}) 'transaction',
+			
+			sum(salary) 'salaryMonthNum'
+			
+			from(
+				select *,left(u.ENTRYDATE,7) entdate,left(u.RESIGNATIONDATE,7) godate,left(u.FORMALDATE,7) fodate,
+			         (select  count(distinct(b.f_userid)) from W_TRANSFERPOSITION b where b.F_month=#{queryMonth} and b.f_userid = u.userid) as salary
+				 from sys_user u where u.USERID in (
+				 select distinct(t.USERID) from sys_user_pos t where t.ISDELETE=0 and t.ISPRIMARY = 1 
+				  and t.ORGID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0)
+				) 
+			)uu 
+					
+	</select>
+	
+	<resultMap id="ExecutiveStaffYear" type="com.hotent.makshi.model.gates.ExecutiveStaffYear">
+		<result property="orgId" column="orgid" jdbcType="VARCHAR"/>
+		<result property="orgName" column="orgname" jdbcType="VARCHAR"/>
+		<result property="perYearTotal" column="perYearTotal" jdbcType="INTEGER"/>
+		<result property="cutYearTotal" column="cutYearTotal" jdbcType="INTEGER"/>
+		<result property="goYearNum" column="goYearNum" jdbcType="INTEGER"/>
+		<result property="inYearNum" column="inYearNum" jdbcType="INTEGER"/>
+		<result property="foYearNum" column="foYearNum" jdbcType="INTEGER"/>
+		<result property="transaction" column="transaction" jdbcType="INTEGER"/>
+		<result property="salaryYearNum" column="salaryYearNum" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="getStaffByYear" parameterType="map" resultMap="ExecutiveStaffYear">
+	
+		select 
+			${orgid} orgid,
+		    (select orgname from sys_org w where w.orgid=#{orgid}) as orgname ,
+			count(if(( (uu.entdate <![CDATA[<]]> #{queryYear} or uu.entdate is null) and uu.USERSTATUS != '实习' and (uu.godate is null or uu.godate >= #{queryYear}) ),true,null)) 'perYearTotal',
+			count(if(( (uu.entdate <![CDATA[<=]]>#{queryYear} or uu.entdate is null) and uu.USERSTATUS != '实习' and (uu.godate is null or uu.godate > #{queryYear}) ),true,null)) 'cutYearTotal',
+		 
+			count(if((uu.godate=#{queryYear} and uu.USERSTATUS != '实习'),true,null)) 'goYearNum',
+			count(if((uu.entdate=#{queryYear} and uu.USERSTATUS != '实习'),true,null)) 'inYearNum',
+			count(if((uu.fodate=#{queryYear}),true,null)) 'foYearNum',
+			(SELECT count(1) FROM W_DEPARTMENT_TRANSFER   a   where a.F_in_departmentID in(select p.orgid from sys_org p where p.path like #{orgid1} 
+			and p.ISDELETE=0) and left(a.F_out_month,4)=#{queryYear}) 'transaction',
+			
+			sum(salary) 'salaryYearNum'
+			
+			from(
+				select *,left(u.ENTRYDATE,4) entdate,left(u.RESIGNATIONDATE,4) godate,left(u.FORMALDATE,4) fodate,
+			         (select  count(distinct(b.f_userid)) from W_TRANSFERPOSITION b where left(b.F_month,4)=#{queryYear} and b.f_userid = u.userid) as salary
+				 from sys_user u where u.USERID in (
+				 select distinct(t.USERID) from sys_user_pos t where t.ISDELETE=0 and t.ISPRIMARY = 1 
+				  and t.ORGID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0)
+				) 
+			)uu 
+					
+	</select>
+	
+	<resultMap id="ContractWordNo" type="com.hotent.makshi.model.gates.ContractWordNo">
+		 <result property="taskId" column="taskId" jdbcType="VARCHAR"/>
+		 <result property="use_at" column="use_at" jdbcType="VARCHAR"/>
+		 <result property="use_no" column="use_no" jdbcType="INTEGER"/>
+		 <result property="create_at" column="create_at" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="getContractWordNoByTaskId" parameterType="map" resultMap="ContractWordNo">
+		select use_at, use_no from w_contract_word_no where taskId = #{taskId} order by create_at desc
+	</select>
+	
+	<select id="getContractWordNo" parameterType="map" resultType="java.lang.Integer">
+		select (ifnull(max(use_no),0)+1) use_no from w_contract_word_no where use_at = #{cutMonth}
+	</select>
+	
+	<insert id="saveContractWordNo" parameterType="map">
+		insert into w_contract_word_no (taskId,use_at,use_no,create_at) values(#{taskId},#{use_at},#{use_no},#{create_at})
+	</insert>
+	
+	
+	<resultMap id="ExecutiveHouseStastics" type="com.hotent.makshi.model.gates.ExecutiveHouseStastics">
+		 <result property="orgId" column="orgid" jdbcType="VARCHAR"/>
+		 <result property="orgName" column="orgname" jdbcType="VARCHAR"/>
+		 <result property="houseNums" column="houseNums" jdbcType="INTEGER"/>
+		 <result property="roomNums" column="roomNums" jdbcType="INTEGER"/>
+		 <result property="monthMoneys" column="monthMoneys" jdbcType="DOUBLE"/>
+		 <result property="peopleNums" column="peopleNums" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="getRentHouseStastics" parameterType="map" resultMap="ExecutiveHouseStastics">
+	select 
+	${orgid} orgid,
+	(select orgname from sys_org w where w.orgid=#{orgid}) as orgname,
+	count(1) houseNums, 
+	ifnull(sum(F_house_type),0)  roomNums, 
+	ifnull(sum(tt.monthMoneys),0) monthMoneys,
+	ifnull(sum(f_number_people),0) peopleNums
+	from (
+		select b.F_house_id , ifnull(sum(a.F_money),0) monthMoneys , a.F_house_type, a.f_number_people
+			from w_house_reimburse b 
+			LEFT JOIN w_rent_house_registration a on a.F_house_id = b.F_house_id
+			where a.F_departmentID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0)
+			and left(b.F_reimburse_date,7) BETWEEN #{start} and #{end}
+		group by b.F_house_id 
+	)tt
+	</select>
+	
+	<resultMap id="ExecutiveHouseStasticsDetail" type="com.hotent.makshi.model.gates.ExecutiveHouseStasticsDetail">
+		 <result property="orgId" column="orgId" jdbcType="VARCHAR"/>
+		 <result property="houseId" column="houseId" jdbcType="VARCHAR"/>
+		 <result property="orgpathname" column="orgpathname" jdbcType="VARCHAR"/>
+		 <result property="rentPerson" column="rentPerson" jdbcType="VARCHAR"/>
+		 <result property="sizes" column="sizes" jdbcType="VARCHAR"/>
+		 <result property="money" column="money" jdbcType="VARCHAR"/>
+		 <result property="houseType" column="houseType" jdbcType="VARCHAR"/>
+		 <result property="rentType" column="rentType" jdbcType="VARCHAR"/>
+		 <result property="numberPeople" column="numberPeople" jdbcType="VARCHAR"/>
+		 <result property="reimburseDate" column="reimburseDate" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="RentHouseStasticsDetail">
+		<if test="null != houseId and houseId != ''">
+	    	and a.F_house_id = #{houseId}
+	    </if>
+	    <if test="null != orgid1 and orgid1 != ''">
+	    	and a.F_departmentID in (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0)
+	    </if>
+	    <if test="null != rentPerson and rentPerson != ''">
+	    	and a.F_rent_person like #{rentPerson}
+	    </if>
+	</sql>
+	<select id="getRentHouseStasticsDetailCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT  count(1)
+			from  w_house_reimburse b 
+			LEFT JOIN 
+			w_rent_house_registration a 
+			on a.F_house_id = b.F_house_id 
+		    where left(b.F_reimburse_date,7) BETWEEN #{start} and #{end}
+		    <include refid="RentHouseStasticsDetail"/>
+	</select>
+	<select id="getRentHouseStasticsDetailPage" parameterType="map" resultMap="ExecutiveHouseStasticsDetail">
+		SELECT 
+		    a.F_departmentID orgId, 
+		    a.F_house_id houseId,
+			(select substring(orgpathname,7) from sys_org w where w.orgid=a.F_departmentID) as orgpathname,
+      		a.F_rent_person rentPerson,a.F_size sizes,F_money money,
+      		F_house_type houseType,F_rent_type rentType,F_number_people numberPeople,
+      		F_reimburse_date reimburseDate 
+			from 
+			w_house_reimburse b 
+			LEFT JOIN 
+			w_rent_house_registration a 
+			on a.F_house_id = b.F_house_id 
+		    where left(b.F_reimburse_date,7) BETWEEN #{start} and #{end}
+		     <include refid="RentHouseStasticsDetail"/>
+		    order by F_reimburse_date desc
+		    limit #{begNum},#{pageSize}
+	</select>
+	
+	
+	
+	
+	<resultMap id="ExecutiveQualification" type="com.hotent.makshi.model.gates.ExecutiveQualification">
+		 <result property="id" column="id" jdbcType="VARCHAR"/>
+		 <result property="userId" column="userId" jdbcType="VARCHAR"/>
+		 <result property="account" column="account" jdbcType="VARCHAR"/>
+		 <result property="name" column="name" jdbcType="VARCHAR"/>
+		 <result property="sex" column="sex" jdbcType="VARCHAR"/>
+		 <result property="type" column="type" jdbcType="VARCHAR"/>
+		 <result property="certificateNo" column="certificateNo" jdbcType="VARCHAR"/>
+		 <result property="initDate" column="initDate" jdbcType="VARCHAR"/>
+		 <result property="inDate" column="inDate" jdbcType="VARCHAR"/>
+		 <result property="outDate" column="outDate" jdbcType="VARCHAR"/>
+		 <result property="sendUnit" column="sendUnit" jdbcType="VARCHAR"/>
+		 <result property="getDate" column="getDate" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="QualificationColumn">
+		id,f_account account,f_name name,f_sex sex,F_certificate_type type, f_certificate_id certificateNo,
+		F_regist_date initDate,F_in_date inDate,f_regist_out_date outDate, f_regist_send_unit sendUnit,
+		(select userId from sys_user where sys_user.account=w_personal_qualification_regist.f_account) userId
+	</sql>
+	 
+	
+	<sql id="QualificationPractitionersColumn">
+		id,f_account account,f_name name,f_sex sex,f_occ_type type, f_occ_certificate_id certificateNo,
+		f_occ_get_date initDate,f_occ_in_date inDate,f_occ_out_date outDate,f_occ_send_unit sendUnit ,f_occ_get_date getDate,
+		(select userId from sys_user where sys_user.account=w_personal_qualification_regist.f_account) userId
+	</sql>
+	  
+	 <sql id="QualificationWhere">
+ 		<if test="null != userNo and userNo != ''">
+ 			and f_account = #{userNo}
+ 		</if>
+ 		<if test="null != userName and userName != ''">
+ 			and f_name like #{userName}
+ 		</if>
+ 		<if test="null != certificateNo and certificateNo != ''">
+ 			and (f_certificate_id like #{certificateNo} or f_occ_certificate_id like  #{certificateNo} )
+ 		</if>
+	 </sql>
+	
+	<!-- 在册人次明细表 -->
+	<select id="getQualificationPeopleDetailCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT  count(1)
+		FROM w_personal_qualification_regist WHERE  F_certificate_type = #{type} AND deleted = 0
+		and (F_isregist = 1 OR F_isregist IS null ) 
+		and (YEAR(F_regist_date) <![CDATA[<=]]> #{year} or YEAR (F_in_date)<![CDATA[<=]]>#{year})   
+		and (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) > #{year})  
+		<include refid="QualificationWhere" />
+	</select>
+	<select id="getQualificationPeopleDetailPage" parameterType="map" resultMap="ExecutiveQualification">
+		SELECT  <include refid="QualificationColumn"/>
+		FROM w_personal_qualification_regist WHERE  F_certificate_type = #{type} AND deleted = 0
+		and (F_isregist = 1 OR F_isregist IS null ) 
+		and (YEAR(F_regist_date) <![CDATA[<=]]> #{year} or YEAR (F_in_date)<![CDATA[<=]]>#{year})   
+		and (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) > #{year})  
+		<include refid="QualificationWhere" />
+		order by CAST(substring(f_account,2) as SIGNED) asc
+		limit #{begNum},#{pageSize}
+	</select>
+	
+	<select id="getQualificationPractitionersPeopleDetailCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(1) 
+		FROM w_personal_qualification_regist WHERE  (YEAR (F_occ_in_date) <![CDATA[<=]]> #{year} OR YEAR (F_OCC_GET_DATE) <![CDATA[<=]]> #{year}) 
+		AND ( F_occ_out_date IS NULL OR YEAR (F_occ_out_date) >#{year} ) AND F_OCC_TYPE = #{type} AND deleted = 0
+		<include refid="QualificationWhere" />
+	</select>
+	<select id="getQualificationPractitionersPeopleDetailPage" parameterType="map" resultMap="ExecutiveQualification">
+		SELECT <include refid="QualificationPractitionersColumn"/> 
+		FROM w_personal_qualification_regist WHERE  (YEAR (F_occ_in_date) <![CDATA[<=]]> #{year} OR YEAR (F_OCC_GET_DATE) <![CDATA[<=]]> #{year}) 
+		AND ( F_occ_out_date IS NULL OR YEAR (F_occ_out_date) >#{year} ) AND F_OCC_TYPE = #{type} AND deleted = 0
+		<include refid="QualificationWhere" />
+		order by CAST(substring(f_account,2) as SIGNED) asc
+		limit #{begNum},#{pageSize}
+	</select>
+	<!-- 在册人次明细表 -->
+	
+	<!-- 初始注册人次明细表 -->
+	<select id="getQualificationInitPeopleDetailCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT  count(1)
+		FROM w_personal_qualification_regist 
+		WHERE Year(F_regist_date)=#{year} AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) > #{year}) 
+		AND F_certificate_type = #{type} AND deleted = 0 
+		<include refid="QualificationWhere" />
+	</select>
+	<select id="getQualificationInitPeopleDetailPage" parameterType="map" resultMap="ExecutiveQualification">
+		SELECT  <include refid="QualificationColumn"/>
+		FROM w_personal_qualification_regist 
+		WHERE Year(F_regist_date)=#{year} AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) > #{year}) 
+		AND F_certificate_type = #{type} AND deleted = 0 
+		<include refid="QualificationWhere" />
+		order by CAST(substring(f_account,2) as SIGNED) asc
+		limit #{begNum},#{pageSize}
+	</select>
+	<!-- 初始注册人次明细表 -->
+	
+	
+	<!--转入注册人次明细表 -->
+	<select id="getQualificationIntoPeopleDetailCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM w_personal_qualification_regist 
+		WHERE Year(F_in_date)=#{year}  
+		AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) > #{year}) AND F_certificate_type = #{type} AND deleted = 0
+		<include refid="QualificationWhere" />
+	</select>
+	<select id="getQualificationIntoPeopleDetailPage" parameterType="map" resultMap="ExecutiveQualification">
+		SELECT <include refid="QualificationColumn"/>
+		FROM w_personal_qualification_regist 
+		WHERE Year(F_in_date)=#{year}  
+		AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) > #{year}) AND F_certificate_type = #{type} AND deleted = 0
+		<include refid="QualificationWhere" />
+		order by CAST(substring(f_account,2) as SIGNED) asc
+		limit #{begNum},#{pageSize}
+	</select>
+	
+	<select id="getQualificationPractitionersIntoPeopleDetailCount" parameterType="map" resultType="java.lang.Integer">
+	 	SELECT  count(1)
+	 	FROM w_personal_qualification_regist 
+ 		WHERE Year(F_occ_in_date)=#{year}  
+		AND (F_occ_out_date IS NULL OR Year(F_occ_out_date) >#{year}) AND F_OCC_TYPE = #{type} AND deleted = 0
+		<include refid="QualificationWhere" />
+	</select>
+	<select id="getQualificationPractitionersIntoPeopleDetailPage" parameterType="map" resultMap="ExecutiveQualification">
+	 SELECT  <include refid="QualificationPractitionersColumn"/> 
+	 	FROM w_personal_qualification_regist 
+ 		WHERE Year(F_occ_in_date)=#{year}  
+		AND (F_occ_out_date IS NULL OR Year(F_occ_out_date) >#{year}) AND F_OCC_TYPE = #{type} AND deleted = 0
+		<include refid="QualificationWhere" />
+		order by CAST(substring(f_account,2) as SIGNED) asc
+		limit #{begNum},#{pageSize}
+	</select>
+	<!-- 转入注册人次明细表 -->
+	
+	<!-- 转出注册人次明细表 -->
+	<select id="getQualificationOuttoPeopleDetailCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM w_personal_qualification_regist 
+		WHERE Year(F_regist_out_date)=#{year} 
+		AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = #{type} AND deleted = 0
+		<include refid="QualificationWhere" />
+	</select>
+	<select id="getQualificationOuttoPeopleDetailPage" parameterType="map" resultMap="ExecutiveQualification">
+		SELECT <include refid="QualificationColumn"/>
+		FROM w_personal_qualification_regist 
+		WHERE Year(F_regist_out_date)=#{year} 
+		AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = #{type} AND deleted = 0
+		<include refid="QualificationWhere" />
+		order by CAST(substring(f_account,2) as SIGNED) asc
+		limit #{begNum},#{pageSize}
+	</select>
+	
+	
+	<select id="getQualificationPractitionersOuttoPeopleDetailCount" parameterType="map" resultType="java.lang.Integer">
+	 SELECT  count(1)
+ 		FROM w_personal_qualification_regist 
+ 		WHERE F_occ_out_date IS NOT NULL AND Year(F_occ_out_date) = #{year} 
+		AND F_OCC_TYPE=#{type} AND deleted = 0 
+		<include refid="QualificationWhere" />
+	</select>
+	<select id="getQualificationPractitionersOuttoPeopleDetailPage" parameterType="map" resultMap="ExecutiveQualification">
+	 SELECT  <include refid="QualificationPractitionersColumn"/> 
+ 		FROM w_personal_qualification_regist 
+ 		WHERE F_occ_out_date IS NOT NULL AND Year(F_occ_out_date) = #{year} 
+		AND F_OCC_TYPE=#{type} AND deleted = 0 
+		<include refid="QualificationWhere" />
+		order by CAST(substring(f_account,2) as SIGNED) asc
+		limit #{begNum},#{pageSize}
+	</select>
+	<!-- 转出注册人次明细表 -->
+	
+	
+	<!-- 上岗培训人次明细表 -->
+	<select id="getQualificationPractitionersTrainingPeopleDetailCount" parameterType="map" resultType="java.lang.Integer">
+	 SELECT count(1)
+        FROM w_personal_qualification_regist
+		WHERE  F_regist_out_date IS NULL 
+	   AND Year(F_OCC_GET_DATE)=#{year} 
+	   AND F_OCC_TYPE=#{type} AND deleted = 0
+	   <include refid="QualificationWhere" />
+	</select>
+	<select id="getQualificationPractitionersTrainingPeopleDetailPage" parameterType="map" resultMap="ExecutiveQualification">
+	 SELECT <include refid="QualificationPractitionersColumn"/> 
+        FROM w_personal_qualification_regist
+		WHERE  F_regist_out_date IS NULL 
+	   AND Year(F_OCC_GET_DATE)=#{year} 
+	   AND F_OCC_TYPE=#{type} AND deleted = 0
+	   <include refid="QualificationWhere" />
+	   order by CAST(substring(f_account,2) as SIGNED) asc
+	   limit #{begNum},#{pageSize}
+	</select>
+	<!-- 上岗培训人次明细表 -->
+	
+	
+	<resultMap id="ExecutiveContractinfoBillingDetail" type="com.hotent.makshi.model.gates.ExecutiveContractinfoBillingDetail">
+		<result property="contract_id" column="id" jdbcType="VARCHAR"/>
+		<result property="contract_num" column="F_CONTRACT_NUM" jdbcType="VARCHAR"/>
+		<result property="contract_name" column="F_CONTRACT_NAME" jdbcType="VARCHAR"/>
+		<result property="contracttype" column="F_CONTRACTTYPE" jdbcType="VARCHAR"/>
+		<result property="contract_status" column="F_CONTRACT_STATUS" jdbcType="VARCHAR"/>
+		<result property="contract_money" column="F_CONTRACT_MONEY" jdbcType="DOUBLE"/>
+		<result property="first_party" column="F_FIRST_PARTY" jdbcType="VARCHAR"/>
+		<result property="contract_department" column="F_CONTRACT_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="contract_departmentID" column="F_CONTRACT_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="project_department" column="F_project_department" jdbcType="VARCHAR"/>
+		<result property="contract_handler" column="F_CONTRACT_HANDLER" jdbcType="VARCHAR"/>
+		<result property="contract_authorized_person" column="F_CONTRACT_AUTHORIZED_PERSON" jdbcType="VARCHAR"/>
+		<result property="payment_date" column="F_payment_date" jdbcType="VARCHAR"/>
+		<result property="arrival_money" column="F_arrival_money" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="getDetailContractBilling">
+		select t.id,F_contract_num,F_contract_name,F_contracttype,F_contract_status,F_contract_money, F_first_party, 
+		F_contract_department,F_contract_departmentID,F_project_department,F_contract_handler,F_contract_authorized_person,
+		F_payment_date,
+		F_arrival_money
+		from w_contract_billing_record q left join W_CONTRACTINFO t on q.REFID = t.ID
+		<where>
+			<if test="null != contracttype and contracttype !=''">
+				and F_contracttype = #{contracttype}
+			</if>
+			<if test="null != contracttype1 and contracttype1 !=''">
+				and F_type = #{contracttype1}
+			</if>
+			<if test="null != contract_status and contract_status !=''">
+				and F_contract_status = #{contract_status}
+			</if>
+			<if test="null != contract_num and contract_num !=''">
+				and F_contract_num like #{contract_num}
+			</if>
+			<if test="null != contract_name and contract_name !=''">
+				and F_contract_name like #{contract_name}
+			</if>
+			<if test="null != first_party and first_party !=''">
+				and F_first_party like #{first_party}
+			</if>
+			<if test="null != orgId and orgId !=''">
+				and F_contract_departmentID = #{orgId}
+			</if>
+			<if test="null != project_department and project_department !=''">
+				and F_project_department like #{project_department}
+			</if>
+			<if test="null != contract_handler and contract_handler !=''">
+				and F_contract_handler like #{contract_handler}
+			</if>
+			
+			<if test="null != singingStart and singingStart != ''">
+				and F_payment_date >= #{singingStart}
+			</if>
+			<if test="null != singingEnd and singingEnd != ''">
+				and F_payment_date <![CDATA[<=]]> #{singingEnd}
+			</if>
+			
+			<if test="null != moneyMin and moneyMin != ''">
+				and F_contract_money >= #{moneyMin}
+			</if>
+			<if test="null != moneyMax and moneyMax != ''">
+				and F_contract_money <![CDATA[<=]]> #{moneyMax}
+			</if>
+		</where>
+		order by F_payment_date desc
+	</sql>
+	<select id="getDetailContractBillingCount" parameterType="map" resultType="java.lang.Integer">
+		select count(1) from (<include refid="getDetailContractBilling"></include>) zz
+	</select>
+	
+	<select id="getDetailContractBillingPage" parameterType="map" resultMap="ExecutiveContractinfoBillingDetail">
+	    select * from (<include refid="getDetailContractBilling"></include>) zz limit #{begNum},#{pageSize}
+	</select>
+	
+	<resultMap type="com.hotent.makshi.model.gates.ExecutiveAssetDetail" id="ExecutiveAssetDetail">
+		 <result property="asset_id" column="f_asset_id" jdbcType="VARCHAR"/>
+		 <result property="asset_name" column="f_asset_name" jdbcType="VARCHAR"/>
+		 <result property="specification" column="f_specification" jdbcType="VARCHAR"/>
+		 <result property="version" column="f_version" jdbcType="VARCHAR"/>
+		 <result property="card_number" column="f_card_number" jdbcType="VARCHAR"/>
+		 <result property="care_person" column="f_care_person" jdbcType="VARCHAR"/>
+		 <result property="use_department" column="F_use_department" jdbcType="VARCHAR"/>
+		 <result property="use_departmentID" column="F_use_departmentID" jdbcType="VARCHAR"/>
+		 <result property="orgpathname" column="orgpathname" jdbcType="VARCHAR"/>
+		 <result property="asset_code" column="asset_code" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="getAssetDetailWhere">
+		<where>
+			<if test="null != orgid1 and orgid1 != ''">
+				and  t.F_use_departmentID in  (select p.orgid from sys_org p where p.path like #{orgid1} and p.ISDELETE=0) 
+			</if>
+			<if test="null != assetCode and assetCode != ''">
+				and substring(F_asset_code,locate(']',F_asset_code)+1) = #{assetCode}
+			</if>
+			<if test="null != assetId and assetId != ''">
+				and f_asset_id = #{assetId}
+			</if>
+			<if test="null != assetName and assetName != ''">
+				and f_asset_name like #{assetName}
+			</if>
+			<if test="null != carePerson and carePerson != ''">
+				and f_care_person like #{carePerson}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAssetDetailCount" parameterType="map" resultType="java.lang.Integer">
+		select  count(1) from w_asset_registration t  
+		<include refid="getAssetDetailWhere"/>
+	</select>
+	<select id="getAssetDetailPage" parameterType="map" resultMap="ExecutiveAssetDetail">
+		select 
+		f_asset_id,f_asset_name,f_specification,f_version,f_card_number,f_care_person,
+		 F_use_department,
+		(select substring(orgpathname,7) from sys_org w where w.orgid=t.F_use_departmentID) as orgpathname,
+		substring(F_asset_code,locate(']',F_asset_code)+1) as asset_code from w_asset_registration t  
+		<include refid="getAssetDetailWhere"/>
+		order by id desc
+		limit #{begNum},#{pageSize}
+	</select>
+	
+	<resultMap type="com.hotent.makshi.model.gates.ExecutiveQualificationsDetail" id="ExecutiveQualificationsDetail">
+		 <result property="id" column="id" jdbcType="VARCHAR"/>
+		 <result property="cno" column="f_cno" jdbcType="VARCHAR"/>
+		 <result property="cname" column="f_cname" jdbcType="VARCHAR"/>
+		 <result property="ctype" column="f_ctype" jdbcType="INTEGER"/>
+		 <result property="institution" column="f_institution" jdbcType="VARCHAR"/>
+		 <result property="certificationtime" column="f_certificationtime" jdbcType="VARCHAR"/>
+		 <result property="certificationlimit" column="f_certificationlimit" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	
+	<sql id="getQualificationsDetailWhere">
+		<where>
+			<if test="type != null and type != ''">
+				and f_ctype = #{type}
+			</if>
+		</where>
+	</sql>
+	<select id="getQualificationsDetailCount" parameterType="map" resultType="java.lang.Integer">
+		select  count(1) from W_COMPANY_QUALIFICATION_CERTIFICATE t  
+		<include refid="getQualificationsDetailWhere"/>
+	</select>
+	<select id="getQualificationsDetailPage" parameterType="map" resultMap="ExecutiveQualificationsDetail">
+		select id, f_cno,f_cname,f_ctype,f_institution,f_certificationtime ,f_certificationlimit from W_COMPANY_QUALIFICATION_CERTIFICATE t
+		<include refid="getQualificationsDetailWhere"/>
+		order by id desc
+		limit #{begNum},#{pageSize}
+	</select>
+	
+	
+	
+	
+</mapper>

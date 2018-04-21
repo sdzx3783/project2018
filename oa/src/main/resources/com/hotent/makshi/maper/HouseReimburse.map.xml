@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.housereimburse.HouseReimburse">
+	<resultMap id="HouseReimburse" type="com.hotent.makshi.model.housereimburse.HouseReimburse">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="departmentID" column="F_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="reimburse_personID" column="F_REIMBURSE_PERSONID" jdbcType="VARCHAR"/>
+		<result property="house_id" column="F_HOUSE_ID" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="rent_person" column="F_RENT_PERSON" jdbcType="VARCHAR"/>
+		<result property="address" column="F_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="reimburse_person" column="F_REIMBURSE_PERSON" jdbcType="VARCHAR"/>
+		<result property="start_date" column="F_START_DATE" jdbcType="DATE"/>
+		<result property="reimburse_date" column="F_REIMBURSE_DATE" jdbcType="DATE"/>
+		<result property="end_date" column="F_END_DATE" jdbcType="DATE"/>
+		<result property="pay_start_date" column="F_PAY_START_DATE" jdbcType="DATE"/>
+		<result property="pay_end_date" column="F_PAY_END_DATE" jdbcType="DATE"/>
+		<result property="rent_money" column="F_RENT_MONEY" jdbcType="VARCHAR"/>
+		<result property="house_type" column="F_HOUSE_TYPE" jdbcType="VARCHAR"/>
+		<result property="rent_type" column="f_rent_type" jdbcType="VARCHAR"/>
+		<result property="number_people" column="F_NUMBER_PEOPLE" jdbcType="VARCHAR"/>
+		<result property="reimburse_money" column="F_reimburse_money" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		b.id Id,a.F_house_id,F_reimburse_person,F_NUMBER_PEOPLE,a.F_HOUSE_TYPE,F_reimburse_date,F_pay_start_date,F_pay_end_date,a.F_department,a.F_address,a.F_rent_person,a.F_money  F_rent_money,a.F_START_DATE,a.F_END_DATE,F_reimburse_money
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_DEPARTMENTID  LIKE '%${departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(reimburse_personID)"> AND F_REIMBURSE_PERSONID  LIKE '%${reimburse_personID}%'  </if>
+			<if test="@Ognl@isNotEmpty(house_id)"> AND S.F_HOUSE_ID  LIKE '%${house_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(rent_person)"> AND F_RENT_PERSON  LIKE '%${rent_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(address)"> AND F_ADDRESS  LIKE '%${address}%'  </if>
+			<if test="@Ognl@isNotEmpty(reimburse_person)"> AND F_REIMBURSE_PERSON  LIKE '%${reimburse_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(start_date)"> AND F_START_DATE  LIKE '%${start_date}%'  </if>
+			<if test="@Ognl@isNotEmpty(reimburse_date)"> AND F_REIMBURSE_DATE  =#{reimburse_date} </if>
+			<if test="@Ognl@isNotEmpty(beginreimburse_date)"> AND F_REIMBURSE_DATE  >=#{beginreimburse_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endreimburse_date)"> AND F_REIMBURSE_DATE <![CDATA[ <=#{endreimburse_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(end_date)"> AND F_END_DATE  LIKE '%${end_date}%'  </if>
+			<if test="@Ognl@isNotEmpty(pay_start_date)"> AND F_PAY_START_DATE  =#{pay_start_date} </if>
+			<if test="@Ognl@isNotEmpty(beginpay_start_date)"> AND F_PAY_START_DATE  >=#{beginpay_start_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endpay_start_date)"> AND F_PAY_START_DATE <![CDATA[ <=#{endpay_start_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(pay_end_date)"> AND F_PAY_END_DATE  =#{pay_end_date} </if>
+			<if test="@Ognl@isNotEmpty(beginpay_end_date)"> AND F_PAY_END_DATE  >=#{beginpay_end_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endpay_end_date)"> AND F_PAY_END_DATE <![CDATA[ <=#{endpay_end_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(rent_money)"> AND F_RENT_MONEY  LIKE '%${rent_money}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.housereimburse.HouseReimburse">
+		INSERT INTO W_HOUSE_REIMBURSE
+		(ID,
+		F_REIMBURSE_PERSONID,
+		F_HOUSE_ID,
+		F_REIMBURSE_PERSON,
+		F_REIMBURSE_DATE,
+		F_PAY_START_DATE,
+		F_PAY_END_DATE,
+		F_reimburse_money)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		 #{reimburse_personID,jdbcType=VARCHAR},
+		 #{house_id,jdbcType=VARCHAR}, 
+		 #{reimburse_person,jdbcType=VARCHAR}, 
+		 #{reimburse_date,jdbcType=DATE}, 
+		 #{pay_start_date,jdbcType=DATE}, 
+		 #{pay_end_date,jdbcType=DATE},
+		 #{reimburse_money,jdbcType=VARCHAR}
+		 )
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_HOUSE_REIMBURSE 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.housereimburse.HouseReimburse">
+		UPDATE W_HOUSE_REIMBURSE SET
+		F_REIMBURSE_PERSON=#{reimburse_person,jdbcType=VARCHAR},
+		F_REIMBURSE_DATE=#{reimburse_date,jdbcType=DATE},
+		F_PAY_START_DATE=#{pay_start_date,jdbcType=DATE},
+		F_PAY_END_DATE=#{pay_end_date,jdbcType=DATE},
+		F_reimburse_money=#{reimburse_money,jdbcType=VARCHAR}
+		
+	<!-- 	F_ADDRESS=#{address,jdbcType=VARCHAR},
+		F_RENT_PERSON=#{rent_person,jdbcType=VARCHAR},
+		F_RENT_MONEY=#{rent_money,jdbcType=VARCHAR}
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_START_DATE=#{start_date,jdbcType=VARCHAR},
+		F_END_DATE=#{end_date,jdbcType=VARCHAR},
+		F_DEPARTMENTID=#{departmentID,jdbcType=VARCHAR}, -->
+		
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="HouseReimburse">
+		SELECT <include refid="columns"/>
+		from w_rent_house_registration a LEFT JOIN w_house_reimburse b on a.F_house_id = b.F_house_id
+		WHERE
+		b.id=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="HouseReimburse">
+	SELECT * FROM (
+		SELECT b.id Id,a.F_house_id ,F_NUMBER_PEOPLE,F_reimburse_person,
+		F_reimburse_date,F_pay_start_date,F_pay_end_date,F_reimburse_money,
+		a.F_department,a.F_money F_rent_money,a.F_house_type ,a.f_rent_type,
+		a.F_ADDRESS,a.f_rent_person,
+		a.f_start_date,a.F_end_date
+		from 
+		w_house_reimburse b 
+		LEFT JOIN 
+		w_rent_house_registration a 
+		on a.F_house_id = b.F_house_id
+		) S
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

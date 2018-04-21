@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hj.HjEquipmentPurchase">
+	<resultMap id="HjEquipmentPurchase" type="com.hotent.makshi.model.hj.HjEquipmentPurchase">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="appli_departmentID" column="F_APPLI_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="person_chargeID" column="F_PERSON_CHARGEID" jdbcType="VARCHAR"/>
+		<result property="deputy_managerID" column="F_DEPUTY_MANAGERID" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="appli_date" column="F_APPLI_DATE" jdbcType="DATE"/>
+		<result property="appli_department" column="F_APPLI_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="remarks" column="F_REMARKS" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="person_charge" column="F_PERSON_CHARGE" jdbcType="VARCHAR"/>
+		<result property="deputy_manager" column="F_DEPUTY_MANAGER" jdbcType="VARCHAR"/>
+		<result property="projectTaskId" column="F_PROJECTTASKID" jdbcType="VARCHAR"/>
+		<result property="project_name" column="F_PROJECT_NAME" jdbcType="VARCHAR"/>
+		
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="Id1" column="ID1" jdbcType="NUMERIC"/>
+		<result property="name" column="F_name" jdbcType="VARCHAR"/>
+		<result property="specification" column="F_SPECIFICATION" jdbcType="VARCHAR"/>
+		<result property="number" column="F_NUMBER" jdbcType="VARCHAR"/>
+		<result property="price" column="F_PRICE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.hj.HjEquipmentPurchase" id="ExtHjEquipmentPurchase" extends="HjEquipmentPurchase">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_APPLICANTID,F_APPLI_DEPARTMENTID,F_PERSON_CHARGEID,F_DEPUTY_MANAGERID,F_APPLICANT,F_APPLI_DATE,F_APPLI_DEPARTMENT,F_TYPE,F_REMARKS,F_ATTACHMENT,F_PERSON_CHARGE,F_DEPUTY_MANAGER,F_PROJECTTASKID,F_PROJECT_NAME,
+		REFID,F_name,F_SPECIFICATION,F_NUMBER,F_PRICE
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPLICANTID,F_APPLI_DEPARTMENTID,F_PERSON_CHARGEID,F_DEPUTY_MANAGERID,F_APPLICANT,F_APPLI_DATE,F_APPLI_DEPARTMENT,F_TYPE,F_REMARKS,F_ATTACHMENT,F_PERSON_CHARGE,F_DEPUTY_MANAGER,F_PROJECTTASKID,F_PROJECT_NAME,
+	    REFID,F_name,F_SPECIFICATION,F_NUMBER,F_PRICE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(appli_departmentID)"> AND F_APPLI_DEPARTMENTID  LIKE '%${appli_departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(person_chargeID)"> AND F_PERSON_CHARGEID  LIKE '%${person_chargeID}%'  </if>
+			<if test="@Ognl@isNotEmpty(deputy_managerID)"> AND F_DEPUTY_MANAGERID  LIKE '%${deputy_managerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(appli_date)"> AND F_APPLI_DATE  =#{appli_date} </if>
+			<if test="@Ognl@isNotEmpty(beginappli_date)"> AND F_APPLI_DATE  >=#{beginappli_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endappli_date)"> AND F_APPLI_DATE <![CDATA[ <=#{endappli_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(appli_department)"> AND F_APPLI_DEPARTMENT  LIKE '%${appli_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  LIKE '%${type}%'  </if>
+			<if test="@Ognl@isNotEmpty(remarks)"> AND F_REMARKS  LIKE '%${remarks}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(projectTaskId)"> AND F_PROJECTTASKID  LIKE '%${projectTaskId}%'  </if>
+			
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_name)"> AND F_PROJECT_NAME  LIKE '%${project_name}%'  </if>
+		             and finish = 1
+		</where>
+	</sql>
+	
+     <select id="SelectByRecord"  resultMap="HjEquipmentPurchase">
+	   SELECT b.ID,F_PROJECTTASKID,b.F_APPLICANT,F_APPLICANTID,b.F_APPLI_DATE,b.F_APPLI_DEPARTMENT,F_APPLI_DEPARTMENTID,b.F_TYPE,b.F_PERSON_CHARGE,b.F_PERSON_CHARGEID,b.F_DEPUTY_MANAGERID,b.F_DEPUTY_MANAGER,b.F_REMARKS,F_ATTACHMENT,
+	   a.REFID,a.F_NAME,a.F_SPECIFICATION,F_PROJECT_NAME,
+	   a.F_NUMBER,a.F_PRICE,a.id as ID1
+       FROM w_hjpurchase_list a LEFT JOIN
+       w_hj_equipment_purchase b
+       ON a.refId = b.id 
+       <include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	<select id="SelectByWPID"  resultMap="HjEquipmentPurchase">
+	   SELECT b.ID,F_PROJECTTASKID,b.F_APPLICANT,F_APPLICANTID,b.F_APPLI_DATE,b.F_APPLI_DEPARTMENT,F_APPLI_DEPARTMENTID,b.F_TYPE,b.F_PERSON_CHARGE,b.F_PERSON_CHARGEID,b.F_DEPUTY_MANAGERID,b.F_DEPUTY_MANAGER,b.F_REMARKS,F_ATTACHMENT,
+	   a.REFID,a.F_NAME,a.F_SPECIFICATION,F_PROJECT_NAME,
+	   a.F_NUMBER,a.F_PRICE,a.id as ID1
+       FROM w_hjpurchase_list a LEFT JOIN
+       w_hj_equipment_purchase b
+       ON a.refId = b.id
+       where a.id=#{id}
+	</select>	    
+	<insert id="add" parameterType="com.hotent.makshi.model.hj.HjEquipmentPurchase">
+		INSERT INTO W_HJ_EQUIPMENT_PURCHASE
+		(ID,
+		F_APPLICANTID,F_APPLI_DEPARTMENTID,F_PERSON_CHARGEID,F_DEPUTY_MANAGERID,F_APPLICANT,F_APPLI_DATE,F_APPLI_DEPARTMENT,F_TYPE,F_REMARKS,F_ATTACHMENT,F_PERSON_CHARGE,F_DEPUTY_MANAGER,F_PROJECTTASKID,F_PROJECT_NAME,)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{applicantID,jdbcType=VARCHAR}, #{appli_departmentID,jdbcType=VARCHAR}, #{person_chargeID,jdbcType=VARCHAR}, #{deputy_managerID,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{appli_date,jdbcType=DATE}, #{appli_department,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, #{person_charge,jdbcType=VARCHAR}, #{deputy_manager,jdbcType=VARCHAR}, #{projectTaskId,jdbcType=VARCHAR},#{project_name,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_HJ_EQUIPMENT_PURCHASE 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hj.HjEquipmentPurchase">
+		UPDATE W_HJ_EQUIPMENT_PURCHASE SET
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_APPLI_DEPARTMENTID=#{appli_departmentID,jdbcType=VARCHAR},
+		F_PERSON_CHARGEID=#{person_chargeID,jdbcType=VARCHAR},
+		F_DEPUTY_MANAGERID=#{deputy_managerID,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_APPLI_DATE=#{appli_date,jdbcType=DATE},
+		F_APPLI_DEPARTMENT=#{appli_department,jdbcType=VARCHAR},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_REMARKS=#{remarks,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_PERSON_CHARGE=#{person_charge,jdbcType=VARCHAR},
+		F_DEPUTY_MANAGER=#{deputy_manager,jdbcType=VARCHAR},
+		F_PROJECTTASKID=#{projectTaskId,jdbcType=VARCHAR},
+		F_PROJECT_NAME=#{project_name,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="HjEquipmentPurchase">
+		SELECT <include refid="columns"/>
+		FROM W_HJ_EQUIPMENT_PURCHASE
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="HjEquipmentPurchase">
+		SELECT <include refid="columns"/>
+		FROM W_HJ_EQUIPMENT_PURCHASE   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="HjEquipmentPurchase">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HJ_EQUIPMENT_PURCHASE A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtHjEquipmentPurchase">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HJ_EQUIPMENT_PURCHASE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HJ_EQUIPMENT_PURCHASE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HJ_EQUIPMENT_PURCHASE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HJ_EQUIPMENT_PURCHASE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HJ_EQUIPMENT_PURCHASE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="HjEquipmentPurchase">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HJ_EQUIPMENT_PURCHASE A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

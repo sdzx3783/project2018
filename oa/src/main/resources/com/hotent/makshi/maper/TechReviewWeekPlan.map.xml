@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.waterprotectpark.TechReviewWeekPlan">
+	<resultMap id="TechReviewWeekPlan" type="com.hotent.makshi.model.waterprotectpark.TechReviewWeekPlan">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="plan_arrangerID" column="F_PLAN_ARRANGERID" jdbcType="VARCHAR"/>
+		<result property="plan_executorID" column="F_PLAN_EXECUTORID" jdbcType="VARCHAR"/>
+		<result property="start_time" column="F_START_TIME" jdbcType="DATE"/>
+		<result property="end_time" column="F_END_TIME" jdbcType="DATE"/>
+		<result property="plan_arranger" column="F_PLAN_ARRANGER" jdbcType="VARCHAR"/>
+		<result property="plan_executor" column="F_PLAN_EXECUTOR" jdbcType="VARCHAR"/>
+		<result property="week" column="F_WEEK" jdbcType="NUMERIC"/>
+		<result property="applicantTime" column="F_APPLICANTTIME" jdbcType="DATE"/>
+		<result property="week_plan_RefId" column="F_WEEK_PLAN_REFID" jdbcType="BIGINT"/>
+		<result property="refRunIds" column="refRunIds" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_PLAN_ARRANGERID,F_PLAN_EXECUTORID,F_START_TIME,F_END_TIME,F_PLAN_ARRANGER,F_PLAN_EXECUTOR,F_WEEK,F_APPLICANTTIME,F_WEEK_PLAN_REFID
+	</sql>
+	<sql id="wfColumns">
+		ID,F_PLAN_ARRANGERID,F_PLAN_EXECUTORID,F_START_TIME,F_END_TIME,F_PLAN_ARRANGER,F_PLAN_EXECUTOR,F_WEEK,F_APPLICANTTIME,F_WEEK_PLAN_REFID
+	</sql>
+	<sql id="w_columns">
+		w1.ID,w1.F_PLAN_ARRANGERID,w1.F_PLAN_EXECUTORID,w1.F_START_TIME,w1.F_END_TIME,w1.F_PLAN_ARRANGER,w1.F_PLAN_EXECUTOR,w1.F_WEEK,w1.F_APPLICANTTIME,w1.F_WEEK_PLAN_REFID
+	</sql>
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(plan_arrangerID)"> AND w1.F_PLAN_ARRANGERID  LIKE '%${plan_arrangerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(plan_executorID)"> AND  w1.F_PLAN_EXECUTORID  LIKE '%${plan_executorID}%'  </if>
+			<if test="@Ognl@isNotEmpty(start_time)"> AND  w1.F_START_TIME  =#{start_time} </if>
+			<if test="@Ognl@isNotEmpty(beginstart_time)"> AND  w1.F_START_TIME  >=#{beginstart_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstart_time)"> AND  w1.F_START_TIME <![CDATA[ <=#{endstart_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(end_time)"> AND  w1.F_END_TIME  =#{end_time} </if>
+			<if test="@Ognl@isNotEmpty(beginend_time)"> AND  w1.F_END_TIME  >=#{beginend_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endend_time)"> AND  w1.F_END_TIME <![CDATA[ <=#{endend_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(plan_arranger)"> AND  w1.F_PLAN_ARRANGER  LIKE '%${plan_arranger}%'  </if>
+			<if test="@Ognl@isNotEmpty(plan_executor)"> AND  w1.F_PLAN_EXECUTOR  LIKE '%${plan_executor}%'  </if>
+			<if test="@Ognl@isNotEmpty(week)"> AND  w1.F_WEEK  =#{week} </if>
+			<if test="@Ognl@isNotEmpty(applicantTime)"> AND  w1.F_APPLICANTTIME  =#{applicantTime} </if>
+			<if test="@Ognl@isNotEmpty(beginapplicantTime)"> AND  w1.F_APPLICANTTIME  >=#{beginapplicantTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endapplicantTime)"> AND  w1.F_APPLICANTTIME <![CDATA[ <=#{endapplicantTime,jdbcType=DATE}]]> </if>
+			and w1.F_isDelete=0 and w1.F_refRunId is NULL and w1.F_week_plan_RefId is null 
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.waterprotectpark.TechReviewWeekPlan">
+		INSERT INTO W_TECH_REVIEW_WEEK_PLAN_SBB
+		(ID,
+		F_PLAN_ARRANGERID,F_PLAN_EXECUTORID,F_START_TIME,F_END_TIME,F_PLAN_ARRANGER,F_PLAN_EXECUTOR,F_WEEK,F_APPLICANTTIME)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{plan_arrangerID,jdbcType=VARCHAR}, #{plan_executorID,jdbcType=VARCHAR}, #{start_time,jdbcType=DATE}, #{end_time,jdbcType=DATE}, #{plan_arranger,jdbcType=VARCHAR}, #{plan_executor,jdbcType=VARCHAR}, #{week,jdbcType=NUMERIC}, #{applicantTime,jdbcType=DATE})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		update  W_TECH_REVIEW_WEEK_PLAN_SBB  set F_ISDELETE=1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.waterprotectpark.TechReviewWeekPlan">
+		UPDATE W_TECH_REVIEW_WEEK_PLAN_SBB SET
+		F_PLAN_ARRANGERID=#{plan_arrangerID,jdbcType=VARCHAR},
+		F_PLAN_EXECUTORID=#{plan_executorID,jdbcType=VARCHAR},
+		F_START_TIME=#{start_time,jdbcType=DATE},
+		F_END_TIME=#{end_time,jdbcType=DATE},
+		F_PLAN_ARRANGER=#{plan_arranger,jdbcType=VARCHAR},
+		F_PLAN_EXECUTOR=#{plan_executor,jdbcType=VARCHAR},
+		F_WEEK=#{week,jdbcType=NUMERIC},
+		F_APPLICANTTIME=#{applicantTime,jdbcType=DATE}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="TechReviewWeekPlan">
+		SELECT <include refid="columns"/>
+		FROM W_TECH_REVIEW_WEEK_PLAN_SBB
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="TechReviewWeekPlan">
+		SELECT <include refid="w_columns"/>,(SELECT GROUP_CONCAT(CAST(F_refRunId AS char))  from w_tech_review_week_plan_sbb w2 where w2.F_week_plan_RefId=w1.id
+ 			) as refRunIds
+		FROM W_TECH_REVIEW_WEEK_PLAN_SBB w1
+		<include refid="dynamicWhere" />
+		
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getRefRunIdsById" resultType="String" parameterType="Long">
+	
+		SELECT GROUP_CONCAT(CAST(F_refRunId AS char)) as refRunIds from w_tech_review_week_plan_sbb 
+		 where F_week_plan_RefId=#{id}
+	</select>
+	
+</mapper>

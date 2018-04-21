@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.userinfo.RegistrationQualification">
+	<resultMap id="RegistrationQualification" type="com.hotent.makshi.model.userinfo.RegistrationQualification">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="certificate_regist_id" column="F_CERTIFICATE_REGIST_ID" jdbcType="VARCHAR"/>
+		<result property="regist_major" column="F_REGIST_MAJOR" jdbcType="VARCHAR"/>
+		<result property="get_date" column="F_GET_DATE" jdbcType="DATE"/>
+		<result property="last_effectice_date" column="F_LAST_EFFECTICE_DATE" jdbcType="DATE"/>
+		<result property="isregist" column="F_ISREGIST" jdbcType="VARCHAR"/>
+		<result property="regist_attachment" column="F_REGIST_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="regist_send_unit" column="F_REGIST_SEND_UNIT" jdbcType="VARCHAR"/>
+		<result property="isBorrowed" column="F_ISBORROWED" jdbcType="VARCHAR"/>
+		<result property="borrower" column="F_borrower" jdbcType="VARCHAR"/>
+		<result property="userId" column="F_USERID" jdbcType="VARCHAR"/>
+		<result property="linkId" column="F_LINKID" jdbcType="VARCHAR"/>
+		<result property="switchs" column="F_SWITCHS" jdbcType="VARCHAR"/>
+		<result property="regist_secondMajor" column="F_secondMajor" jdbcType="VARCHAR"/>
+		<result property="regist_thirdMajor" column="F_thirdMajor" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_LINKID,F_CERTIFICATE_REGIST_ID,F_REGIST_MAJOR,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_ISREGIST,F_REGIST_ATTACHMENT,F_REGIST_SEND_UNIT,F_ISBORROWED,F_borrower,F_USERID,F_SWITCHS
+		,F_secondMajor,F_thirdMajor
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_LINKID,F_CERTIFICATE_REGIST_ID,F_REGIST_MAJOR,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_ISREGIST,F_REGIST_ATTACHMENT,F_REGIST_SEND_UNIT,F_ISBORROWED,F_borrower,F_USERID,F_SWITCHS
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(certificate_regist_id)"> AND F_CERTIFICATE_REGIST_ID  LIKE '%${certificate_regist_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_major)"> AND F_REGIST_MAJOR  LIKE '%${regist_major}%'  </if>
+			<if test="@Ognl@isNotEmpty(get_date)"> AND F_GET_DATE  =#{get_date} </if>
+			<if test="@Ognl@isNotEmpty(beginget_date)"> AND F_GET_DATE  >=#{beginget_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endget_date)"> AND F_GET_DATE <![CDATA[ <=#{endget_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(last_effectice_date)"> AND F_LAST_EFFECTICE_DATE  =#{last_effectice_date} </if>
+			<if test="@Ognl@isNotEmpty(beginlast_effectice_date)"> AND F_LAST_EFFECTICE_DATE  >=#{beginlast_effectice_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endlast_effectice_date)"> AND F_LAST_EFFECTICE_DATE <![CDATA[ <=#{endlast_effectice_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(isregist)"> AND F_ISREGIST  LIKE '%${isregist}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_attachment)"> AND F_REGIST_ATTACHMENT  LIKE '%${regist_attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_send_unit)"> AND F_REGIST_SEND_UNIT  LIKE '%${regist_send_unit}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.userinfo.RegistrationQualification">
+		INSERT INTO W_REGISTRATION_QUALIFICATION
+		(ID,REFID,F_USERID,F_LINKID,
+		F_CERTIFICATE_REGIST_ID,F_REGIST_MAJOR,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_ISREGIST,F_REGIST_ATTACHMENT,F_REGIST_SEND_UNIT,F_SWITCHS,F_secondMajor,F_thirdMajor)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},#{userId,jdbcType=NUMERIC},#{linkId,jdbcType=NUMERIC},
+		#{certificate_regist_id,jdbcType=VARCHAR}, #{regist_major,jdbcType=VARCHAR}, #{get_date,jdbcType=DATE}, #{last_effectice_date,jdbcType=DATE}, #{isregist,jdbcType=VARCHAR}, #{regist_attachment,jdbcType=VARCHAR},
+	    #{regist_send_unit,jdbcType=VARCHAR},#{switchs,jdbcType=VARCHAR},#{regist_secondMajor,jdbcType=VARCHAR},#{regist_thirdMajor,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_REGISTRATION_QUALIFICATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	<delete id="delByLinkId" parameterType="java.lang.Long">
+		DELETE FROM W_REGISTRATION_QUALIFICATION 
+		WHERE
+		F_LINKID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.userinfo.RegistrationQualification">
+		UPDATE W_REGISTRATION_QUALIFICATION SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		F_LINKID=#{linkId,jdbcType=NUMERIC},
+		F_CERTIFICATE_REGIST_ID=#{certificate_regist_id,jdbcType=VARCHAR},
+		F_REGIST_MAJOR=#{regist_major,jdbcType=VARCHAR},
+		F_GET_DATE=#{get_date,jdbcType=DATE},
+		F_LAST_EFFECTICE_DATE=#{last_effectice_date,jdbcType=DATE},
+		F_ISREGIST=#{isregist,jdbcType=VARCHAR},
+		F_REGIST_ATTACHMENT=#{regist_attachment,jdbcType=VARCHAR},
+		F_REGIST_SEND_UNIT=#{regist_send_unit,jdbcType=VARCHAR},
+		F_ISBORROWED=#{isBorrowed,jdbcType=VARCHAR},
+		F_borrower=#{borrower,jdbcType=VARCHAR},
+		F_USERID = #{userId,jdbcType=NUMERIC},
+		F_SWITCHS=#{switchs,jdbcType=VARCHAR},
+		F_secondMajor=#{regist_secondMajor,jdbcType=VARCHAR},
+		F_thirdMajor=#{regist_thirdMajor,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<update id="updateByLinkId" parameterType="java.lang.Long">
+		UPDATE W_REGISTRATION_QUALIFICATION SET
+		F_SWITCHS=#{switchs,jdbcType=VARCHAR}
+		WHERE
+		F_LINKID=#{linkId}
+	</update>
+	
+	<update id="updateByCertificateId"  parameterType="com.hotent.makshi.model.userinfo.RegistrationQualification">
+	UPDATE W_REGISTRATION_QUALIFICATION SET
+	<if test="{regist_major!=null}">
+	F_REGIST_MAJOR=#{regist_major,jdbcType=VARCHAR},
+	</if>
+	<if test="{last_effectice_date!=null}">
+	F_LAST_EFFECTICE_DATE=#{last_effectice_date,jdbcType=DATE}
+	</if>
+	WHERE
+	F_CERTIFICATE_REGIST_ID=#{certificate_regist_id}
+	</update>
+	<delete id="delByMainId">
+	    DELETE FROM W_REGISTRATION_QUALIFICATION
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getRegistrationQualificationList" resultMap="RegistrationQualification">
+	    SELECT <include refid="columns"/>
+	    FROM W_REGISTRATION_QUALIFICATION 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="RegistrationQualification">
+		SELECT <include refid="columns"/>
+		FROM W_REGISTRATION_QUALIFICATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="RegistrationQualification">
+		SELECT <include refid="columns"/>
+		FROM W_REGISTRATION_QUALIFICATION   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getByCertificateId" parameterType="String" resultMap="RegistrationQualification">
+		SELECT <include refid="columns"/>
+		FROM W_REGISTRATION_QUALIFICATION
+		WHERE
+		F_CERTIFICATE_REGIST_ID=#{certificate_regist_id}
+	</select>
+	
+	<select id="getByLinkId" parameterType="Long" resultMap="RegistrationQualification">
+		SELECT <include refid="columns"/>
+		FROM W_REGISTRATION_QUALIFICATION
+		WHERE
+		F_LINKID=#{linkId}
+	</select>
+</mapper>

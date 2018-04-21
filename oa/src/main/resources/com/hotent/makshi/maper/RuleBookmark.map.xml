@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.template.RuleBookmark">
+	<resultMap id="RuleBookmark" type="com.hotent.makshi.model.template.RuleBookmark">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="mark_name" column="F_MARK_NAME" jdbcType="VARCHAR"/>
+		<result property="mark_value" column="F_MARK_VALUE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_MARK_NAME,F_MARK_VALUE
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_MARK_NAME,F_MARK_VALUE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(mark_name)"> AND F_MARK_NAME  LIKE '%${mark_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(mark_value)"> AND F_MARK_VALUE  LIKE '%${mark_value}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.template.RuleBookmark">
+		INSERT INTO W_RULE_BOOKMARK
+		(ID,REFID,
+		F_MARK_NAME,F_MARK_VALUE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{mark_name,jdbcType=VARCHAR}, #{mark_value,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_RULE_BOOKMARK 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.template.RuleBookmark">
+		UPDATE W_RULE_BOOKMARK SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		F_MARK_NAME=#{mark_name,jdbcType=VARCHAR},
+		F_MARK_VALUE=#{mark_value,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_RULE_BOOKMARK
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getRuleBookmarkList" resultMap="RuleBookmark">
+	    SELECT <include refid="columns"/>
+	    FROM W_RULE_BOOKMARK 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="RuleBookmark">
+		SELECT <include refid="columns"/>
+		FROM W_RULE_BOOKMARK
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="RuleBookmark">
+		SELECT <include refid="columns"/>
+		FROM W_RULE_BOOKMARK   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

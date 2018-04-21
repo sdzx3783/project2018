@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.contract.ContractBillingRecord">
+	<resultMap id="ContractBillingRecord" type="com.hotent.makshi.model.contract.ContractBillingRecord">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="billing_date" column="F_BILLING_DATE" jdbcType="DATE"/>
+		<result property="invoice_money" column="F_INVOICE_MONEY" jdbcType="VARCHAR"/>
+		<result property="operator" column="F_OPERATOR" jdbcType="VARCHAR"/>
+		<result property="operatorID" column="F_OPERATORID" jdbcType="VARCHAR"/>
+		<result property="status" column="F_STATUS" jdbcType="VARCHAR"/>
+		<result property="bearer" column="F_BEARER" jdbcType="VARCHAR"/>
+		<result property="bearerID" column="F_BEARERID" jdbcType="VARCHAR"/>
+		<result property="payment_date" column="F_PAYMENT_DATE" jdbcType="DATE"/>
+		<result property="arrival_money" column="F_ARRIVAL_MONEY" jdbcType="VARCHAR"/>
+		<result property="linkId" column="LINKID" jdbcType="NUMERIC"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_BILLING_DATE,F_INVOICE_MONEY,F_OPERATOR,F_OPERATORID,F_STATUS,F_BEARER,F_BEARERID,F_PAYMENT_DATE,F_ARRIVAL_MONEY,LINKID
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_BILLING_DATE,F_INVOICE_MONEY,F_OPERATOR,F_OPERATORID,F_STATUS,F_BEARER,F_BEARERID,F_PAYMENT_DATE,F_ARRIVAL_MONEY,LINKID
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(billing_date)"> AND F_BILLING_DATE  =#{billing_date} </if>
+			<if test="@Ognl@isNotEmpty(beginbilling_date)"> AND F_BILLING_DATE  >=#{beginbilling_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endbilling_date)"> AND F_BILLING_DATE <![CDATA[ <=#{endbilling_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(invoice_money)"> AND F_INVOICE_MONEY  LIKE '%${invoice_money}%'  </if>
+			<if test="@Ognl@isNotEmpty(operator)"> AND F_OPERATOR  LIKE '%${operator}%'  </if>
+			<if test="@Ognl@isNotEmpty(operatorID)"> AND F_OPERATORID  LIKE '%${operatorID}%'  </if>
+			<if test="@Ognl@isNotEmpty(status)"> AND F_STATUS  LIKE '%${status}%'  </if>
+			<if test="@Ognl@isNotEmpty(bearer)"> AND F_BEARER  LIKE '%${bearer}%'  </if>
+			<if test="@Ognl@isNotEmpty(bearerID)"> AND F_BEARERID  LIKE '%${bearerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(payment_date)"> AND F_PAYMENT_DATE  =#{payment_date} </if>
+			<if test="@Ognl@isNotEmpty(beginpayment_date)"> AND F_PAYMENT_DATE  >=#{beginpayment_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endpayment_date)"> AND F_PAYMENT_DATE <![CDATA[ <=#{endpayment_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(arrival_money)"> AND F_ARRIVAL_MONEY  LIKE '%${arrival_money}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.contract.ContractBillingRecord">
+		INSERT INTO W_CONTRACT_BILLING_RECORD
+		(ID,REFID,
+		F_BILLING_DATE,F_INVOICE_MONEY,F_OPERATOR,F_OPERATORID,F_STATUS,F_BEARER,F_BEARERID,F_PAYMENT_DATE,F_ARRIVAL_MONEY,LINKID)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{billing_date,jdbcType=DATE}, #{invoice_money,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{operatorID,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{bearer,jdbcType=VARCHAR}, #{bearerID,jdbcType=VARCHAR}, #{payment_date,jdbcType=DATE}, #{arrival_money,jdbcType=VARCHAR},#{linkId,jdbcType=NUMERIC})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CONTRACT_BILLING_RECORD 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.contract.ContractBillingRecord">
+		UPDATE W_CONTRACT_BILLING_RECORD SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		F_BILLING_DATE=#{billing_date,jdbcType=DATE},
+		F_INVOICE_MONEY=#{invoice_money,jdbcType=VARCHAR},
+		F_OPERATOR=#{operator,jdbcType=VARCHAR},
+		F_OPERATORID=#{operatorID,jdbcType=VARCHAR},
+		F_STATUS=#{status,jdbcType=VARCHAR},
+		F_BEARER=#{bearer,jdbcType=VARCHAR},
+		F_BEARERID=#{bearerID,jdbcType=VARCHAR},
+		F_PAYMENT_DATE=#{payment_date,jdbcType=DATE},
+		F_ARRIVAL_MONEY=#{arrival_money,jdbcType=VARCHAR},
+		LINKID=#{linkId,jdbcType=NUMERIC}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_CONTRACT_BILLING_RECORD
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getContractBillingRecordList" resultMap="ContractBillingRecord">
+	    SELECT <include refid="columns"/>
+	    FROM W_CONTRACT_BILLING_RECORD 
+	    WHERE REFID=#{refId} order by LINKID desc
+	    <!-- order by LINKID desc  这个必须要 -->
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ContractBillingRecord">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_BILLING_RECORD
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="ContractBillingRecord">
+		SELECT A.*
+		FROM W_CONTRACT_BILLING_RECORD A ,W_CONTRACTINFO B WHERE A.REFID = B.ID
+	</select>
+	
+	<delete id="delByLinkId">
+	    DELETE FROM W_CONTRACT_BILLING_RECORD
+	    WHERE
+	    LINKID=#{linkId}
+	</delete>  
+	
+	<select id="getByLinkId" parameterType="java.lang.Long" resultMap="ContractBillingRecord">
+	   SELECT <include refid="columns"/>
+		FROM W_CONTRACT_BILLING_RECORD
+		WHERE
+	    LINKID=#{linkId}
+	</select>  
+	
+</mapper>

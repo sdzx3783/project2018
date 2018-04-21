@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.finance.WorkHourApplication">
+	<resultMap id="WorkHourApplication" type="com.hotent.makshi.model.finance.WorkHourApplication">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="orgID" column="F_ORGID" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="org" column="F_ORG" jdbcType="VARCHAR"/>
+		<result property="applicant_time" column="F_APPLICANT_TIME" jdbcType="DATE"/>
+		<result property="work_hour_total" column="F_WORK_HOUR_TOTAL" jdbcType="VARCHAR"/>
+		<result property="overtime_hour_total" column="F_OVERTIME_HOUR_TOTAL" jdbcType="VARCHAR"/>
+		<result property="refRunid" column="F_refRunid" jdbcType="BIGINT"/>
+		<result property="bussinessDataId" column="F_bussinessDataId" jdbcType="BIGINT"/>
+		<result property="work_hour_rate" column="F_work_hour_rate" jdbcType="INTEGER"/>
+		<result property="basehour" column="F_basehour" jdbcType="INTEGER"/>
+	
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_APPLICANTID,F_ORGID,F_APPLICANT,F_ORG,F_APPLICANT_TIME,F_WORK_HOUR_TOTAL,F_OVERTIME_HOUR_TOTAL,F_refRunid,F_bussinessDataId,F_work_hour_rate,F_basehour
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPLICANTID,F_ORGID,F_APPLICANT,F_ORG,F_APPLICANT_TIME,F_WORK_HOUR_TOTAL,F_OVERTIME_HOUR_TOTAL,F_refRunid,F_bussinessDataId,F_work_hour_rate,F_basehour
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(curID)"> AND F_APPLICANTID= ${curID}</if>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(orgID)"> AND F_ORGID  LIKE '%${orgID}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(org)"> AND F_ORG  LIKE '%${org}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant_time)"> AND F_APPLICANT_TIME  =#{applicant_time} </if>
+			<if test="@Ognl@isNotEmpty(beginapplicant_time)"> AND F_APPLICANT_TIME  >=#{beginapplicant_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endapplicant_time)"> AND F_APPLICANT_TIME <![CDATA[ <#{endapplicant_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(work_hour_total)"> AND F_WORK_HOUR_TOTAL  LIKE '%${work_hour_total}%'  </if>
+			<if test="@Ognl@isNotEmpty(overtime_hour_total)"> AND F_OVERTIME_HOUR_TOTAL  LIKE '%${overtime_hour_total}%'  </if>
+			and F_isdelete=0
+			and F_bussinessDataId is  null
+		</where>
+	</sql>
+	<insert id="lockById">
+		INSERT ignore INTO `w_workhour_lock` (`taskid`, `ctime`) VALUES (#{taskid,jdbcType=BIGINT}, NOW());
+	</insert>
+	<delete id="unlockById" parameterType="java.lang.Long">
+		delete  w_workhour_lock WHERE taskid=#{taskid,jdbcType=BIGINT}
+	</delete>
+	<delete id="clearTimeOutLock">
+		DELETE  from w_workhour_lock where ctime NOT between date_add(now(), interval - 5 minute) and now()
+	</delete>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.finance.WorkHourApplication">
+		INSERT INTO W_WORK_HOUR_APPLICATION
+		(ID,
+		F_APPLICANTID,F_ORGID,F_APPLICANT,F_ORG,F_APPLICANT_TIME,F_WORK_HOUR_TOTAL,F_OVERTIME_HOUR_TOTAL,F_WORK_HOUR_RATE,F_BASEHOUR)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{applicantID,jdbcType=VARCHAR}, #{orgID,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{org,jdbcType=VARCHAR}, #{applicant_time,jdbcType=DATE}, #{work_hour_total,jdbcType=VARCHAR}
+		, #{overtime_hour_total,jdbcType=VARCHAR},#{work_hour_rate,jdbcType=INTEGER},#{basehour,jdbcType=INTEGER})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		update  W_WORK_HOUR_APPLICATION set F_isdelete=1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.finance.WorkHourApplication">
+		UPDATE W_WORK_HOUR_APPLICATION SET
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_ORGID=#{orgID,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_ORG=#{org,jdbcType=VARCHAR},
+		F_APPLICANT_TIME=#{applicant_time,jdbcType=DATE},
+		F_WORK_HOUR_TOTAL=#{work_hour_total,jdbcType=VARCHAR},
+		F_OVERTIME_HOUR_TOTAL=#{overtime_hour_total,jdbcType=VARCHAR},
+		F_WORK_HOUR_RATE=#{work_hour_rate,jdbcType=INTEGER},
+		F_BASEHOUR=#{basehour,jdbcType=INTEGER}
+		WHERE
+		ID=#{id}
+	</update>
+	<select id="getByBusinessDataId" parameterType="java.lang.Long" resultMap="WorkHourApplication">
+		SELECT <include refid="columns"/>
+		FROM W_WORK_HOUR_APPLICATION
+		WHERE
+		F_bussinessDataId=#{bussinessDataId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="WorkHourApplication">
+		SELECT <include refid="columns"/>
+		FROM W_WORK_HOUR_APPLICATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="WorkHourApplication">
+		SELECT <include refid="columns"/>
+		FROM W_WORK_HOUR_APPLICATION   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by F_APPLICANT_TIME  desc
+		</if>
+	</select>
+	
+	<select id="getByApplicantTime" resultMap="WorkHourApplication">
+		SELECT <include refid="columns"/>
+		FROM W_WORK_HOUR_APPLICATION   
+		<include refid="dynamicWhere" />
+		and F_APPLICANT_TIME=#{applicant_time}
+		and F_APPLICANTID=#{userid}
+		<if test="@Ognl@isEmpty(orderField)">
+		order by F_APPLICANT_TIME  desc
+		</if>
+	</select>
+	
+	<select id="hasExist" resultMap="WorkHourApplication">
+		SELECT <include refid="columns"/>
+		FROM W_WORK_HOUR_APPLICATION  w1 
+		where w1.id=#{id} and w1.F_refRunid is not null and
+			exists (select * from bpm_pro_run_his w2 where w2.runid=w1.F_refRunid)
+	</select>
+	<resultMap id="vaction" type="com.hotent.makshi.model.finance.Vaction">
+		<result property="id" column="id" jdbcType="NUMERIC"/>
+		<result property="startTime" column="F_startTime" jdbcType="DATE"/>
+		<result property="endTime" column="F_endTime" jdbcType="DATE"/>
+		<result property="leaveStartSolt" column="F_leaveStartSolt" jdbcType="VARCHAR"/>
+		<result property="leaveEndSolt" column="F_leaveEndSolt" jdbcType="VARCHAR"/>
+		<result property="startTimeView" column="F_startTimeView" jdbcType="VARCHAR"/>
+		<result property="endTimeView" column="F_endTimeView" jdbcType="VARCHAR"/>
+		<result property="userid" column="F_user_num" jdbcType="VARCHAR"/>
+		<result property="username" column="F_applicant" jdbcType="VARCHAR"/>
+		<result property="leavetype" column="F_leave_type" jdbcType="VARCHAR"/>
+		<result property="leavedays" column="F_leave_days" jdbcType="DOUBLE"/>
+		<result property="globalflowno" column="GLOBALFLOWNO" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="overTime" type="com.hotent.makshi.model.finance.OverTime">
+		<result property="id" column="id" jdbcType="NUMERIC"/>
+		<result property="startTime" column="F_startTime" jdbcType="TIMESTAMP"/>
+		<result property="endTime" column="F_endTime" jdbcType="TIMESTAMP"/>
+		<result property="userid" column="F_user_num" jdbcType="VARCHAR"/>
+		<result property="username" column="F_applicant" jdbcType="VARCHAR"/>
+		<result property="legalovertimes" column="F_legal_overtimes" jdbcType="VARCHAR"/>
+		<result property="globalflowno" column="GLOBALFLOWNO" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="getVactions" resultMap="vaction">
+		SELECT
+			ID,
+			F_startTime,
+			F_endTime,
+			F_leaveStartSolt,
+			F_leaveEndSolt
+		FROM
+			w_vaction v1
+		WHERE
+			F_isFinished = 1
+		AND F_startTime &lt;= #{applicant_time}
+		AND F_endTime &gt;= #{applicant_time}
+		AND (
+			F_needActual IS NULL
+			OR F_needActual = 0
+		)
+		AND F_user_num = #{userid}
+		AND NOT EXISTS(SELECT runid FROM bpm_pro_run run WHERE run.businesskey=v1.id and run.`status`=11)
+		UNION
+			SELECT
+				ID,
+				F_actualstartTime AS F_startTime,
+				F_actualendTime AS F_endTime,
+				F_actualleaveStartSolt AS F_leaveStartSolt,
+				F_actualleaveEndSolt AS F_leaveEndSolt
+			FROM
+				w_vaction v2
+			WHERE
+				F_isFinished = 1
+			AND F_actualstartTime &lt;= #{applicant_time}
+			AND F_actualendTime &gt;= #{applicant_time}
+			AND F_needActual = 1
+			AND F_user_num =#{userid}
+			AND NOT EXISTS(SELECT runid FROM bpm_pro_run run WHERE run.businesskey=v2.id and run.`status`=11)
+	</select>
+	<resultMap id="workstats" type="com.hotent.makshi.model.finance.Workstats">
+		<result property="userid" column="userid" jdbcType="VARCHAR"/>
+		<result property="username" column="username" jdbcType="VARCHAR"/>
+		<result property="day" column="day" jdbcType="VARCHAR"/>
+		<result property="hadwork" column="hadwork" jdbcType="INTEGER"/>
+		<result property="isleader" column="isleader" jdbcType="INTEGER"/>
+	</resultMap>
+	<select id="getWorkStatsByOrgPathAndMonth"  resultMap="workstats">
+		SELECT DISTINCT a.userid,a.`DAY`,a.username,a.isleader,IFNULL(w2.F_basehour,0) as hadwork FROM(
+		SELECT t.userid,t.fullname as username,cal.d as day,
+			IF(EXISTS(SELECT sp.posid FROM sys_pos sp INNER JOIN sys_user_pos sup on sup.posid=sp.posid WHERE sup.userid=t.userid AND sup.isdelete=0 AND (sp.posname LIKE '%公司领导%' or sp.posname LIKE '%财务经理%' or sp.posname LIKE '%副主任%' or sp.posname LIKE '%部门负责人%' or sp.posname LIKE '%部门副经理%' or sp.posname LIKE '%部门经理%' or sp.posname LIKE '%董事长%')),1,0) as isleader
+			 FROM 
+			
+			(SELECT userid,fullname from sys_user u    WHERE userstatus!='离职' and EXISTS(
+				SELECT * from sys_user s LEFT JOIN sys_user_pos p ON s.userid=p.userid AND p.isdelete=0
+				LEFT JOIN sys_org o on p.ORGID=o.ORGID
+			WHERE u.USERID=s.userid AND o.path LIKE '${orgPath}%' and p.ISPRIMARY=1  and  DATE_FORMAT(s.ENTRYDATE, '%Y-%m') &lt;='${queryMonth}'
+			)) t,
+			
+			(SELECT ADDDATE(y.first, x.d - 1) as d
+			FROM
+			    (SELECT 1 AS d UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL
+			    SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL
+			    SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20 UNION ALL SELECT 21 UNION ALL
+			    SELECT 22 UNION ALL SELECT 23 UNION ALL SELECT 24 UNION ALL SELECT 25 UNION ALL SELECT 26 UNION ALL SELECT 27 UNION ALL SELECT 28 UNION ALL
+			    SELECT 29 UNION ALL SELECT 30 UNION ALL SELECT 31) x,
+			    (SELECT CONCAT('${queryMonth}','-01') as FIRST, DAY(LAST_DAY(str_to_date('${queryMonth}','%Y-%m'))) AS last) y
+			WHERE x.d &lt;= y.last) cal 
+			) a LEFT JOIN
+			 (SELECT w.F_applicantID,w.F_applicant_time,w.F_basehour,COUNT(DISTINCT F_applicantID,F_applicant_time) FROM w_work_hour_application w WHERE w.F_bussinessDataId IS NOT NULL
+				AND w.F_isdelete = 0
+				AND w.F_isFinished = 1 AND DATE_FORMAT(w.F_applicant_time,'%Y-%m')='${queryMonth}' GROUP BY w.F_applicantID,w.F_applicant_time
+			) w2 ON w2.F_applicantID = a.userid AND DATE_FORMAT(
+					w2.F_applicant_time,
+					'%Y-%m-%d'
+				) = a.`day`  
+	
+			ORDER BY
+			a.userid,
+			a.`DAY`
+	
+	</select>
+	<!-- 根据userid查询当前运行节点不在申请请假节点的请假流程 -->
+	<select id="getHadStartedVactionByUserId" resultMap="vaction">
+		SELECT t1.*,his.GLOBALFLOWNO from 
+		(
+		SELECT
+			a.ID,
+			a.F_user_num,
+			a.F_applicant,
+			a.F_leave_type,
+		IF (
+			(`a`.`F_needActual` = '1'),
+			concat(
+				date_format(
+					`a`.`F_actualstartTime`,
+					'%Y-%m-%d'
+				),
+				(
+					CASE
+					WHEN (
+						`a`.`F_actualleaveStartSolt` = '1'
+					) THEN
+						'-上午'
+					WHEN (
+						`a`.`F_actualleaveStartSolt` = '2'
+					) THEN
+						'-下午'
+					ELSE
+						'-上午'
+					END
+				)
+			),
+			concat(
+				date_format(
+					`a`.`F_startTime`,
+					'%Y-%m-%d'
+				),
+				(
+					CASE
+					WHEN (`a`.`F_leaveStartSolt` = '1') THEN
+						'-上午'
+					WHEN (`a`.`F_leaveStartSolt` = '2') THEN
+						'-下午'
+					ELSE
+						'-上午'
+					END
+				)
+			)
+		) AS `F_startTimeView`,
+		
+		IF (
+			(`a`.`F_needActual` = '1'),
+			concat(
+				date_format(
+					`a`.`F_actualendTime`,
+					'%Y-%m-%d'
+				),
+				(
+					CASE
+					WHEN (
+						`a`.`F_actualleaveEndSolt` = '1'
+					) THEN
+						'-上午'
+					WHEN (
+						`a`.`F_actualleaveEndSolt` = '2'
+					) THEN
+						'-下午'
+					ELSE
+						'-下午'
+					END
+				)
+			),
+			concat(
+				date_format(`a`.`F_endTime`, '%Y-%m-%d'),
+				(
+					CASE
+					WHEN (`a`.`F_leaveEndSolt` = '1') THEN
+						'-上午'
+					WHEN (`a`.`F_leaveEndSolt` = '2') THEN
+						'-下午'
+					ELSE
+						'-下午'
+					END
+				)
+			)
+		) AS `F_endTimeView`,
+		IF ((a.F_needActual= '1'),
+			 a.F_actualleave_days,
+			 a.F_leave_days
+		) AS `F_leave_days`
+		FROM
+			w_vaction a
+		WHERE
+			a.F_isFinished = 1
+			AND a.id not in (SELECT w.id from w_vaction w LEFT JOIN bpm_pro_run_his his on w.ID=his.BUSINESSKEY 
+				LEFT JOIN act_ru_task ru on ru.PROC_INST_ID_=his.ACTINSTID 
+      WHERE  ru.NAME_='申请请假' AND  his.DEFID=10000009830004)
+		AND a.F_user_num=#{userId}
+		) t1 LEFT JOIN bpm_pro_run_his his on his.BUSINESSKEY=t1.ID
+	
+	</select>
+	
+	
+	<select id="getCompletedVactionsByOrgPathAndMonth" resultMap="vaction">
+		SELECT t1.*,his.GLOBALFLOWNO from 
+		(
+		SELECT
+			a.ID,
+			a.F_user_num,
+			a.F_applicant,
+			a.F_leave_type,
+		IF (
+			(`a`.`F_needActual` = '1'),
+			concat(
+				date_format(
+					`a`.`F_actualstartTime`,
+					'%Y-%m-%d'
+				),
+				(
+					CASE
+					WHEN (
+						`a`.`F_actualleaveStartSolt` = '1'
+					) THEN
+						'-上午'
+					WHEN (
+						`a`.`F_actualleaveStartSolt` = '2'
+					) THEN
+						'-下午'
+					ELSE
+						'-上午'
+					END
+				)
+			),
+			concat(
+				date_format(
+					`a`.`F_startTime`,
+					'%Y-%m-%d'
+				),
+				(
+					CASE
+					WHEN (`a`.`F_leaveStartSolt` = '1') THEN
+						'-上午'
+					WHEN (`a`.`F_leaveStartSolt` = '2') THEN
+						'-下午'
+					ELSE
+						'-上午'
+					END
+				)
+			)
+		) AS `F_startTimeView`,
+		
+		IF (
+			(`a`.`F_needActual` = '1'),
+			concat(
+				date_format(
+					`a`.`F_actualendTime`,
+					'%Y-%m-%d'
+				),
+				(
+					CASE
+					WHEN (
+						`a`.`F_actualleaveEndSolt` = '1'
+					) THEN
+						'-上午'
+					WHEN (
+						`a`.`F_actualleaveEndSolt` = '2'
+					) THEN
+						'-下午'
+					ELSE
+						'-下午'
+					END
+				)
+			),
+			concat(
+				date_format(`a`.`F_endTime`, '%Y-%m-%d'),
+				(
+					CASE
+					WHEN (`a`.`F_leaveEndSolt` = '1') THEN
+						'-上午'
+					WHEN (`a`.`F_leaveEndSolt` = '2') THEN
+						'-下午'
+					ELSE
+						'-下午'
+					END
+				)
+			)
+		) AS `F_endTimeView`,
+		IF ((a.F_needActual= '1'),
+			 a.F_actualleave_days,
+			 a.F_leave_days
+		) AS `F_leave_days`
+		FROM
+			w_vaction a
+		WHERE
+			a.F_isFinished = 1
+		<!-- and a.F_end = 1 -->
+		and a.id not in (SELECT w.id from w_vaction w LEFT JOIN bpm_pro_run_his his on w.ID=his.BUSINESSKEY 
+				LEFT JOIN act_ru_task ru on ru.PROC_INST_ID_=his.ACTINSTID 
+      WHERE  ru.NAME_='申请请假' AND  his.DEFID=10000009830004)
+		AND a.F_user_num IN (
+			SELECT
+				userid
+			FROM
+				sys_user u
+			WHERE
+				userstatus != '离职'
+			AND EXISTS (
+				SELECT
+					*
+				FROM
+					sys_user s
+				LEFT JOIN sys_user_pos p ON s.userid = p.userid
+				AND p.isdelete = 0
+				LEFT JOIN sys_org o ON p.ORGID = o.ORGID
+				WHERE
+					u.USERID = s.userid
+				AND o.path LIKE '${orgPath}%'
+			)
+		)
+		) t1 LEFT JOIN bpm_pro_run_his his on his.BUSINESSKEY=t1.ID
+		 WHERE left(t1.F_startTimeView,7) &lt;='${queryMonth}' AND left(t1.F_endTimeView,7) &gt;= '${queryMonth}'
+	
+	</select>
+	<select id="getCompletedOvertimeByOrgPathAndMonth" resultMap="overTime">
+		SELECT w.F_user_num,w.F_statTime as F_startTime,w.F_endTime,w.F_applicant,IFNULL(w.F_legal_overtimes,0) as F_legal_overtimes,his.GLOBALFLOWNO
+		
+		from w_overtime_application w 
+			LEFT JOIN bpm_pro_run_his his on his.BUSINESSKEY=w.id 
+		WHERE w.F_isfinished=1
+
+		AND w.F_user_num IN (
+			SELECT
+				userid
+			FROM
+				sys_user u
+			WHERE
+				userstatus != '离职'
+			AND EXISTS (
+				SELECT
+					*
+				FROM
+					sys_user s
+				LEFT JOIN sys_user_pos p ON s.userid = p.userid
+				AND p.isdelete = 0
+				LEFT JOIN sys_org o ON p.ORGID = o.ORGID
+				WHERE
+					u.USERID = s.userid
+				AND o.path LIKE '${orgPath}%'
+			)
+		)
+		and DATE_FORMAT(w.F_application_date,'%Y-%m') ='${queryMonth}'
+		<!-- DATE_FORMAT(w.F_statTime,'%Y-%m') &lt;= '${queryMonth}' and DATE_FORMAT(w.F_endTime,'%Y-%m') &gt;= '${queryMonth}' -->
+	</select>
+	
+	
+	<resultMap id="workcount" type="com.hotent.makshi.model.finance.WorkCount">
+		<result property="userid" column="userid" jdbcType="VARCHAR"/>
+		<result property="username" column="username" jdbcType="VARCHAR"/>
+		<result property="orgid" column="ORGID" jdbcType="VARCHAR"/>
+		<result property="orgname" column="ORGNAME" jdbcType="VARCHAR"/>
+		<result property="path" column="PATH" jdbcType="VARCHAR"/>
+		<result property="workcount" column="workcount" jdbcType="DOUBLE"/>
+		<result property="workdaystr" column="workdaystr" jdbcType="VARCHAR"/>
+		<result property="userstatus" column="userstatus" jdbcType="VARCHAR"/>
+		<result property="ischarge" column="ischarge" jdbcType="INTEGER"/>
+		<result property="isleader" column="isleader" jdbcType="INTEGER"/>
+		<result property="isnew" column="isnew" jdbcType="INTEGER"/>
+		<result property="entrydate" column="entrydate" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<select id="getWorkStatsCountByOrgPathAndMonth" resultMap="workcount">
+		SELECT DISTINCT s.userid,s.fullname as username,s.account,o.ORGID,o.ORGNAME,o.PATH,IF((DATE_FORMAT(s.ENTRYDATE,'%Y-%m')='${queryMonth}'),1,0) as isnew,
+			<!-- (SELECT COUNT(DISTINCT w.F_applicantID,w.F_applicant_time) from w_work_hour_application w 
+				WHERE w.F_bussinessDataId IS not null and w.F_isdelete=0 and w.F_isFinished=1 AND w.F_applicantID=s.USERID AND DATE_FORMAT(w.F_applicant_time,'%Y-%m')='${queryMonth}'  and DATE_FORMAT(w.F_applicant_time,'%e') in (${queryneedWorkedDay}))
+			as workcount, -->
+			(SELECT
+				GROUP_CONCAT(DISTINCT DATE_FORMAT(w.F_applicant_time,'%Y-%m-%d'))
+			FROM
+				w_work_hour_application w
+			WHERE
+				w.F_bussinessDataId IS NOT NULL AND w.F_isdelete = 0 AND w.F_isFinished = 1 AND w.F_applicantID = s.USERID AND DATE_FORMAT(w.F_applicant_time, '%Y-%m') = '${queryMonth}' AND DATE_FORMAT(w.F_applicant_time, '%e') IN (${queryneedWorkedDay}) 
+			) as workdaystr,
+			s.userstatus,
+			s.ENTRYDATE,
+			<!-- IF(EXISTS(SELECT pos.userposid from sys_user_pos pos WHERE pos.isdelete=0 AND pos.userid=s.userid AND pos.ischarge=1),1,0) as ischarge, -->
+
+			IF(EXISTS(SELECT * FROM sys_pos sp INNER JOIN sys_user_pos sup on sup.posid=sp.posid WHERE sup.userid=s.userid AND sup.isdelete=0 AND (sp.posname LIKE '%公司领导%' or sp.posname LIKE '%财务经理%' or sp.posname LIKE '%副主任%' or sp.posname LIKE '%部门负责人%' or sp.posname LIKE '%部门副经理%' or sp.posname LIKE '%部门经理%' or sp.posname LIKE '%董事长%')),1,0) as isleader
+ 
+ 		from sys_user s   
+	 	LEFT JOIN sys_user_pos p ON s.userid=p.userid AND p.isdelete=0
+		LEFT JOIN sys_org o on p.ORGID=o.ORGID
+		WHERE   s.userstatus!='离职'  AND o.path LIKE '${orgPath}%' and DATE_FORMAT(s.ENTRYDATE, '%Y-%m') &lt;='${queryMonth}'
+		and p.ISPRIMARY=1
+		<if test="@Ognl@isNotEmpty(account)">AND s.account like '%${account}%'</if>
+		<if test="@Ognl@isNotEmpty(userid)">AND s.userid=#{userid}</if>
+		<if test="@Ognl@isNotEmpty(username)">AND s.fullname like '%${username}%'</if>
+		 ORDER BY o.PATH,s.account
+	</select>
+</mapper>

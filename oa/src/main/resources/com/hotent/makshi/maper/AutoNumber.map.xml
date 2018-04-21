@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.autonum.AutoNumber">
+	<resultMap id="BaseResultMap" type="com.hotent.makshi.model.autonum.AutoNumber">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="alias" property="alias" jdbcType="VARCHAR" />
+		<result column="curvalue" property="curvalue" jdbcType="BIGINT" />
+		<result column="uninque_no" property="uninque_no" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, name, alias, curvalue, uninque_no
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.autonum.AutoNumber">
+		insert into w_auto_number (id, name, alias, curvalue,
+		uninque_no)
+		values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{alias,jdbcType=VARCHAR},
+		#{curvalue,jdbcType=BIGINT},#{uninque_no,jdbcType=VARCHAR})
+	</insert>
+
+	<select id="getNo" parameterType="map" resultMap="BaseResultMap">
+		select * from w_auto_number where uninque_no = #{uninque_no} and alias = #{alias}
+	</select>
+
+
+	<update id="incr" parameterType="map">
+		update w_auto_number set curvalue = (curvalue+1) where id =
+		#{id}
+	</update>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.contract.Bankandaccount">
+	<resultMap id="Bankandaccount" type="com.hotent.makshi.model.contract.Bankandaccount">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="bankName" column="F_BANKNAME" jdbcType="VARCHAR"/>
+		<result property="bankAccount" column="F_BANKACCOUNT" jdbcType="VARCHAR"/>
+		<result property="bankNameVal" column="F_BANKNAMEVAL" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_BANKNAME,F_BANKACCOUNT,F_BANKNAMEVAL
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.contract.Bankandaccount">
+		INSERT INTO W_BANKANDACCOUNT
+		(ID,
+		F_BANKNAME,F_BANKACCOUNT,F_BANKNAMEVAL)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{bankName,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR},
+		#{bankName,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_BANKANDACCOUNT 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.contract.Bankandaccount">
+		UPDATE W_BANKANDACCOUNT SET
+		F_BANKNAME=#{bankName,jdbcType=VARCHAR},
+		F_BANKACCOUNT=#{bankAccount,jdbcType=VARCHAR},
+		F_BANKNAMEVAL=#{bankName,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="Bankandaccount">
+		SELECT <include refid="columns"/>
+		FROM W_BANKANDACCOUNT
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="Bankandaccount">
+		SELECT <include refid="columns"/>
+		FROM W_BANKANDACCOUNT   
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

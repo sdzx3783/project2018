@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.waterprotectpark.EquipmentMaintenanceApplication">
+	<resultMap id="EquipmentMaintenanceApplication" type="com.hotent.makshi.model.waterprotectpark.EquipmentMaintenanceApplication">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="orgID" column="F_ORGID" jdbcType="VARCHAR"/>
+		<result property="orgChargerID" column="F_ORGCHARGERID" jdbcType="VARCHAR"/>
+		<result property="orgLeaderID" column="F_ORGLEADERID" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="applicationTime" column="F_APPLICATIONTIME" jdbcType="DATE"/>
+		<result property="org" column="F_ORG" jdbcType="VARCHAR"/>
+		<result property="faultTime" column="F_FAULTTIME" jdbcType="DATE"/>
+		<result property="equipmentName" column="F_EQUIPMENTNAME" jdbcType="VARCHAR"/>
+		<result property="problemDesc" column="F_PROBLEMDESC" jdbcType="VARCHAR"/>
+		<result property="maintenancePlan" column="F_MAINTENANCEPLAN" jdbcType="VARCHAR"/>
+		<result property="maintenanceCost" column="F_MAINTENANCECOST" jdbcType="NUMERIC"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="orgCharger" column="F_ORGCHARGER" jdbcType="VARCHAR"/>
+		<result property="orgLeader" column="F_ORGLEADER" jdbcType="VARCHAR"/>
+		<result property="from" column="F_FROM" jdbcType="INTEGER"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_APPLICANTID,F_ORGID,F_ORGCHARGERID,F_ORGLEADERID,F_APPLICANT,F_APPLICATIONTIME,F_ORG,F_FAULTTIME,F_EQUIPMENTNAME,F_PROBLEMDESC,F_MAINTENANCEPLAN,F_MAINTENANCECOST,F_REMARK,F_ATTACHMENT,F_ORGCHARGER,F_ORGLEADER
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPLICANTID,F_ORGID,F_ORGCHARGERID,F_ORGLEADERID,F_APPLICANT,F_APPLICATIONTIME,F_ORG,F_FAULTTIME,F_EQUIPMENTNAME,F_PROBLEMDESC,F_MAINTENANCEPLAN,F_MAINTENANCECOST,F_REMARK,F_ATTACHMENT,F_ORGCHARGER,F_ORGLEADER
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(orgID)"> AND F_ORGID  LIKE '%${orgID}%'  </if>
+			<if test="@Ognl@isNotEmpty(orgChargerID)"> AND F_ORGCHARGERID  LIKE '%${orgChargerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(orgLeaderID)"> AND F_ORGLEADERID  LIKE '%${orgLeaderID}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicationTime)"> AND F_APPLICATIONTIME  =#{applicationTime} </if>
+			<if test="@Ognl@isNotEmpty(beginapplicationTime)"> AND F_APPLICATIONTIME  >=#{beginapplicationTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endapplicationTime)"> AND F_APPLICATIONTIME <![CDATA[ <=#{endapplicationTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(org)"> AND F_ORG  LIKE '%${org}%'  </if>
+			<if test="@Ognl@isNotEmpty(faultTime)"> AND F_FAULTTIME  =#{faultTime} </if>
+			<if test="@Ognl@isNotEmpty(beginfaultTime)"> AND F_FAULTTIME  >=#{beginfaultTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endfaultTime)"> AND F_FAULTTIME <![CDATA[ <=#{endfaultTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(equipmentName)"> AND F_EQUIPMENTNAME  LIKE '%${equipmentName}%'  </if>
+			<if test="@Ognl@isNotEmpty(problemDesc)"> AND F_PROBLEMDESC  LIKE '%${problemDesc}%'  </if>
+			<if test="@Ognl@isNotEmpty(maintenancePlan)"> AND F_MAINTENANCEPLAN  LIKE '%${maintenancePlan}%'  </if>
+			<if test="@Ognl@isNotEmpty(maintenanceCost)"> AND F_MAINTENANCECOST  =#{maintenanceCost} </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(orgCharger)"> AND F_ORGCHARGER  LIKE '%${orgCharger}%'  </if>
+			<if test="@Ognl@isNotEmpty(orgLeader)"> AND F_ORGLEADER  LIKE '%${orgLeader}%'  </if>
+			and F_isDelete=0 and (F_isFinished=1 or F_FROM=1)
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.waterprotectpark.EquipmentMaintenanceApplication">
+		INSERT INTO W_EQUIPMENT_MAINTENANCE_APPLICATION
+		(ID,
+		F_APPLICANTID,F_ORGID,F_ORGCHARGERID,F_ORGLEADERID,F_APPLICANT,F_APPLICATIONTIME,F_ORG,F_FAULTTIME,F_EQUIPMENTNAME,F_PROBLEMDESC,F_MAINTENANCEPLAN,F_MAINTENANCECOST,F_REMARK,F_ATTACHMENT,F_ORGCHARGER,F_ORGLEADER,F_FROM)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{applicantID,jdbcType=VARCHAR}, #{orgID,jdbcType=VARCHAR}, #{orgChargerID,jdbcType=VARCHAR}, #{orgLeaderID,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{applicationTime,jdbcType=DATE}, #{org,jdbcType=VARCHAR}, #{faultTime,jdbcType=DATE}, #{equipmentName,jdbcType=VARCHAR}, #{problemDesc,jdbcType=VARCHAR}, #{maintenancePlan,jdbcType=VARCHAR}, #{maintenanceCost,jdbcType=NUMERIC}, #{remark,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, #{orgCharger,jdbcType=VARCHAR}, #{orgLeader,jdbcType=VARCHAR}, #{from,jdbcType=INTEGER})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_EQUIPMENT_MAINTENANCE_APPLICATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.waterprotectpark.EquipmentMaintenanceApplication">
+		UPDATE W_EQUIPMENT_MAINTENANCE_APPLICATION SET
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_ORGID=#{orgID,jdbcType=VARCHAR},
+		F_ORGCHARGERID=#{orgChargerID,jdbcType=VARCHAR},
+		F_ORGLEADERID=#{orgLeaderID,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_APPLICATIONTIME=#{applicationTime,jdbcType=DATE},
+		F_ORG=#{org,jdbcType=VARCHAR},
+		F_FAULTTIME=#{faultTime,jdbcType=DATE},
+		F_EQUIPMENTNAME=#{equipmentName,jdbcType=VARCHAR},
+		F_PROBLEMDESC=#{problemDesc,jdbcType=VARCHAR},
+		F_MAINTENANCEPLAN=#{maintenancePlan,jdbcType=VARCHAR},
+		F_MAINTENANCECOST=#{maintenanceCost,jdbcType=NUMERIC},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_ORGCHARGER=#{orgCharger,jdbcType=VARCHAR},
+		F_ORGLEADER=#{orgLeader,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="EquipmentMaintenanceApplication">
+		SELECT <include refid="columns"/>
+		FROM W_EQUIPMENT_MAINTENANCE_APPLICATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="EquipmentMaintenanceApplication">
+		SELECT <include refid="columns"/>
+		FROM W_EQUIPMENT_MAINTENANCE_APPLICATION   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

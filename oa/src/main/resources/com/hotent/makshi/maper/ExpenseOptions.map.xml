@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.autonum.ExpenseOptions" >
+  <resultMap id="ExpenseOptions" type="com.hotent.makshi.model.autonum.ExpenseOptions" >
+    <id property="id" column="ID" jdbcType="NUMERIC"/>
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sorting" property="sorting" jdbcType="NUMERIC" />
+  </resultMap>
+   
+  <sql id="Base_Column_List" >
+   id, name, sorting
+  </sql>
+  
+  <delete id="delById" parameterType="java.lang.Long">
+		delete from w_expense_options  
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<select id="getById" parameterType="java.lang.Long" resultMap="ExpenseOptions">
+		SELECT <include refid="Base_Column_List"/>
+		FROM w_expense_options
+		WHERE
+		ID=#{id}
+	</select>
+
+
+	<select id="getAll" resultMap="ExpenseOptions">
+		select
+		<include refid="Base_Column_List" />
+		from w_expense_options t
+		order by sorting asc
+	</select>
+	
+  <insert id="add" parameterType="com.hotent.makshi.model.autonum.ExpenseOptions" >
+    insert into w_expense_options (id, name, sorting)
+    values (#{id,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{sorting,jdbcType=DECIMAL})
+  </insert>
+  
+  <update id="update" parameterType="com.hotent.makshi.model.autonum.ExpenseOptions">
+		update w_expense_options
+    	set name = #{name,jdbcType=VARCHAR},
+      sorting = #{sorting,jdbcType=DECIMAL}
+	    where id = #{id,jdbcType=DECIMAL}
+	</update>
+	
+</mapper>

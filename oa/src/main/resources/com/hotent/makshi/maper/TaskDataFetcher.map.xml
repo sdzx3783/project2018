@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.common.TaskDataFetcher">
+	<resultMap id="TaskDataFetcher" type="com.hotent.makshi.model.common.TaskDataFetcher">
+		<id property="tableName" column="F_table_name" jdbcType="VARCHAR"/>
+		<result property="fetcher" column="F_fetcher" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		F_TABLE_NAME,F_FETCHER
+	</sql>
+	<sql id="wfColumns">
+		F_TABLE_NAME,F_FETCHER
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(tableName)"> AND F_TABLE_NAME =#{tableName}  </if>
+			<if test="@Ognl@isNotEmpty(fetcher)"> AND F_FETCHER =#{fetcher}  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.common.TaskDataFetcher">
+		INSERT INTO W_TASK_DATA_FETCHER
+		(F_TABLE_NAME,F_FETCHER)
+		VALUES
+		(#{tableName,jdbcType=VARCHAR}, #{fetcher,jdbcType=VARCHAR}
+		  )
+	</insert>
+	
+	<delete id="delById">
+		DELETE FROM W_TASK_DATA_FETCHER 
+		WHERE F_TABLE_NAME=#{tableName}
+	</delete>
+		    
+	<select id="getById" resultMap="TaskDataFetcher">
+		SELECT <include refid="columns"/>
+		FROM W_TASK_DATA_FETCHER
+		WHERE
+		WHERE F_TABLE_NAME=#{tableName}
+	</select>
+	
+	<select id="getAll" resultMap="TaskDataFetcher">
+		SELECT <include refid="columns"/>
+		FROM W_TASK_DATA_FETCHER   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+</mapper>

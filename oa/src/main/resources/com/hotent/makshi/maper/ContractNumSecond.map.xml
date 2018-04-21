@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.contract.ContractNumSecond">
+	<resultMap id="ContractNumSecond" type="com.hotent.makshi.model.contract.ContractNumSecond">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="num" column="F_NUM" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_TYPE,F_NUM
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_TYPE,F_NUM
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  LIKE '%${type}%'  </if>
+			<if test="@Ognl@isNotEmpty(num)"> AND F_NUM  LIKE '%${num}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.contract.ContractNumSecond">
+		INSERT INTO W_CONTRACT_NUM_SECOND
+		(ID,REFID,
+		F_TYPE,F_NUM)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{type,jdbcType=VARCHAR}, #{num,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CONTRACT_NUM_SECOND 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.contract.ContractNumSecond">
+		UPDATE W_CONTRACT_NUM_SECOND SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_NUM=#{num,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_CONTRACT_NUM_SECOND
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getContractNumSecondList" resultMap="ContractNumSecond">
+	    SELECT <include refid="columns"/>
+	    FROM W_CONTRACT_NUM_SECOND 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ContractNumSecond">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_NUM_SECOND
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="ContractNumSecond">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_NUM_SECOND   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

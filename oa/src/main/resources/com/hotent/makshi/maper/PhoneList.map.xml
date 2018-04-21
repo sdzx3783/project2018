@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.telList.PhoneList">
+	<resultMap id="PhoneList" type="com.hotent.makshi.model.telList.PhoneList">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="departmentID" column="F_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="user_id" column="F_USER_ID" jdbcType="VARCHAR"/>
+		<result property="state" column="F_STATE" jdbcType="VARCHAR"/>
+		<result property="user_name" column="F_USER_NAME" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="limit" column="F_LIMIT" jdbcType="VARCHAR"/>
+		<result property="phone_number" column="F_PHONE_NUMBER" jdbcType="NUMERIC"/>
+		<result property="max_position" column="F_MAX_POSITION" jdbcType="VARCHAR"/>
+		<result property="short_munber" column="F_SHORT_MUNBER" jdbcType="NUMERIC"/>
+		<result property="remarks" column="F_REMARKS" jdbcType="VARCHAR"/>
+		<result property="packages" column="F_PACKAGES" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_DEPARTMENTID,F_USER_ID,F_STATE,F_USER_NAME,F_DEPARTMENT,F_LIMIT,F_PHONE_NUMBER,F_MAX_POSITION,F_SHORT_MUNBER,F_REMARKS,F_PACKAGES
+	</sql>
+	<sql id="wfColumns">
+		ID,F_DEPARTMENTID,F_USER_ID,F_STATE,F_USER_NAME,F_DEPARTMENT,F_LIMIT,F_PHONE_NUMBER,F_MAX_POSITION,F_SHORT_MUNBER,F_REMARKS,F_PACKAGES
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_DEPARTMENTID  LIKE '%${departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_id)"> AND F_USER_ID  LIKE '%${user_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(state)"> AND F_STATE  LIKE '%${state}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_name)"> AND F_USER_NAME  LIKE '%${user_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(limit)"> AND F_LIMIT  LIKE '%${limit}%'  </if>
+			<if test="@Ognl@isNotEmpty(phone_number)"> AND F_PHONE_NUMBER  =#{phone_number} </if>
+			<if test="@Ognl@isNotEmpty(max_position)"> AND F_MAX_POSITION  LIKE '%${max_position}%'  </if>
+			<if test="@Ognl@isNotEmpty(short_munber)"> AND F_SHORT_MUNBER  =#{short_munber} </if>
+			<if test="@Ognl@isNotEmpty(remarks)"> AND F_REMARKS  LIKE '%${remarks}%'  </if>
+			<if test="@Ognl@isNotEmpty(packages)"> AND F_PACKAGES  LIKE '%${packages}%'  </if>
+			<if test="@Ognl@isNotEmpty(userIdIsNull)"> AND F_USER_ID=''  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.telList.PhoneList">
+		INSERT INTO W_PHONE_LIST
+		(ID,
+		F_DEPARTMENTID,F_USER_ID,F_STATE,F_USER_NAME,F_DEPARTMENT,F_LIMIT,F_PHONE_NUMBER,F_MAX_POSITION,F_SHORT_MUNBER,F_REMARKS,F_PACKAGES)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{departmentID,jdbcType=VARCHAR}, #{user_id,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{limit,jdbcType=VARCHAR}, #{phone_number,jdbcType=NUMERIC}, #{max_position,jdbcType=VARCHAR}, #{short_munber,jdbcType=NUMERIC}, #{remarks,jdbcType=VARCHAR}, #{packages,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_PHONE_LIST 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.telList.PhoneList">
+		UPDATE W_PHONE_LIST SET
+		F_DEPARTMENTID=#{departmentID,jdbcType=VARCHAR},
+		F_USER_ID=#{user_id,jdbcType=VARCHAR},
+		F_STATE=#{state,jdbcType=VARCHAR},
+		F_USER_NAME=#{user_name,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_LIMIT=#{limit,jdbcType=VARCHAR},
+		F_PHONE_NUMBER=#{phone_number,jdbcType=NUMERIC},
+		F_MAX_POSITION=#{max_position,jdbcType=VARCHAR},
+		F_SHORT_MUNBER=#{short_munber,jdbcType=NUMERIC},
+		F_REMARKS=#{remarks,jdbcType=VARCHAR},
+		F_PACKAGES=#{packages,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="PhoneList">
+		SELECT <include refid="columns"/>
+		FROM W_PHONE_LIST
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="PhoneList">
+		SELECT <include refid="columns"/>
+		FROM W_PHONE_LIST   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

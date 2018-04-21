@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.expense.ExpenseReimbursement">
+	<resultMap id="BaseResultMap" type="com.hotent.makshi.model.expense.ExpenseReimbursement">
+		 
+	</resultMap>
+	<resultMap id="BaseResultMapOrg" type="com.hotent.makshi.model.expense.ExpenseReimbursementOrg">
+		 
+	</resultMap>
+	<resultMap id="BaseResultMapTypes" type="com.hotent.makshi.model.expense.ExpenseReimbursementTypes">
+		 
+	</resultMap>
+
+	<select id="getStatics" resultMap="BaseResultMap" parameterType="map">
+		select o orgId,c types,sum(ifnull(m,0)) money,left(F_ctime,7)ctime  from (
+		SELECT t.id,F_ctime, t.F_orgID o, t.F_money_first m,t.F_purpose_first  c from w_expense_reimbursement t where F_complete=2
+		union all
+		SELECT t1.id,F_ctime,t1.F_orgID o, t1.F_money_second m,t1.F_purpose_second c from w_expense_reimbursement t1 where F_complete=2
+		union all
+		SELECT t1.id,F_ctime,t1.F_orgID o, t1.F_money_third m,t1.F_purpose_third c from w_expense_reimbursement t1 where F_complete=2
+		union all
+		SELECT t1.id,F_ctime,t1.F_orgID o, t1.F_money_four m,t1.F_purpose_four c from w_expense_reimbursement t1 where F_complete=2
+		order by id desc
+		)tt where 
+		<if test="type == 1">
+			o in (select p.orgid from sys_org p where p.path like #{orgidlike} and p.ISDELETE=0)
+		</if>
+		<if test="type == 2">
+			o = #{orgId}
+		</if>
+		and c is not null and left(F_ctime,7) between #{start} and #{end}
+		and exists (select name from w_expense_options ops where tt.c =ops.name)
+		group by c,left(F_ctime,7)
+	</select>
+	
+	
+	<select id="getOrgIds" resultMap="BaseResultMapOrg" parameterType="map">
+		select g.orgId ,g.ORGNAME orgName from (
+			select  distinct( SUBSTRING_INDEX(SUBSTRING_INDEX(g.path,'.',3),'.',-1) ) orgId
+			from w_expense_reimbursement t1 left join sys_org g on t1.f_orgid=g.orgid
+			where F_complete=2 
+			and (F_purpose_first is not null or F_purpose_second is not null or F_purpose_third is not null or F_purpose_four is not null  )
+			and left(F_ctime,7) between #{start} and #{end}
+		)tt join sys_org g on tt.orgid=g.ORGID
+		order by  g.sn asc
+	</select>
+	
+	<select id="getTypes" resultMap="BaseResultMapTypes" parameterType="map">
+		select distinct(c) typeName,ops.id typesId from (
+		SELECT t.id,F_ctime, t.F_orgID o, t.F_money_first m,t.F_purpose_first c from w_expense_reimbursement t where F_complete=2
+		union all
+		SELECT t1.id,F_ctime,t1.F_orgID o, t1.F_money_second m,t1.F_purpose_second c from w_expense_reimbursement t1 where F_complete=2
+		union all
+		SELECT t1.id,F_ctime,t1.F_orgID o, t1.F_money_third m,t1.F_purpose_third c from w_expense_reimbursement t1 where F_complete=2
+		union all
+		SELECT t1.id,F_ctime,t1.F_orgID o, t1.F_money_four m,t1.F_purpose_four c from w_expense_reimbursement t1 where F_complete=2
+		order by id desc
+		)tt join w_expense_options ops on tt.c= ops.name
+		where 
+		<if test="type == 1">
+			o in (select p.orgid from sys_org p where p.path like #{orgidlike} and p.ISDELETE=0)
+		</if>
+		<if test="type == 2">
+			o = #{orgId}
+		</if>
+		and c is not null and left(F_ctime,7) between #{start} and #{end}
+		order by ops.id asc
+	</select>
+	
+	
+	
+	
+	<resultMap id="BaseResultDepartMap" type="com.hotent.makshi.model.expense.ExpenseReimbursementDepart">
+		 
+	</resultMap>
+	
+	<resultMap id="BaseResultDepartMapUser" type="com.hotent.makshi.model.expense.ExpenseReimbursementDepartUser">
+		 
+	</resultMap>
+	
+	<select id="getDepartStatics" resultMap="BaseResultDepartMap" parameterType="map">
+		select userName,userNum,sum(money)money,types  from (
+                SELECT t.id,t.F_applicant userName,t.F_user_num userNum,F_ctime, t.F_orgID orgId, t.F_money_first money,t.F_purpose_first  types from w_expense_reimbursement t where F_complete=2
+				union all
+				SELECT t1.id,t1.F_applicant userName,t1.F_user_num userNum,F_ctime,t1.F_orgID orgId, t1.F_money_second money,t1.F_purpose_second types from w_expense_reimbursement t1 where F_complete=2
+				union all
+				SELECT t1.id,t1.F_applicant userName,t1.F_user_num userNum,F_ctime,t1.F_orgID orgId, t1.F_money_third money,t1.F_purpose_third types from w_expense_reimbursement t1 where F_complete=2
+				union all
+				SELECT t1.id,t1.F_applicant userName,t1.F_user_num userNum,F_ctime,t1.F_orgID orgId, t1.F_money_four money,t1.F_purpose_four types from w_expense_reimbursement t1 where F_complete=2
+				order by id desc
+		)tt where 
+		<if test="type == 1">
+			orgId in (select p.orgid from sys_org p where p.path like #{orgidlike} and p.ISDELETE=0)
+		</if>
+		<if test="type == 2">
+			orgId = #{orgId}
+		</if>
+		and types is not null and left(F_ctime,7) between #{start} and #{end}
+		and exists (select name from w_expense_options ops where tt.types =ops.name)
+		group by userName,types
+	</select>
+	
+	<select id="getUsers" resultMap="BaseResultDepartMapUser" parameterType="map">
+	 select distinct(F_applicant) userName,F_user_num userNum from w_expense_reimbursement where 
+	 	F_complete=2
+		and (F_purpose_first is not null or F_purpose_second is not null or F_purpose_third is not null or F_purpose_four is not null  )
+	 	<if test="type == 1">
+			and F_orgID in (select p.orgid from sys_org p where p.path like #{orgidlike} and p.ISDELETE=0)
+		</if>
+		<if test="type == 2">
+			and F_orgID = #{orgId}
+		</if>
+		and left(F_ctime,7) between #{start} and #{end}
+	</select>
+	
+  
+</mapper>

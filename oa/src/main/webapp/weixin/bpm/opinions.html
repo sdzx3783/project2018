@@ -1,0 +1,83 @@
+<!doctype html>
+<html class="no-js" >
+<head>
+<title>BPMX 微信端</title>
+<meta charset="utf-8">
+<script src="../assets/js/importJs.js"></script>
+<script type="text/javascript">
+$(function() {
+	var runId=HtUtil.getParameter("runId");
+	var url=__ctx +"/weixin/bpm/taskOpinion/listJson.ht?runId=" + runId;
+	var $wrapperList=$("#wrapperList");
+	
+	var tpl = $('#tpi-list-item').html();
+	var template = Handlebars.compile(tpl);
+	
+	$.get(url,function(data){
+		var tmp=template(data);
+		$wrapperList.html(tmp);
+	});
+});
+
+Handlebars.registerHelper("ifExeUserId",function(exeUserId,options){
+    if(exeUserId){
+      //满足添加继续执行
+      return options.fn(this);
+    }else{
+      //不满足条件执行{{else}}部分
+      return options.inverse(this);
+    }
+});
+
+</script>
+<style type="text/css">
+li.title {font-weight: bold;}
+li.title  li {font-weight: normal;list-style-type:none;}
+</style>
+</head>
+<body>
+
+<div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="my-modal-loading">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">正在加载数据请稍候...</div>
+    <div class="am-modal-bd">
+      <span class="am-icon-spinner am-icon-spin"></span>
+    </div>
+  </div>
+</div>
+
+<script type="text/x-handlebars-template" id="tpi-list-item">
+	{{#each taskOpinionList}}
+		<li class="title">{{taskName}}
+			{{#with list}}
+			{{#each this}}
+			<ul>
+				<li>执行人:
+					{{#ifExeUserId exeUserId}}
+						{{exeFullname}}
+					{{else}} 
+						{{#if candidateUsers}}
+						{{#each candidateUsers}}
+							<span>{{fullname}}</span>
+						{{/each}}
+						{{/if}}
+					{{/ifExeUserId}}
+					
+				</li>
+		    	<li>开始时间:{{startTimeStr}}</li>
+		    	<li>结束时间:{{endTimeStr}}</li>
+		    	<li>状态:{{{status}}}</li>
+		    	<li>意见:{{opinion}}</li>
+		    </ul>
+			{{/each}}
+			{{/with}}
+		</li>
+	{{/each}}
+</script>
+
+<div id="contentDiv" >
+	<ul class="am-list" id="wrapperList" style="min-height: 200px"></ul>
+</div>
+
+</body>
+</html>

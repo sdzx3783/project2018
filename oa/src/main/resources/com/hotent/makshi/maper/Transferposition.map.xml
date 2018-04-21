@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hr.Transferposition">
+	<resultMap id="Transferposition" type="com.hotent.makshi.model.hr.Transferposition">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="userId" column="F_staffNameID" jdbcType="VARCHAR"/>
+		<result property="shortNum" column="F_SHORT" jdbcType="VARCHAR"/>
+		<result property="month" column="F_MONTH" jdbcType="VARCHAR"/>
+		<result property="positional" column="F_POSITIONAL" jdbcType="VARCHAR"/>
+		<result property="reason" column="F_REASON" jdbcType="VARCHAR"/>
+		<result property="beforePostion" column="F_BEFOREPOSTION" jdbcType="VARCHAR"/>
+		<result property="beforePostionID" column="F_BEFOREPOSTIONID" jdbcType="VARCHAR"/>
+		<result property="beforeMoney" column="F_BEFOREMONEY" jdbcType="VARCHAR"/>
+		<result property="beforeBasicMoney" column="F_BEFOREBASICMONEY" jdbcType="VARCHAR"/>
+		<result property="beforeTelStandard" column="F_BEFORETELSTANDARD" jdbcType="VARCHAR"/>
+		<result property="afterPostion" column="F_AFTERPOSTION" jdbcType="VARCHAR"/>
+		<result property="afterPostionID" column="F_AFTERPOSTIONID" jdbcType="VARCHAR"/>
+		<result property="afterMoney" column="F_AFTERMONEY" jdbcType="VARCHAR"/>
+		<result property="afterBasicMoney" column="F_AFTERBASICMONEY" jdbcType="VARCHAR"/>
+		<result property="afterTelStandard" column="F_AFTERTELSTANDARD" jdbcType="VARCHAR"/>
+		<result property="myOpinion" column="F_MYOPINION" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.hr.Transferposition" id="ExtTransferposition" extends="Transferposition">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_NAME,F_DEPARTMENT,F_staffNameID,F_SHORT,F_MONTH,F_POSITIONAL,F_REASON,F_BEFOREPOSTION,F_BEFOREPOSTIONID,F_BEFOREMONEY,F_BEFOREBASICMONEY,F_BEFORETELSTANDARD,F_AFTERPOSTION,F_AFTERPOSTIONID,F_AFTERMONEY,F_AFTERBASICMONEY,F_AFTERTELSTANDARD,F_MYOPINION
+	</sql>
+	<sql id="wfColumns">
+		ID,F_NAME,F_DEPARTMENT,F_staffNameID,F_SHORT,F_MONTH,F_POSITIONAL,F_REASON,F_BEFOREPOSTION,F_BEFOREPOSTIONID,F_BEFOREMONEY,F_BEFOREBASICMONEY,F_BEFORETELSTANDARD,F_AFTERPOSTION,F_AFTERPOSTIONID,F_AFTERMONEY,F_AFTERBASICMONEY,F_AFTERTELSTANDARD,F_MYOPINION
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(userId)"> AND F_staffNameID  LIKE '%${userId}%'  </if>
+			<if test="@Ognl@isNotEmpty(shortNum)"> AND F_SHORT  LIKE '%${shortNum}%'  </if>
+			<if test="@Ognl@isNotEmpty(month)"> AND F_MONTH  LIKE '%${month}%'  </if>
+			<if test="@Ognl@isNotEmpty(positional)"> AND F_POSITIONAL  LIKE '%${positional}%'  </if>
+			<if test="@Ognl@isNotEmpty(reason)"> AND F_REASON  LIKE '%${reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(beforePostion)"> AND F_BEFOREPOST  LIKE '%${beforePostion}%'  </if>
+			<if test="@Ognl@isNotEmpty(beforeMoney)"> AND F_BEFOREMONEY  LIKE '%${beforeMoney}%'  </if>
+			<if test="@Ognl@isNotEmpty(beforeBasicMoney)"> AND F_BEFOREBASICMONEY  LIKE '%${beforeBasicMoney}%'  </if>
+			<if test="@Ognl@isNotEmpty(beforeTelStandard)"> AND F_BEFORETELSTANDARD  LIKE '%${beforeTelStandard}%'  </if>
+			<if test="@Ognl@isNotEmpty(afterPostion)"> AND F_AFTERPOST  LIKE '%${afterPostion}%'  </if>
+			<if test="@Ognl@isNotEmpty(afterMoney)"> AND F_AFTERMONEY  LIKE '%${afterMoney}%'  </if>
+			<if test="@Ognl@isNotEmpty(afterBasicMoney)"> AND F_AFTERBASICMONEY  LIKE '%${afterBasicMoney}%'  </if>
+			<if test="@Ognl@isNotEmpty(afterTelStandard)"> AND F_AFTERTELSTANDARD  LIKE '%${afterTelStandard}%'  </if>
+			<if test="@Ognl@isNotEmpty(myOpinion)"> AND F_MYOPINION  LIKE '%${myOpinion}%'  </if>
+			<if test="@Ognl@isNotEmpty(globalflowno)"> AND b.GLOBALFLOWNO  LIKE #{globalflowno}  </if>
+			<if test="@Ognl@isNotEmpty(creator)"> AND b.CREATOR  LIKE '%${creator}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.hr.Transferposition">
+		INSERT INTO W_TRANSFERPOSITION
+		(ID,
+		F_NAME,F_DEPARTMENT,F_staffNameID,F_SHORT,F_MONTH,F_POSITIONAL,F_REASON,F_BEFOREPOSTION,F_BEFOREPOSTIONID,F_BEFOREMONEY,F_BEFOREBASICMONEY,F_BEFORETELSTANDARD,F_AFTERPOSTION,F_AFTERPOSTIONID,F_AFTERMONEY,F_AFTERBASICMONEY,F_AFTERTELSTANDARD,F_MYOPINION)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{name,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{shortNum,jdbcType=VARCHAR}, #{month,jdbcType=VARCHAR}, #{positional,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{beforePostion,jdbcType=VARCHAR},#{beforePostionID,jdbcType=VARCHAR}, #{beforeMoney,jdbcType=VARCHAR}, #{beforeBasicMoney,jdbcType=VARCHAR}, #{beforeTelStandard,jdbcType=VARCHAR}, #{afterPostion,jdbcType=VARCHAR},#{afterPostionID,jdbcType=VARCHAR}, #{afterMoney,jdbcType=VARCHAR}, #{afterBasicMoney,jdbcType=VARCHAR}, #{afterTelStandard,jdbcType=VARCHAR}, #{myOpinion,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_TRANSFERPOSITION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hr.Transferposition">
+		UPDATE W_TRANSFERPOSITION SET
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_staffNameID=#{userId,jdbcType=VARCHAR},
+		F_SHORT=#{shortNum,jdbcType=VARCHAR},
+		F_MONTH=#{month,jdbcType=VARCHAR},
+		F_POSITIONAL=#{positional,jdbcType=VARCHAR},
+		F_REASON=#{reason,jdbcType=VARCHAR},
+		F_BEFOREPOSTION=#{beforePostion,jdbcType=VARCHAR},
+		F_BEFOREPOSTIONID=#{beforePostionID,jdbcType=VARCHAR},
+		F_BEFOREMONEY=#{beforeMoney,jdbcType=VARCHAR},
+		F_BEFOREBASICMONEY=#{beforeBasicMoney,jdbcType=VARCHAR},
+		F_BEFORETELSTANDARD=#{beforeTelStandard,jdbcType=VARCHAR},
+		F_AFTERPOSTION=#{afterPostion,jdbcType=VARCHAR},
+		F_AFTERPOSTIONID=#{afterPostionID,jdbcType=VARCHAR},
+		F_AFTERMONEY=#{afterMoney,jdbcType=VARCHAR},
+		F_AFTERBASICMONEY=#{afterBasicMoney,jdbcType=VARCHAR},
+		F_AFTERTELSTANDARD=#{afterTelStandard,jdbcType=VARCHAR},
+		F_MYOPINION=#{myOpinion,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="Transferposition">
+		SELECT <include refid="columns"/>
+		FROM W_TRANSFERPOSITION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="Transferposition">
+		SELECT <include refid="columns"/>
+		FROM W_TRANSFERPOSITION    a   
+		left join bpm_pro_run_his b on a.id=b.BUSINESSKEY
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="Transferposition">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_TRANSFERPOSITION A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtTransferposition">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_TRANSFERPOSITION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_TRANSFERPOSITION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_TRANSFERPOSITION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_TRANSFERPOSITION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_TRANSFERPOSITION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="Transferposition">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_TRANSFERPOSITION A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

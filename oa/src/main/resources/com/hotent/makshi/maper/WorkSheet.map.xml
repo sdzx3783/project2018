@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.worksheet.WorkSheet">
+	<resultMap id="WorkSheet" type="com.hotent.makshi.model.worksheet.WorkSheet">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="fullnameID" column="F_FULLNAMEID" jdbcType="VARCHAR"/>
+		<result property="orgID" column="F_ORGID" jdbcType="VARCHAR"/>
+		<result property="roleID" column="F_ROLEID" jdbcType="VARCHAR"/>
+		<result property="fullname" column="F_FULLNAME" jdbcType="VARCHAR"/>
+		<result property="org" column="F_ORG" jdbcType="VARCHAR"/>
+		<result property="rolename" column="F_ROLENAME" jdbcType="VARCHAR"/>
+		<result property="clock_time" column="F_CLOCK_TIME" jdbcType="DATE"/>
+		<result property="week" column="F_WEEK" jdbcType="VARCHAR"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="create_time" column="F_CREATE_TIME" jdbcType="TIMESTAMP"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="count_flag" column="F_count_flag" jdbcType="INTEGER"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_FULLNAMEID,F_ORGID,F_ROLEID,F_FULLNAME,F_ORG,F_ROLENAME,F_CLOCK_TIME,F_WEEK,F_TYPE,F_CREATE_TIME,F_REMARK,F_COUNT_FLAG
+	</sql>
+	<sql id="wfColumns">
+		ID,F_FULLNAMEID,F_ORGID,F_ROLEID,F_FULLNAME,F_ORG,F_ROLENAME,F_CLOCK_TIME,F_WEEK,F_TYPE,F_CREATE_TIME,F_REMARK,F_COUNT_FLAG
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(fullnameID)"> AND F_FULLNAMEID = #{fullnameID} </if>
+			<if test="@Ognl@isNotEmpty(orgID)"> AND F_ORGID  =#{orgID}  </if>
+			<if test="@Ognl@isNotEmpty(roleID)"> AND F_roleID  =#{roleID} </if>
+			<if test="@Ognl@isNotEmpty(fullname)"> AND F_FULLNAME  LIKE '${fullname}'  </if>
+			<if test="@Ognl@isNotEmpty(org)"> AND F_ORG  LIKE '${org}'  </if>
+			<if test="@Ognl@isNotEmpty(rolename)"> AND F_ROLENAME  LIKE '${rolename}'  </if>
+			<if test="@Ognl@isNotEmpty(count_flag)"> AND F_count_flag = #{count_flag}  </if>
+			<if test="@Ognl@isNotEmpty(clock_time)"> AND F_CLOCK_TIME  =#{clock_time} </if>
+			<if test="@Ognl@isNotEmpty(beginclock_time)"> AND F_CLOCK_TIME  >=#{beginclock_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endclock_time)"> AND F_CLOCK_TIME <![CDATA[ <=#{endclock_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(week)"> AND F_WEEK= #{week}</if>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  =#{type}  </if>
+			<if test="@Ognl@isNotEmpty(create_time)"> AND F_CREATE_TIME  =#{create_time} </if>
+			<if test="@Ognl@isNotEmpty(begincreate_time)"> AND F_CREATE_TIME  >=#{begincreate_time} </if>
+			<if test="@Ognl@isNotEmpty(endcreate_time)"> AND F_CREATE_TIME <![CDATA[ <=#{endcreate_time}]]> </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.worksheet.WorkSheet">
+		INSERT INTO W_WORK_SHEET
+		(ID,
+		F_FULLNAMEID,F_ORGID,F_ROLEID,F_FULLNAME,F_ORG,F_ROLENAME,F_CLOCK_TIME,F_WEEK,F_TYPE,F_CREATE_TIME,F_REMARK)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{fullnameID,jdbcType=VARCHAR}, #{orgID,jdbcType=VARCHAR}, #{roleID,jdbcType=VARCHAR}, #{fullname,jdbcType=VARCHAR}, #{org,jdbcType=VARCHAR}, #{rolename,jdbcType=VARCHAR}, #{clock_time}, #{week,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{create_time}, #{remark,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_WORK_SHEET 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.worksheet.WorkSheet">
+		UPDATE W_WORK_SHEET SET
+		F_FULLNAMEID=#{fullnameID,jdbcType=VARCHAR},
+		F_ORGID=#{orgID,jdbcType=VARCHAR},
+		F_ROLEID=#{roleID,jdbcType=VARCHAR},
+		F_FULLNAME=#{fullname,jdbcType=VARCHAR},
+		F_ORG=#{org,jdbcType=VARCHAR},
+		F_ROLENAME=#{rolename,jdbcType=VARCHAR},
+		F_CLOCK_TIME=#{clock_time},
+		F_WEEK=#{week,jdbcType=VARCHAR},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_CREATE_TIME=#{create_time},
+		F_REMARK=#{remark,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="WorkSheet">
+		SELECT <include refid="columns"/>
+		FROM W_WORK_SHEET
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="WorkSheet">
+		SELECT <include refid="columns"/>
+		FROM W_WORK_SHEET   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<insert id="replaceByMap" parameterType="Map">
+		REPLACE into W_WORK_SHEET(
+			ID,F_FULLNAMEID,F_ORGID,F_ROLEID,F_FULLNAME,F_ORG,F_ROLENAME,F_CLOCK_TIME,F_WEEK,F_TYPE,F_CREATE_TIME,F_REMARK,F_COUNT_FLAG
+		) 
+		values
+		<foreach item="item" separator="," collection="sheetList"> 
+			(#{item.id},#{item.fullnameID},#{item.orgID},#{item.roleID},#{item.fullname},#{item.org},#{item.rolename},
+			#{item.clock_time},#{item.week},#{item.type},#{item.create_time},#{item.remark},#{item.count_flag})
+		</foreach>
+	</insert>
+	
+	
+</mapper>

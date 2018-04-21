@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.operation.OverTime">
+	<resultMap id="OverTime" type="com.hotent.makshi.model.operation.OverTime">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="name" column="userName" jdbcType="VARCHAR"/>
+		<result property="userId" column="userId" jdbcType="VARCHAR"/>
+		<result property="overTimeDays" column="overTimeDays" jdbcType="DOUBLE"/>
+		<result property="adjustDays" column="adjustDays" jdbcType="DOUBLE"/>
+		<result property="leftAdjustDays" column="leftAdjustDays" jdbcType="DOUBLE"/>
+		<result property="appliYear" column="appliYear" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="columns">
+		ID,name,userId,overTimeDays,leftAdjustDays
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(name)"> AND h.FULLNAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(userId)"> AND g.USERID in
+				<foreach collection="userId" item="userId" index="index" open="(" separator="," close=")">  
+        		 ${userId}  
+    		  	</foreach> 
+		   </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND d.f_F_department LIKE '%${department}%' </if>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_departmentID in 
+				<foreach collection="departmentID" item="departmentID" index="index" open="(" separator="," close=")">  
+        		 ${departmentID}  
+    		  </foreach> 
+		   </if>
+		</where>
+	</sql>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CAR_REGIST 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<select id="getById" parameterType="java.lang.Long" resultMap="OverTime">
+		SELECT <include refid="columns"/>
+			FROM W_CAR_REGIST
+			WHERE
+			ID=#{id}
+	</select>
+		
+	<select id="getAll" resultMap="OverTime">
+		SELECT g.FULLNAME userName,g.userId userId, 
+	CASE WHEN overTimeDays IS null THEN 0.0 ELSE overTimeDays END overTimeDays,
+	h.F_departmentID,
+			CASE WHEN adjustDays IS null THEN 0.0 ELSE adjustDays END adjustDays,
+			CASE WHEN (
+				h.overTimeDays - g.adjustDays
+			) IS NULL THEN overTimeDays ELSE (
+				CASE WHEN (
+			h.overTimeDays - g.adjustDays) &lt;0 then 0.0 ELSE (
+			h.overTimeDays - g.adjustDays) END
+			) END leftAdjustDays
+			FROM
+				(SELECT userId,FULLNAME,
+					CASE WHEN adjustDays IS null THEN 0.0 ELSE adjustDays END adjustDays
+					FROM(
+					SELECT
+						f_offdays adjustDays,
+						f_applicantId f_applicantId,
+						F_applicant F_applicant
+					FROM
+						w_adjust a
+					WHERE
+						a.F_finish = 1
+					AND a.F_isdeleted !=1
+					GROUP BY
+						F_applicantID
+					) c
+					RIGHT   JOIN
+					sys_user s
+					ON s.USERID  = c.f_applicantId
+					) g 
+				LEFT JOIN
+				(
+					SELECT USERID,FULLNAME,F_departmentID,F_department,
+					CASE WHEN overTimeDays IS null THEN 0.0 ELSE overTimeDays END overTimeDays 
+					FROM(
+								SELECT
+									b.F_applicant,
+									b.f_applicantId,
+									b.F_department,
+									b.F_departmentID,
+									sum(
+										(
+											CASE (
+												f_overTime_end_point - f_overTime_start_point
+											)
+											WHEN 1 THEN
+												1
+											WHEN 0 THEN
+												0.5
+											WHEN - 1 THEN
+												0
+											END
+										) + (
+											CASE F_include_front
+											WHEN 1 THEN
+												0.5
+											WHEN 0 THEN
+												0
+											END
+										) + (
+											CASE F_include_later
+											WHEN 1 THEN
+												0.5
+											WHEN 0 THEN
+												0
+											END
+										) + datediff(
+											f_overTime_end,
+											f_overTime_start
+				
+										)
+									) overTimeDays
+								FROM
+									w_overtime b
+								WHERE
+									b.F_finish = 1
+								AND b.F_isdeleted !=1
+								GROUP BY
+									F_applicantID
+								) d 	RIGHT   JOIN
+								sys_user s
+								ON s.USERID  = d.f_applicantId
+								
+								) h 
+				ON g.USERID = h.USERID
+				
+			 <include refid="dynamicWhere" />
+			<!-- <if test="@Ognl@isEmpty(orderField)">
+			 ID  desc
+			</if>  -->
+		</select>
+		
+	<select id="getAllInfo"  parameterType="map" resultMap="OverTime">
+		SELECT g.FULLNAME userName,g.userId userId,
+		CASE
+	WHEN overTimeDays IS NULL THEN
+		0.0
+	ELSE
+		overTimeDays
+	END overTimeDays,
+	 h.F_departmentID,
+	 CASE
+	WHEN adjustDays IS NULL THEN
+		0.0
+	ELSE
+		adjustDays
+	END adjustDays,
+	 CASE
+	WHEN (
+		h.overTimeDays - g.adjustDays
+	) IS NULL THEN
+		overTimeDays
+	ELSE
+		(
+			CASE
+			WHEN (
+				h.overTimeDays - g.adjustDays
+			) &lt; 0 THEN 0.0
+			ELSE
+				(
+					h.overTimeDays - g.adjustDays
+				)
+			END
+		)
+	END leftAdjustDays
+	FROM
+		(
+			SELECT
+				userId,
+				FULLNAME,
+				CASE
+			WHEN adjustDays IS NULL THEN
+				0.0
+			ELSE
+				adjustDays
+			END adjustDays
+			FROM
+				(
+					SELECT
+						f_offdays adjustDays,
+						f_applicantId f_applicantId,
+						F_applicant F_applicant
+					FROM
+						w_adjust a
+					WHERE
+						a.F_finish = 1
+					AND a.F_isdeleted != 1
+					GROUP BY
+						F_applicantID
+				) c
+			RIGHT JOIN sys_user s ON s.USERID = c.f_applicantId
+		) g
+	LEFT JOIN (
+		SELECT
+			USERID,
+			FULLNAME,
+			F_departmentID,
+			F_department,
+			CASE
+		WHEN overTimeDays IS NULL THEN
+			0.0
+		ELSE
+			overTimeDays
+		END overTimeDays
+		FROM
+			(
+				SELECT
+					b.F_applicant,
+					b.f_applicantId,
+					b.F_department,
+					b.F_departmentID,
+					sum(
+						(
+							CASE (
+								f_overTime_end_point - f_overTime_start_point
+							)
+							WHEN 1 THEN
+								1
+							WHEN 0 THEN
+								0.5
+							WHEN - 1 THEN
+								0
+							END
+						) + (
+							CASE F_include_front
+							WHEN 1 THEN
+								0.5
+							WHEN 0 THEN
+								0
+							END
+						) + (
+							CASE F_include_later
+							WHEN 1 THEN
+								0.5
+							WHEN 0 THEN
+								0
+							END
+						) + datediff(
+							f_overTime_end,
+							f_overTime_start
+						)
+					) overTimeDays
+				FROM
+					w_overtime b
+				WHERE
+					b.F_finish = 1
+				AND b.F_isdeleted != 1
+				GROUP BY
+					F_applicantID
+			) d
+		RIGHT JOIN sys_user s ON s.USERID = d.f_applicantId
+	) h ON g.USERID = h.USERID
+	WHERE g.USERID IN 
+		<foreach collection="userIdList" item="userId" index="index" open="(" separator="," close=")">  
+        		 ${userId}  
+ 	   </foreach> 
+	</select>
+	
+	<select id="getPast" resultMap="OverTime" parameterType="java.lang.Long">
+	SELECT * from
+	(
+		SELECT
+			d.F_applicant userName,
+			d.f_applicantId userId,
+			overTimeDays,
+			d.appliYear appliYear,
+			CASE
+		WHEN adjustDays IS NULL THEN
+			0
+		ELSE
+			adjustDays
+		END adjustDays,
+		 CASE
+		WHEN (
+			d.overTimeDays - c.adjustDays
+		) IS NULL THEN
+			0
+		ELSE
+			(
+				d.overTimeDays - c.adjustDays
+			)
+		END leftAdjustDays
+		FROM
+			(
+				SELECT
+					sum(
+						(
+							CASE (
+								f_adjust_end_point - f_adjust_start_point
+							)
+							WHEN 1 THEN
+								1
+							WHEN 0 THEN
+								0.5
+							WHEN - 1 THEN
+								0
+							END
+						) + datediff(
+							F_adjust_end,
+							F_adjust_start
+						)
+					) adjustDays,
+					f_applicantId f_applicantId,
+					F_applicant F_applicant,
+		YEAR (F_adjust_end) appliYear
+				FROM
+					w_adjust a
+				WHERE
+					a.F_finish = 1
+				AND a.F_isdeleted = 1
+				GROUP BY
+					F_applicantID,
+					YEAR (F_adjust_end)
+			) c
+		RIGHT JOIN (
+			SELECT
+				b.F_applicant,
+				b.f_applicantId,
+				b.F_department,
+				b.F_departmentID,
+				sum(
+					(
+						CASE (
+							f_overTime_end_point - f_overTime_start_point
+						)
+						WHEN 1 THEN
+							1
+						WHEN 0 THEN
+							0.5
+						WHEN - 1 THEN
+							0
+						END
+					) + (
+						CASE F_include_front
+						WHEN 1 THEN
+							0.5
+						WHEN 0 THEN
+							0
+						END
+					) + (
+						CASE F_include_later
+						WHEN 1 THEN
+							0.5
+						WHEN 0 THEN
+							0
+						END
+					) + datediff(
+						f_overTime_end,
+						f_overTime_start
+					)
+				) overTimeDays,
+			YEAR (F_overTime_end) appliYear
+			FROM
+				w_overtime b
+			WHERE
+				b.F_finish = 1
+			AND b.F_isdeleted = 1
+			GROUP BY
+				F_applicantID,
+				YEAR (F_overTime_end)
+		) d ON c.f_applicantId = d.f_applicantId AND c.appliYear = d.appliYear
+		) j
+		where userId = #{userId}
+	</select>
+	<update id="cleanInfo">
+		UPDATE w_overtime SET F_isdeleted =1
+	</update>
+	
+	
+</mapper>

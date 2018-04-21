@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.common.FriendshipLink">
+	<resultMap id="FriendshipLink" type="com.hotent.makshi.model.common.FriendshipLink">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="name" column="name" jdbcType="VARCHAR"/>
+		<result property="priority" column="priority" jdbcType="INTEGER"/>
+		<result property="url" column="url" jdbcType="VARCHAR"/>
+		<result property="ctime" column="ctime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		id,name,priority,url,ctime
+	</sql>
+	<sql id="wfColumns">
+		id,name,priority,url,ctime
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(id)"> AND id = #{id} </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND name  LIKE '${name}'  </if>
+			<if test="@Ognl@isNotEmpty(priority)"> AND priority=#{priority}  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.common.FriendshipLink">
+		INSERT INTO w_friendship_link
+		(id,name,priority,url,ctime)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{name,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR},now())
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM w_friendship_link 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.common.FriendshipLink">
+		UPDATE w_friendship_link SET
+		name=#{name,jdbcType=VARCHAR},
+		priority=#{priority,jdbcType=INTEGER},
+		url=#{url,jdbcType=INTEGER}
+		WHERE ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="FriendshipLink">
+		SELECT <include refid="columns"/>
+		FROM w_friendship_link
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="FriendshipLink">
+		SELECT <include refid="columns"/>
+		FROM w_friendship_link   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<insert id="replaceByMap" parameterType="Map">
+		REPLACE into w_friendship_link(
+			id,name,priority,url,ctime
+		) 
+		values
+		<foreach item="item" separator="," collection="sheetList"> 
+			(#{item.id},#{item.name},#{item.priority},#{item.url},now())
+		</foreach>
+	</insert>
+	
+	
+</mapper>

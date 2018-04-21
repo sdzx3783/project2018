@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.makshi.oa</groupId>
+  <artifactId>Oa-core</artifactId>
+  <version>1.0.7-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>oa-core</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <scm>
+	<connection>scm:git:${git.url.oacore}</connection>
+	<developerConnection>scm:git:${git.url.oacore}</developerConnection>
+	<url>scm:git:${git.url.oacore}</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <dependencies>
+  </dependencies>
+  
+  <build>
+	<finalName>Oa-core</finalName>
+	<plugins>
+	  <plugin>
+	    <artifactId>maven-compiler-plugin</artifactId>
+		<version>3.7.0</version>
+	    <configuration>
+		  <source>1.7</source>
+		  <target>1.7</target>
+		  <encoding>UTF-8</encoding>
+		  <compilerArguments>
+		    <extdirs>lib</extdirs>
+		  </compilerArguments>
+	    </configuration>
+	  </plugin>
+	  <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-release-plugin</artifactId>
+		<version>2.5.3</version>
+	  </plugin>
+    </plugins>
+  </build>
+  <distributionManagement>
+	  <repository>
+		  <id>makshi-release</id>
+		  <name>Makshi Release Repository</name>
+		  <url>${repos.url.release}</url>
+  	  </repository>
+	  <snapshotRepository>
+		  <id>makshi-snapshot</id>
+		  <name>Makshi Snapshot Repository</name>
+		  <url>${repos.url.snapshot}</url>
+	  </snapshotRepository>
+  </distributionManagement>
+</project>

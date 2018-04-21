@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.title.VocationQualification">
+	<resultMap id="BaseResultMap" type="com.hotent.makshi.model.title.VocationQualification" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="REFID" property="linkId" jdbcType="BIGINT" />
+    <result column="userName" property="userName" jdbcType="VARCHAR" />
+    <result column="isBinding" property="isBinding" jdbcType="INTEGER" />
+    
+    <result column="vocationName" property="vocationName" jdbcType="VARCHAR" />
+    <result column="vocationNum" property="vocationNum" jdbcType="VARCHAR" />
+    <result column="vocationSwitchs" property="vocationSwitchs" jdbcType="VARCHAR" />
+    <result column="vocationBorrower" property="vocationBorrower" jdbcType="VARCHAR" />
+    <result column="vocationBorrowerId" property="vocationBorrowerId" jdbcType="VARCHAR" />
+    
+    <result column="registCertificateRegistId" property="registCertificateRegistId" jdbcType="VARCHAR" />
+    <result column="registMajor" property="registMajor" jdbcType="VARCHAR" />
+    <result column="registBorrower" property="registBorrower" jdbcType="VARCHAR" />
+    <result column="registBorrowerID" property="registBorrowerID" jdbcType="VARCHAR" />
+    
+    <result column="occupationalCertificateId" property="occupationalCertificateId" jdbcType="VARCHAR" />
+    <result column="occupationalType" property="occupationalType" jdbcType="VARCHAR" />
+    <result column="occupationalBorrowerID" property="occupationalBorrowerID" jdbcType="VARCHAR" />
+    <result column="occupationalBorrower" property="occupationalBorrower" jdbcType="VARCHAR" />
+    
+  </resultMap>
+	
+
+	<sql id="columns"> 
+		 linkId,userName,
+	     vocationName, vocationNum, vocationBorrower, vocationBorrowerId,vocationSwitchs,
+		 registCertificateRegistId, registMajor,registBorrowerID,registBorrower,
+		 occupationalCertificateId, occupationalType,occupationalBorrowerID,occupationalBorrower
+	</sql>
+	
+	<select id="getAll" resultMap="BaseResultMap">
+		SELECT <include refid="columns"/>
+		FROM w_entry_vocation_qualification   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getOutAll" resultMap="BaseResultMap">
+		SELECT 
+		 linkId,userName,isBinding,
+	     vocationName, vocationNum, vocationBorrower, vocationBorrowerId,vocationSwitchs,
+		 registCertificateRegistId, registMajor,registBorrowerID,registBorrower,
+		 occupationalCertificateId, occupationalType,occupationalBorrowerID,occupationalBorrower
+		FROM borrowView  
+		<where>
+		<if test="@Ognl@isNotEmpty(userName)"> AND userName  LIKE '%${userName}%'  </if>
+		<if test="@Ognl@isNotEmpty(vocationNum)"> AND vocationNum  LIKE '%${vocationNum}%'  </if>
+		<if test="@Ognl@isNotEmpty(vocationName)"> AND vocationName  LIKE '%${vocationName}%'  </if>
+		<if test="@Ognl@isNotEmpty(registCertificateRegistId)"> AND registCertificateRegistId  LIKE '%${registCertificateRegistId}%'  </if>
+		<if test="@Ognl@isNotEmpty(registMajor)"> AND registMajor  LIKE '%${registMajor}%'  </if>
+		<if test="@Ognl@isNotEmpty(occupationalCertificateId)"> AND occupationalCertificateId  LIKE '%${occupationalCertificateId}%'  </if>
+		<if test="@Ognl@isNotEmpty(occupationalType)"> AND occupationalType  LIKE '%${occupationalType}%'  </if>
+		</where>
+	</select>
+	
+	<sql id="dynamicWhere">
+		<where>
+			and F_status = 1
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_DEPARTMENTID  LIKE '%${departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(positionID)"> AND F_POSITIONID  LIKE '%${positionID}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_num)"> AND F_USER_NUM  LIKE '%${user_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(num)"> AND F_NUM  LIKE '%${num}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_name  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(borrower)"> AND F_borrower  LIKE '%${borrower}%'  </if>
+			<if test="@Ognl@isNotEmpty(owner)"> AND c.fullname  LIKE '%${owner}%'  </if>
+			<!-- <if test="@Ognl@isNotEmpty(status)"> AND F_status  LIKE '%${status}%'  </if> -->
+			<if test="@Ognl@isNotEmpty(organization)"> AND F_organization  LIKE '%${organization}%'  </if>
+			<if test="@Ognl@isNotEmpty(major)"> AND F_major  LIKE '%${major}%'  </if>
+			<if test="@Ognl@isNotEmpty(switchs)"> AND F_switchs  LIKE '%${switchs}%'  </if>
+			<if test="@Ognl@isNotEmpty(join_work_time)"> AND F_JOIN_WORK_TIME  =#{join_work_time} </if>
+			<if test="@Ognl@isNotEmpty(beginjoin_work_time)"> AND F_JOIN_WORK_TIME  >=#{beginjoin_work_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endjoin_work_time)"> AND F_JOIN_WORK_TIME <![CDATA[ <=#{endjoin_work_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(induction_time)"> AND F_INDUCTION_TIME  =#{induction_time} </if>
+			<if test="@Ognl@isNotEmpty(begininduction_time)"> AND F_INDUCTION_TIME  >=#{begininduction_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endinduction_time)"> AND F_INDUCTION_TIME <![CDATA[ <=#{endinduction_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(application_date)"> AND F_APPLICATION_DATE  =#{application_date} </if>
+			<if test="@Ognl@isNotEmpty(beginapplication_date)"> AND F_APPLICATION_DATE  >=#{beginapplication_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endapplication_date)"> AND F_APPLICATION_DATE <![CDATA[ <=#{endapplication_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(isMarry)"> AND F_ISMARRY  LIKE '%${isMarry}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(leave_type)"> AND F_LEAVE_TYPE  LIKE '%${leave_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(position)"> AND F_POSITION  LIKE '%${position}%'  </if>
+			<if test="@Ognl@isNotEmpty(startTime)"> AND F_STARTTIME  =#{startTime} </if>
+			<if test="@Ognl@isNotEmpty(beginstartTime)"> AND F_STARTTIME  >=#{beginstartTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstartTime)"> AND F_STARTTIME <![CDATA[ <=#{endstartTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(endTime)"> AND F_ENDTIME  =#{endTime} </if>
+			<if test="@Ognl@isNotEmpty(beginendTime)"> AND F_ENDTIME  >=#{beginendTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endendTime)"> AND F_ENDTIME <![CDATA[ <=#{endendTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(reason)"> AND F_REASON  LIKE '%${reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(file)"> AND F_FILE  LIKE '%${file}%'  </if>
+		</where>
+	</sql>
+
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM w_entry_vocation_qualification 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+ 	<update id="update" parameterType="com.hotent.makshi.model.title.VocationQualification">
+		 update w_entry_vocation_qualification
+    <set >
+      <if test="name != null" >
+        F_name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="organization != null" >
+        F_organization = #{organization,jdbcType=VARCHAR},
+      </if>
+      <if test="major != null" >
+        F_major = #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="achieveTime != null" >
+        F_achieve_time = #{achieveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attachment != null" >
+        F_attachment = #{attachment,jdbcType=VARCHAR},
+      </if>
+      <if test="refid != null" >
+        REFID = #{refid,jdbcType=BIGINT},
+      </if>
+      <if test="switchs != null" >
+        F_switchs = #{switchs,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        F_num = #{num,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        F_status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="borrower != null" >
+        F_borrower = #{borrower,jdbcType=VARCHAR},
+      </if>
+      <if test="borrowerID != null" >
+        F_borrowerID = #{borrowerID,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        F_remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="regist_major != null" >
+        F_regist_major = #{regist_major,jdbcType=VARCHAR},
+      </if>
+      <if test="practis_certificate_num != null" >
+        F_practis_certificate_num = #{practis_certificate_num,jdbcType=VARCHAR},
+      </if>
+      <if test="practis_certificate_issue_date != null" >
+        F_practis_certificate_issue_date = #{practis_certificate_issue_date,jdbcType=DATE},
+      </if>
+      <if test="practis_certificate_com != null" >
+        F_practis_certificate_com = #{practis_certificate_com,jdbcType=VARCHAR},
+      </if>
+      <if test="practis_certificate_remark != null" >
+        F_practis_certificate_remark = #{practis_certificate_remark,jdbcType=VARCHAR},
+      </if>
+      <if test="practis_certificate_file != null" >
+        F_practis_certificate_file = #{practis_certificate_file,jdbcType=VARCHAR},
+      </if>
+      <if test="regist_num != null" >
+        F_regist_num = #{regist_num,jdbcType=VARCHAR},
+      </if>
+      <if test="regist_certificate_effective_date != null" >
+        F_regist_certificate_effective_date = #{regist_certificate_effective_date,jdbcType=DATE},
+      </if>
+      <if test="seal_num != null" >
+        F_seal_num = #{seal_num,jdbcType=VARCHAR},
+      </if>
+      <if test="out_date != null" >
+        F_out_date = #{out_date,jdbcType=DATE},
+      </if>
+      <if test="regist_type != null" >
+        F_regist_type = #{regist_type,jdbcType=VARCHAR},
+      </if>
+      <if test="regist_date != null" >
+        F_regist_date = #{regist_date,jdbcType=DATE},
+      </if>
+      <if test="contine_edu_comple != null" >
+        F_contine_edu_comple = #{contine_edu_comple,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+	</update> 
+	
+	<select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT <include refid="columns"/>
+		FROM w_entry_vocation_qualification
+		WHERE
+		ID=#{id}
+	</select> 
+</mapper>

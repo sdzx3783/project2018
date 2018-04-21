@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.appPush.AppPushJobHistory">
+	<resultMap id="AppPushJobHistory" type="com.hotent.makshi.model.appPush.AppPushJobHistory">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="jobId" column="JOBID" jdbcType="NUMERIC"/>
+		<result property="runId" column="RUNID" jdbcType="NUMERIC"/>
+		<result property="taskId" column="TASKID" jdbcType="NUMERIC"/>
+		<result property="orgId" column="ORGID" jdbcType="NUMERIC"/>
+		<result property="pushType" column="PUSHTYPE" jdbcType="VARCHAR"/>
+		<result property="error_code" column="ERROR_CODE" jdbcType="NUMERIC"/>
+		<result property="userId" column="USERID" jdbcType="NUMERIC"/>
+		<result property="ticker" column="TICKER" jdbcType="VARCHAR"/>
+		<result property="title" column="TITLE" jdbcType="VARCHAR"/>
+		<result property="content" column="CONTENT" jdbcType="VARCHAR"/>
+		<result property="url" column="URL" jdbcType="VARCHAR"/>
+		<result property="resetCount" column="RESETCOUNT" jdbcType="NUMERIC"/>
+		<result property="appKey" column="APPKEY" jdbcType="VARCHAR"/>
+		<result property="appMastersecret" column="APPMASTERSECRET" jdbcType="VARCHAR"/>
+		<result property="appType" column="APPTYPE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,JOBID,RUNID,TASKID,ORGID,PUSHTYPE,ERROR_CODE,USERID,TICKER,TITLE,CONTENT,URL,RESETCOUNT,APPKEY,APPMASTERSECRET,APPTYPE
+	</sql>
+	<sql id="wfColumns">
+		ID,JOBID,RUNID,TASKID,ORGID,PUSHTYPE,ERROR_CODE,USERID,TICKER,TITLE,CONTENT,URL,RESETCOUNT,APPKEY,APPMASTERSECRET,APPTYPE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(jobId)"> AND jobId  =#{jobId} </if>
+			<if test="@Ognl@isNotEmpty(pushType)"> AND PUSHTYPE  = #{pushType}  </if>
+			<if test="@Ognl@isNotEmpty(orgId)"> AND ORGID  = #{orgId}  </if>
+			<if test="@Ognl@isNotEmpty(userId)"> AND USERID  = #{userId}  </if>
+			<if test="@Ognl@isNotEmpty(resetCount)"> AND RESTCOUNT  = #{resetCount} </if>
+			<if test="@Ognl@isNotEmpty(id)"> AND ID  =#{id} </if>
+			<if test="@Ognl@isNotEmpty(ticker)"> AND TICKER  LIKE '%${ticker}%'  </if>
+			<if test="@Ognl@isNotEmpty(title)"> AND TITLE  LIKE '%${title}%'  </if>
+			<if test="@Ognl@isNotEmpty(content)"> AND CONTENT  LIKE '%${content}%'  </if>
+			<if test="@Ognl@isNotEmpty(url)"> AND URL  LIKE '%${url}%'  </if>
+			<if test="@Ognl@isNotEmpty(appKey)"> AND APPKEY  LIKE '%${appKey}%'  </if>
+			<if test="@Ognl@isNotEmpty(appMastersecret)"> AND APPMASTERSECRET  LIKE '%${appMastersecret}%'  </if>
+			<if test="@Ognl@isNotEmpty(appType)"> AND APPTYPE  LIKE '%${appType}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.appPush.AppPushJobHistory">
+		INSERT INTO app_push_job_history
+		(ID,JOBID,RUNID,TASKID,ORGID,PUSHTYPE,ERROR_CODE,USERID,TICKER,TITLE,CONTENT,URL,RESETCOUNT,APPKEY,APPMASTERSECRET,APPTYPE)
+		VALUES
+		(#{id,jdbcType=NUMERIC}, #{jobId,jdbcType=NUMERIC}, #{runId,jdbcType=NUMERIC}, #{taskId,jdbcType=NUMERIC}, #{orgId,jdbcType=NUMERIC}, #{pushType,jdbcType=VARCHAR}, #{error_code,jdbcType=NUMERIC}, #{userId,jdbcType=NUMERIC}, #{ticker,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{resetCount,jdbcType=NUMERIC}, #{appKey,jdbcType=VARCHAR}, #{appMastersecret,jdbcType=VARCHAR}, #{appType,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM app_push_job_history 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<delete id="delByJobId" parameterType="java.lang.Long">
+		DELETE FROM app_push_job_history 
+		WHERE
+		jobId=#{jobId}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.appPush.AppPushJobHistory">
+		UPDATE app_push_job_history SET
+		JOBID=#{jobId,jdbcType=NUMERIC},
+		RUNID=#{runId,jdbcType=NUMERIC},
+		TASKID=#{taskId,jdbcType=NUMERIC},
+		ORGID=#{orgId,jdbcType=NUMERIC},
+		PUSHTYPE=#{pushType,jdbcType=VARCHAR},
+		ERROR_CODE=#{error_code,jdbcType=NUMERIC},
+		USERID=#{userId,jdbcType=NUMERIC},
+		TICKER=#{ticker,jdbcType=VARCHAR},
+		TITLE=#{title,jdbcType=VARCHAR},
+		CONTENT=#{content,jdbcType=VARCHAR},
+		URL=#{url,jdbcType=VARCHAR},
+		RESETCOUNT=#{resetCount,jdbcType=NUMERIC},
+		APPKEY=#{appKey,jdbcType=VARCHAR},
+		APPMASTERSECRET=#{appMastersecret,jdbcType=VARCHAR},
+		APPTYPE=#{appType,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="AppPushJobHistory">
+		SELECT <include refid="columns"/>
+		FROM app_push_job_history
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getByJobId" parameterType="java.lang.Long" resultMap="AppPushJobHistory">
+		SELECT <include refid="columns"/>
+		FROM app_push_job_history
+		WHERE	1=1 
+		AND jobId  =#{jobId}
+	</select>
+	
+	<select id="getAll" resultMap="AppPushJobHistory">
+		SELECT <include refid="columns"/>
+		FROM app_push_job_history   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

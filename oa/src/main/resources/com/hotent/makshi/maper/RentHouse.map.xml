@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.renhouse.RentHouse">
+	<resultMap id="RentHouse" type="com.hotent.makshi.model.renhouse.RentHouse">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="second_departmentID" column="F_SECOND_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="departmentID" column="F_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="application_person" column="F_APPLICATION_PERSON" jdbcType="VARCHAR"/>
+		<result property="second_department" column="F_SECOND_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="use_type" column="F_USE_TYPE" jdbcType="VARCHAR"/>
+		<result property="reason" column="F_REASON" jdbcType="VARCHAR"/>
+		<result property="reason_content" column="F_REASON_CONTENT" jdbcType="VARCHAR"/>
+		<result property="current_rent_info" column="F_CURRENT_RENT_INFO" jdbcType="VARCHAR"/>
+		<result property="handle_personID" column="F_HANDLE_PERSONID" jdbcType="VARCHAR"/>
+		<result property="address" column="F_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="deposit" column="F_DEPOSIT" jdbcType="VARCHAR"/>
+		<result property="money" column="F_MONEY" jdbcType="VARCHAR"/>
+		<result property="handle_person" column="F_HANDLE_PERSON" jdbcType="VARCHAR"/>
+		<result property="size" column="F_SIZE" jdbcType="VARCHAR"/>
+		<result property="landlord" column="F_LANDLORD" jdbcType="VARCHAR"/>
+		<result property="rent_person" column="F_RENT_PERSON" jdbcType="VARCHAR"/>
+		<result property="number_people" column="F_NUMBER_PEOPLE" jdbcType="VARCHAR"/>
+		<result property="responsible_person" column="F_RESPONSIBLE_PERSON" jdbcType="VARCHAR"/>
+		<result property="start_date" column="F_START_DATE" jdbcType="DATE"/>
+		<result property="rent_end_date" column="F_RENT_END_DATE" jdbcType="DATE"/>
+		<result property="reimburse_type" column="F_REIMBURSE_TYPE" jdbcType="VARCHAR"/>
+		<result property="water_and_electricity" column="F_WATER_AND_ELECTRICITY" jdbcType="VARCHAR"/>
+		<result property="reimburse_note" column="F_REIMBURSE_NOTE" jdbcType="VARCHAR"/>
+		<result property="structure" column="F_STRUCTURE" jdbcType="VARCHAR"/>
+		<result property="rent_house_attachment" column="F_RENT_HOUSE_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.renhouse.RentHouse" id="ExtRentHouse" extends="RentHouse">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_SECOND_DEPARTMENTID,F_DEPARTMENTID,F_APPLICATION_PERSON,F_SECOND_DEPARTMENT,F_DEPARTMENT,F_USE_TYPE,F_REASON,F_REASON_CONTENT,
+		F_CURRENT_RENT_INFO,F_HANDLE_PERSONID,F_ADDRESS,F_DEPOSIT,F_MONEY,F_HANDLE_PERSON,F_SIZE,F_LANDLORD,F_RENT_PERSON,F_NUMBER_PEOPLE,
+		F_RESPONSIBLE_PERSON,F_START_DATE,F_RENT_END_DATE,F_REIMBURSE_TYPE,F_WATER_AND_ELECTRICITY,F_REIMBURSE_NOTE,F_STRUCTURE,F_RENT_HOUSE_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_SECOND_DEPARTMENTID,F_DEPARTMENTID,F_APPLICATION_PERSON,F_SECOND_DEPARTMENT,F_DEPARTMENT,F_USE_TYPE,F_REASON,F_REASON_CONTENT,F_CURRENT_RENT_INFO,F_HANDLE_PERSONID,F_ADDRESS,F_DEPOSIT,F_MONEY,F_HANDLE_PERSON,F_SIZE,F_LANDLORD,F_RENT_PERSON,F_NUMBER_PEOPLE,F_RESPONSIBLE_PERSON,F_START_DATE,F_REIMBURSE_TYPE,F_WATER_AND_ELECTRICITY,F_REIMBURSE_NOTE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(second_departmentID)"> AND F_SECOND_DEPARTMENTID  LIKE '%${second_departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_DEPARTMENTID  LIKE '%${departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(application_person)"> AND F_APPLICATION_PERSON  LIKE '%${application_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(second_department)"> AND F_SECOND_DEPARTMENT  LIKE '%${second_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(use_type)"> AND F_USE_TYPE  LIKE '%${use_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(reason)"> AND F_REASON  LIKE '%${reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(reason_content)"> AND F_REASON_CONTENT  LIKE '%${reason_content}%'  </if>
+			<if test="@Ognl@isNotEmpty(current_rent_info)"> AND F_CURRENT_RENT_INFO  LIKE '%${current_rent_info}%'  </if>
+			<if test="@Ognl@isNotEmpty(handle_personID)"> AND F_HANDLE_PERSONID  LIKE '%${handle_personID}%'  </if>
+			<if test="@Ognl@isNotEmpty(address)"> AND F_ADDRESS  LIKE '%${address}%'  </if>
+			<if test="@Ognl@isNotEmpty(deposit)"> AND F_DEPOSIT  LIKE '%${deposit}%'  </if>
+			<if test="@Ognl@isNotEmpty(money)"> AND F_MONEY  LIKE '%${money}%'  </if>
+			<if test="@Ognl@isNotEmpty(handle_person)"> AND F_HANDLE_PERSON  LIKE '%${handle_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(size)"> AND F_SIZE  LIKE '%${size}%'  </if>
+			<if test="@Ognl@isNotEmpty(landlord)"> AND F_LANDLORD  LIKE '%${landlord}%'  </if>
+			<if test="@Ognl@isNotEmpty(rent_person)"> AND F_RENT_PERSON  LIKE '%${rent_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(number_people)"> AND F_NUMBER_PEOPLE  LIKE '%${number_people}%'  </if>
+			<if test="@Ognl@isNotEmpty(responsible_person)"> AND F_RESPONSIBLE_PERSON  LIKE '%${responsible_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(start_date)"> AND F_START_DATE  =#{start_date} </if>
+			<if test="@Ognl@isNotEmpty(beginstart_date)"> AND F_START_DATE  >=#{beginstart_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstart_date)"> AND F_START_DATE <![CDATA[ <=#{endstart_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(reimburse_type)"> AND F_REIMBURSE_TYPE  LIKE '%${reimburse_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(water_and_electricity)"> AND F_WATER_AND_ELECTRICITY  LIKE '%${water_and_electricity}%'  </if>
+			<if test="@Ognl@isNotEmpty(reimburse_note)"> AND F_REIMBURSE_NOTE  LIKE '%${reimburse_note}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.renhouse.RentHouse">
+		INSERT INTO W_RENT_HOUSE
+		(ID,
+		F_SECOND_DEPARTMENTID,F_DEPARTMENTID,F_APPLICATION_PERSON,F_SECOND_DEPARTMENT,F_DEPARTMENT,F_USE_TYPE,F_REASON,F_REASON_CONTENT,
+		F_CURRENT_RENT_INFO,F_HANDLE_PERSONID,F_ADDRESS,F_DEPOSIT,F_MONEY,F_HANDLE_PERSON,F_SIZE,F_LANDLORD,F_RENT_PERSON,F_NUMBER_PEOPLE,
+		F_RESPONSIBLE_PERSON,F_START_DATE,F_REIMBURSE_TYPE,F_WATER_AND_ELECTRICITY,F_REIMBURSE_NOTE,F_STRUCTURE,F_RENT_HOUSE_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{second_departmentID,jdbcType=VARCHAR}, #{departmentID,jdbcType=VARCHAR}, #{application_person,jdbcType=VARCHAR}, #{second_department,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{use_type,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{reason_content,jdbcType=VARCHAR}, #{current_rent_info,jdbcType=VARCHAR}, #{handle_personID,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{deposit,jdbcType=VARCHAR}, #{money,jdbcType=VARCHAR}, #{handle_person,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR}, #{landlord,jdbcType=VARCHAR}, #{rent_person,jdbcType=VARCHAR}, #{number_people,jdbcType=VARCHAR}, #{responsible_person,jdbcType=VARCHAR}, #{start_date,jdbcType=DATE}, #{reimburse_type,jdbcType=VARCHAR}, #{water_and_electricity,jdbcType=VARCHAR}, #{reimburse_note,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_RENT_HOUSE 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.renhouse.RentHouse">
+		UPDATE W_RENT_HOUSE SET
+		F_SECOND_DEPARTMENTID=#{second_departmentID,jdbcType=VARCHAR},
+		F_DEPARTMENTID=#{departmentID,jdbcType=VARCHAR},
+		F_APPLICATION_PERSON=#{application_person,jdbcType=VARCHAR},
+		F_SECOND_DEPARTMENT=#{second_department,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_USE_TYPE=#{use_type,jdbcType=VARCHAR},
+		F_REASON=#{reason,jdbcType=VARCHAR},
+		F_REASON_CONTENT=#{reason_content,jdbcType=VARCHAR},
+		F_CURRENT_RENT_INFO=#{current_rent_info,jdbcType=VARCHAR},
+		F_HANDLE_PERSONID=#{handle_personID,jdbcType=VARCHAR},
+		F_ADDRESS=#{address,jdbcType=VARCHAR},
+		F_DEPOSIT=#{deposit,jdbcType=VARCHAR},
+		F_MONEY=#{money,jdbcType=VARCHAR},
+		F_HANDLE_PERSON=#{handle_person,jdbcType=VARCHAR},
+		F_SIZE=#{size,jdbcType=VARCHAR},
+		F_LANDLORD=#{landlord,jdbcType=VARCHAR},
+		F_RENT_PERSON=#{rent_person,jdbcType=VARCHAR},
+		F_NUMBER_PEOPLE=#{number_people,jdbcType=VARCHAR},
+		F_RESPONSIBLE_PERSON=#{responsible_person,jdbcType=VARCHAR},
+		F_START_DATE=#{start_date,jdbcType=DATE},
+		F_REIMBURSE_TYPE=#{reimburse_type,jdbcType=VARCHAR},
+		F_WATER_AND_ELECTRICITY=#{water_and_electricity,jdbcType=VARCHAR},
+		F_REIMBURSE_NOTE=#{reimburse_note,jdbcType=VARCHAR},
+		F_STRUCTURE=#{structure,jdbcType=VARCHAR},
+		F_RENT_HOUSE_ATTACHMENT=#{rent_house_attachment,jdbcType=VARCHAR},
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="RentHouse">
+		SELECT <include refid="columns"/>
+		FROM W_RENT_HOUSE
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="RentHouse">
+		SELECT <include refid="columns"/>
+		FROM W_RENT_HOUSE   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="RentHouse">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_RENT_HOUSE A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtRentHouse">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_RENT_HOUSE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_RENT_HOUSE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_RENT_HOUSE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_RENT_HOUSE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_RENT_HOUSE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="RentHouse">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_RENT_HOUSE A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

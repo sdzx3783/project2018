@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="app">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<title>流程图</title>
+		<script type="text/javascript" src="../../js/jquery/jquery.js"></script>
+		<script src="../assets/js/importJs.js"></script>
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+
+				<div style="width:100%;height:100%;-webkit-overflow-scrolling:touch;overflow-y:scroll;">
+					<iframe src="" id="iframeImage" style="width:100%;height:100%;"></iframe>
+				</div>
+
+	</body>
+</html>
+<script type="text/javascript" charset="utf-8">
+	$(function(){
+		var runId=getUrlParam("runId");
+		var account=getUrlParam("account");
+		var access_token=getUrlParam("access_token");
+		var openid=getUrlParam("openid");
+		var source=getUrlParam("source");
+		var url="/bpmImage?runId="+runId+"&account="+account+"&access_token="+access_token+"&openid="+openid+"&source="+source;
+		$("#iframeImage").attr("src",url);
+	})
+	//获取url中的参数
+	function getUrlParam(name) {
+	    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+	    if (r != null) return unescape(r[2]); return null; //返回参数值
+	}	
+</script>

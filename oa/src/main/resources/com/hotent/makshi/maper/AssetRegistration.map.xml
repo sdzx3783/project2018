@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.assetregistration.AssetRegistration">
+	<resultMap id="AssetRegistration" type="com.hotent.makshi.model.assetregistration.AssetRegistration">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="use_departmentID" column="F_USE_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="care_personID" column="F_CARE_PERSONID" jdbcType="VARCHAR"/>
+		<result property="get_date" column="F_GET_DATE" jdbcType="DATE"/>
+		<result property="use_department" column="F_USE_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="card_number" column="F_CARD_NUMBER" jdbcType="VARCHAR"/>
+		<result property="care_person" column="F_CARE_PERSON" jdbcType="VARCHAR"/>
+		<result property="asset_name" column="F_ASSET_NAME" jdbcType="VARCHAR"/>
+		<result property="use_date" column="F_USE_DATE" jdbcType="DATE"/>
+		<result property="specification" column="F_SPECIFICATION" jdbcType="VARCHAR"/>
+		<result property="number" column="F_NUMBER" jdbcType="VARCHAR"/>
+		<result property="asset_code" column="F_ASSET_CODE" jdbcType="VARCHAR"/>
+		<result property="asset_id" column="F_ASSET_ID" jdbcType="VARCHAR"/>
+		<result property="asset_type" column="F_ASSET_TYPE" jdbcType="VARCHAR"/>
+		<result property="state" column="F_STATE" jdbcType="VARCHAR"/>
+		<result property="get_type" column="F_GET_TYPE" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="abandonment_date" column="F_ABANDONMENT_DATE" jdbcType="DATE"/>
+		<result property="edit_time" column="F_EDIT_TIME" jdbcType="VARCHAR"/>
+		<result property="version" column="F_VERSION" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_USE_DEPARTMENTID,F_CARE_PERSONID,F_GET_DATE,F_USE_DEPARTMENT,F_CARD_NUMBER,F_CARE_PERSON,F_ASSET_NAME,F_USE_DATE,F_SPECIFICATION,F_NUMBER,
+		F_ASSET_CODE,F_ASSET_ID,F_ASSET_TYPE,F_STATE,F_GET_TYPE,F_ATTACHMENT,F_ABANDONMENT_DATE,F_EDIT_TIME,F_VERSION
+	</sql>
+	<sql id="wfColumns">
+		ID,F_USE_DEPARTMENTID,F_CARE_PERSONID,F_GET_DATE,F_USE_DEPARTMENT,F_CARD_NUMBER,F_CARE_PERSON,F_ASSET_NAME,F_USE_DATE,F_SPECIFICATION,F_NUMBER,
+		F_ASSET_CODE,F_ASSET_ID,F_ASSET_TYPE,F_STATE,F_GET_TYPE,F_ATTACHMENT,F_ABANDONMENT_DATE,F_EDIT_TIME,F_VERSION
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(use_departmentID)"> AND F_USE_DEPARTMENTID  LIKE '%${use_departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(care_personID)"> AND F_CARE_PERSONID  LIKE '%${care_personID}%'  </if>
+			<if test="@Ognl@isNotEmpty(get_date)"> AND F_GET_DATE  =#{get_date} </if>
+			<if test="@Ognl@isNotEmpty(beginget_date)"> AND F_GET_DATE  >=#{beginget_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endget_date)"> AND F_GET_DATE <![CDATA[ <=#{endget_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(use_department)"> AND F_USE_DEPARTMENT  LIKE '%${use_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(card_number)"> AND F_CARD_NUMBER  LIKE '%${card_number}%'  </if>
+			<if test="@Ognl@isNotEmpty(care_person)"> AND F_CARE_PERSON  LIKE '%${care_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(asset_name)"> AND F_ASSET_NAME  LIKE '%${asset_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(use_date)"> AND F_USE_DATE  =#{use_date} </if>
+			<if test="@Ognl@isNotEmpty(beginuse_date)"> AND F_USE_DATE  >=#{beginuse_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(enduse_date)"> AND F_USE_DATE <![CDATA[ <=#{enduse_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(specification)"> AND F_SPECIFICATION  LIKE '%${specification}%'  </if>
+			<if test="@Ognl@isNotEmpty(number)"> AND F_NUMBER  LIKE '%${number}%'  </if>
+			<if test="@Ognl@isNotEmpty(asset_code)"> AND F_ASSET_CODE  LIKE '%${asset_code}%'  </if>
+			<if test="@Ognl@isNotEmpty(asset_id)"> AND F_ASSET_ID  LIKE '%${asset_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(asset_type)"> AND F_ASSET_TYPE  LIKE '%${asset_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(state)"> AND F_STATE  = ${state}  </if>
+			<if test="@Ognl@isNotEmpty(get_type)"> AND F_GET_TYPE  LIKE '%${get_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(abandonment_date)"> AND F_ABANDONMENT_DATE  =#{abandonment_date} </if>
+			<if test="@Ognl@isNotEmpty(beginabandonment_date)"> AND F_ABANDONMENT_DATE  >=#{beginabandonment_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endabandonment_date)"> AND F_ABANDONMENT_DATE <![CDATA[ <=#{endabandonment_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(edit_time)"> AND F_EDIT_TIME  LIKE '%${edit_time}%'  </if>
+			<if test="@Ognl@isNotEmpty(version)"> AND F_VERSION  LIKE '%${version}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.assetregistration.AssetRegistration">
+		INSERT INTO W_ASSET_REGISTRATION
+		(ID,
+		F_USE_DEPARTMENTID,
+		F_CARE_PERSONID,
+		F_GET_DATE,
+		F_USE_DEPARTMENT,
+		F_CARD_NUMBER,
+		F_CARE_PERSON,
+		F_ASSET_NAME,
+		F_USE_DATE,
+		F_SPECIFICATION,
+		F_NUMBER,
+		F_ASSET_CODE,
+		F_ASSET_ID,
+		F_ASSET_TYPE,
+		F_STATE,
+		F_GET_TYPE,
+		F_ATTACHMENT,
+		F_ABANDONMENT_DATE,
+		F_EDIT_TIME,
+		F_VERSION)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{use_departmentID,jdbcType=VARCHAR}, #{care_personID,jdbcType=VARCHAR}, #{get_date,jdbcType=DATE}, #{use_department,jdbcType=VARCHAR}, #{card_number,jdbcType=VARCHAR}, #{care_person,jdbcType=VARCHAR}, #{asset_name,jdbcType=VARCHAR}, #{use_date,jdbcType=DATE}, #{specification,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{asset_code,jdbcType=VARCHAR}, #{asset_id,jdbcType=VARCHAR}, #{asset_type,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{get_type,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, #{abandonment_date,jdbcType=DATE}, #{edit_time,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_ASSET_REGISTRATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.assetregistration.AssetRegistration">
+		UPDATE W_ASSET_REGISTRATION SET
+		F_USE_DEPARTMENTID=#{use_departmentID,jdbcType=VARCHAR},
+		F_CARE_PERSONID=#{care_personID,jdbcType=VARCHAR},
+		F_GET_DATE=#{get_date,jdbcType=DATE},
+		F_USE_DEPARTMENT=#{use_department,jdbcType=VARCHAR},
+		<if test="null!=card_number">
+		F_CARD_NUMBER=#{card_number,jdbcType=VARCHAR},
+		</if>
+		F_CARE_PERSON=#{care_person,jdbcType=VARCHAR},
+		F_ASSET_NAME=#{asset_name,jdbcType=VARCHAR},
+		F_USE_DATE=#{use_date,jdbcType=DATE},
+		F_SPECIFICATION=#{specification,jdbcType=VARCHAR},
+		F_NUMBER=#{number,jdbcType=VARCHAR},
+		F_ASSET_CODE=#{asset_code,jdbcType=VARCHAR},
+		F_ASSET_ID=#{asset_id,jdbcType=VARCHAR},
+		F_ASSET_TYPE=#{asset_type,jdbcType=VARCHAR},
+		F_STATE=#{state,jdbcType=VARCHAR},
+		F_GET_TYPE=#{get_type,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_ABANDONMENT_DATE=#{abandonment_date,jdbcType=DATE},
+		F_EDIT_TIME=#{edit_time,jdbcType=VARCHAR},
+		F_VERSION=#{version,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="AssetRegistration">
+		SELECT <include refid="columns"/>
+		FROM W_ASSET_REGISTRATION  A LEFT JOIN sys_dic B ON A.F_asset_type=B.ITEMVALUE
+		WHERE
+		ID=#{id}
+	</select>
+	<select id="getByAssetId" parameterType="String" resultMap="AssetRegistration">
+		SELECT 
+			ID,
+			F_USE_DEPARTMENTID,
+			F_CARE_PERSONID,
+			F_GET_DATE,
+			F_USE_DEPARTMENT,
+			F_CARD_NUMBER,
+			F_CARE_PERSON,
+			F_ASSET_NAME,
+			F_USE_DATE,
+			F_SPECIFICATION,
+			F_NUMBER,
+			F_ASSET_CODE,
+			F_ASSET_ID,
+			F_ASSET_TYPE,
+			F_STATE,
+			F_GET_TYPE,
+			F_ATTACHMENT,
+			F_ABANDONMENT_DATE,
+			F_EDIT_TIME,
+			F_VERSION
+		FROM W_ASSET_REGISTRATION 
+		WHERE
+		F_ASSET_ID=#{assetId}
+	</select>
+	<select id="getAll" resultMap="AssetRegistration">
+		SELECT <include refid="columns"/>
+		FROM W_ASSET_REGISTRATION  
+		 <include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if> 
+	</select>
+	
+	<insert id="saveHistory" parameterType="com.hotent.makshi.model.assetregistration.AssetRegistration">
+		INSERT INTO W_ASSET_REGISTRATION_HISTORY
+		(F_HIS_ID,
+		F_USE_DEPARTMENTID,F_CARE_PERSONID,F_GET_DATE,F_USE_DEPARTMENT,F_CARD_NUMBER,F_CARE_PERSON,F_ASSET_NAME,F_USE_DATE,F_SPECIFICATION,F_NUMBER,F_ASSET_CODE,F_ASSET_ID,F_ASSET_TYPE,F_STATE,F_GET_TYPE,F_ATTACHMENT,F_ABANDONMENT_DATE,F_EDIT_TIME,F_VERSION)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{use_departmentID,jdbcType=VARCHAR}, #{care_personID,jdbcType=VARCHAR}, #{get_date,jdbcType=DATE}, #{use_department,jdbcType=VARCHAR}, #{card_number,jdbcType=VARCHAR}, #{care_person,jdbcType=VARCHAR}, #{asset_name,jdbcType=VARCHAR}, #{use_date,jdbcType=DATE}, #{specification,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{asset_code,jdbcType=VARCHAR}, #{asset_id,jdbcType=VARCHAR}, #{asset_type,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{get_type,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, #{abandonment_date,jdbcType=DATE}, #{edit_time,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR})
+	</insert>
+	
+	<select id="getMyAssetList"  parameterType="String" resultMap="AssetRegistration">
+		SELECT <include refid="columns"/>
+		FROM W_ASSET_REGISTRATION  A LEFT JOIN sys_dic B ON A.F_asset_type=B.ITEMVALUE
+		WHERE 
+		F_CARE_PERSONID=#{FullName} and f_state = 0
+		order by F_EDIT_TIME  desc
+	</select>
+	
+	<select id="getLastAssetId"  parameterType="String" resultMap="AssetRegistration">
+		SELECT <include refid="columns"/>
+		FROM W_ASSET_REGISTRATION  A LEFT JOIN sys_dic B ON A.F_asset_type=B.ITEMVALUE
+		WHERE
+	    F_ASSET_ID= (SELECT MAX(F_ASSET_ID) FROM(
+ 													SELECT F_ASSET_ID FROM W_ASSET_REGISTRATION 
+													WHERE F_asset_id LIKE CONCAT('%',#{assetType},'_%')  ) C)
+
+	</select>
+	
+	<select id="getAllAssetType" resultMap="AssetRegistration">
+		SELECT DISTINCT(LEFT(F_ASSET_ID,4)) F_ASSET_TYPE FROM W_ASSET_REGISTRATION 
+	</select>
+	
+	<select id="getAllInfo" resultMap="AssetRegistration">
+		SELECT <include refid="columns"/>
+		FROM W_ASSET_REGISTRATION  
+	</select>
+	<update id="complete"  parameterType="map" >
+		UPDATE W_ASSET_REGISTRATION SET F_USE_DEPARTMENTID=#{orgId,jdbcType=VARCHAR}
+		WHERE F_USE_DEPARTMENT=#{orgName,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="addInfo"  parameterType="map" >
+		UPDATE W_ASSET_REGISTRATION SET F_CARE_PERSONID=(
+			SELECT a.userId FROM sys_user a,sys_user_pos b WHERE b.isdelete = 0 AND b.isprimary = 1 AND a.userId = b.userId AND b.orgId = #{orgId,jdbcType=VARCHAR} AND a.fullName = #{userName,jdbcType=VARCHAR}
+		)
+		where F_CARE_PERSON = #{userName,jdbcType=VARCHAR} and F_USE_DEPARTMENT = #{orgId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="setInfo"  parameterType="map" >
+		UPDATE W_ASSET_REGISTRATION SET F_USE_DEPARTMENT=#{newdepartment,jdbcType=VARCHAR}
+		WHERE F_USE_DEPARTMENT=#{department,jdbcType=VARCHAR}
+	</update>
+	<update id="setUserInfo"  parameterType="map" >
+		UPDATE W_ASSET_REGISTRATION SET F_care_personId=#{userId,jdbcType=VARCHAR}
+		WHERE F_care_person=#{userName,jdbcType=VARCHAR}
+	</update>
+</mapper>

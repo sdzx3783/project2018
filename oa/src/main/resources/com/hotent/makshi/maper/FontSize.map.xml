@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.fontsize.FontSize">
+	<resultMap id="FontSize" type="com.hotent.makshi.model.fontsize.FontSize">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="type" column="F_TYPES" jdbcType="VARCHAR"/>
+		<result property="font_size" column="F_SIZE" jdbcType="VARCHAR"/>
+		<result property="dispatch_year" column="F_DISPATCH_YEAR" jdbcType="VARCHAR"/>
+		<result property="typeName" column="TYPENAME" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_TYPES,F_SIZE,F_DISPATCH_YEAR,TYPENAME
+	</sql>
+	<sql id="wfColumns">
+		ID,F_TYPES,F_SIZE,F_DISPATCH_YEAR,TYPENAME
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPES  LIKE '%${type}%'  </if>
+			<if test="@Ognl@isNotEmpty(font_size)"> AND F_SIZE  LIKE '%${font_size}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.fontsize.FontSize">
+		INSERT INTO w_font_size
+		(ID,
+		F_TYPES,F_SIZE,F_DISPATCH_YEAR)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{type,jdbcType=VARCHAR}, 
+		#{font_size,jdbcType=VARCHAR},
+		#{dispatch_year,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM w_font_size 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.fontsize.FontSize">
+		UPDATE w_font_size SET
+		F_TYPES=#{type,jdbcType=VARCHAR},
+		F_SIZE=#{font_size,jdbcType=VARCHAR},
+		F_DISPATCH_YEAR=#{dispatch_year,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="FontSize">
+		SELECT B.ID,A.ITEMVALUE F_TYPES,ITEMNAME TYPENAME,B.F_size,B.F_dispatch_year 
+		FROM
+			(
+			SELECT * FROM
+			sys_dic
+			WHERE PARENTID = 10000006140011
+			) A
+			LEFT JOIN
+			w_font_size B
+			ON A.ITEMVALUE = B.F_TYPES
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getByTypes" parameterType="String" resultMap="FontSize">
+		SELECT B.ID,A.ITEMVALUE F_TYPES,ITEMNAME TYPENAME,B.F_size,B.F_dispatch_year 
+		FROM
+			(
+			SELECT * FROM
+			sys_dic
+			WHERE PARENTID = 10000006140011
+			) A
+			LEFT JOIN
+			w_font_size B
+			ON A.ITEMVALUE = B.F_TYPES
+			where f_types = #{type}
+	</select>
+	
+	<select id="getAll" resultMap="FontSize">
+		SELECT B.ID,A.ITEMVALUE F_TYPES,ITEMNAME TYPENAME,B.F_size,B.F_dispatch_year FROM
+			(
+			SELECT * FROM
+			sys_dic
+			WHERE PARENTID = 10000006140011
+			) A
+			LEFT JOIN
+			w_font_size B
+			ON A.ITEMVALUE = B.F_TYPES
+
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

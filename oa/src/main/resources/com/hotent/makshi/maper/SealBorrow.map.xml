@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.seal.SealBorrow">
+	<resultMap id="SealBorrow" type="com.hotent.makshi.model.seal.SealBorrow">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="departmentID" column="F_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="application_person" column="F_APPLICATION_PERSON" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="reason" column="F_REASON" jdbcType="VARCHAR"/>
+		<result property="go_to_unit" column="F_GO_TO_UNIT" jdbcType="VARCHAR"/>
+		<result property="seal_name" column="F_SEAL_NAME" jdbcType="VARCHAR"/>
+		<result property="borrow_time" column="F_BORROW_TIME" jdbcType="DATE"/>
+		<result property="return_time" column="F_RETURN_TIME" jdbcType="DATE"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="backDate" column="F_BACK_DATE" jdbcType="DATE"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.seal.SealBorrow" id="ExtSealBorrow" extends="SealBorrow">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_REMARK,F_DEPARTMENTID,F_APPLICATION_PERSON,F_DEPARTMENT,F_REASON,F_GO_TO_UNIT,F_SEAL_NAME,F_BORROW_TIME,F_RETURN_TIME,F_ATTACHMENT,F_BACK_DATE
+	</sql>
+	<sql id="wfColumns">
+		ID,F_REMARK,F_DEPARTMENTID,F_APPLICATION_PERSON,F_DEPARTMENT,F_REASON,F_GO_TO_UNIT,F_SEAL_NAME,F_BORROW_TIME,F_RETURN_TIME,F_ATTACHMENT,F_BACK_DATE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_DEPARTMENTID  LIKE '%${departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(application_person)"> AND F_APPLICATION_PERSON  LIKE '%${application_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(reason)"> AND F_REASON  LIKE '%${reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(go_to_unit)"> AND F_GO_TO_UNIT  LIKE '%${go_to_unit}%'  </if>
+			<if test="@Ognl@isNotEmpty(seal_name)"> AND F_SEAL_NAME  LIKE '%${seal_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(borrow_time)"> AND F_BORROW_TIME  =#{borrow_time} </if>
+			<if test="@Ognl@isNotEmpty(beginborrow_time)"> AND F_BORROW_TIME  >=#{beginborrow_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endborrow_time)"> AND F_BORROW_TIME <![CDATA[ <=#{endborrow_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(return_time)"> AND F_RETURN_TIME  =#{return_time} </if>
+			<if test="@Ognl@isNotEmpty(beginreturn_time)"> AND F_RETURN_TIME  >=#{beginreturn_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endreturn_time)"> AND F_RETURN_TIME <![CDATA[ <=#{endreturn_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(backDate)"> AND F_BACK_DATE  =#{backDate} </if>
+			<if test="@Ognl@isNotEmpty(beginbackDate)"> AND F_BACK_DATE  >=#{beginbackDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endbackDate)"> AND F_BACK_DATE <![CDATA[ <=#{endbackDate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.seal.SealBorrow">
+		INSERT INTO W_SEAL_BORROW
+		(ID,
+		F_REMARK,F_DEPARTMENTID,F_APPLICATION_PERSON,F_DEPARTMENT,F_REASON,F_GO_TO_UNIT,F_SEAL_NAME,F_BORROW_TIME,F_RETURN_TIME,F_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{remark,jdbcType=VARCHAR}, #{departmentID,jdbcType=VARCHAR}, #{application_person,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{go_to_unit,jdbcType=VARCHAR}, #{seal_name,jdbcType=VARCHAR}, #{borrow_time,jdbcType=DATE}, #{return_time,jdbcType=DATE}, #{attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_SEAL_BORROW 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.seal.SealBorrow">
+		UPDATE W_SEAL_BORROW SET
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_DEPARTMENTID=#{departmentID,jdbcType=VARCHAR},
+		F_APPLICATION_PERSON=#{application_person,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_REASON=#{reason,jdbcType=VARCHAR},
+		F_GO_TO_UNIT=#{go_to_unit,jdbcType=VARCHAR},
+		F_SEAL_NAME=#{seal_name,jdbcType=VARCHAR},
+		F_BORROW_TIME=#{borrow_time,jdbcType=DATE},
+		F_RETURN_TIME=#{return_time,jdbcType=DATE},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_BACK_DATE=#{backDate,jdbcType=DATE}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="SealBorrow">
+		SELECT <include refid="columns"/>
+		FROM W_SEAL_BORROW
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="SealBorrow">
+		SELECT <include refid="columns"/>
+		FROM W_SEAL_BORROW   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="SealBorrow">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_SEAL_BORROW A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtSealBorrow">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_SEAL_BORROW A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_SEAL_BORROW A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_SEAL_BORROW A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_SEAL_BORROW A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_SEAL_BORROW A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="SealBorrow">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_SEAL_BORROW A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

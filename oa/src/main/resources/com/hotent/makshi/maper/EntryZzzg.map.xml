@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hr.EntryZzzg">
+	<resultMap id="EntryZzzg" type="com.hotent.makshi.model.hr.EntryZzzg">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="certificate_regist_id" column="F_CERTIFICATE_REGIST_ID" jdbcType="VARCHAR"/>
+		<result property="regist_major" column="F_REGIST_MAJOR" jdbcType="VARCHAR"/>
+		<result property="regist_send_unit" column="F_REGIST_SEND_UNIT" jdbcType="VARCHAR"/>
+		<result property="get_date" column="F_GET_DATE" jdbcType="DATE"/>
+		<result property="last_effectice_date" column="F_LAST_EFFECTICE_DATE" jdbcType="DATE"/>
+		<result property="isregist" column="F_ISREGIST" jdbcType="VARCHAR"/>
+		<result property="regist_attachment" column="F_REGIST_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_CERTIFICATE_REGIST_ID,F_REGIST_MAJOR,F_REGIST_SEND_UNIT,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_ISREGIST,F_REGIST_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_CERTIFICATE_REGIST_ID,F_REGIST_MAJOR,F_REGIST_SEND_UNIT,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_ISREGIST,F_REGIST_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(certificate_regist_id)"> AND F_CERTIFICATE_REGIST_ID  LIKE '%${certificate_regist_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_major)"> AND F_REGIST_MAJOR  LIKE '%${regist_major}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_send_unit)"> AND F_REGIST_SEND_UNIT  LIKE '%${regist_send_unit}%'  </if>
+			<if test="@Ognl@isNotEmpty(get_date)"> AND F_GET_DATE  =#{get_date} </if>
+			<if test="@Ognl@isNotEmpty(beginget_date)"> AND F_GET_DATE  >=#{beginget_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endget_date)"> AND F_GET_DATE <![CDATA[ <=#{endget_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(last_effectice_date)"> AND F_LAST_EFFECTICE_DATE  =#{last_effectice_date} </if>
+			<if test="@Ognl@isNotEmpty(beginlast_effectice_date)"> AND F_LAST_EFFECTICE_DATE  >=#{beginlast_effectice_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endlast_effectice_date)"> AND F_LAST_EFFECTICE_DATE <![CDATA[ <=#{endlast_effectice_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(isregist)"> AND F_ISREGIST  LIKE '%${isregist}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_attachment)"> AND F_REGIST_ATTACHMENT  LIKE '%${regist_attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.hr.EntryZzzg">
+		INSERT INTO W_ENTRY_ZZZG
+		(ID,REFID,
+		F_CERTIFICATE_REGIST_ID,F_REGIST_MAJOR,F_REGIST_SEND_UNIT,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_ISREGIST,F_REGIST_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{certificate_regist_id,jdbcType=VARCHAR}, #{regist_major,jdbcType=VARCHAR}, #{regist_send_unit,jdbcType=VARCHAR}, #{get_date,jdbcType=DATE}, #{last_effectice_date,jdbcType=DATE}, #{isregist,jdbcType=VARCHAR}, #{regist_attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_ENTRY_ZZZG 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hr.EntryZzzg">
+		UPDATE W_ENTRY_ZZZG SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		F_CERTIFICATE_REGIST_ID=#{certificate_regist_id,jdbcType=VARCHAR},
+		F_REGIST_MAJOR=#{regist_major,jdbcType=VARCHAR},
+		F_REGIST_SEND_UNIT=#{regist_send_unit,jdbcType=VARCHAR},
+		F_GET_DATE=#{get_date,jdbcType=DATE},
+		F_LAST_EFFECTICE_DATE=#{last_effectice_date,jdbcType=DATE},
+		F_ISREGIST=#{isregist,jdbcType=VARCHAR},
+		F_REGIST_ATTACHMENT=#{regist_attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_ENTRY_ZZZG
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getEntryZzzgList" resultMap="EntryZzzg">
+	    SELECT <include refid="columns"/>
+	    FROM W_ENTRY_ZZZG 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="EntryZzzg">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY_ZZZG
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="EntryZzzg">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY_ZZZG   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

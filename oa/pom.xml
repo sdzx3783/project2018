@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>com.makshi.oa</groupId>
+	<artifactId>oa</artifactId>
+	<packaging>war</packaging>
+	<version>4.1.14-SNAPSHOT</version>
+	
+	<name>oa-web Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<oa.core.version>1.0.7-SNAPSHOT</oa.core.version>
+		<sonar.exclusions>
+		      src/main/webapp/styles/blue/**/*,
+		      src/main/webapp/styles/green/**/*,
+		      src/main/webapp/styles/red/**/*,
+		      src/main/webapp/styles/ligerUI/**/*,
+		      src/main/webapp/weixin/**/*,
+		      src/main/style/default/**/*,
+		      src/main/webapp/weixin/assets/**/*,
+		      src/main/webapp/js/**/*
+	      	</sonar.exclusions>
+
+	</properties>
+	
+	<dependencies>
+		<dependency>
+		    <groupId>com.makshi.oa</groupId>
+		    <artifactId>Oa-core</artifactId>
+		    <version>${oa.core.version}</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>4.0.0</version>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>javax.servlet.jsp</groupId>
+		    <artifactId>jsp-api</artifactId>
+		    <version>2.2</version>
+		    <scope>provided</scope>
+		</dependency>
+					
+	</dependencies>
+		
+	<build>
+		<finalName>oa</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+					<compilerArguments>
+					  <extdirs>${project.basedir}/src/main/webapp/WEB-INF/lib</extdirs>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>  
+                <artifactId>maven-resources-plugin</artifactId>  
+                <version>2.7</version>
+                <configuration>  
+                    <encoding>UTF-8</encoding>
+                </configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

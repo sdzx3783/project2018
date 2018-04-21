@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.project.ProjectStageTask">
+	<resultMap id="BaseResultMap" type="com.hotent.makshi.model.project.ProjectStageTask">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="proStageId" property="prostageid" jdbcType="INTEGER" />
+		<result column="taskNo" property="taskno" jdbcType="INTEGER" />
+		<result column="taskName" property="taskname" jdbcType="VARCHAR" />
+		<result column="templateFile" property="templatefile" jdbcType="VARCHAR" />
+		<result column="taskType" property="tasktype" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="isExamine" property="isexamine" jdbcType="BIT" />
+		<result column="isMore" property="ismore" jdbcType="BIT" />
+		<result column="order" property="order" jdbcType="INTEGER" />
+		<result column="fields" property="fields" jdbcType="VARCHAR" />
+		<result column="uploadFile" property="uploadfile" jdbcType="VARCHAR" />
+		<result column="flowId" property="flowid" jdbcType="VARCHAR" />
+		<result column="flowRunId" property="flowrunid" jdbcType="VARCHAR" />
+		<result column="cstId" property="cstid" jdbcType="VARCHAR" />
+		<result column="preTaskId" property="pretaskid" jdbcType="VARCHAR" />
+		<result column="afterTaskId" property="aftertaskid" jdbcType="VARCHAR" />
+		<result column="queryTaskId" property="querytaskid" jdbcType="VARCHAR" />
+		<result column="charge" property="charge" jdbcType="VARCHAR" />
+		<result column="chargeID" property="chargeID" jdbcType="VARCHAR" />
+		<result column="startTime" property="starttime" jdbcType="DATE" />
+		<result column="endTime" property="endtime" jdbcType="DATE" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="endCount" property="endcount" jdbcType="INTEGER" />
+		<result column="isDelete" property="isdelete" jdbcType="INTEGER" />
+		<result column="sysplanid" property="sysplanid" jdbcType="NUMERIC" />
+	</resultMap>
+
+	<sql id="columns">
+		id, proStageId, taskNo, taskName, templateFile, taskType, remark, isExamine, isMore,
+		`order`, fields, uploadFile, flowId,flowRunId, cstId, preTaskId, afterTaskId,queryTaskId, charge,
+		chargeID,
+		startTime, endTime,`status`,endCount,isDelete,sysplanid
+	</sql>
+	<sql id="wfColumns">
+		id, proStageId, taskNo, taskName, templateFile, taskType, remark, isExamine, isMore,
+		`order`, fields, uploadFile, flowId,flowRunId, cstId, preTaskId, afterTaskId,queryTaskId, charge,
+		chargeID,
+		startTime, endTime,`status`,endCount,isDelete,sysplanid
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.project.ProjectStageTask">
+		insert into w_project_stage_task (id, proStageId, taskNo,
+		taskName, templateFile, taskType,
+		remark, isExamine, isMore,
+		`order`, fields, uploadFile,
+		flowId, cstId, preTaskId,
+		afterTaskId,queryTaskId, charge, chargeID,
+		startTime, endTime,`status`)
+		values (#{id,jdbcType=INTEGER}, #{prostageid,jdbcType=INTEGER}, #{taskno,jdbcType=INTEGER},
+		#{taskname,jdbcType=VARCHAR}, #{templatefile,jdbcType=VARCHAR}, #{tasktype,jdbcType=INTEGER},
+		#{remark,jdbcType=VARCHAR}, #{isexamine,jdbcType=BIT}, #{ismore,jdbcType=BIT},
+		#{order,jdbcType=INTEGER}, #{fields,jdbcType=VARCHAR}, #{uploadfile,jdbcType=VARCHAR},
+		#{flowid,jdbcType=VARCHAR}, #{cstid,jdbcType=VARCHAR}, #{pretaskid,jdbcType=VARCHAR},
+		#{aftertaskid,jdbcType=VARCHAR},#{querytaskid,jdbcType=VARCHAR}, #{charge,jdbcType=VARCHAR},
+		#{chargeID,jdbcType=VARCHAR},
+		#{starttime,jdbcType=DATE}, #{endtime,jdbcType=DATE},#{status,jdbcType=INTEGER} )
+	</insert>
+
+	<delete id="delById" parameterType="java.lang.Long">
+		update w_project_stage_task set isDelete=1
+		where id = #{id}
+	</delete>
+
+	<update id="update" parameterType="com.hotent.makshi.model.project.ProjectStageTask">
+		update w_project_stage_task
+		<set>
+			<if test="prostageid != null">
+				proStageId = #{prostageid,jdbcType=INTEGER},
+			</if>
+			<if test="taskno != null">
+				taskNo = #{taskno,jdbcType=INTEGER},
+			</if>
+			<if test="taskname != null">
+				taskName = #{taskname,jdbcType=VARCHAR},
+			</if>
+			<if test="templatefile != null">
+				templateFile = #{templatefile,jdbcType=VARCHAR},
+			</if>
+			<if test="tasktype != null">
+				taskType = #{tasktype,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isexamine != null">
+				isExamine = #{isexamine,jdbcType=BIT},
+			</if>
+			<if test="ismore != null">
+				isMore = #{ismore,jdbcType=BIT},
+			</if>
+			<if test="order != null">
+				`order` = #{order,jdbcType=INTEGER},
+			</if>
+			<if test="fields != null">
+				fields = #{fields,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadfile != null">
+				uploadFile = #{uploadfile,jdbcType=VARCHAR},
+			</if>
+			<if test="flowid != null">
+				flowId = #{flowid,jdbcType=VARCHAR},
+			</if>
+			<if test="flowrunid != null">
+				flowRunId = #{flowrunid,jdbcType=VARCHAR},
+			</if>
+			<if test="cstid != null">
+				cstId = #{cstid,jdbcType=VARCHAR},
+			</if>
+			<if test="pretaskid != null">
+				preTaskId = #{pretaskid,jdbcType=VARCHAR},
+			</if>
+			<if test="aftertaskid != null">
+				afterTaskId = #{aftertaskid,jdbcType=VARCHAR},
+			</if>
+			<if test="querytaskid != null">
+				queryTaskId = #{querytaskid,jdbcType=VARCHAR},
+			</if>
+			<if test="charge != null">
+				charge = #{charge,jdbcType=VARCHAR},
+			</if>
+			<if test="chargeID != null">
+				chargeID = #{chargeID,jdbcType=VARCHAR},
+			</if>
+			<if test="starttime != null">
+				startTime = #{starttime,jdbcType=DATE},
+			</if>
+			<if test="endtime != null">
+				endTime = #{endtime,jdbcType=DATE},
+			</if>
+			<if test="status != null">
+				`status` = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="endcount != null">
+				endCount = #{endcount,jdbcType=INTEGER},
+			</if>
+			<if test="isdelete != null">
+				isDelete = #{isdelete,jdbcType=INTEGER},
+			</if>
+			<if test="sysplanid != null">
+				sysplanid = #{sysplanid,jdbcType=NUMERIC},
+			</if>
+
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+
+	</update>
+
+
+	<update id="setTask" parameterType="com.hotent.makshi.model.project.ProjectStageTask">
+		update w_project_stage_task
+		<set>
+			<if test="prostageid != null">
+				proStageId = #{prostageid,jdbcType=INTEGER},
+			</if>
+			<if test="taskno != null">
+				taskNo = #{taskno,jdbcType=INTEGER},
+			</if>
+			<if test="taskname != null">
+				taskName = #{taskname,jdbcType=VARCHAR},
+			</if>
+			<if test="templatefile != null">
+				templateFile = #{templatefile,jdbcType=VARCHAR},
+			</if>
+			<if test="tasktype != null">
+				taskType = #{tasktype,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isexamine != null">
+				isExamine = #{isexamine,jdbcType=BIT},
+			</if>
+			<if test="ismore != null">
+				isMore = #{ismore,jdbcType=BIT},
+			</if>
+			<if test="order != null">
+				`order` = #{order,jdbcType=INTEGER},
+			</if>
+			<if test="fields != null">
+				fields = #{fields,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadfile != null">
+				uploadFile = #{uploadfile,jdbcType=VARCHAR},
+			</if>
+			<if test="flowid != null">
+				flowId = #{flowid,jdbcType=VARCHAR},
+			</if>
+			<if test="flowrunid != null">
+				flowRunId = #{flowrunid,jdbcType=VARCHAR},
+			</if>
+			<if test="cstid != null">
+				cstId = #{cstid,jdbcType=VARCHAR},
+			</if>
+			<if test="pretaskid != null">
+				preTaskId = #{pretaskid,jdbcType=VARCHAR},
+			</if>
+			<if test="aftertaskid != null">
+				afterTaskId = #{aftertaskid,jdbcType=VARCHAR},
+			</if>
+			<if test="querytaskid != null">
+				queryTaskId = #{querytaskid,jdbcType=VARCHAR},
+			</if>
+			<if test="charge != null">
+				charge = #{charge,jdbcType=VARCHAR},
+			</if>
+			<if test="chargeID != null">
+				chargeID = #{chargeID,jdbcType=VARCHAR},
+			</if>
+			startTime = #{starttime,jdbcType=DATE},
+			endTime = #{endtime,jdbcType=DATE},
+			<if test="status != null">
+				`status` = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="endcount != null">
+				endCount = #{endcount,jdbcType=INTEGER},
+			</if>
+			<if test="isdelete != null">
+				isDelete = #{isdelete,jdbcType=INTEGER},
+			</if>
+			<if test="sysplanid != null">
+				sysplanid = #{sysplanid,jdbcType=NUMERIC},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+
+	</update>
+
+	<select id="delByProjectId">
+		update w_project_stage_task wt inner join
+		w_project_stage ws on wt.proStageId=ws.id
+		and ws.proId=#{projectId,jdbcType=INTEGER} set wt.isDelete = 1
+	</select>
+
+	<select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT
+		<include refid="columns" />
+		FROM w_project_stage_task
+		where id = #{id} and isDelete = 0
+		order by `order`
+	</select>
+
+	<select id="getProjectStageTaskByStageId" resultMap="BaseResultMap">
+		SELECT
+		<include refid="columns" />
+		FROM w_project_stage_task
+		where proStageId = #{stageId,jdbcType=INTEGER} and isDelete = 0
+		order by `order`
+	</select>
+
+	<select id="getProjectStageTaskByStageIdAndCstId" resultMap="BaseResultMap">
+		SELECT
+		<include refid="columns" />
+		FROM w_project_stage_task
+		where proStageId = #{stageId,jdbcType=INTEGER}
+		and cstId = #{cstId,jdbcType=VARCHAR}
+		and isDelete = 0
+		order by `order`
+	</select>
+
+
+	<select id="getNodesOfstageTaskContainId" resultMap="BaseResultMap">
+		select
+		<include refid="columns" />
+		from w_project_stage_task
+		where isDelete =0 and proStageId = #{stageId,jdbcType=INTEGER} and
+		FIND_IN_SET(#{containedId,jdbcType=VARCHAR},
+		<if test="preprojectstagetaskid != null">
+			preTaskId
+		</if>
+		<if test="afterprojectstagetaskid != null">
+			afterTaskId
+		</if>
+		<if test="queryprojectstagetaskid != null">
+			queryTaskId
+		</if>
+		)
+
+	</select>
+	<select id="getStageTaskByStageIdAndCstId" resultMap="BaseResultMap">
+		SELECT
+		<include refid="columns" />
+		FROM w_project_stage_task
+		where proStageId = #{stageId,jdbcType=INTEGER}
+		and cstId = #{cstId,jdbcType=VARCHAR}
+		order by taskNo
+
+	</select>
+	<select id="getStageTaskByStageId" resultMap="BaseResultMap">
+		SELECT
+		<include refid="columns" />
+		FROM w_project_stage_task
+		where proStageId = #{stageId,jdbcType=INTEGER} and isDelete = 0
+		order by taskNo
+	</select>
+
+	<select id="getMaxCstIdByProjectstageid" resultType="long">
+		SELECT max(cstId)
+		FROM
+		w_project_stage_task
+		where proStageId = #{stageId,jdbcType=INTEGER}
+	</select>
+
+	<select id="getAll" resultMap="BaseResultMap">
+		select * from (
+			SELECT t.*,
+			(select proid from w_project_stage q where t.proStageId = q.id limit 1 ) proid,
+			(select stagename from w_project_stage q where t.proStageId = q.id limit 1 ) stagename,
+			(select w.name from w_project w where w.id = proid limit 1 ) projectname
+			FROM w_project_stage_task t
+		)tt
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by status,startTime,endtime
+		</if>
+	</select>
+
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(charge)"> AND charge like #{charge} </if>
+			<if test="@Ognl@isNotEmpty(chargeID)"> AND FIND_IN_SET (#{chargeID},chargeID) </if>
+			<if test="@Ognl@isNotEmpty(status)"> AND status = #{status} </if>
+			<if test="@Ognl@isNotEmpty(flowId)"> AND flowId = #{flowId} </if>
+			<if test="@Ognl@isNotEmpty(select_time)"> AND endTime >=#{select_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(select_time)">
+				AND startTime <![CDATA[ <=#{select_time,jdbcType=DATE}]]>
+			</if>
+			<if test="@Ognl@isNotEmpty(projectname)">
+				and projectname like #{projectname}
+			</if>
+			<if test="@Ognl@isNotEmpty(stagename)">
+				and stagename like #{stagename}
+			</if>
+			<if test="@Ognl@isNotEmpty(taskname)">
+				and taskname like #{taskname}
+			</if>
+			and isDelete = 0
+		</where>
+	</sql>
+
+	<select id="getByStageId" resultMap="BaseResultMap">
+		select
+		<include refid="columns" />
+		FROM w_project_stage_task
+		where proStageId = #{prostageid,jdbcType=INTEGER}
+		<if test="isdelete != null">
+			and isDelete = #{isdelete,jdbcType=INTEGER}
+		</if>
+		<if test="orderField!=null">
+			order by ${orderField} ${orderSeq}
+		</if>
+		<if test="orderField==null">
+			order by id
+		</if>
+		<if test="pageStart != null and pageStart > -1 and pageSize != null and pageSize > -1">
+			limit ${pageStart}, ${pageSize}
+		</if>
+	</select>
+
+</mapper>

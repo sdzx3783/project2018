@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.appPush.AppPushUser">
+	<resultMap id="AppPushUser" type="com.hotent.makshi.model.appPush.AppPushUser">
+		<id property="devicetoken" column="DEVICETOKEN" jdbcType="VARCHAR"/>
+		<result property="userId" column="USERID" jdbcType="NUMERIC"/>
+		<result property="appType" column="APPTYPE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		DEVICETOKEN,USERID,APPTYPE
+	</sql>
+	<sql id="wfColumns">
+		DEVICETOKEN,USERID,APPTYPE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(deviceToken)"> AND DEVICETOKEN  =#{deviceToken} </if>
+			<if test="@Ognl@isNotEmpty(userId)"> AND USERID  =#{userId} </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.appPush.AppPushUser">
+		INSERT INTO app_push_user
+		(DEVICETOKEN,USERID,APPTYPE)
+		VALUES
+		(#{deviceToken,jdbcType=VARCHAR}, #{userId,jdbcType=NUMERIC}, #{appType,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.String">
+		DELETE FROM app_push_user 
+		WHERE
+		DEVICETOKEN=#{devicetoken}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.appPush.AppPushUser">
+		UPDATE app_push_user SET
+		USERID=#{userId,jdbcType=NUMERIC},
+		APPTYPE=#{appType,jdbcType=NUMERIC}
+		WHERE
+		DEVICETOKEN=#{devicetoken}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.String" resultMap="AppPushUser">
+		SELECT <include refid="columns"/>
+		FROM app_push_user
+		WHERE
+		DEVICETOKEN=#{devicetoken}
+	</select>
+	
+	<select id="getAll" resultMap="AppPushUser">
+		SELECT <include refid="columns"/>
+		FROM app_push_user   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by DEVICETOKEN desc
+		</if>
+	</select>
+		<select id="getByOrgId" parameterType="java.lang.Long" resultMap="AppPushUser">
+		SELECT a.*
+		FROM app_push_user a  
+		LEFT JOIN sys_user_pos b ON a.USERID=b.USERID
+		where b.orgId=#{orgId}
+	</select>
+	
+</mapper>

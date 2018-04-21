@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.appPush.AppPushJob">
+	<resultMap id="AppPushJob" type="com.hotent.makshi.model.appPush.AppPushJob">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="userId" column="USERID" jdbcType="NUMERIC"/>
+		<result property="runId" column="RUNID" jdbcType="NUMERIC"/>
+		<result property="taskId" column="TASKID" jdbcType="NUMERIC"/>
+		<result property="orgId" column="ORGID" jdbcType="NUMERIC"/>
+		<result property="pushType" column="PUSHTYPE" jdbcType="VARCHAR"/>
+		<result property="content" column="CONTENT" jdbcType="VARCHAR"/>
+		<result property="url" column="URL" jdbcType="VARCHAR"/>
+		<result property="ticker" column="TICKER" jdbcType="VARCHAR"/>
+		<result property="title" column="TITLE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,USERID,RUNID,ORGID,PUSHTYPE,TASKID,CONTENT,URL,TICKER,TITLE
+	</sql>
+	<sql id="wfColumns">
+		ID,USERID,RUNID,ORGID,PUSHTYPE,TASKID,CONTENT,URL,TICKER,TITLE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(id)"> AND ID  =#{id} </if>
+			<if test="@Ognl@isNotEmpty(pushType)"> AND PUSHTYPE  = #{pushType}  </if>
+			<if test="@Ognl@isNotEmpty(orgId)"> AND ORGID  = #{orgId}  </if>
+			<if test="@Ognl@isNotEmpty(content)"> AND CONTENT  LIKE '%${content}%'  </if>
+			<if test="@Ognl@isNotEmpty(url)"> AND URL  LIKE '%${url}%'  </if>
+			<if test="@Ognl@isNotEmpty(ticker)"> AND TICKER  LIKE '%${ticker}%'  </if>
+			<if test="@Ognl@isNotEmpty(title)"> AND TITLE  LIKE '%${title}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.appPush.AppPushJob">
+		INSERT INTO app_push_job
+		(ID,USERID,RUNID,TASKID,ORGID,PUSHTYPE,CONTENT,URL,TICKER,TITLE)
+		VALUES
+		(#{id,jdbcType=NUMERIC}, #{userId,jdbcType=NUMERIC}, #{runId,jdbcType=NUMERIC}, #{taskId,jdbcType=NUMERIC}, #{orgId,jdbcType=NUMERIC}, #{pushType,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{ticker,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM app_push_job 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.appPush.AppPushJob">
+		UPDATE app_push_job SET
+		USERID=#{userId,jdbcType=NUMERIC},
+		RUNID=#{runId,jdbcType=NUMERIC},
+		TASKID=#{taskId,jdbcType=NUMERIC},
+		ORGID=#{orgId,jdbcType=NUMERIC},
+		PUSHTYPE=#{pushType,jdbcType=VARCHAR},
+		CONTENT=#{content,jdbcType=VARCHAR},
+		URL=#{url,jdbcType=VARCHAR},
+		TICKER=#{ticker,jdbcType=VARCHAR},
+		TITLE=#{title,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="AppPushJob">
+		SELECT <include refid="columns"/>
+		FROM app_push_job
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getByRunId" parameterType="java.lang.Long" resultMap="AppPushJob">
+		SELECT <include refid="columns"/>
+		FROM app_push_job
+		WHERE
+		RUNID=#{runId}
+	</select>
+	
+	<select id="getAll" resultMap="AppPushJob">
+		SELECT <include refid="columns"/>
+		FROM app_push_job   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

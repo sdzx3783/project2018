@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.sms.SmsMsgRecordReady">
+	<resultMap id="SmsMsgRecordReady" type="com.hotent.makshi.model.sms.SmsMsgRecordReady">
+		<id property="id" column="ID" jdbcType="NUMERIC" />
+		<result property="userid" column="userid" jdbcType="VARCHAR" />
+		<result property="username" column="username" jdbcType="VARCHAR" />
+		<result property="mobile" column="mobile" jdbcType="VARCHAR" />
+		<result property="content" column="content" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="getRecords" parameterType="map" resultMap="SmsMsgRecordReady">
+		select * from w_sms_msg_record_ready limit #{sizes}
+	</select>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM w_sms_msg_record_ready 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<insert id="add" parameterType="com.hotent.makshi.model.sms.SmsMsgRecordReady">
+		insert into w_sms_msg_record_ready(id,userid,username,mobile,content)
+		values (#{id,jdbcType=NUMERIC},#{userid,jdbcType=VARCHAR},#{username,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR})
+	</insert>
+</mapper>

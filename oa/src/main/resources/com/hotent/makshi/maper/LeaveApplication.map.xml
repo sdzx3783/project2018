@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hr.LeaveApplication">
+	<resultMap id="LeaveApplication" type="com.hotent.makshi.model.hr.LeaveApplication">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="departmentID" column="F_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="positionID" column="F_POSITIONID" jdbcType="VARCHAR"/>
+		<result property="user_num" column="F_USER_NUM" jdbcType="VARCHAR"/>
+		<result property="join_work_time" column="F_JOIN_WORK_TIME" jdbcType="DATE"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="induction_time" column="F_INDUCTION_TIME" jdbcType="DATE"/>
+		<result property="application_date" column="F_APPLICATION_DATE" jdbcType="DATE"/>
+		<result property="isMarry" column="F_ISMARRY" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="leave_type" column="F_LEAVE_TYPE" jdbcType="VARCHAR"/>
+		<result property="leave_days" column="F_LEAVE_DAYS" jdbcType="VARCHAR"/>
+		<result property="position" column="F_POSITION" jdbcType="VARCHAR"/>
+		<result property="startTime" column="F_STARTTIME" jdbcType="TIMESTAMP"/>
+		<result property="endTime" column="F_ENDTIME" jdbcType="TIMESTAMP"/>
+		<result property="leaveStartSolt" column="F_leaveStartSolt" jdbcType="VARCHAR"/>
+		<result property="leaveEndSolt" column="F_leaveEndSolt" jdbcType="VARCHAR"/>
+		<result property="reason" column="F_REASON" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="file" column="F_FILE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.hr.LeaveApplication" id="ExtLeaveApplication" extends="LeaveApplication">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_DEPARTMENTID,F_POSITIONID,F_USER_NUM,F_JOIN_WORK_TIME,F_APPLICANT,F_INDUCTION_TIME,F_APPLICATION_DATE,F_ISMARRY,F_DEPARTMENT,F_LEAVE_TYPE,F_LEAVE_DAYS,F_POSITION,F_STARTTIME,F_ENDTIME,F_LEAVESTARTSOLT,F_LEAVEENDSOLT,F_REASON,F_REMARK,F_FILE
+	</sql>
+	<sql id="wfColumns">
+		ID,F_DEPARTMENTID,F_POSITIONID,F_USER_NUM,F_JOIN_WORK_TIME,F_APPLICANT,F_INDUCTION_TIME,F_APPLICATION_DATE,F_ISMARRY,F_DEPARTMENT,F_LEAVE_TYPE,F_POSITION,F_STARTTIME,F_ENDTIME,F_LEAVESTARTSOLT,F_LEAVEENDSOLT,F_REASON,F_REMARK,F_FILE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_DEPARTMENTID  LIKE '%${departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(positionID)"> AND F_POSITIONID  LIKE '%${positionID}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_num)"> AND F_USER_NUM  LIKE '%${user_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(join_work_time)"> AND F_JOIN_WORK_TIME  =#{join_work_time} </if>
+			<if test="@Ognl@isNotEmpty(beginjoin_work_time)"> AND F_JOIN_WORK_TIME  >=#{beginjoin_work_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endjoin_work_time)"> AND F_JOIN_WORK_TIME <![CDATA[ <=#{endjoin_work_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(induction_time)"> AND F_INDUCTION_TIME  =#{induction_time} </if>
+			<if test="@Ognl@isNotEmpty(begininduction_time)"> AND F_INDUCTION_TIME  >=#{begininduction_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endinduction_time)"> AND F_INDUCTION_TIME <![CDATA[ <=#{endinduction_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(application_date)"> AND F_APPLICATION_DATE  =#{application_date} </if>
+			<if test="@Ognl@isNotEmpty(beginapplication_date)"> AND F_APPLICATION_DATE  >=#{beginapplication_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endapplication_date)"> AND F_APPLICATION_DATE <![CDATA[ <=#{endapplication_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(isMarry)"> AND F_ISMARRY  LIKE '%${isMarry}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(leave_type)"> AND F_LEAVE_TYPE  LIKE '%${leave_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(position)"> AND F_POSITION  LIKE '%${position}%'  </if>
+			<if test="@Ognl@isNotEmpty(startTime)"> AND F_STARTTIME  =#{startTime} </if>
+			<if test="@Ognl@isNotEmpty(beginstartTime)"> AND F_STARTTIME  >=#{beginstartTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstartTime)"> AND F_STARTTIME <![CDATA[ <=#{endstartTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(endTime)"> AND F_ENDTIME  =#{endTime} </if>
+			<if test="@Ognl@isNotEmpty(beginendTime)"> AND F_ENDTIME  >=#{beginendTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endendTime)"> AND F_ENDTIME <![CDATA[ <=#{endendTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(reason)"> AND F_REASON  LIKE '%${reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(file)"> AND F_FILE  LIKE '%${file}%'  </if>
+			<if test="@Ognl@isNotEmpty(globalflowno)"> AND b.GLOBALFLOWNO  LIKE #{globalflowno}  </if>
+			<if test="@Ognl@isNotEmpty(creator)"> AND b.CREATOR  LIKE '%${creator}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.hr.LeaveApplication">
+		INSERT INTO w_vaction
+		(ID,
+		F_DEPARTMENTID,F_POSITIONID,F_USER_NUM,F_JOIN_WORK_TIME,F_APPLICANT,F_INDUCTION_TIME,F_APPLICATION_DATE,F_ISMARRY,F_DEPARTMENT,F_LEAVE_TYPE,F_POSITION,F_STARTTIME,F_ENDTIME,F_LEAVESTARTSOLT,F_LEAVEENDSOLT,F_REASON,F_REMARK,F_FILE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{departmentID,jdbcType=VARCHAR}, #{positionID,jdbcType=VARCHAR}, #{user_num,jdbcType=VARCHAR}, #{join_work_time,jdbcType=DATE}, #{applicant,jdbcType=VARCHAR}, #{induction_time,jdbcType=DATE}, #{application_date,jdbcType=DATE}, #{isMarry,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{leave_type,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE},#{leaveStartSolt,jdbcType=VARCHAR},#{leaveEndSolt,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM w_vaction 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hr.LeaveApplication">
+		UPDATE w_vaction SET
+		F_DEPARTMENTID=#{departmentID,jdbcType=VARCHAR},
+		F_POSITIONID=#{positionID,jdbcType=VARCHAR},
+		F_USER_NUM=#{user_num,jdbcType=VARCHAR},
+		F_JOIN_WORK_TIME=#{join_work_time,jdbcType=DATE},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_INDUCTION_TIME=#{induction_time,jdbcType=DATE},
+		F_APPLICATION_DATE=#{application_date,jdbcType=DATE},
+		F_ISMARRY=#{isMarry,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_LEAVE_TYPE=#{leave_type,jdbcType=VARCHAR},
+		F_POSITION=#{position,jdbcType=VARCHAR},
+		F_STARTTIME=#{startTime,jdbcType=DATE},
+		F_ENDTIME=#{endTime,jdbcType=DATE},
+		F_REASON=#{reason,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_FILE=#{file,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="LeaveApplication">
+		SELECT <include refid="columns"/>
+		FROM w_vaction
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="LeaveApplication">
+		SELECT <include refid="columns"/>
+		FROM w_vaction    a   
+		left join bpm_pro_run_his b on a.id=b.BUSINESSKEY
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="LeaveApplication">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM w_vaction A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtLeaveApplication">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM w_vaction A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM w_vaction A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM w_vaction A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM w_vaction A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM w_vaction A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="LeaveApplication">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM w_vaction A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

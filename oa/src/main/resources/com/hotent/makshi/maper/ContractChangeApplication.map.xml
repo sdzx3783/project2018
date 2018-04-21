@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.contract.ContractChangeApplication">
+	<resultMap id="ContractChangeApplication" type="com.hotent.makshi.model.contract.ContractChangeApplication">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="contract_num" column="F_CONTRACT_NUM" jdbcType="VARCHAR"/>
+		<result property="contract_name" column="F_CONTRACT_NAME" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="change_content" column="F_CHANGE_CONTENT" jdbcType="VARCHAR"/>
+		<result property="change_time" column="F_CHANGE_TIME" jdbcType="DATE"/>
+		<result property="change_before" column="F_CHANGE_BEFORE" jdbcType="VARCHAR"/>
+		<result property="change_after" column="F_CHANGE_AFTER" jdbcType="VARCHAR"/>
+		<result property="application_reason" column="F_APPLICATION_REASON" jdbcType="VARCHAR"/>
+		<result property="file" column="F_FILE" jdbcType="VARCHAR"/>
+		<result property="contract_account" column="F_contract_account" jdbcType="VARCHAR"/>
+		<result property="contract_related_person" column="F_CONTRACT_RELATED_PERSON" jdbcType="VARCHAR"/>
+		
+		<result property="globalFlowNo" column="globalFlowNo" jdbcType="VARCHAR"/>
+		<result property="creator" column="creator" jdbcType="VARCHAR"/>
+		<result property="createTime" column="createTime" jdbcType="DATE"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.contract.ContractChangeApplication" id="ExtContractChangeApplication" extends="ContractChangeApplication">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_CONTRACT_NUM,F_CHANGE_BEFORE,F_CONTRACT_NAME,F_CHANGE_AFTER,F_APPLICANT,F_CHANGE_TIME,F_CONTRACT_RELATED_PERSON,F_APPLICATION_REASON,F_CHANGE_CONTENT,F_FILE
+		,F_contract_account
+	</sql>
+	<sql id="wfColumns">
+		ID,F_CONTRACT_NUM,F_CHANGE_BEFORE,F_CONTRACT_NAME,F_CHANGE_AFTER,F_APPLICANT,F_CHANGE_TIME,F_CONTRACT_RELATED_PERSON,F_APPLICATION_REASON,F_CHANGE_CONTENT,F_FILE
+		,F_contract_account,globalFlowNo,creator,createTime
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(contract_num)"> AND F_CONTRACT_NUM  LIKE '%${contract_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(change_before)"> AND F_CHANGE_BEFORE  LIKE '%${change_before}%'  </if>
+			<if test="@Ognl@isNotEmpty(contract_name)"> AND F_CONTRACT_NAME  LIKE '%${contract_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(change_after)"> AND F_CHANGE_AFTER  LIKE '%${change_after}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(change_time)"> AND F_CHANGE_TIME  =#{change_time} </if>
+			<if test="@Ognl@isNotEmpty(beginchange_time)"> AND F_CHANGE_TIME  >=#{beginchange_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endchange_time)"> AND F_CHANGE_TIME <![CDATA[ <=#{endchange_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(contract_related_person)"> AND F_CONTRACT_RELATED_PERSON  LIKE '%${contract_related_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(application_reason)"> AND F_APPLICATION_REASON  LIKE '%${application_reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(change_content)"> AND F_CHANGE_CONTENT  LIKE '%${change_content}%'  </if>
+			<if test="@Ognl@isNotEmpty(file)"> AND F_FILE  LIKE '%${file}%'  </if>
+			<if test="@Ognl@isNotEmpty(globalflowno)"> AND b.GLOBALFLOWNO  LIKE #{globalflowno}  </if>
+			<if test="@Ognl@isNotEmpty(creator)"> AND b.CREATOR  LIKE '%${creator}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.contract.ContractChangeApplication">
+		INSERT INTO W_CONTRACT_CHANGE_APPLICATION
+		(ID,
+		F_CONTRACT_NUM,F_CHANGE_BEFORE,F_CONTRACT_NAME,F_CHANGE_AFTER,F_APPLICANT,F_CHANGE_TIME,F_CONTRACT_RELATED_PERSON,F_APPLICATION_REASON,F_CHANGE_CONTENT,F_FILE
+		,F_contract_account)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{contract_num,jdbcType=VARCHAR}, #{change_before,jdbcType=VARCHAR}, #{contract_name,jdbcType=VARCHAR}, #{change_after,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{change_time,jdbcType=DATE}, #{contract_related_person,jdbcType=VARCHAR}, #{application_reason,jdbcType=VARCHAR}, #{change_content,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR}
+		,#{contract_account,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CONTRACT_CHANGE_APPLICATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.contract.ContractChangeApplication">
+		UPDATE W_CONTRACT_CHANGE_APPLICATION SET
+		F_CONTRACT_NUM=#{contract_num,jdbcType=VARCHAR},
+		F_CHANGE_BEFORE=#{change_before,jdbcType=VARCHAR},
+		F_CONTRACT_NAME=#{contract_name,jdbcType=VARCHAR},
+		F_CHANGE_AFTER=#{change_after,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_CHANGE_TIME=#{change_time,jdbcType=DATE},
+		F_CONTRACT_RELATED_PERSON=#{contract_related_person,jdbcType=VARCHAR},
+		F_APPLICATION_REASON=#{application_reason,jdbcType=VARCHAR},
+		F_CHANGE_CONTENT=#{change_content,jdbcType=VARCHAR},
+		F_FILE=#{file,jdbcType=VARCHAR},
+		F_contract_account=#{contract_account,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ContractChangeApplication">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_CHANGE_APPLICATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="ContractChangeApplication">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_CHANGE_APPLICATION   a   
+		left join bpm_pro_run_his b on a.id=b.BUSINESSKEY
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="ContractChangeApplication">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_CONTRACT_CHANGE_APPLICATION A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtContractChangeApplication">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_CONTRACT_CHANGE_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_CONTRACT_CHANGE_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_CONTRACT_CHANGE_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_CONTRACT_CHANGE_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_CONTRACT_CHANGE_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="ContractChangeApplication">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_CONTRACT_CHANGE_APPLICATION A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+	
+	<select id="getByContractNum" parameterType="map" resultMap="ContractChangeApplication">
+		SELECT <include refid="wfColumns"/>  
+		FROM W_CONTRACT_CHANGE_APPLICATION A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY  AND F_CONTRACT_NUM=#{contractNum}
+	</select>
+	
+</mapper>

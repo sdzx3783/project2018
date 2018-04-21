@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.contract.ContractSingingRate">
+	<resultMap id="ContractSingingRate"
+		type="com.hotent.makshi.model.contract.ContractSingingRate">
+		<!-- <id property="id" column="ID" jdbcType="NUMERIC"/> -->
+		<result property="departmentId" column="departmentID" jdbcType="VARCHAR" />
+		<result property="department" column="department" jdbcType="VARCHAR" />
+		<result property="contracttype" column="contracttype" jdbcType="VARCHAR" />
+		<result property="allContract" column="allContract" jdbcType="INTEGER" />
+		<result property="allContractTypes" column="allContractTypes" jdbcType="INTEGER" />
+		<result property="cgContract" column="cgContract" jdbcType="INTEGER" />
+		<result property="fcgContract" column="fcgContract" jdbcType="INTEGER" />
+		<result property="allContractMoney" column="allContractMoney" jdbcType="DOUBLE" />
+		<result property="cgContractMoney" column="cgContractMoney" jdbcType="DOUBLE" />
+		<result property="fcgContractMoney" column="fcgContractMoney" jdbcType="DOUBLE" />
+		<result property="investmentContractMoney" column="investmentContractMoney" jdbcType="DOUBLE" />
+		<result property="allGd" column="allGd" jdbcType="INTEGER" />
+		<result property="cgGd" column="cgGd" jdbcType="INTEGER" />
+		<result property="fcgGd" column="fcgGd" jdbcType="INTEGER" />
+		<result property="waitGd" column="waitGd" jdbcType="INTEGER" />
+		<result property="allRate" column="allRate" jdbcType="DOUBLE" />
+		<result property="fcgRate" column="fcgRate" jdbcType="DOUBLE" />
+	</resultMap>
+
+	<sql id="getAllDepartmentContractSigningStatisticsColumns">
+			F_contract_departmentID as departmentID,
+			(select orgname from sys_org w where w.orgid=F_contract_departmentID) as department,
+			F_contracttype contracttype,
+			count(distinct(F_contracttype))  allContractTypes ,
+			count(1) allContract, 
+			count(1) fcgContract, 
+			SUM(F_contract_money) allContractMoney,
+			SUM(f_total_investment) investmentContractMoney,
+			SUM(F_contract_money) fcgContractMoney,
+			count(if((F_isrecovery=1),true,null))  allGd ,
+			count(if((F_isrecovery=1),true,null))  fcgGd ,
+			count(if((F_isrecovery != 1 or F_isrecovery is null),true,null))  waitGd,
+			CAST(count(if((F_isrecovery=1),true,null)) * 1.00 / count(1) * 100 AS DECIMAL (18, 2)) allRate,
+			CAST(count(if((F_isrecovery=1),true,null)) * 1.00 / count(1) * 100 AS DECIMAL (18, 2)) fcgRate 
+	</sql>
+	
+	<sql id="getAllDepartmentContractSigningStatisticsWhere">
+		<where>
+			 F_contract_departmentID is not null and F_contract_departmentID != '' 
+			<if test="years != null and  years != ''">
+				AND yearsort in
+				<foreach collection="years" item="item" open="(" close=")" separator="," >
+				     #{item}
+				</foreach>
+			</if>
+			<if test="cotps != null and  cotps != ''">
+				and F_contracttype in
+				<foreach collection="cotps" item="item" open="(" close=")" separator="," >
+				     #{item}
+				</foreach>
+			</if>
+			<if test="cotpsList != null and  cotpsList.size>0 ">
+				and F_contracttype in
+				<foreach collection="cotpsList" item="item" open="(" close=")" separator="," >
+				     #{item}
+				</foreach>
+			</if>
+			<if test="orgIds != null and orgIds != ''">
+				and F_contract_departmentID in
+				<foreach collection="orgIds" item="item" open="(" close=")" separator="," >
+				     #{item}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAllDepartmentContractSigningStatistics" parameterType="map" resultMap="ContractSingingRate">
+		select 
+			<include refid="getAllDepartmentContractSigningStatisticsColumns"/>
+		from w_contractinfo
+			<include refid="getAllDepartmentContractSigningStatisticsWhere"/>
+		GROUP BY F_contract_departmentID
+		<if test="cotps != null and  cotps != ''">
+			,F_contracttype
+		</if>
+	</select>
+	
+	<select id="getAllDepartmentTotalContractSigningStatistics" parameterType="map" resultMap="ContractSingingRate">
+		select 
+			<include refid="getAllDepartmentContractSigningStatisticsColumns"/>
+		from w_contractinfo
+			<include refid="getAllDepartmentContractSigningStatisticsWhere"/>
+	</select>
+	
+</mapper>

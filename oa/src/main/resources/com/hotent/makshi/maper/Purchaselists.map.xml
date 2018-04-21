@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.operation.Purchaselists">
+	<resultMap id="Purchaselists" type="com.hotent.makshi.model.operation.Purchaselists">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="specification" column="F_SPECIFICATION" jdbcType="VARCHAR"/>
+		<result property="number" column="F_NUMBER" jdbcType="VARCHAR"/>
+		<result property="price" column="F_PRICE" jdbcType="VARCHAR"/>
+		<result property="recipients_userID" column="F_RECIPIENTS_USERID" jdbcType="VARCHAR"/>
+		<result property="recipients_user" column="F_RECIPIENTS_USER" jdbcType="VARCHAR"/>
+		<result property="recipients_departmentID" column="F_RECIPIENTS_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="recipients_department" column="F_RECIPIENTS_DEPARTMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_NAME,F_SPECIFICATION,F_NUMBER,F_PRICE,F_RECIPIENTS_USERID,F_RECIPIENTS_USER,F_RECIPIENTS_DEPARTMENTID,F_RECIPIENTS_DEPARTMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_NAME,F_SPECIFICATION,F_NUMBER,F_PRICE,F_RECIPIENTS_USERID,F_RECIPIENTS_USER,F_RECIPIENTS_DEPARTMENTID,F_RECIPIENTS_DEPARTMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+		DELETED = 0
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(specification)"> AND F_SPECIFICATION  LIKE '%${specification}%'  </if>
+			<if test="@Ognl@isNotEmpty(number)"> AND F_NUMBER  LIKE '%${number}%'  </if>
+			<if test="@Ognl@isNotEmpty(price)"> AND F_PRICE  LIKE '%${price}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.operation.Purchaselists">
+		INSERT INTO W_PURCHASELISTS
+		(ID,REFID,
+		F_NAME,F_SPECIFICATION,F_NUMBER,F_PRICE,F_RECIPIENTS_USERID,F_RECIPIENTS_USER,F_RECIPIENTS_DEPARTMENTID,F_RECIPIENTS_DEPARTMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{name,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, 
+		#{recipients_userID,jdbcType=VARCHAR}, #{recipients_user,jdbcType=VARCHAR},
+		#{recipients_departmentID,jdbcType=VARCHAR}, #{recipients_department,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_PURCHASELISTS 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.operation.Purchaselists">
+		UPDATE W_PURCHASELISTS SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_SPECIFICATION=#{specification,jdbcType=VARCHAR},
+		F_NUMBER=#{number,jdbcType=VARCHAR},
+		F_PRICE=#{price,jdbcType=VARCHAR},
+		F_RECIPIENTS_USERID=#{recipients_userID,jdbcType=VARCHAR},
+		F_RECIPIENTS_USER=#{recipients_user,jdbcType=VARCHAR},
+		F_RECIPIENTS_DEPARTMENTID=#{recipients_departmentID,jdbcType=VARCHAR},
+		F_RECIPIENTS_DEPARTMENT=#{recipients_department,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    UPDATE W_PURCHASELISTS SET
+	    DELETED = 1
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getPurchaselistsList" resultMap="Purchaselists">
+	    SELECT <include refid="columns"/>
+	    FROM W_PURCHASELISTS 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="Purchaselists">
+		SELECT <include refid="columns"/>
+		FROM W_PURCHASELISTS
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="Purchaselists">
+		SELECT <include refid="columns"/>
+		FROM W_PURCHASELISTS   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

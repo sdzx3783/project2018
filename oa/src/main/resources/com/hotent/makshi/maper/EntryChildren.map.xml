@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hr.EntryChildren">
+	<resultMap id="EntryChildren" type="com.hotent.makshi.model.hr.EntryChildren">
+		<id property="id" column="id" jdbcType="NUMERIC"/>
+		<result property="refId" column="refId" jdbcType="NUMERIC"/>
+		<result property="birthday" column="birthday" jdbcType="DATE"/>
+		<result property="sex" column="sex" jdbcType="VARCHAR"/>
+		<result property="name" column="name" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<sql id="columns">
+		id,refId,birthday,sex,name
+	</sql>
+	
+	<insert id="add" parameterType="com.hotent.makshi.model.hr.EntryChildren">
+		insert into w_entry_children
+		(id,refId,birthday,sex,name)
+		values
+		(#{id,jdbcType=NUMERIC},
+		 #{refId,jdbcType=NUMERIC},
+		 #{birthday,jdbcType=DATE},
+		 #{sex,jdbcType=VARCHAR}, 
+		 #{name,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		delete from w_entry_children 
+		where
+		id=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hr.EntryChildren">
+		update w_entry_children set
+		refId=#{refId,jdbcType=NUMERIC},
+		birthday=#{birthday,jdbcType=DATE},
+		sex=#{sex,jdbcType=VARCHAR},
+		name=#{name,jdbcType=VARCHAR}
+		where
+		id=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    delete from w_entry_children
+	    where refId=#{refId}
+	</delete>    
+	
+	<select id="getEntryChildrenList" resultMap="EntryChildren">
+	    select <include refid="columns"/>  from w_entry_children where refId=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="EntryChildren">
+		select <include refid="columns"/> from w_entry_children where id=#{id}
+	</select>
+	
+</mapper>

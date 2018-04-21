@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.talente.PersonIn">
+	<resultMap id="PersonIn" type="com.hotent.makshi.model.talente.PersonIn">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="person_in_num" column="F_PERSON_IN_NUM" jdbcType="VARCHAR"/>
+		<result property="account" column="F_account" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="applicantID" column="F_applicantID" jdbcType="VARCHAR"/>
+		<result property="application_time" column="F_APPLICATION_TIME" jdbcType="DATE"/>
+		<result property="method" column="F_METHOD" jdbcType="VARCHAR"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="arrival_time" column="F_ARRIVAL_TIME" jdbcType="DATE"/>
+		<result property="userdata_num" column="F_USERDATA_NUM" jdbcType="VARCHAR"/>
+		<result property="trust_unit" column="F_TRUST_UNIT" jdbcType="VARCHAR"/>
+		<result property="settling_time" column="F_SETTLING_TIME" jdbcType="DATE"/>
+		<result property="police_station" column="F_POLICE_STATION" jdbcType="VARCHAR"/>
+		<result property="isArrive" column="F_ISARRIVE" jdbcType="VARCHAR"/>
+		<result property="settled_situation" column="F_SETTLED_SITUATION" jdbcType="VARCHAR"/>
+		<result property="payment_time" column="F_PAYMENT_TIME" jdbcType="DATE"/>
+		<result property="payment_amount" column="F_PAYMENT_AMOUNT" jdbcType="VARCHAR"/>
+		<result property="introduction_state" column="F_INTRODUCTION_STATE" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="file" column="F_FILE" jdbcType="VARCHAR"/>
+		<result property="user_num" column="F_USER_NUM" jdbcType="VARCHAR"/>
+		<result property="id_number" column="F_id_number" jdbcType="VARCHAR"/>
+		<result property="edu" column="F_edu" jdbcType="VARCHAR"/>
+		<result property="age" column="F_age" jdbcType="VARCHAR"/>
+		<result property="entryDate" column="F_entryDate" jdbcType="DATE"/>
+		<result property="tel_number" column="F_tel_number" jdbcType="VARCHAR"/>
+		<result property="residence_type" column="F_residence_type" jdbcType="VARCHAR"/>
+		<result property="house_status" column="F_house_status" jdbcType="VARCHAR"/>
+		<result property="appli_reason" column="F_appli_reason" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.talente.PersonIn" id="ExtPersonIn" extends="PersonIn">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_PERSON_IN_NUM,F_TRUST_UNIT,F_USER_NUM,F_SETTLING_TIME,F_APPLICANT,F_POLICE_STATION,F_APPLICATION_TIME,F_ISARRIVE,F_METHOD,F_SETTLED_SITUATION,F_TYPE,F_PAYMENT_TIME,F_ARRIVAL_TIME,F_PAYMENT_AMOUNT,F_USERDATA_NUM,F_REMARK,F_FILE,F_INTRODUCTION_STATE
+		,F_id_number,
+		F_account,
+		F_applicantID,
+		F_edu,
+		F_age,
+		F_entryDate,
+		F_residence_type,
+		F_tel_number,
+		F_house_status,
+		F_appli_reason
+	</sql>
+	<sql id="wfColumns">
+		ID,F_PERSON_IN_NUM,F_TRUST_UNIT,F_USER_NUM,F_SETTLING_TIME,F_APPLICANT,F_POLICE_STATION,F_APPLICATION_TIME,F_ISARRIVE,F_METHOD,F_SETTLED_SITUATION,F_TYPE,F_PAYMENT_TIME,F_ARRIVAL_TIME,F_PAYMENT_AMOUNT,F_USERDATA_NUM,F_REMARK,F_FILE,F_INTRODUCTION_STATE
+		,F_id_number,
+	    F_account,
+		F_applicantID,
+		F_edu,
+		F_age,
+		F_entryDate,
+		F_residence_type,
+		F_tel_number,
+		F_house_status,
+		F_appli_reason
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(person_in_num)"> AND F_PERSON_IN_NUM  LIKE '%${person_in_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(trust_unit)"> AND F_TRUST_UNIT  LIKE '%${trust_unit}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_num)"> AND F_USER_NUM  LIKE '%${user_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(settling_time)"> AND F_SETTLING_TIME  =#{settling_time} </if>
+			<if test="@Ognl@isNotEmpty(beginsettling_time)"> AND F_SETTLING_TIME  >=#{beginsettling_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endsettling_time)"> AND F_SETTLING_TIME <![CDATA[ <=#{endsettling_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(police_station)"> AND F_POLICE_STATION  LIKE '%${police_station}%'  </if>
+			<if test="@Ognl@isNotEmpty(application_time)"> AND F_APPLICATION_TIME  =#{application_time} </if>
+			<if test="@Ognl@isNotEmpty(beginapplication_time)"> AND F_APPLICATION_TIME  >=#{beginapplication_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endapplication_time)"> AND F_APPLICATION_TIME <![CDATA[ <=#{endapplication_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(isArrive)"> AND F_ISARRIVE  LIKE '%${isArrive}%'  </if>
+			<if test="@Ognl@isNotEmpty(method)"> AND F_METHOD  LIKE '%${method}%'  </if>
+			<if test="@Ognl@isNotEmpty(settled_situation)"> AND F_SETTLED_SITUATION  LIKE '%${settled_situation}%'  </if>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  LIKE '%${type}%'  </if>
+			<if test="@Ognl@isNotEmpty(payment_time)"> AND F_PAYMENT_TIME  =#{payment_time} </if>
+			<if test="@Ognl@isNotEmpty(beginpayment_time)"> AND F_PAYMENT_TIME  >=#{beginpayment_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endpayment_time)"> AND F_PAYMENT_TIME <![CDATA[ <=#{endpayment_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(arrival_time)"> AND F_ARRIVAL_TIME  =#{arrival_time} </if>
+			<if test="@Ognl@isNotEmpty(beginarrival_time)"> AND F_ARRIVAL_TIME  >=#{beginarrival_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endarrival_time)"> AND F_ARRIVAL_TIME <![CDATA[ <=#{endarrival_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(payment_amount)"> AND F_PAYMENT_AMOUNT  LIKE '%${payment_amount}%'  </if>
+			<if test="@Ognl@isNotEmpty(userdata_num)"> AND F_USERDATA_NUM  LIKE '%${userdata_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(file)"> AND F_FILE  LIKE '%${file}%'  </if>
+			<if test="@Ognl@isNotEmpty(introduction_state)"> AND F_INTRODUCTION_STATE  LIKE '%${introduction_state}%'  </if>
+			<if test="@Ognl@isNotEmpty(beginapplytime)"> AND F_APPLICATION_TIME  >= #{beginapplytime} </if>
+			<if test="@Ognl@isNotEmpty(endapplytime)"> AND F_APPLICATION_TIME  &lt;= #{endapplytime} </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.talente.PersonIn">
+		INSERT INTO W_PERSON_IN
+		(ID,
+		F_PERSON_IN_NUM,F_TRUST_UNIT,F_USER_NUM,F_SETTLING_TIME,F_APPLICANT,F_POLICE_STATION,F_APPLICATION_TIME,F_ISARRIVE,F_METHOD,F_SETTLED_SITUATION,F_TYPE,F_PAYMENT_TIME,F_ARRIVAL_TIME,F_PAYMENT_AMOUNT,F_USERDATA_NUM,F_REMARK,F_FILE,F_INTRODUCTION_STATE
+		,F_id_number,
+	    F_account,
+		F_applicantID,
+		F_edu,
+		F_age,
+		F_entryDate,
+		F_residence_type,
+		F_tel_number,
+		F_house_status,
+		F_appli_reason)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{person_in_num,jdbcType=VARCHAR}, #{trust_unit,jdbcType=VARCHAR}, #{user_num,jdbcType=VARCHAR}, #{settling_time,jdbcType=DATE}, #{applicant,jdbcType=VARCHAR}, #{police_station,jdbcType=VARCHAR}, #{application_time,jdbcType=DATE}, #{isArrive,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR}, #{settled_situation,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{payment_time,jdbcType=DATE}, #{arrival_time,jdbcType=DATE}, #{payment_amount,jdbcType=VARCHAR}, #{userdata_num,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR}, #{introduction_state,jdbcType=VARCHAR}
+		,#{id_number,jdbcType=VARCHAR},
+		#{account,jdbcType=VARCHAR},
+		#{applicantID,jdbcType=VARCHAR},
+		#{edu,jdbcType=VARCHAR},
+		#{age,jdbcType=VARCHAR},
+		#{entryDate,jdbcType=DATE},
+		#{residence_type,jdbcType=VARCHAR},
+		#{tel_number,jdbcType=VARCHAR},
+		#{house_status,jdbcType=VARCHAR},
+		#{appli_reason,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_PERSON_IN 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.talente.PersonIn">
+		UPDATE W_PERSON_IN SET
+		F_PERSON_IN_NUM=#{person_in_num,jdbcType=VARCHAR},
+		F_TRUST_UNIT=#{trust_unit,jdbcType=VARCHAR},
+		F_USER_NUM=#{user_num,jdbcType=VARCHAR},
+		F_SETTLING_TIME=#{settling_time,jdbcType=DATE},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_POLICE_STATION=#{police_station,jdbcType=VARCHAR},
+		F_APPLICATION_TIME=#{application_time,jdbcType=DATE},
+		F_ISARRIVE=#{isArrive,jdbcType=VARCHAR},
+		F_METHOD=#{method,jdbcType=VARCHAR},
+		F_SETTLED_SITUATION=#{settled_situation,jdbcType=VARCHAR},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_PAYMENT_TIME=#{payment_time,jdbcType=DATE},
+		F_ARRIVAL_TIME=#{arrival_time,jdbcType=DATE},
+		F_PAYMENT_AMOUNT=#{payment_amount,jdbcType=VARCHAR},
+		F_USERDATA_NUM=#{userdata_num,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_FILE=#{file,jdbcType=VARCHAR},
+		F_INTRODUCTION_STATE=#{introduction_state,jdbcType=VARCHAR}
+		,F_id_number=#{id_number,jdbcType=VARCHAR},
+		F_edu=#{edu,jdbcType=VARCHAR},
+		F_age=#{age,jdbcType=VARCHAR},
+		F_entryDate=#{entryDate,jdbcType=DATE},
+		F_residence_type=#{residence_type,jdbcType=VARCHAR},
+		F_tel_number=#{tel_number,jdbcType=VARCHAR},
+		F_house_status=#{house_status,jdbcType=VARCHAR},
+		F_appli_reason=#{appli_reason,jdbcType=VARCHAR},
+	    F_account=#{account,jdbcType=VARCHAR},
+		F_applicantID=#{applicantID,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="PersonIn">
+		SELECT <include refid="columns"/>
+		FROM W_PERSON_IN
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="PersonIn">
+		SELECT <include refid="columns"/>
+		FROM W_PERSON_IN   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="PersonIn">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_PERSON_IN A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtPersonIn">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_PERSON_IN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_PERSON_IN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_PERSON_IN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_PERSON_IN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_PERSON_IN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="PersonIn">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_PERSON_IN A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

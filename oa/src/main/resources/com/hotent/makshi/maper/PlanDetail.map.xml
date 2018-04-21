@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.plan.PlanDetail" >
+  <resultMap id="BaseResultMap" type="com.hotent.makshi.model.plan.PlanDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="isend" property="isend" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, plan_id, title, end_date, isend, remark
+  </sql>
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from w_plan_detail
+    where id = #{id}
+  </select>
+  
+  
+  <select id="getDetailByPId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from w_plan_detail
+    where plan_id = #{pId}
+  </select>
+  
+  
+  
+  <delete id="delById" parameterType="java.lang.Long" >
+    delete from w_plan_detail
+    where id = #{id}
+  </delete>
+  
+  
+  <delete id="delByPId" parameterType="java.lang.Long" >
+    delete from w_plan_detail
+    where plan_id = #{pId}
+  </delete>
+  
+  
+  
+  
+  <insert id="add" parameterType="com.hotent.makshi.model.plan.PlanDetail" >
+    insert into w_plan_detail (id, plan_id, title, 
+      end_date, isend, remark
+      )
+    values (#{id,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{endDate,jdbcType=DATE}, #{isend,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="update" parameterType="com.hotent.makshi.model.plan.PlanDetail" >
+    update w_plan_detail
+    <set >
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="isend != null" >
+        isend = #{isend,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

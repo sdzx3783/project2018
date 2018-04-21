@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.finance.ProjectMonthIncome">
+	<resultMap id="ProjectMonthIncome" type="com.hotent.makshi.model.finance.ProjectMonthIncome">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="proid" column="F_PROID" jdbcType="VARCHAR"/>
+		<result property="month" column="F_MONTH" jdbcType="VARCHAR"/>
+		<result property="ctime" column="F_CTIME" jdbcType="DATE"/>
+		<result property="utime" column="F_UTIME" jdbcType="DATE"/>
+		<result property="income" column="F_INCOME" jdbcType="NUMERIC"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_PROID,F_MONTH,F_CTIME,F_UTIME,F_INCOME
+	</sql>
+	<sql id="wfColumns">
+		ID,F_PROID,F_MONTH,F_CTIME,F_UTIME,F_INCOME
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(proid)"> AND F_PROID  = #{proid}  </if>
+			<if test="@Ognl@isNotEmpty(month)"> AND F_MONTH  = #{month}  </if>
+			<if test="@Ognl@isNotEmpty(ctime)"> AND F_CTIME  =#{ctime} </if>
+			<if test="@Ognl@isNotEmpty(beginctime)"> AND F_CTIME  >=#{beginctime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endctime)"> AND F_CTIME <![CDATA[ <=#{endctime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(utime)"> AND F_UTIME  =#{utime} </if>
+			<if test="@Ognl@isNotEmpty(beginutime)"> AND F_UTIME  >=#{beginutime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endutime)"> AND F_UTIME <![CDATA[ <=#{endutime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(income)"> AND F_INCOME  =#{income} </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.finance.ProjectMonthIncome">
+		INSERT INTO W_PROJECT_MONTH_INCOME
+		(ID,
+		F_PROID,F_MONTH,F_CTIME,F_UTIME,F_INCOME)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{proid,jdbcType=VARCHAR}, #{month,jdbcType=VARCHAR}, #{ctime,jdbcType=DATE}, #{utime,jdbcType=DATE}, #{income,jdbcType=NUMERIC})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_PROJECT_MONTH_INCOME 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.finance.ProjectMonthIncome">
+		UPDATE W_PROJECT_MONTH_INCOME SET
+		F_PROID=#{proid,jdbcType=VARCHAR},
+		F_MONTH=#{month,jdbcType=VARCHAR},
+		F_CTIME=#{ctime,jdbcType=DATE},
+		F_UTIME=#{utime,jdbcType=DATE},
+		F_INCOME=#{income,jdbcType=NUMERIC}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ProjectMonthIncome">
+		SELECT <include refid="columns"/>
+		FROM W_PROJECT_MONTH_INCOME
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="ProjectMonthIncome">
+		SELECT <include refid="columns"/>
+		FROM W_PROJECT_MONTH_INCOME   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getByProIdAndMonth" resultMap="ProjectMonthIncome">
+		SELECT <include refid="columns"/>
+		FROM W_PROJECT_MONTH_INCOME   
+		where F_PROID  = #{proid} and  F_MONTH  = #{month}
+		order by ID  desc
+	</select>
+</mapper>

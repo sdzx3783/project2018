@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.userinfo.UserInfomation">
+	<resultMap id="UserInfomation" type="com.hotent.makshi.model.userinfo.UserInfomation">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="account" column="account" jdbcType="VARCHAR"/>
+		<result property="entrylDate" column="entrylDate" jdbcType="DATE"/>
+		<result property="formalDate" column="formalDate" jdbcType="DATE"/>
+		<result property="leavelDate" column="leavelDate" jdbcType="DATE"/>
+		<result property="userId" column="F_USERID" jdbcType="NUMERIC"/>
+		<result property="birthday" column="F_BIRTHDAY" jdbcType="DATE"/>
+		<result property="marriage_state" column="F_MARRIAGE_STATE" jdbcType="VARCHAR"/>
+		<result property="used_name" column="F_USED_NAME" jdbcType="VARCHAR"/>
+		<result property="nation" column="F_NATION" jdbcType="VARCHAR"/>
+		<result property="address" column="F_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="positional_major" column="F_POSITIONAL_MAJOR" jdbcType="VARCHAR"/>
+		<result property="education" column="F_EDUCATION" jdbcType="VARCHAR"/>
+		<result property="start_work_time" column="F_START_WORK_TIME" jdbcType="DATE"/>
+		<result property="graduate_time" column="F_GRADUATE_TIME" jdbcType="DATE"/>
+		<result property="graduate_school" column="F_GRADUATE_SCHOOL" jdbcType="VARCHAR"/>
+		<result property="political_status" column="F_POLITICAL_STATUS" jdbcType="VARCHAR"/>
+		<result property="major" column="F_MAJOR" jdbcType="VARCHAR"/>
+		<result property="identification_id" column="F_IDENTIFICATION_ID" jdbcType="VARCHAR"/>
+		<result property="positional" column="F_POSITIONAL" jdbcType="VARCHAR"/>
+		<result property="address_type" column="F_ADDRESS_TYPE" jdbcType="VARCHAR"/>
+		<result property="infection_history" column="F_INFECTION_HISTORY" jdbcType="VARCHAR"/>
+		<result property="disorders_history" column="F_DISORDERS_HISTORY" jdbcType="VARCHAR"/>
+		<result property="social_security_computer_id" column="F_SOCIAL_SECURITY_COMPUTER_ID" jdbcType="VARCHAR"/>
+		<result property="handedness" column="F_HANDEDNESS" jdbcType="VARCHAR"/>
+		<result property="hobby" column="F_HOBBY" jdbcType="VARCHAR"/>
+		<result property="home_address" column="F_HOME_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="spouse_name" column="F_SPOUSE_NAME" jdbcType="VARCHAR"/>
+		<result property="parents" column="F_PARENTS" jdbcType="VARCHAR"/>
+		<result property="spouse_identification_id" column="F_SPOUSE_IDENTIFICATION_ID" jdbcType="VARCHAR"/>
+		<result property="spouse_address" column="F_SPOUSE_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="link_address" column="F_LINK_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="sjdh" column="F_SJDH" jdbcType="VARCHAR"/>
+		<result property="emergency_link_person" column="F_EMERGENCY_LINK_PERSON" jdbcType="VARCHAR"/>
+		<result property="BOC_id" column="F_BOC_ID" jdbcType="VARCHAR"/>
+		<result property="emergency_link_person_phone" column="F_EMERGENCY_LINK_PERSON_PHONE" jdbcType="VARCHAR"/>
+		<result property="QQ" column="F_QQ" jdbcType="VARCHAR"/>
+		<result property="wechart" column="F_WECHART" jdbcType="VARCHAR"/>
+		<result property="social_security_num" column="F_SOCIAL_SECURITY_NUM" jdbcType="VARCHAR"/>
+		<result property="medical_insurance_first" column="F_MEDICAL_INSURANCE_FIRST" jdbcType="VARCHAR"/>
+		<result property="monthly_wages" column="F_MONTHLY_WAGES" jdbcType="VARCHAR"/>
+		<result property="medical_insurance_second" column="F_MEDICAL_INSURANCE_SECOND" jdbcType="VARCHAR"/>
+		<result property="endowment_insurance" column="F_ENDOWMENT_INSURANCE" jdbcType="VARCHAR"/>
+		<result property="injury_insurance" column="F_INJURY_INSURANCE" jdbcType="VARCHAR"/>
+		<result property="unemployment_insurance" column="F_UNEMPLOYMENT_INSURANCE" jdbcType="VARCHAR"/>
+		<result property="ICBC_id" column="F_ICBC_ID" jdbcType="VARCHAR"/>
+		<result property="yearVacation" column="F_year_vacation" jdbcType="DOUBLE"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_USERID,F_BIRTHDAY,F_MARRIAGE_STATE,F_USED_NAME,F_NATION,F_ADDRESS,F_POSITIONAL_MAJOR,F_EDUCATION,F_START_WORK_TIME,F_GRADUATE_TIME,F_GRADUATE_SCHOOL,F_POLITICAL_STATUS,F_MAJOR,F_IDENTIFICATION_ID,F_POSITIONAL,F_ADDRESS_TYPE,F_INFECTION_HISTORY,F_DISORDERS_HISTORY,F_SOCIAL_SECURITY_COMPUTER_ID,F_HANDEDNESS,F_HOBBY,F_HOME_ADDRESS,F_SPOUSE_NAME,F_PARENTS,F_SPOUSE_IDENTIFICATION_ID,F_SPOUSE_ADDRESS,F_LINK_ADDRESS,F_SJDH,F_EMERGENCY_LINK_PERSON,F_BOC_ID,F_EMERGENCY_LINK_PERSON_PHONE,F_QQ,F_WECHART,F_SOCIAL_SECURITY_NUM,F_MEDICAL_INSURANCE_FIRST,F_MONTHLY_WAGES,F_MEDICAL_INSURANCE_SECOND,F_ENDOWMENT_INSURANCE,F_INJURY_INSURANCE,F_UNEMPLOYMENT_INSURANCE,F_ICBC_ID,F_YEAR_VACATION
+	</sql>
+	<sql id="wfColumns">
+		ID,F_USERID,F_BIRTHDAY,F_MARRIAGE_STATE,F_USED_NAME,F_NATION,F_ADDRESS,F_POSITIONAL_MAJOR,F_EDUCATION,F_START_WORK_TIME,F_GRADUATE_TIME,F_GRADUATE_SCHOOL,F_POLITICAL_STATUS,F_MAJOR,F_IDENTIFICATION_ID,F_POSITIONAL,F_ADDRESS_TYPE,F_INFECTION_HISTORY,F_DISORDERS_HISTORY,F_SOCIAL_SECURITY_COMPUTER_ID,F_HANDEDNESS,F_HOBBY,F_HOME_ADDRESS,F_SPOUSE_NAME,F_PARENTS,F_SPOUSE_IDENTIFICATION_ID,F_SPOUSE_ADDRESS,F_LINK_ADDRESS,F_SJDH,F_EMERGENCY_LINK_PERSON,F_BOC_ID,F_EMERGENCY_LINK_PERSON_PHONE,F_QQ,F_WECHART,F_SOCIAL_SECURITY_NUM,F_MEDICAL_INSURANCE_FIRST,F_MONTHLY_WAGES,F_MEDICAL_INSURANCE_SECOND,F_ENDOWMENT_INSURANCE,F_INJURY_INSURANCE,F_UNEMPLOYMENT_INSURANCE,F_ICBC_ID,F_YEAR_VACATION
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(userId)"> AND F_USERID  =#{userId} </if>
+			<if test="@Ognl@isNotEmpty(birthday)"> AND F_BIRTHDAY  =#{birthday} </if>
+			<if test="@Ognl@isNotEmpty(beginbirthday)"> AND F_BIRTHDAY  >=#{beginbirthday,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endbirthday)"> AND F_BIRTHDAY <![CDATA[ <=#{endbirthday,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(marriage_state)"> AND F_MARRIAGE_STATE  LIKE '%${marriage_state}%'  </if>
+			<if test="@Ognl@isNotEmpty(used_name)"> AND F_USED_NAME  LIKE '%${used_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(nation)"> AND F_NATION  LIKE '%${nation}%'  </if>
+			<if test="@Ognl@isNotEmpty(address)"> AND F_ADDRESS  LIKE '%${address}%'  </if>
+			<if test="@Ognl@isNotEmpty(positional_major)"> AND F_POSITIONAL_MAJOR  LIKE '%${positional_major}%'  </if>
+			<if test="@Ognl@isNotEmpty(education)"> AND F_EDUCATION  LIKE '%${education}%'  </if>
+			<if test="@Ognl@isNotEmpty(start_work_time)"> AND F_START_WORK_TIME  =#{start_work_time} </if>
+			<if test="@Ognl@isNotEmpty(beginstart_work_time)"> AND F_START_WORK_TIME  >=#{beginstart_work_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstart_work_time)"> AND F_START_WORK_TIME <![CDATA[ <=#{endstart_work_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(graduate_school)"> AND F_GRADUATE_SCHOOL  LIKE '%${graduate_school}%'  </if>
+			<if test="@Ognl@isNotEmpty(political_status)"> AND F_POLITICAL_STATUS  LIKE '%${political_status}%'  </if>
+			<if test="@Ognl@isNotEmpty(major)"> AND F_MAJOR  LIKE '%${major}%'  </if>
+			<if test="@Ognl@isNotEmpty(identification_id)"> AND F_IDENTIFICATION_ID  LIKE '%${identification_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(positional)"> AND F_POSITIONAL  LIKE '%${positional}%'  </if>
+			<if test="@Ognl@isNotEmpty(address_type)"> AND F_ADDRESS_TYPE  LIKE '%${address_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(infection_history)"> AND F_INFECTION_HISTORY  LIKE '%${infection_history}%'  </if>
+			<if test="@Ognl@isNotEmpty(disorders_history)"> AND F_DISORDERS_HISTORY  LIKE '%${disorders_history}%'  </if>
+			<if test="@Ognl@isNotEmpty(social_security_computer_id)"> AND F_SOCIAL_SECURITY_COMPUTER_ID  LIKE '%${social_security_computer_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(handedness)"> AND F_HANDEDNESS  LIKE '%${handedness}%'  </if>
+			<if test="@Ognl@isNotEmpty(hobby)"> AND F_HOBBY  LIKE '%${hobby}%'  </if>
+			<if test="@Ognl@isNotEmpty(home_address)"> AND F_HOME_ADDRESS  LIKE '%${home_address}%'  </if>
+			<if test="@Ognl@isNotEmpty(spouse_name)"> AND F_SPOUSE_NAME  LIKE '%${spouse_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(parents)"> AND F_PARENTS  LIKE '%${parents}%'  </if>
+			<if test="@Ognl@isNotEmpty(spouse_identification_id)"> AND F_SPOUSE_IDENTIFICATION_ID  LIKE '%${spouse_identification_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(spouse_address)"> AND F_SPOUSE_ADDRESS  LIKE '%${spouse_address}%'  </if>
+			<if test="@Ognl@isNotEmpty(link_address)"> AND F_LINK_ADDRESS  LIKE '%${link_address}%'  </if>
+			<if test="@Ognl@isNotEmpty(sjdh)"> AND F_SJDH  LIKE '%${sjdh}%'  </if>
+			<if test="@Ognl@isNotEmpty(emergency_link_person)"> AND F_EMERGENCY_LINK_PERSON  LIKE '%${emergency_link_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(BOC_id)"> AND F_BOC_ID  LIKE '%${BOC_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(emergency_link_person_phone)"> AND F_EMERGENCY_LINK_PERSON_PHONE  LIKE '%${emergency_link_person_phone}%'  </if>
+			<if test="@Ognl@isNotEmpty(QQ)"> AND F_QQ  LIKE '%${QQ}%'  </if>
+			<if test="@Ognl@isNotEmpty(wechart)"> AND F_WECHART  LIKE '%${wechart}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.userinfo.UserInfomation">
+		INSERT INTO W_USER_INFOMATION
+		(ID,
+		F_USERID,F_BIRTHDAY,F_MARRIAGE_STATE,F_USED_NAME,F_NATION,F_ADDRESS,F_POSITIONAL_MAJOR,F_EDUCATION,F_START_WORK_TIME,F_GRADUATE_TIME,F_GRADUATE_SCHOOL,F_POLITICAL_STATUS,F_MAJOR,F_IDENTIFICATION_ID,F_POSITIONAL,F_ADDRESS_TYPE,F_INFECTION_HISTORY,F_DISORDERS_HISTORY,F_SOCIAL_SECURITY_COMPUTER_ID,F_HANDEDNESS,F_HOBBY,F_HOME_ADDRESS,F_SPOUSE_NAME,F_PARENTS,F_SPOUSE_IDENTIFICATION_ID,F_SPOUSE_ADDRESS,F_LINK_ADDRESS,F_SJDH,F_EMERGENCY_LINK_PERSON,F_BOC_ID,F_EMERGENCY_LINK_PERSON_PHONE,F_QQ,F_WECHART,F_SOCIAL_SECURITY_NUM,F_MEDICAL_INSURANCE_FIRST,F_MONTHLY_WAGES,F_MEDICAL_INSURANCE_SECOND,F_ENDOWMENT_INSURANCE,F_INJURY_INSURANCE,F_UNEMPLOYMENT_INSURANCE,F_ICBC_ID,F_YEAR_VACATION)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{userId,jdbcType=NUMERIC}, #{birthday,jdbcType=DATE}, #{marriage_state,jdbcType=VARCHAR}, #{used_name,jdbcType=VARCHAR}, #{nation,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{positional_major,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{start_work_time,jdbcType=DATE}, #{graduate_time,jdbcType=DATE}, #{graduate_school,jdbcType=VARCHAR}, #{political_status,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, #{identification_id,jdbcType=VARCHAR}, #{positional,jdbcType=VARCHAR}, #{address_type,jdbcType=VARCHAR}, #{infection_history,jdbcType=VARCHAR}, #{disorders_history,jdbcType=VARCHAR}, #{social_security_computer_id,jdbcType=VARCHAR}, #{handedness,jdbcType=VARCHAR}, #{hobby,jdbcType=VARCHAR}, #{home_address,jdbcType=VARCHAR}, #{spouse_name,jdbcType=VARCHAR}, #{parents,jdbcType=VARCHAR}, #{spouse_identification_id,jdbcType=VARCHAR}, #{spouse_address,jdbcType=VARCHAR}, #{link_address,jdbcType=VARCHAR}, #{sjdh,jdbcType=VARCHAR}, #{emergency_link_person,jdbcType=VARCHAR}, #{BOC_id,jdbcType=VARCHAR}, #{emergency_link_person_phone,jdbcType=VARCHAR}, #{QQ,jdbcType=VARCHAR}, #{wechart,jdbcType=VARCHAR}, #{social_security_num,jdbcType=VARCHAR}, #{medical_insurance_first,jdbcType=VARCHAR}, #{monthly_wages,jdbcType=VARCHAR}, #{medical_insurance_second,jdbcType=VARCHAR}, #{endowment_insurance,jdbcType=VARCHAR}, #{injury_insurance,jdbcType=VARCHAR}, #{unemployment_insurance,jdbcType=VARCHAR}, #{ICBC_id,jdbcType=VARCHAR},#{yearVacation,jdbcType=DOUBLE})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_USER_INFOMATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="updateSjdh" parameterType="com.hotent.makshi.model.userinfo.UserInfomation">
+		UPDATE W_USER_INFOMATION  
+		<set >
+		  <if test="sjdh != null" >
+		   	 F_SJDH=#{sjdh,jdbcType=VARCHAR}, 
+	      </if>
+		  <if test="emergency_link_person != null" >
+			 F_EMERGENCY_LINK_PERSON=#{emergency_link_person,jdbcType=VARCHAR},
+	      </if>
+	      <if test="emergency_link_person_phone != null" >
+	         F_EMERGENCY_LINK_PERSON_PHONE = #{emergency_link_person_phone,jdbcType=VARCHAR},
+	      </if>
+        </set>
+		WHERE
+			ID=#{id}
+	</update>
+	<update id="update" parameterType="com.hotent.makshi.model.userinfo.UserInfomation">
+		UPDATE W_USER_INFOMATION SET
+		F_USERID=#{userId,jdbcType=NUMERIC},
+		F_BIRTHDAY=#{birthday,jdbcType=DATE},
+		F_MARRIAGE_STATE=#{marriage_state,jdbcType=VARCHAR},
+		F_USED_NAME=#{used_name,jdbcType=VARCHAR},
+		F_NATION=#{nation,jdbcType=VARCHAR},
+		F_ADDRESS=#{address,jdbcType=VARCHAR},
+		F_POSITIONAL_MAJOR=#{positional_major,jdbcType=VARCHAR},
+		F_EDUCATION=#{education,jdbcType=VARCHAR},
+		F_START_WORK_TIME=#{start_work_time,jdbcType=DATE},
+		F_GRADUATE_TIME=#{graduate_time,jdbcType=DATE},
+		F_GRADUATE_SCHOOL=#{graduate_school,jdbcType=VARCHAR},
+		F_POLITICAL_STATUS=#{political_status,jdbcType=VARCHAR},
+		F_MAJOR=#{major,jdbcType=VARCHAR},
+		F_IDENTIFICATION_ID=#{identification_id,jdbcType=VARCHAR},
+		F_POSITIONAL=#{positional,jdbcType=VARCHAR},
+		F_ADDRESS_TYPE=#{address_type,jdbcType=VARCHAR},
+		F_INFECTION_HISTORY=#{infection_history,jdbcType=VARCHAR},
+		F_DISORDERS_HISTORY=#{disorders_history,jdbcType=VARCHAR},
+		F_SOCIAL_SECURITY_COMPUTER_ID=#{social_security_computer_id,jdbcType=VARCHAR},
+		F_HANDEDNESS=#{handedness,jdbcType=VARCHAR},
+		F_HOBBY=#{hobby,jdbcType=VARCHAR},
+		F_HOME_ADDRESS=#{home_address,jdbcType=VARCHAR},
+		F_SPOUSE_NAME=#{spouse_name,jdbcType=VARCHAR},
+		F_PARENTS=#{parents,jdbcType=VARCHAR},
+		F_SPOUSE_IDENTIFICATION_ID=#{spouse_identification_id,jdbcType=VARCHAR},
+		F_SPOUSE_ADDRESS=#{spouse_address,jdbcType=VARCHAR},
+		F_LINK_ADDRESS=#{link_address,jdbcType=VARCHAR},
+		F_SJDH=#{sjdh,jdbcType=VARCHAR},
+		F_EMERGENCY_LINK_PERSON=#{emergency_link_person,jdbcType=VARCHAR},
+		F_BOC_ID=#{BOC_id,jdbcType=VARCHAR},
+		F_EMERGENCY_LINK_PERSON_PHONE=#{emergency_link_person_phone,jdbcType=VARCHAR},
+		F_QQ=#{QQ,jdbcType=VARCHAR},
+		F_WECHART=#{wechart,jdbcType=VARCHAR},
+		F_SOCIAL_SECURITY_NUM=#{social_security_num,jdbcType=VARCHAR},
+		F_MEDICAL_INSURANCE_FIRST=#{medical_insurance_first,jdbcType=VARCHAR},
+		F_MONTHLY_WAGES=#{monthly_wages,jdbcType=VARCHAR},
+		F_MEDICAL_INSURANCE_SECOND=#{medical_insurance_second,jdbcType=VARCHAR},
+		F_ENDOWMENT_INSURANCE=#{endowment_insurance,jdbcType=VARCHAR},
+		F_INJURY_INSURANCE=#{injury_insurance,jdbcType=VARCHAR},
+		F_UNEMPLOYMENT_INSURANCE=#{unemployment_insurance,jdbcType=VARCHAR},
+		F_ICBC_ID=#{ICBC_id,jdbcType=VARCHAR},
+		F_YEAR_VACATION=#{yearVacation,jdbcType=DOUBLE}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="UserInfomation">
+		SELECT <include refid="columns"/>
+		FROM W_USER_INFOMATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getUserDataByYgbh" parameterType="java.lang.Long" resultMap="UserInfomation">
+		SELECT <include refid="columns"/>
+		FROM W_USER_INFOMATION
+		WHERE
+		F_userId=#{uid}
+	</select>
+	
+	<select id="getAll" resultMap="UserInfomation">
+		SELECT 
+		ID,  b.ACCOUNT ACCOUNT,b.ENTRYDATE entrylDate,b.RESIGNATIONDATE formalDate,F_USERID,F_BIRTHDAY,F_MARRIAGE_STATE,F_USED_NAME,F_NATION,F_ADDRESS,F_POSITIONAL_MAJOR,F_EDUCATION,F_START_WORK_TIME,F_GRADUATE_TIME,F_GRADUATE_SCHOOL,F_POLITICAL_STATUS,F_MAJOR,F_IDENTIFICATION_ID,F_POSITIONAL,F_ADDRESS_TYPE,F_INFECTION_HISTORY,F_DISORDERS_HISTORY,F_SOCIAL_SECURITY_COMPUTER_ID,F_HANDEDNESS,F_HOBBY,F_HOME_ADDRESS,F_SPOUSE_NAME,F_PARENTS,F_SPOUSE_IDENTIFICATION_ID,F_SPOUSE_ADDRESS,F_LINK_ADDRESS,F_SJDH,F_EMERGENCY_LINK_PERSON,F_BOC_ID,F_EMERGENCY_LINK_PERSON_PHONE,F_QQ,F_WECHART,F_SOCIAL_SECURITY_NUM,F_MEDICAL_INSURANCE_FIRST,F_MONTHLY_WAGES,F_MEDICAL_INSURANCE_SECOND,F_ENDOWMENT_INSURANCE,F_INJURY_INSURANCE,F_UNEMPLOYMENT_INSURANCE,F_ICBC_ID,F_YEAR_VACATION
+		FROM W_USER_INFOMATION  a
+		LEFT JOIN sys_user b
+		ON  a.F_USERID = b.userId
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getByAccount" parameterType="String" resultMap="UserInfomation">
+		SELECT 
+		ID,F_USERID,F_BIRTHDAY,F_MARRIAGE_STATE,B.FULLNAME F_USED_NAME,F_NATION,F_ADDRESS,F_POSITIONAL_MAJOR,F_EDUCATION,F_START_WORK_TIME,F_GRADUATE_TIME,F_GRADUATE_SCHOOL,F_POLITICAL_STATUS,F_MAJOR,F_IDENTIFICATION_ID,F_POSITIONAL,F_ADDRESS_TYPE,F_INFECTION_HISTORY,F_DISORDERS_HISTORY,F_SOCIAL_SECURITY_COMPUTER_ID,F_HANDEDNESS,F_HOBBY,F_HOME_ADDRESS,F_SPOUSE_NAME,F_PARENTS,F_SPOUSE_IDENTIFICATION_ID,F_SPOUSE_ADDRESS,F_LINK_ADDRESS,F_SJDH,F_EMERGENCY_LINK_PERSON,F_BOC_ID,F_EMERGENCY_LINK_PERSON_PHONE,F_QQ,F_WECHART,F_SOCIAL_SECURITY_NUM,F_MEDICAL_INSURANCE_FIRST,F_MONTHLY_WAGES,F_MEDICAL_INSURANCE_SECOND,F_ENDOWMENT_INSURANCE,F_INJURY_INSURANCE,F_UNEMPLOYMENT_INSURANCE,F_ICBC_ID,F_YEAR_VACATION
+		FROM W_USER_INFOMATION A  JOIN SYS_USER B
+		ON A.F_USERID = B.USERID  
+		WHERE
+		B.ACCOUNT=#{account}
+	</select>
+	
+	<select id="updateLeaveVacation" parameterType="map" >
+		UPDATE W_USER_INFOMATION w SET
+		w.F_year_vacation=IF(EXISTS(
+			SELECT * from sys_user s WHERE s.userid=w.F_userId AND s.userstatus='离职'
+				),0,#{leaveVacation,jdbcType=DOUBLE})
+		WHERE
+		w.F_USERID=#{userId}
+	</select>
+</mapper>

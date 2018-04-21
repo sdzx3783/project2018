@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.project.ProjectStage" >
+  <resultMap id="BaseResultMap" type="com.hotent.makshi.model.project.ProjectStage" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="proId" property="proid" jdbcType="INTEGER" />
+    <result column="stageName" property="stagename" jdbcType="VARCHAR" />
+    <result column="stageNo" property="stageno" jdbcType="INTEGER" />
+    <result column="stageType" property="stagetype" jdbcType="INTEGER" />
+    <result column="order" property="order" jdbcType="INTEGER" />
+    <result column="csId" property="csid" jdbcType="BIGINT" />
+    <result column="preStage" property="prestage" jdbcType="VARCHAR" />
+    <result column="afterStage" property="afterstage" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  
+  
+   <sql id="columns">
+		id, proId, stageName, stageNo, stageType, `order`, csId, preStage, afterStage,`status`
+	</sql>
+	<sql id="wfColumns">
+		id, proId, stageName, stageNo, stageType, `order`, csId, preStage, afterStage,`status`
+	</sql>
+	
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.hotent.makshi.model.project.ProjectStage">
+		insert into w_project_stage (id, proId, stageName, 
+      stageNo, stageType, `order`, 
+      csId, preStage, afterStage
+      )
+    values (#{id,jdbcType=INTEGER}, #{proid,jdbcType=INTEGER}, #{stagename,jdbcType=VARCHAR}, 
+      #{stageno,jdbcType=INTEGER}, #{stagetype,jdbcType=INTEGER}, #{order,jdbcType=INTEGER}, 
+      #{csid,jdbcType=BIGINT}, #{prestage,jdbcType=VARCHAR}, #{afterstage,jdbcType=VARCHAR}
+      )
+	</insert>
+	
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM w_project_stage
+    	where id = #{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.project.ProjectStage">
+		update w_project_stage
+    <set >
+      <if test="proid != null" >
+        proId = #{proid,jdbcType=INTEGER},
+      </if>
+      <if test="stagename != null" >
+        stageName = #{stagename,jdbcType=VARCHAR},
+      </if>
+      <if test="stageno != null" >
+        stageNo = #{stageno,jdbcType=INTEGER},
+      </if>
+      <if test="stagetype != null" >
+        stageType = #{stagetype,jdbcType=INTEGER},
+      </if>
+      <if test="order != null" >
+        `order` = #{order,jdbcType=INTEGER},
+      </if>
+      <if test="csid != null" >
+        csId = #{csid,jdbcType=BIGINT},
+      </if>
+      <if test="prestage != null" >
+        preStage = #{prestage,jdbcType=VARCHAR},
+      </if>
+      <if test="afterstage != null" >
+        afterStage = #{afterstage,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT <include refid="columns"/>
+		FROM w_project_stage
+    	where id = #{id}
+	</select>
+	
+	<select id="getProjectStageByProId"  resultMap="BaseResultMap">
+		SELECT <include refid="columns"/>
+		FROM w_project_stage
+    	where proId = #{proId,jdbcType=INTEGER}
+    	order by `order` 
+	</select>
+	
+	<select id="getProjectStageByCstIdAndProId"  resultMap="BaseResultMap">
+		SELECT <include refid="columns"/>
+		FROM w_project_stage
+    	where csId = #{csId,jdbcType=BIGINT}
+    	and proId = #{proId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getAll" resultMap="BaseResultMap">
+		SELECT <include refid="columns"/>
+		FROM w_project_stage   
+		<!-- <include refid="dynamicWhere" /> -->
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+  
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.qualification.CompanyQualificationCertificate">
+	<resultMap id="CompanyQualificationCertificate" type="com.hotent.makshi.model.qualification.CompanyQualificationCertificate">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="cno" column="F_CNO" jdbcType="VARCHAR"/>
+		<result property="ctype" column="F_CTYPE" jdbcType="VARCHAR"/>
+		<result property="cname" column="F_CNAME" jdbcType="VARCHAR"/>
+		<result property="institution" column="F_INSTITUTION" jdbcType="VARCHAR"/>
+		<result property="certificationtime" column="F_CERTIFICATIONTIME" jdbcType="DATE"/>
+		<result property="certificationlimit" column="F_CERTIFICATIONLIMIT" jdbcType="DATE"/>
+		<result property="contractscope" column="F_CONTRACTSCOPE" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_attachment" jdbcType="VARCHAR"/>
+		<result property="status" column="F_status" jdbcType="INTEGER"/>
+		<result property="isdelete" column="F_ISDELETE" jdbcType="INTEGER"/>
+		<result property="isborrowed" column="F_ISBORROWED" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_CNO,F_CTYPE,F_CNAME,F_INSTITUTION,F_CERTIFICATIONTIME,F_CERTIFICATIONLIMIT,F_CONTRACTSCOPE,F_REMARK,F_attachment,F_status,F_ISBORROWED
+	</sql>
+	<sql id="wfColumns">
+		ID,F_CNO,F_CTYPE,F_CNAME,F_INSTITUTION,F_CERTIFICATIONTIME,F_CERTIFICATIONLIMIT,F_CONTRACTSCOPE,F_REMARK,F_attachment,F_status,F_ISBORROWED
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(cno)"> AND F_CNO  LIKE '%${cno}%'  </if>
+			<if test="@Ognl@isNotEmpty(ctype)"> AND F_CTYPE  LIKE '%${ctype}%'  </if>
+			<if test="@Ognl@isNotEmpty(cname)"> AND F_CNAME  LIKE '%${cname}%'  </if>
+			<if test="@Ognl@isNotEmpty(institution)"> AND F_INSTITUTION  LIKE '%${institution}%'  </if>
+			<if test="@Ognl@isNotEmpty(certificationtime)"> AND F_CERTIFICATIONTIME  =#{certificationtime} </if>
+			<if test="@Ognl@isNotEmpty(begincertificationtime)"> AND F_CERTIFICATIONTIME  >=#{begincertificationtime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endcertificationtime)"> AND F_CERTIFICATIONTIME <![CDATA[ <=#{endcertificationtime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(certificationlimit)"> AND F_CERTIFICATIONLIMIT  =#{certificationlimit} </if>
+			<if test="@Ognl@isNotEmpty(begincertificationlimit)"> AND F_CERTIFICATIONLIMIT  >=#{begincertificationlimit,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endcertificationlimit)"> AND F_CERTIFICATIONLIMIT <![CDATA[ <=#{endcertificationlimit,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(contractscope)"> AND F_CONTRACTSCOPE  LIKE '%${contractscope}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			and F_isdelete=0
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.qualification.CompanyQualificationCertificate">
+		INSERT INTO W_COMPANY_QUALIFICATION_CERTIFICATE
+		(ID,
+		F_CNO,F_CTYPE,F_CNAME,F_INSTITUTION,F_CERTIFICATIONTIME,F_CERTIFICATIONLIMIT,F_CONTRACTSCOPE,F_REMARK,F_status,F_attachment,F_ISBORROWED)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{cno,jdbcType=VARCHAR}, #{ctype,jdbcType=VARCHAR}, #{cname,jdbcType=VARCHAR}, #{institution,jdbcType=VARCHAR}, #{certificationtime,jdbcType=DATE}, #{certificationlimit,jdbcType=DATE}, 
+		#{contractscope,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},#{status,jdbcType=INTEGER}, #{attachment,jdbcType=VARCHAR},#{isborrowed,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		update W_COMPANY_QUALIFICATION_CERTIFICATE set F_isdelete=1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.qualification.CompanyQualificationCertificate">
+		UPDATE W_COMPANY_QUALIFICATION_CERTIFICATE SET
+		F_CNO=#{cno,jdbcType=VARCHAR},
+		F_CTYPE=#{ctype,jdbcType=VARCHAR},
+		F_CNAME=#{cname,jdbcType=VARCHAR},
+		F_INSTITUTION=#{institution,jdbcType=VARCHAR},
+		F_CERTIFICATIONTIME=#{certificationtime,jdbcType=DATE},
+		F_CERTIFICATIONLIMIT=#{certificationlimit,jdbcType=DATE},
+		F_CONTRACTSCOPE=#{contractscope,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_status=#{status,jdbcType=VARCHAR},
+		F_ISBORROWED=#{isborrowed,jdbcType=VARCHAR},
+		F_attachment=#{attachment,jdbcType=VARCHAR} 
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="CompanyQualificationCertificate">
+		SELECT <include refid="columns"/>
+		FROM W_COMPANY_QUALIFICATION_CERTIFICATE
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="CompanyQualificationCertificate">
+		SELECT <include refid="columns"/>
+		FROM W_COMPANY_QUALIFICATION_CERTIFICATE   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getByCtype" resultMap="CompanyQualificationCertificate">
+		SELECT <include refid="columns"/>
+		FROM W_COMPANY_QUALIFICATION_CERTIFICATE   
+		where F_ctype=#{ctype,jdbcType=VARCHAR} and F_isdelete=0
+	</select>
+	
+</mapper>

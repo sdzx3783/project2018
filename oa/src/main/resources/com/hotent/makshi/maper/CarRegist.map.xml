@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.operation.CarRegist">
+	<resultMap id="CarRegist" type="com.hotent.makshi.model.operation.CarRegist">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="carId" column="F_CARID" jdbcType="VARCHAR"/>
+		<result property="version" column="F_VERSION" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="departmentID" column="F_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="kepperID" column="F_KEPPERID" jdbcType="VARCHAR"/>
+		<result property="oil_card" column="F_OIL_CARD" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="kepper" column="F_KEPPER" jdbcType="VARCHAR"/>
+		<result property="pass_card" column="F_PASS_CARD" jdbcType="VARCHAR"/>
+		<result property="status" column="F_status" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_CARID,F_VERSION,F_ATTACHMENT,F_DEPARTMENTID,F_KEPPERID,F_OIL_CARD,F_DEPARTMENT,F_KEPPER,F_PASS_CARD,F_status
+	</sql>
+	<sql id="wfColumns">
+		ID,F_CARID,F_VERSION,F_ATTACHMENT,F_DEPARTMENTID,F_KEPPERID,F_OIL_CARD,F_DEPARTMENT,F_KEPPER,F_PASS_CARD
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(carId)"> AND F_CARID  LIKE '%${carId}%'  </if>
+			<if test="@Ognl@isNotEmpty(version)"> AND F_VERSION  LIKE '%${version}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_DEPARTMENTID in (${departmentID})  </if>
+			<if test="@Ognl@isNotEmpty(kepperID)"> AND F_KEPPERID  LIKE '%${kepperID}%'  </if>
+			<if test="@Ognl@isNotEmpty(oil_card)"> AND F_OIL_CARD  LIKE '%${oil_card}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(kepper)"> AND F_KEPPER  LIKE '%${kepper}%'  </if>
+			<if test="@Ognl@isNotEmpty(pass_card)"> AND F_PASS_CARD  LIKE '%${pass_card}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.operation.CarRegist">
+		INSERT INTO W_CAR_REGIST
+		(ID,
+		F_CARID,F_VERSION,F_ATTACHMENT,F_DEPARTMENTID,F_KEPPERID,F_OIL_CARD,F_DEPARTMENT,F_KEPPER,F_PASS_CARD)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{carId,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, #{departmentID,jdbcType=VARCHAR}, #{kepperID,jdbcType=VARCHAR}, #{oil_card,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{kepper,jdbcType=VARCHAR}, #{pass_card,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CAR_REGIST 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.operation.CarRegist">
+		UPDATE W_CAR_REGIST SET
+		F_CARID=#{carId,jdbcType=VARCHAR},
+		F_VERSION=#{version,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_DEPARTMENTID=#{departmentID,jdbcType=VARCHAR},
+		F_KEPPERID=#{kepperID,jdbcType=VARCHAR},
+		F_OIL_CARD=#{oil_card,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_KEPPER=#{kepper,jdbcType=VARCHAR},
+		F_PASS_CARD=#{pass_card,jdbcType=VARCHAR},
+		F_status=#{status,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<select id="getById" parameterType="java.lang.Long" resultMap="CarRegist">
+		SELECT <include refid="columns"/>
+		FROM W_CAR_REGIST
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="CarRegist">
+		SELECT <include refid="columns"/>
+		FROM W_CAR_REGIST   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getUnuseCar" parameterType="java.util.List" resultMap="CarRegist">
+		SELECT <include refid="columns"/>
+		FROM W_CAR_REGIST   
+		where 1 = 1
+		<if test="_parameter!=null and _parameter!='' "> 
+			And Id NOT in 
+			<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+				#{item} 
+			</foreach>
+        </if> 
+	</select>
+	
+	<update id="updateStatus" parameterType="java.util.List">
+		update W_CAR_REGIST set F_status = 1
+		where F_CARID in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		#{item} 
+		</foreach>
+	</update>
+	<update id="updateStatusFree" parameterType="java.util.List">
+		update W_CAR_REGIST set F_status = 0
+		where F_CARID not in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		#{item} 
+		</foreach>
+	</update>
+</mapper>

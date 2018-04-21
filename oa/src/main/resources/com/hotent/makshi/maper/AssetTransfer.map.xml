@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.assettransfer.AssetTransfer">
+	<resultMap id="AssetTransfer" type="com.hotent.makshi.model.assettransfer.AssetTransfer">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="transfer_person_id" column="F_transfer_person_id" jdbcType="VARCHAR"/>
+		<result property="application_Person" column="F_application_Person" jdbcType="VARCHAR"/>
+		<result property="account" column="F_account" jdbcType="VARCHAR"/>
+		<result property="transfer_person" column="F_TRANSFER_PERSON" jdbcType="VARCHAR"/>
+		<result property="transfer_first_department" column="F_transfer_department" jdbcType="VARCHAR"/>
+		<result property="transfer_first_departmentid" column="F_transfer_departmentid" jdbcType="VARCHAR"/>
+		<result property="receiption_person" column="F_RECEIPTION_PERSON" jdbcType="VARCHAR"/>
+		<result property="receiption_personID" column="F_RECEIPTION_PERSONID" jdbcType="VARCHAR"/>
+		<result property="receiption_department" column="F_receiption_department" jdbcType="VARCHAR"/>
+		<result property="receiption_departmentID" column="F_receiption_departmentID" jdbcType="VARCHAR"/>
+		<result property="asset_id" column="F_ASSET_ID" jdbcType="VARCHAR"/>
+		<result property="asset_name" column="F_ASSET_NAME" jdbcType="VARCHAR"/>
+		<result property="specifications" column="F_SPECIFICATIONS" jdbcType="VARCHAR"/>
+		<result property="number" column="F_NUMBER" jdbcType="NUMERIC"/>
+		<result property="reason" column="F_REASON" jdbcType="VARCHAR"/>
+		<result property="time" column="F_TIME" jdbcType="DATE"/>
+		<result property="attachment" column="F_attachment" jdbcType="VARCHAR"/>
+		<result property="application_time" column="F_application_time" jdbcType="DATE"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.assettransfer.AssetTransfer" id="ExtAssetTransfer" extends="AssetTransfer">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,
+		F_transfer_person_id,F_application_Person,F_account,F_TRANSFER_PERSON,F_transfer_department,F_transfer_departmentid,F_RECEIPTION_PERSON,
+		F_RECEIPTION_PERSONID,F_receiption_department,F_receiption_departmentID,F_ASSET_ID,F_ASSET_NAME,F_SPECIFICATIONS,F_NUMBER,F_REASON,
+		F_TIME,F_attachment,F_application_time
+	</sql>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_ASSET_TRANSFER 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<select id="getById" parameterType="java.lang.Long" resultMap="AssetTransfer">
+		SELECT <include refid="columns"/>
+		FROM W_ASSET_TRANSFER
+		WHERE
+		ID=#{id}
+	</select>
+	
+</mapper>

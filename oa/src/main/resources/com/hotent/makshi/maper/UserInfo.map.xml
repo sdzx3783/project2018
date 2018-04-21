@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.inuserinfo.UserInfo">
+	<resultMap id="UserInfo" type="com.hotent.makshi.model.inuserinfo.UserInfo">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="user_name" column="F_USER_NAME" jdbcType="VARCHAR"/>
+		<result property="isresponsible" column="F_ISRESPONSIBLE" jdbcType="VARCHAR"/>
+		<result property="family" column="F_FAMILY" jdbcType="VARCHAR"/>
+		<result property="in_date" column="F_IN_DATE" jdbcType="DATE"/>
+		<result property="left_date" column="F_LEFT_DATE" jdbcType="DATE"/>
+		<result property="house_id" column="F_HOUSE_ID" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_USER_NAME,F_ISRESPONSIBLE,F_FAMILY,F_IN_DATE,F_LEFT_DATE
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_USER_NAME,F_ISRESPONSIBLE,F_FAMILY,F_IN_DATE,F_LEFT_DATE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(user_name)"> AND F_USER_NAME  LIKE '%${user_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(isresponsible)"> AND F_ISRESPONSIBLE  LIKE '%${isresponsible}%'  </if>
+			<if test="@Ognl@isNotEmpty(family)"> AND F_FAMILY  LIKE '%${family}%'  </if>
+			<if test="@Ognl@isNotEmpty(in_date)"> AND F_IN_DATE  =#{in_date} </if>
+			<if test="@Ognl@isNotEmpty(beginin_date)"> AND F_IN_DATE  >=#{beginin_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endin_date)"> AND F_IN_DATE <![CDATA[ <=#{endin_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(left_date)"> AND F_LEFT_DATE  =#{left_date} </if>
+			<if test="@Ognl@isNotEmpty(beginleft_date)"> AND F_LEFT_DATE  >=#{beginleft_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endleft_date)"> AND F_LEFT_DATE <![CDATA[ <=#{endleft_date,jdbcType=DATE}]]> </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.inuserinfo.UserInfo">
+		INSERT INTO W_USER_INFO
+		(ID,REFID,
+		F_USER_NAME,F_ISRESPONSIBLE,F_FAMILY,F_IN_DATE,F_LEFT_DATE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{user_name,jdbcType=VARCHAR}, #{isresponsible,jdbcType=VARCHAR}, #{family,jdbcType=VARCHAR}, #{in_date,jdbcType=DATE}, #{left_date,jdbcType=DATE})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_USER_INFO 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.inuserinfo.UserInfo">
+		UPDATE W_USER_INFO SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		F_USER_NAME=#{user_name,jdbcType=VARCHAR},
+		F_ISRESPONSIBLE=#{isresponsible,jdbcType=VARCHAR},
+		F_FAMILY=#{family,jdbcType=VARCHAR},
+		F_IN_DATE=#{in_date,jdbcType=DATE},
+		F_LEFT_DATE=#{left_date,jdbcType=DATE}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_USER_INFO
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getUserInfoList" resultMap="UserInfo">
+	    SELECT <include refid="columns"/>
+	    FROM W_USER_INFO 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="UserInfo">
+		SELECT <include refid="columns"/>
+		FROM W_USER_INFO
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getUserInfoListByParam" parameterType="java.util.HashMap" resultMap="UserInfo">
+		SELECT
+			b.ID,
+			REFID,
+			f_house_id,
+			F_USER_NAME,
+			F_ISRESPONSIBLE,
+			F_FAMILY,
+			F_IN_DATE,
+			F_LEFT_DATE
+		FROM
+			W_USER_INFO a,w_in_house_registration b 
+		WHERE
+			a.REFID = b.ID
+		<if test="begininDate!=null"> AND F_IN_DATE  >=#{begininDate,jdbcType=DATE} </if>
+		<if test="endleftDate!=null"> AND F_LEFT_DATE <![CDATA[ <=#{endleftDate,jdbcType=DATE}]]> </if>
+		<if test="userName!=null"> AND F_USER_NAME  LIKE '%${userName}%'  </if>
+		<if test="houseId!=null"> AND f_house_id  LIKE '%${houseId}%'  </if>
+	</select>
+	<select id="getAll" resultMap="UserInfo">
+		SELECT <include refid="columns"/>
+		FROM W_USER_INFO   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

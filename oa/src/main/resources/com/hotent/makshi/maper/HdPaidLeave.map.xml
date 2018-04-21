@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.river.HdPaidLeave">
+	<resultMap id="HdPaidLeave" type="com.hotent.makshi.model.river.HdPaidLeave">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="project_leaderID" column="F_PROJECT_LEADERID" jdbcType="VARCHAR"/>
+		<result property="area_headID" column="F_AREA_HEADID" jdbcType="VARCHAR"/>
+		<result property="managerID" column="F_MANAGERID" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="position" column="F_POSITION" jdbcType="VARCHAR"/>
+		<result property="adjust_appliDate" column="F_ADJUST_APPLIDATE" jdbcType="DATE"/>
+		<result property="adjust_reson" column="F_ADJUST_RESON" jdbcType="VARCHAR"/>
+		<result property="adjust_start" column="F_ADJUST_START" jdbcType="DATE"/>
+		<result property="adjust_start_point" column="F_ADJUST_START_POINT" jdbcType="VARCHAR"/>
+		<result property="adjust_end" column="F_ADJUST_END" jdbcType="DATE"/>
+		<result property="adjust_end_point" column="F_ADJUST_END_POINT" jdbcType="VARCHAR"/>
+		<result property="adjust_remark" column="F_ADJUST_REMARK" jdbcType="VARCHAR"/>
+		<result property="adjust_attachment" column="F_ADJUST_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="project_leader" column="F_PROJECT_LEADER" jdbcType="VARCHAR"/>
+		<result property="area_head" column="F_AREA_HEAD" jdbcType="VARCHAR"/>
+		<result property="manager" column="F_MANAGER" jdbcType="VARCHAR"/>
+		<result property="finish" column="F_FINISH" jdbcType="VARCHAR"/>
+		<result property="isdeleted" column="F_ISDELETED" jdbcType="VARCHAR"/>
+		
+		<result property="startDate" column="startDate" jdbcType="DATE"/>
+		<result property="endDate" column="endDate" jdbcType="DATE"/>
+		<result property="morning" column="morning" jdbcType="INTEGER"/>
+		<result property="afternoon" column="afternoon" jdbcType="INTEGER"/>
+		<result property="days" column="days" jdbcType="DOUBLE"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.river.HdPaidLeave" id="ExtHdPaidLeave" extends="HdPaidLeave">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+	
+	<sql id="columns">
+		ID,startDate,endDate,front,later,days
+	</sql>
+	
+	<select id="getOverListByUsrId" parameterType="java.lang.Long" resultMap="HdPaidLeave">
+		SELECT 
+					id,
+					F_overTime_start startDate,
+					F_overTime_end endDate,
+					F_overTime_start_point morning,
+					F_overTime_end_point afternoon,
+					(
+							CASE (
+								f_overTime_end_point - f_overTime_start_point
+							)
+							WHEN 1 THEN
+								1
+							WHEN 0 THEN
+								0.5
+							WHEN - 1 THEN
+								0
+							END
+						) + (
+							CASE F_include_front
+							WHEN 1 THEN
+								0.5
+							WHEN 0 THEN
+								0
+							END
+						) + (
+							CASE F_include_later
+							WHEN 1 THEN
+								0.5
+							WHEN 0 THEN
+								0
+							END
+						) + datediff(
+							f_overTime_end,
+							f_overTime_start
+							) days
+				FROM w_hd_overtime_applications
+				WHERE
+					F_finish = 1
+				AND F_isdeleted !=1
+				AND F_APPLICANTID = #{id}
+	</select>
+	
+	<select id="getAdjustListByUsrId" parameterType="java.lang.Long" resultMap="HdPaidLeave">
+		SELECT
+			id,
+			F_adjust_start startDate,
+			F_adjust_end endDate,
+			F_adjust_start_point morning,
+			F_adjust_end_point afternoon,
+			(CASE (
+				F_adjust_end_point - F_adjust_start_point
+					)
+				WHEN 1 THEN
+					1
+				WHEN 0 THEN
+					0.5
+				WHEN - 1 THEN
+					0
+				END
+			) + datediff(
+				F_adjust_end,
+				F_adjust_start
+			) days
+			FROM
+				w_hd_paid_leave
+			WHERE
+				F_finish = 1
+			AND F_isdeleted !=1
+			AND F_APPLICANTID = #{id}
+	</select>
+	<update id="cleanInfo">
+		UPDATE w_adjust SET F_isdeleted =1
+	</update>
+	
+	
+	
+	
+	
+	
+    <!-- 
+	<sql id="columns">
+		ID,F_APPLICANTID,F_PROJECT_LEADERID,F_AREA_HEADID,F_MANAGERID,F_APPLICANT,F_POSITION,F_ADJUST_APPLIDATE,F_ADJUST_RESON,F_ADJUST_START,F_ADJUST_START_POINT,F_ADJUST_END,F_ADJUST_END_POINT,F_ADJUST_REMARK,F_ADJUST_ATTACHMENT,F_PROJECT_LEADER,F_AREA_HEAD,F_MANAGER,F_FINISH,F_ISDELETED
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPLICANTID,F_PROJECT_LEADERID,F_AREA_HEADID,F_MANAGERID,F_APPLICANT,F_POSITION,F_ADJUST_APPLIDATE,F_ADJUST_RESON,F_ADJUST_START,F_ADJUST_START_POINT,F_ADJUST_END,F_ADJUST_END_POINT,F_ADJUST_REMARK,F_ADJUST_ATTACHMENT,F_PROJECT_LEADER,F_AREA_HEAD,F_MANAGER,F_FINISH,F_ISDELETED
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_leaderID)"> AND F_PROJECT_LEADERID  LIKE '%${project_leaderID}%'  </if>
+			<if test="@Ognl@isNotEmpty(area_headID)"> AND F_AREA_HEADID  LIKE '%${area_headID}%'  </if>
+			<if test="@Ognl@isNotEmpty(managerID)"> AND F_MANAGERID  LIKE '%${managerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(position)"> AND F_POSITION  LIKE '%${position}%'  </if>
+			<if test="@Ognl@isNotEmpty(adjust_appliDate)"> AND F_ADJUST_APPLIDATE  =#{adjust_appliDate} </if>
+			<if test="@Ognl@isNotEmpty(beginadjust_appliDate)"> AND F_ADJUST_APPLIDATE  >=#{beginadjust_appliDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endadjust_appliDate)"> AND F_ADJUST_APPLIDATE <![CDATA[ <=#{endadjust_appliDate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(adjust_reson)"> AND F_ADJUST_RESON  LIKE '%${adjust_reson}%'  </if>
+			<if test="@Ognl@isNotEmpty(adjust_start)"> AND F_ADJUST_START  =#{adjust_start} </if>
+			<if test="@Ognl@isNotEmpty(beginadjust_start)"> AND F_ADJUST_START  >=#{beginadjust_start,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endadjust_start)"> AND F_ADJUST_START <![CDATA[ <=#{endadjust_start,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(adjust_start_point)"> AND F_ADJUST_START_POINT  LIKE '%${adjust_start_point}%'  </if>
+			<if test="@Ognl@isNotEmpty(adjust_end)"> AND F_ADJUST_END  =#{adjust_end} </if>
+			<if test="@Ognl@isNotEmpty(beginadjust_end)"> AND F_ADJUST_END  >=#{beginadjust_end,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endadjust_end)"> AND F_ADJUST_END <![CDATA[ <=#{endadjust_end,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(adjust_end_point)"> AND F_ADJUST_END_POINT  LIKE '%${adjust_end_point}%'  </if>
+			<if test="@Ognl@isNotEmpty(adjust_remark)"> AND F_ADJUST_REMARK  LIKE '%${adjust_remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(adjust_attachment)"> AND F_ADJUST_ATTACHMENT  LIKE '%${adjust_attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_leader)"> AND F_PROJECT_LEADER  LIKE '%${project_leader}%'  </if>
+			<if test="@Ognl@isNotEmpty(area_head)"> AND F_AREA_HEAD  LIKE '%${area_head}%'  </if>
+			<if test="@Ognl@isNotEmpty(manager)"> AND F_MANAGER  LIKE '%${manager}%'  </if>
+			<if test="@Ognl@isNotEmpty(finish)"> AND F_FINISH  LIKE '%${finish}%'  </if>
+			<if test="@Ognl@isNotEmpty(isdeleted)"> AND F_ISDELETED  LIKE '%${isdeleted}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.river.HdPaidLeave">
+		INSERT INTO W_HD_PAID_LEAVE
+		(ID,
+		F_APPLICANTID,F_PROJECT_LEADERID,F_AREA_HEADID,F_MANAGERID,F_APPLICANT,F_POSITION,F_ADJUST_APPLIDATE,F_ADJUST_RESON,F_ADJUST_START,F_ADJUST_START_POINT,F_ADJUST_END,F_ADJUST_END_POINT,F_ADJUST_REMARK,F_ADJUST_ATTACHMENT,F_PROJECT_LEADER,F_AREA_HEAD,F_MANAGER,F_FINISH,F_ISDELETED)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{applicantID,jdbcType=VARCHAR}, #{project_leaderID,jdbcType=VARCHAR}, #{area_headID,jdbcType=VARCHAR}, #{managerID,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{adjust_appliDate,jdbcType=DATE}, #{adjust_reson,jdbcType=VARCHAR}, #{adjust_start,jdbcType=DATE}, #{adjust_start_point,jdbcType=VARCHAR}, #{adjust_end,jdbcType=DATE}, #{adjust_end_point,jdbcType=VARCHAR}, #{adjust_remark,jdbcType=VARCHAR}, #{adjust_attachment,jdbcType=VARCHAR}, #{project_leader,jdbcType=VARCHAR}, #{area_head,jdbcType=VARCHAR}, #{manager,jdbcType=VARCHAR}, #{finish,jdbcType=VARCHAR}, #{isdeleted,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_HD_PAID_LEAVE 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.river.HdPaidLeave">
+		UPDATE W_HD_PAID_LEAVE SET
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_PROJECT_LEADERID=#{project_leaderID,jdbcType=VARCHAR},
+		F_AREA_HEADID=#{area_headID,jdbcType=VARCHAR},
+		F_MANAGERID=#{managerID,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_POSITION=#{position,jdbcType=VARCHAR},
+		F_ADJUST_APPLIDATE=#{adjust_appliDate,jdbcType=DATE},
+		F_ADJUST_RESON=#{adjust_reson,jdbcType=VARCHAR},
+		F_ADJUST_START=#{adjust_start,jdbcType=DATE},
+		F_ADJUST_START_POINT=#{adjust_start_point,jdbcType=VARCHAR},
+		F_ADJUST_END=#{adjust_end,jdbcType=DATE},
+		F_ADJUST_END_POINT=#{adjust_end_point,jdbcType=VARCHAR},
+		F_ADJUST_REMARK=#{adjust_remark,jdbcType=VARCHAR},
+		F_ADJUST_ATTACHMENT=#{adjust_attachment,jdbcType=VARCHAR},
+		F_PROJECT_LEADER=#{project_leader,jdbcType=VARCHAR},
+		F_AREA_HEAD=#{area_head,jdbcType=VARCHAR},
+		F_MANAGER=#{manager,jdbcType=VARCHAR},
+		F_FINISH=#{finish,jdbcType=VARCHAR},
+		F_ISDELETED=#{isdeleted,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="HdPaidLeave">
+		SELECT <include refid="columns"/>
+		FROM W_HD_PAID_LEAVE
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="HdPaidLeave">
+		SELECT <include refid="columns"/>
+		FROM W_HD_PAID_LEAVE   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="HdPaidLeave">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HD_PAID_LEAVE A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtHdPaidLeave">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_PAID_LEAVE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_PAID_LEAVE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_PAID_LEAVE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_PAID_LEAVE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_PAID_LEAVE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="HdPaidLeave">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HD_PAID_LEAVE A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	 -->
+</mapper>

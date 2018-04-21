@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hr.Entry">
+	<resultMap id="Entry" type="com.hotent.makshi.model.hr.Entry">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="account" column="F_account" jdbcType="VARCHAR"/>
+		<result property="baseSalary" column="F_base_salary" jdbcType="DOUBLE"/>
+		<result property="posSalary" column="F_position_salary" jdbcType="DOUBLE"/>
+		<result property="zp" column="F_ZP" jdbcType="VARCHAR"/>
+		<result property="ygbh" column="F_YGBH" jdbcType="NUMERIC"/>
+		<result property="xm" column="F_XM" jdbcType="VARCHAR"/>
+		<result property="xb" column="F_XB" jdbcType="VARCHAR"/>
+		<result property="csrq" column="F_CSRQ" jdbcType="DATE"/>
+		<result property="hyzk" column="F_HYZK" jdbcType="VARCHAR"/>
+		<result property="cym" column="F_CYM" jdbcType="VARCHAR"/>
+		<result property="mz" column="F_MZ" jdbcType="VARCHAR"/>
+		<result property="jg" column="F_JG" jdbcType="VARCHAR"/>
+		<result property="zczy" column="F_ZCZY" jdbcType="VARCHAR"/>
+		<result property="whcd" column="F_WHCD" jdbcType="VARCHAR"/>
+		<result property="cjgzsj" column="F_CJGZSJ" jdbcType="DATE"/>
+		<result property="byyx" column="F_BYYX" jdbcType="VARCHAR"/>
+		<result property="zzmm" column="F_ZZMM" jdbcType="VARCHAR"/>
+		<result property="zy" column="F_ZY" jdbcType="VARCHAR"/>
+		<result property="sfzhm" column="F_SFZHM" jdbcType="VARCHAR"/>
+		<result property="zc" column="F_ZC" jdbcType="VARCHAR"/>
+		<result property="hj" column="F_HJ" jdbcType="VARCHAR"/>
+		<result property="sfycrbs" column="F_SFYCRBS" jdbcType="VARCHAR"/>
+		<result property="sfyycbs" column="F_SFYYCBS" jdbcType="VARCHAR"/>
+		<result property="shbxdnh" column="F_SHBXDNH" jdbcType="VARCHAR"/>
+		<result property="ls" column="F_LS" jdbcType="VARCHAR"/>
+		<result property="tzah" column="F_TZAH" jdbcType="VARCHAR"/>
+		<result property="hjszd" column="F_HJSZD" jdbcType="VARCHAR"/>
+		<result property="poxm" column="F_POXM" jdbcType="VARCHAR"/>
+		<result property="fmjzd" column="F_FMJZD" jdbcType="VARCHAR"/>
+		<result property="posfzhm" column="F_POSFZHM" jdbcType="VARCHAR"/>
+		<result property="pojzd" column="F_POJZD" jdbcType="VARCHAR"/>
+		<result property="txdz" column="F_TXDZ" jdbcType="VARCHAR"/>
+		<result property="sjhm" column="F_SJHM" jdbcType="VARCHAR"/>
+		<result property="jtdh" column="F_JTDH" jdbcType="VARCHAR"/>
+		<result property="sjdh" column="F_SJDH" jdbcType="VARCHAR"/>
+		<result property="jjlxr" column="F_JJLXR" jdbcType="VARCHAR"/>
+		<result property="jxkh" column="F_JXKH" jdbcType="VARCHAR"/>
+		<result property="jjlxrdh" column="F_JJLXRDH" jdbcType="VARCHAR"/>
+		<result property="gryx" column="F_GRYX" jdbcType="VARCHAR"/>
+		<result property="QQhm" column="F_QQHM" jdbcType="VARCHAR"/>
+		<result property="wx" column="F_WX" jdbcType="VARCHAR"/>
+		
+		<result property="creator" column="creator" jdbcType="VARCHAR"/>
+		<result property="createTime" column="createTime" jdbcType="VARCHAR"/>
+		<result property="creatorOrgName" column="creatorOrgName" jdbcType="VARCHAR"/>
+		
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.hr.Entry" id="ExtEntry" extends="Entry">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_account,F_base_salary,F_position_salary,F_XH,F_ZP,F_YGBH,F_XM,F_XB,F_CSRQ,F_HYZK,F_CYM,F_MZ,F_JG,F_ZCZY,F_WHCD,F_CJGZSJ,F_BYYX,F_ZZMM,F_ZY,F_SFZHM,F_ZC,F_HJ,F_SFYCRBS,F_SFYYCBS,F_SHBXDNH,F_LS,F_TZAH,F_HJSZD,F_POXM,F_FMJZD,F_POSFZHM,F_POJZD,F_TXDZ,F_SJHM,F_JTDH,F_SJDH,F_JJLXR,F_JXKH,F_JJLXRDH,F_GRYX,F_QQHM,F_WX
+	</sql>
+	<sql id="wfColumns">
+		ID,F_account,F_base_salary,F_position_salary,F_XH,F_ZP,F_YGBH,F_XM,F_XB,F_CSRQ,F_HYZK,F_CYM,F_MZ,F_JG,F_ZCZY,F_WHCD,F_CJGZSJ,F_BYYX,F_ZZMM,F_ZY,F_SFZHM,F_ZC,F_HJ,F_SFYCRBS,F_SFYYCBS,F_SHBXDNH,F_LS,F_TZAH,F_HJSZD,F_POXM,F_FMJZD,F_POSFZHM,F_POJZD,F_TXDZ,F_SJHM,F_JTDH,F_SJDH,F_JJLXR,F_JXKH,F_JJLXRDH,F_GRYX,F_QQHM,F_WX
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(creator)"> AND CREATOR  LIKE '%${creator}%'  </if>
+			<if test="@Ognl@isNotEmpty(account)"> AND F_account  LIKE '%${account}%'  </if>
+			<if test="@Ognl@isNotEmpty(startorgname)"> AND startorgname  LIKE '%${startorgname}%'  </if>
+			<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND entryDate  >=#{createTimeBegin,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND entryDate <![CDATA[ <=#{createTimeEnd,jdbcType=DATE}]]> </if>
+			
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.hr.Entry">
+		INSERT INTO W_ENTRY
+		(ID,F_base_salary,F_position_salary,F_account,
+		F_XH,F_ZP,F_YGBH,F_XM,F_XB,F_CSRQ,F_HYZK,F_CYM,F_MZ,F_JG,F_ZCZY,F_WHCD,F_CJGZSJ,F_BYYX,F_ZZMM,F_ZY,F_SFZHM,F_ZC,F_HJ,F_SFYCRBS,F_SFYYCBS,F_SHBXDNH,F_LS,F_TZAH,F_HJSZD,F_POXM,F_FMJZD,F_POSFZHM,F_POJZD,F_TXDZ,F_SJHM,F_JTDH,F_SJDH,F_JJLXR,F_JXKH,F_JJLXRDH,F_GRYX,F_QQHM,F_WX)
+		VALUES
+		(#{id,jdbcType=NUMERIC},#{baseSalary,jdbcType=DOUBLE},#{posSalary,jdbcType=DOUBLE},#{account,jdbcType=VARCHAR},
+		#{xh,jdbcType=VARCHAR}, #{zp,jdbcType=VARCHAR}, #{ygbh,jdbcType=NUMERIC}, #{xm,jdbcType=VARCHAR}, #{xb,jdbcType=VARCHAR}, #{csrq,jdbcType=DATE}, #{hyzk,jdbcType=VARCHAR}, #{cym,jdbcType=VARCHAR}, #{mz,jdbcType=VARCHAR}, #{jg,jdbcType=VARCHAR}, #{zczy,jdbcType=VARCHAR}, #{whcd,jdbcType=VARCHAR}, #{cjgzsj,jdbcType=DATE}, #{byyx,jdbcType=VARCHAR}, #{zzmm,jdbcType=VARCHAR}, #{zy,jdbcType=VARCHAR}, #{sfzhm,jdbcType=VARCHAR}, #{zc,jdbcType=VARCHAR}, #{hj,jdbcType=VARCHAR}, #{sfycrbs,jdbcType=VARCHAR}, #{sfyycbs,jdbcType=VARCHAR}, #{shbxdnh,jdbcType=VARCHAR}, #{ls,jdbcType=VARCHAR}, #{tzah,jdbcType=VARCHAR}, #{hjszd,jdbcType=VARCHAR}, #{poxm,jdbcType=VARCHAR}, #{fmjzd,jdbcType=VARCHAR}, #{posfzhm,jdbcType=VARCHAR}, #{pojzd,jdbcType=VARCHAR}, #{txdz,jdbcType=VARCHAR}, #{sjhm,jdbcType=VARCHAR}, #{jtdh,jdbcType=VARCHAR}, #{sjdh,jdbcType=VARCHAR}, #{jjlxr,jdbcType=VARCHAR}, #{jxkh,jdbcType=VARCHAR}, #{jjlxrdh,jdbcType=VARCHAR}, #{gryx,jdbcType=VARCHAR}, #{QQhm,jdbcType=VARCHAR}, #{wx,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_ENTRY 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hr.Entry">
+		UPDATE W_ENTRY SET
+		F_account=#{account,jdbcType=VARCHAR},
+		F_base_salary = #{baseSalary,jdbcType=DOUBLE},
+		F_position_salary = #{posSalary,jdbcType=DOUBLE},
+		F_XH=#{xh,jdbcType=VARCHAR},
+		F_ZP=#{zp,jdbcType=VARCHAR},
+		F_YGBH=#{ygbh,jdbcType=NUMERIC},
+		F_XM=#{xm,jdbcType=VARCHAR},
+		F_XB=#{xb,jdbcType=VARCHAR},
+		F_CSRQ=#{csrq,jdbcType=DATE},
+		F_HYZK=#{hyzk,jdbcType=VARCHAR},
+		F_CYM=#{cym,jdbcType=VARCHAR},
+		F_MZ=#{mz,jdbcType=VARCHAR},
+		F_JG=#{jg,jdbcType=VARCHAR},
+		F_ZCZY=#{zczy,jdbcType=VARCHAR},
+		F_WHCD=#{whcd,jdbcType=VARCHAR},
+		F_CJGZSJ=#{cjgzsj,jdbcType=DATE},
+		F_BYYX=#{byyx,jdbcType=VARCHAR},
+		F_ZZMM=#{zzmm,jdbcType=VARCHAR},
+		F_ZY=#{zy,jdbcType=VARCHAR},
+		F_SFZHM=#{sfzhm,jdbcType=VARCHAR},
+		F_ZC=#{zc,jdbcType=VARCHAR},
+		F_HJ=#{hj,jdbcType=VARCHAR},
+		F_SFYCRBS=#{sfycrbs,jdbcType=VARCHAR},
+		F_SFYYCBS=#{sfyycbs,jdbcType=VARCHAR},
+		F_SHBXDNH=#{shbxdnh,jdbcType=VARCHAR},
+		F_LS=#{ls,jdbcType=VARCHAR},
+		F_TZAH=#{tzah,jdbcType=VARCHAR},
+		F_HJSZD=#{hjszd,jdbcType=VARCHAR},
+		F_POXM=#{poxm,jdbcType=VARCHAR},
+		F_FMJZD=#{fmjzd,jdbcType=VARCHAR},
+		F_POSFZHM=#{posfzhm,jdbcType=VARCHAR},
+		F_POJZD=#{pojzd,jdbcType=VARCHAR},
+		F_TXDZ=#{txdz,jdbcType=VARCHAR},
+		F_SJHM=#{sjhm,jdbcType=VARCHAR},
+		F_JTDH=#{jtdh,jdbcType=VARCHAR},
+		F_SJDH=#{sjdh,jdbcType=VARCHAR},
+		F_JJLXR=#{jjlxr,jdbcType=VARCHAR},
+		F_JXKH=#{jxkh,jdbcType=VARCHAR},
+		F_JJLXRDH=#{jjlxrdh,jdbcType=VARCHAR},
+		F_GRYX=#{gryx,jdbcType=VARCHAR},
+		F_QQHM=#{QQhm,jdbcType=VARCHAR},
+		F_WX=#{wx,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="Entry">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getFininshedByUserId"  resultMap="Entry">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY
+		WHERE
+		ID=#{userId} and F_isFinished=1 order by id desc
+	</select>
+	
+	<select id="getAll" resultMap="Entry">
+		SELECT 
+		ID,F_account,creator,createtime,entryDate entryTime,startorgname creatorOrgName,F_base_salary,F_position_salary
+		FROM entryView  
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="Entry">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_ENTRY A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+		
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtEntry">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_ENTRY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_ENTRY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_ENTRY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_ENTRY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_ENTRY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="Entry">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_ENTRY A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

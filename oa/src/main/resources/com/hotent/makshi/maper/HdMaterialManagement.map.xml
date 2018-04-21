@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.river.HdMaterialManagement">
+	<resultMap id="HdMaterialManagement" type="com.hotent.makshi.model.river.HdMaterialManagement">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="departmentID" column="F_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="userID" column="F_USERID" jdbcType="VARCHAR"/>
+		<result property="item_name" column="F_ITEM_NAME" jdbcType="VARCHAR"/>
+		<result property="model" column="F_MODEL" jdbcType="VARCHAR"/>
+		<result property="number" column="F_NUMBER" jdbcType="NUMERIC"/>
+		<result property="ownership_unit" column="F_OWNERSHIP_UNIT" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="user" column="F_USER" jdbcType="VARCHAR"/>
+		<result property="remarks" column="F_REMARKS" jdbcType="VARCHAR"/>
+		<result property="state" column="F_STATE" jdbcType="VARCHAR"/>
+		<result property="enclosure" column="F_ENCLOSURE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_DEPARTMENTID,F_USERID,F_ITEM_NAME,F_MODEL,F_NUMBER,F_OWNERSHIP_UNIT,F_DEPARTMENT,F_USER,F_REMARKS,F_STATE,F_ENCLOSURE
+	</sql>
+	<sql id="wfColumns">
+		ID,F_DEPARTMENTID,F_USERID,F_ITEM_NAME,F_MODEL,F_NUMBER,F_OWNERSHIP_UNIT,F_DEPARTMENT,F_USER,F_REMARKS,F_STATE,F_ENCLOSURE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_DEPARTMENTID  LIKE '%${departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(userID)"> AND F_USERID  LIKE '%${userID}%'  </if>
+			<if test="@Ognl@isNotEmpty(item_name)"> AND F_ITEM_NAME  LIKE '%${item_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(model)"> AND F_MODEL  LIKE '%${model}%'  </if>
+			<if test="@Ognl@isNotEmpty(number)"> AND F_NUMBER  =#{number} </if>
+			<if test="@Ognl@isNotEmpty(ownership_unit)"> AND F_OWNERSHIP_UNIT  LIKE '%${ownership_unit}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(user)"> AND F_USER  LIKE '%${user}%'  </if>
+			<if test="@Ognl@isNotEmpty(remarks)"> AND F_REMARKS  LIKE '%${remarks}%'  </if>
+			<if test="@Ognl@isNotEmpty(state)"> AND F_STATE  LIKE '%${state}%'  </if>
+			<if test="@Ognl@isNotEmpty(enclosure)"> AND F_ENCLOSURE  LIKE '%${enclosure}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.river.HdMaterialManagement">
+		INSERT INTO W_HD_MATERIAL_MANAGEMENT
+		(ID,
+		F_DEPARTMENTID,F_USERID,F_ITEM_NAME,F_MODEL,F_NUMBER,F_OWNERSHIP_UNIT,F_DEPARTMENT,F_USER,F_REMARKS,F_STATE,F_ENCLOSURE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{departmentID,jdbcType=VARCHAR}, #{userID,jdbcType=VARCHAR}, #{item_name,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{number,jdbcType=NUMERIC}, #{ownership_unit,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{user,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{enclosure,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_HD_MATERIAL_MANAGEMENT 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.river.HdMaterialManagement">
+		UPDATE W_HD_MATERIAL_MANAGEMENT SET
+		F_DEPARTMENTID=#{departmentID,jdbcType=VARCHAR},
+		F_USERID=#{userID,jdbcType=VARCHAR},
+		F_ITEM_NAME=#{item_name,jdbcType=VARCHAR},
+		F_MODEL=#{model,jdbcType=VARCHAR},
+		F_NUMBER=#{number,jdbcType=NUMERIC},
+		F_OWNERSHIP_UNIT=#{ownership_unit,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_USER=#{user,jdbcType=VARCHAR},
+		F_REMARKS=#{remarks,jdbcType=VARCHAR},
+		F_STATE=#{state,jdbcType=VARCHAR},
+		F_ENCLOSURE=#{enclosure,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="HdMaterialManagement">
+		SELECT <include refid="columns"/>
+		FROM W_HD_MATERIAL_MANAGEMENT
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="HdMaterialManagement">
+		SELECT <include refid="columns"/>
+		FROM W_HD_MATERIAL_MANAGEMENT   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

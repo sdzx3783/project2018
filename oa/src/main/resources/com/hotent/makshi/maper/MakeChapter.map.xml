@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.makechapter.MakeChapter">
+	<resultMap id="MakeChapter" type="com.hotent.makshi.model.makechapter.MakeChapter">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="take_personID" column="F_TAKE_PERSONID" jdbcType="VARCHAR"/>
+		<result property="contract_id" column="F_CONTRACT_ID" jdbcType="VARCHAR"/>
+		<result property="total_investment" column="F_TOTAL_INVESTMENT" jdbcType="VARCHAR"/>
+		<result property="application_person" column="F_APPLICATION_PERSON" jdbcType="VARCHAR"/>
+		<result property="chapter_name" column="F_CHAPTER_NAME" jdbcType="VARCHAR"/>
+		<result property="reason" column="F_REASON" jdbcType="VARCHAR"/>
+		<result property="limit_date" column="F_LIMIT_DATE" jdbcType="DATE"/>
+		<result property="project_name" column="F_PROJECT_NAME" jdbcType="VARCHAR"/>
+		<result property="chapter_type" column="F_CHAPTER_TYPE" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="remarks" column="F_REMARKS" jdbcType="VARCHAR"/>
+		<result property="globalflowno" column="F_GLOBALFLOWNO" jdbcType="VARCHAR"/>
+		<result property="application_time" column="F_APPLICATION_TIME" jdbcType="VARCHAR"/>
+		<result property="take_date" column="F_TAKE_DATE" jdbcType="DATE"/>
+		<result property="take_person" column="F_TAKE_PERSON" jdbcType="VARCHAR"/>
+		<result property="state" column="state" jdbcType="VARCHAR"/>
+		<result property="ifSealDel" column="if_seal_del" jdbcType="TINYINT" />
+		<result property="sealImg" column="seal_img" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.makechapter.MakeChapter" id="ExtMakeChapter" extends="MakeChapter">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_TAKE_PERSONID,F_CONTRACT_ID,F_TOTAL_INVESTMENT,F_APPLICATION_PERSON,F_CHAPTER_NAME,F_REASON,F_LIMIT_DATE,F_PROJECT_NAME,F_CHAPTER_TYPE,F_ATTACHMENT,F_REMARKS,F_GLOBALFLOWNO,F_APPLICATION_TIME,F_TAKE_DATE,F_TAKE_PERSON,if_seal_del,seal_img
+	</sql>
+	<sql id="wfColumns">
+		ID,F_TAKE_PERSONID,F_CONTRACT_ID,F_TOTAL_INVESTMENT,F_APPLICATION_PERSON,F_CHAPTER_NAME,F_REASON,F_LIMIT_DATE,F_PROJECT_NAME,F_CHAPTER_TYPE,F_ATTACHMENT,F_REMARKS,F_GLOBALFLOWNO,F_APPLICATION_TIME,F_TAKE_DATE,F_TAKE_PERSON
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(take_personID)"> AND F_TAKE_PERSONID  LIKE '%${take_personID}%'  </if>
+			<if test="@Ognl@isNotEmpty(contract_id)"> AND F_CONTRACT_ID  LIKE '%${contract_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(total_investment)"> AND F_TOTAL_INVESTMENT  LIKE '%${total_investment}%'  </if>
+			<if test="@Ognl@isNotEmpty(application_person)"> AND F_APPLICATION_PERSON  LIKE '%${application_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(chapter_name)"> AND F_CHAPTER_NAME  LIKE '%${chapter_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(reason)"> AND F_REASON  LIKE '%${reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(limit_date)"> AND F_LIMIT_DATE  =#{limit_date} </if>
+			<if test="@Ognl@isNotEmpty(beginlimit_date)"> AND F_LIMIT_DATE  >=#{beginlimit_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endlimit_date)"> AND F_LIMIT_DATE <![CDATA[ <=#{endlimit_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(project_name)"> AND F_PROJECT_NAME  LIKE '%${project_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(chapter_type)"> AND F_CHAPTER_TYPE  LIKE '%${chapter_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(remarks)"> AND F_REMARKS  LIKE '%${remarks}%'  </if>
+			<if test="@Ognl@isNotEmpty(globalflowno)"> AND F_GLOBALFLOWNO  LIKE '%${globalflowno}%'  </if>
+			<if test="@Ognl@isNotEmpty(application_time)"> AND F_APPLICATION_TIME  LIKE '%${application_time}%'  </if>
+			<if test="@Ognl@isNotEmpty(take_date)"> AND F_TAKE_DATE  =#{take_date} </if>
+			<if test="@Ognl@isNotEmpty(begintake_date)"> AND F_TAKE_DATE  >=#{begintake_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endtake_date)"> AND F_TAKE_DATE <![CDATA[ <=#{endtake_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(take_person)"> AND F_TAKE_PERSON  LIKE '%${take_person}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.makechapter.MakeChapter">
+		INSERT INTO W_MAKE_CHAPTER
+		(ID,
+		F_TAKE_PERSONID,F_CONTRACT_ID,F_TOTAL_INVESTMENT,F_APPLICATION_PERSON,F_CHAPTER_NAME,F_REASON,F_LIMIT_DATE,F_PROJECT_NAME,F_CHAPTER_TYPE,F_ATTACHMENT,F_REMARKS,
+		F_GLOBALFLOWNO,F_APPLICATION_TIME,F_TAKE_DATE,F_TAKE_PERSON,if_seal_del,seal_img)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{take_personID,jdbcType=VARCHAR}, #{contract_id,jdbcType=VARCHAR}, #{total_investment,jdbcType=VARCHAR}, #{application_person,jdbcType=VARCHAR}, #{chapter_name,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{limit_date,jdbcType=DATE}, #{project_name,jdbcType=VARCHAR}, #{chapter_type,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR},
+		#{globalflowno,jdbcType=VARCHAR}, #{application_time,jdbcType=VARCHAR}, #{take_date,jdbcType=DATE}, #{take_person,jdbcType=VARCHAR}, #{ifSealDel,jdbcType=TINYINT}, #{sealImg,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_MAKE_CHAPTER 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.makechapter.MakeChapter">
+		UPDATE W_MAKE_CHAPTER SET
+		F_TAKE_PERSONID=#{take_personID,jdbcType=VARCHAR},
+		F_CONTRACT_ID=#{contract_id,jdbcType=VARCHAR},
+		F_TOTAL_INVESTMENT=#{total_investment,jdbcType=VARCHAR},
+		F_APPLICATION_PERSON=#{application_person,jdbcType=VARCHAR},
+		F_CHAPTER_NAME=#{chapter_name,jdbcType=VARCHAR},
+		F_REASON=#{reason,jdbcType=VARCHAR},
+		F_LIMIT_DATE=#{limit_date,jdbcType=DATE},
+		F_PROJECT_NAME=#{project_name,jdbcType=VARCHAR},
+		F_CHAPTER_TYPE=#{chapter_type,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_REMARKS=#{remarks,jdbcType=VARCHAR},
+		F_GLOBALFLOWNO=#{globalflowno,jdbcType=VARCHAR},
+		F_APPLICATION_TIME=#{application_time,jdbcType=VARCHAR},
+		F_TAKE_DATE=#{take_date,jdbcType=DATE},
+		F_TAKE_PERSON=#{take_person,jdbcType=VARCHAR}
+        <if test="ifSealDel != null" >
+            ,if_seal_del=#{ifSealDel,jdbcType=TINYINT}
+        </if>
+        <if test="sealImg != null" >
+            ,seal_img=#{sealImg,jdbcType=VARCHAR}
+        </if>
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="MakeChapter">
+		SELECT <include refid="columns"/>
+		FROM W_MAKE_CHAPTER
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="MakeChapter">
+		SELECT ID,F_TAKE_PERSONID,F_CONTRACT_ID,F_TOTAL_INVESTMENT,F_APPLICATION_PERSON,F_CHAPTER_NAME,F_REASON,F_LIMIT_DATE,F_PROJECT_NAME,F_CHAPTER_TYPE,
+			   F_ATTACHMENT,F_REMARKS,F_GLOBALFLOWNO,ifnull(b.createtime,F_APPLICATION_TIME) F_APPLICATION_TIME,F_TAKE_DATE,F_TAKE_PERSON,if_seal_del,seal_img,
+			  (CASE WHEN isnull(`b`.`NAME_`) THEN '流程已结束' ELSE `b`.`NAME_` END ) AS `state`
+	   FROM
+			W_MAKE_CHAPTER a
+			LEFT JOIN run_task b ON  a.ID = b.BUSINESSKEY
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+</mapper>

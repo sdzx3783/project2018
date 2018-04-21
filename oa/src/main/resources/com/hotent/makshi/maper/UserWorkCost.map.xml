@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.finance.UserWorkCost">
+	<resultMap id="UserWorkCost" type="com.hotent.makshi.model.finance.UserWorkCost">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="userid" column="F_USERID" jdbcType="VARCHAR"/>
+		<result property="month" column="F_MONTH" jdbcType="VARCHAR"/>
+		<result property="ctime" column="F_CTIME" jdbcType="DATE"/>
+		<result property="utime" column="F_UTIME" jdbcType="DATE"/>
+		<result property="work_hour_cost" column="F_WORK_HOUR_COST" jdbcType="NUMERIC"/>
+		<result property="over_hour_cost" column="F_OVER_HOUR_COST" jdbcType="NUMERIC"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_USERID,F_MONTH,F_CTIME,F_UTIME,F_WORK_HOUR_COST,F_OVER_HOUR_COST
+	</sql>
+	<sql id="wfColumns">
+		ID,F_USERID,F_MONTH,F_CTIME,F_UTIME,F_WORK_HOUR_COST,F_OVER_HOUR_COST
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(userid)"> AND F_USERID  = #{userid}  </if>
+			<if test="@Ognl@isNotEmpty(month)"> AND F_MONTH  = #{month}  </if>
+			<if test="@Ognl@isNotEmpty(ctime)"> AND F_CTIME  =#{ctime} </if>
+			<if test="@Ognl@isNotEmpty(beginctime)"> AND F_CTIME  >=#{beginctime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endctime)"> AND F_CTIME <![CDATA[ <=#{endctime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(utime)"> AND F_UTIME  =#{utime} </if>
+			<if test="@Ognl@isNotEmpty(beginutime)"> AND F_UTIME  >=#{beginutime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endutime)"> AND F_UTIME <![CDATA[ <=#{endutime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(work_hour_cost)"> AND F_WORK_HOUR_COST  =#{work_hour_cost} </if>
+			<if test="@Ognl@isNotEmpty(over_hour_cost)"> AND F_OVER_HOUR_COST  =#{over_hour_cost} </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.finance.UserWorkCost">
+		INSERT INTO W_USER_WORK_COST
+		(ID,
+		F_USERID,F_MONTH,F_CTIME,F_UTIME,F_WORK_HOUR_COST,F_OVER_HOUR_COST)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{userid,jdbcType=VARCHAR}, #{month,jdbcType=VARCHAR}, #{ctime,jdbcType=DATE}, #{utime,jdbcType=DATE}, #{work_hour_cost,jdbcType=NUMERIC}, #{over_hour_cost,jdbcType=NUMERIC})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_USER_WORK_COST 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.finance.UserWorkCost">
+		UPDATE W_USER_WORK_COST SET
+		F_USERID=#{userid,jdbcType=VARCHAR},
+		F_MONTH=#{month,jdbcType=VARCHAR},
+		F_CTIME=#{ctime,jdbcType=DATE},
+		F_UTIME=#{utime,jdbcType=DATE},
+		F_WORK_HOUR_COST=#{work_hour_cost,jdbcType=NUMERIC},
+		F_OVER_HOUR_COST=#{over_hour_cost,jdbcType=NUMERIC}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="UserWorkCost">
+		SELECT <include refid="columns"/>
+		FROM W_USER_WORK_COST
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getByUserIdAndMonth"  resultMap="UserWorkCost">
+		SELECT <include refid="columns"/>
+		FROM W_USER_WORK_COST
+		WHERE  F_USERID  = #{userid}  AND F_MONTH  = #{month}
+	</select>
+	
+	<select id="getAll" resultMap="UserWorkCost">
+		SELECT <include refid="columns"/>
+		FROM W_USER_WORK_COST   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

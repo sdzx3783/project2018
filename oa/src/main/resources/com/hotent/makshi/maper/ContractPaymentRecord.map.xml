@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.contract.ContractPaymentRecord">
+	<resultMap id="ContractPaymentRecord" type="com.hotent.makshi.model.contract.ContractPaymentRecord">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="apply_payment_date" column="F_APPLY_PAYMENT_DATE" jdbcType="DATE"/>
+		<result property="apply_payment_money" column="F_APPLY_PAYMENT_MONEY" jdbcType="VARCHAR"/>
+		<result property="operator" column="F_OPERATOR" jdbcType="VARCHAR"/>
+		<result property="operatorID" column="F_OPERATORID" jdbcType="VARCHAR"/>
+		<result property="status" column="F_STATUS" jdbcType="VARCHAR"/>
+		<result property="payment_time" column="F_PAYMENT_TIME" jdbcType="DATE"/>
+		<result property="actual_amount_paid" column="F_ACTUAL_AMOUNT_PAID" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_APPLY_PAYMENT_DATE,F_APPLY_PAYMENT_MONEY,F_OPERATOR,F_OPERATORID,F_STATUS,F_PAYMENT_TIME,F_ACTUAL_AMOUNT_PAID
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_APPLY_PAYMENT_DATE,F_APPLY_PAYMENT_MONEY,F_OPERATOR,F_OPERATORID,F_STATUS,F_PAYMENT_TIME,F_ACTUAL_AMOUNT_PAID
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(apply_payment_date)"> AND F_APPLY_PAYMENT_DATE  =#{apply_payment_date} </if>
+			<if test="@Ognl@isNotEmpty(beginapply_payment_date)"> AND F_APPLY_PAYMENT_DATE  >=#{beginapply_payment_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endapply_payment_date)"> AND F_APPLY_PAYMENT_DATE <![CDATA[ <=#{endapply_payment_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(apply_payment_money)"> AND F_APPLY_PAYMENT_MONEY  LIKE '%${apply_payment_money}%'  </if>
+			<if test="@Ognl@isNotEmpty(operator)"> AND F_OPERATOR  LIKE '%${operator}%'  </if>
+			<if test="@Ognl@isNotEmpty(operatorID)"> AND F_OPERATORID  LIKE '%${operatorID}%'  </if>
+			<if test="@Ognl@isNotEmpty(status)"> AND F_STATUS  LIKE '%${status}%'  </if>
+			<if test="@Ognl@isNotEmpty(payment_time)"> AND F_PAYMENT_TIME  =#{payment_time} </if>
+			<if test="@Ognl@isNotEmpty(beginpayment_time)"> AND F_PAYMENT_TIME  >=#{beginpayment_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endpayment_time)"> AND F_PAYMENT_TIME <![CDATA[ <=#{endpayment_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(actual_amount_paid)"> AND F_ACTUAL_AMOUNT_PAID  LIKE '%${actual_amount_paid}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.contract.ContractPaymentRecord">
+		INSERT INTO W_CONTRACT_PAYMENT_RECORD
+		(ID,REFID,
+		F_APPLY_PAYMENT_DATE,F_APPLY_PAYMENT_MONEY,F_OPERATOR,F_OPERATORID,F_STATUS,F_PAYMENT_TIME,F_ACTUAL_AMOUNT_PAID)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{apply_payment_date,jdbcType=DATE}, #{apply_payment_money,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{operatorID,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{payment_time,jdbcType=DATE}, #{actual_amount_paid,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CONTRACT_PAYMENT_RECORD 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.contract.ContractPaymentRecord">
+		UPDATE W_CONTRACT_PAYMENT_RECORD SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		F_APPLY_PAYMENT_DATE=#{apply_payment_date,jdbcType=DATE},
+		F_APPLY_PAYMENT_MONEY=#{apply_payment_money,jdbcType=VARCHAR},
+		F_OPERATOR=#{operator,jdbcType=VARCHAR},
+		F_OPERATORID=#{operatorID,jdbcType=VARCHAR},
+		F_STATUS=#{status,jdbcType=VARCHAR},
+		F_PAYMENT_TIME=#{payment_time,jdbcType=DATE},
+		F_ACTUAL_AMOUNT_PAID=#{actual_amount_paid,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_CONTRACT_PAYMENT_RECORD
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getContractPaymentRecordList" resultMap="ContractPaymentRecord">
+	    SELECT <include refid="columns"/>
+	    FROM W_CONTRACT_PAYMENT_RECORD 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ContractPaymentRecord">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_PAYMENT_RECORD
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="ContractPaymentRecord">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_PAYMENT_RECORD   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

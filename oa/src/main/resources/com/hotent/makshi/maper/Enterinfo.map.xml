@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.contract.Enterinfo">
+	<resultMap id="Enterinfo" type="com.hotent.makshi.model.contract.Enterinfo">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="enterTime" column="F_ENTERTIME" jdbcType="DATE"/>
+		<result property="enterNumber" column="F_ENTERNUMBER" jdbcType="NUMERIC"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_ENTERTIME,F_ENTERNUMBER
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_ENTERTIME,F_ENTERNUMBER
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(enterTime)"> AND F_ENTERTIME  =#{enterTime} </if>
+			<if test="@Ognl@isNotEmpty(beginenterTime)"> AND F_ENTERTIME  >=#{beginenterTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endenterTime)"> AND F_ENTERTIME <![CDATA[ <=#{endenterTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(enterNumber)"> AND F_ENTERNUMBER  =#{enterNumber} </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.contract.Enterinfo">
+		INSERT INTO w_billingEnterList
+		(ID,REFID,
+		F_ENTERTIME,F_ENTERNUMBER)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{enterTime,jdbcType=DATE}, #{enterNumber,jdbcType=NUMERIC})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM w_billingEnterList 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.contract.Enterinfo">
+		UPDATE w_billingEnterList SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		F_ENTERTIME=#{enterTime,jdbcType=DATE},
+		F_ENTERNUMBER=#{enterNumber,jdbcType=NUMERIC}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM w_billingEnterList
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getEnterinfoList" resultMap="Enterinfo">
+	    SELECT <include refid="columns"/>
+	    FROM w_billingEnterList 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="Enterinfo">
+		SELECT <include refid="columns"/>
+		FROM w_billingEnterList
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="Enterinfo">
+		SELECT <include refid="columns"/>
+		FROM w_billingEnterList   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

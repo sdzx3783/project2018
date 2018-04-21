@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.qualification.AttorneyStamp">
+	<resultMap id="AttorneyStamp" type="com.hotent.makshi.model.qualification.AttorneyStamp">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="orgID" column="F_ORGID" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="org" column="F_ORG" jdbcType="VARCHAR"/>
+		<result property="submittime" column="F_SUBMITTIME" jdbcType="DATE"/>
+		<result property="cerno" column="F_CERNO" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="position" column="F_POSITION" jdbcType="VARCHAR"/>
+		<result property="limittime" column="F_LIMITTIME" jdbcType="DATE"/>
+		<result property="signtime" column="F_SIGNTIME" jdbcType="DATE"/>
+		<result property="representor" column="F_REPRESENTOR" jdbcType="VARCHAR"/>
+		<result property="age" column="F_AGE" jdbcType="NUMERIC"/>
+		<result property="workno" column="F_WORKNO" jdbcType="VARCHAR"/>
+		<!-- <result property="institutionno" column="F_INSTITUTIONNO" jdbcType="VARCHAR"/> -->
+		<!-- <result property="institutiontype" column="F_INSTITUTIONTYPE" jdbcType="VARCHAR"/> -->
+		<result property="major_pro" column="F_MAJOR_PRO" jdbcType="VARCHAR"/>
+		<result property="sideline_pro" column="F_SIDELINE_PRO" jdbcType="VARCHAR"/>
+		<result property="licenseno" column="F_LICENSENO" jdbcType="VARCHAR"/>
+		<result property="major" column="F_MAJOR" jdbcType="VARCHAR"/>
+		<result property="sideline" column="F_SIDELINE" jdbcType="VARCHAR"/>
+		<result property="runid" column="runid" jdbcType="VARCHAR"/>
+		<result property="privilege" column="F_privilege" jdbcType="VARCHAR"/>
+		<result property="job" column="F_job" jdbcType="VARCHAR"/>
+		<result property="economicnature" column="F_economicnature" jdbcType="VARCHAR"/>
+		<result property="businessnum" column="F_businessnum" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		a.ID,a.F_APPLICANTID,a.F_ORGID,a.F_APPLICANT,a.F_ORG,a.F_SUBMITTIME,a.F_CERNO,a.F_NAME,a.F_LIMITTIME,a.F_SIGNTIME,a.F_REPRESENTOR,a.F_AGE,a.F_WORKNO,a.F_MAJOR_PRO,a.F_SIDELINE_PRO,a.F_LICENSENO,a.F_MAJOR,a.F_SIDELINE
+	,a.F_privilege,a.F_job,a.F_economicnature,a.F_businessnum
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPLICANTID,F_ORGID,F_APPLICANT,F_ORG,F_SUBMITTIME,F_CERNO,F_NAME,F_LIMITTIME,F_SIGNTIME,F_REPRESENTOR,F_AGE,F_WORKNO,F_MAJOR_PRO,F_SIDELINE_PRO,F_LICENSENO,F_MAJOR,F_SIDELINE
+	,F_privilege,F_job,F_economicnature,F_businessnum
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND a.F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(orgID)"> AND a.F_ORGID  LIKE '%${orgID}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND a.F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(org)"> AND a.F_ORG  LIKE '%${org}%'  </if>
+			<if test="@Ognl@isNotEmpty(submittime)"> AND a.F_SUBMITTIME  =#{submittime} </if>
+			<if test="@Ognl@isNotEmpty(beginsubmittime)"> AND a.F_SUBMITTIME  >=#{beginsubmittime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endsubmittime)"> AND a.F_SUBMITTIME <![CDATA[ <=#{endsubmittime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(cerno)"> AND a.F_CERNO  LIKE '%${cerno}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND a.F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(limittime)"> AND a.F_LIMITTIME  =#{limittime} </if>
+			<if test="@Ognl@isNotEmpty(beginlimittime)"> AND a.F_LIMITTIME  >=#{beginlimittime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endlimittime)"> AND a.F_LIMITTIME <![CDATA[ <=#{endlimittime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(signtime)"> AND a.F_SIGNTIME  =#{signtime} </if>
+			<if test="@Ognl@isNotEmpty(beginsigntime)"> AND a.F_SIGNTIME  >=#{beginsigntime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endsigntime)"> AND a.F_SIGNTIME <![CDATA[ <=#{endsigntime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(representor)"> AND a.F_REPRESENTOR  LIKE '%${representor}%'  </if>
+			<if test="@Ognl@isNotEmpty(age)"> AND a.F_AGE  =#{age} </if>
+			<if test="@Ognl@isNotEmpty(workno)"> AND a.F_WORKNO  LIKE '%${workno}%'  </if>
+			<if test="@Ognl@isNotEmpty(institutionno)"> AND a.F_INSTITUTIONNO  LIKE '%${institutionno}%'  </if>
+			<if test="@Ognl@isNotEmpty(institutiontype)"> AND a.F_INSTITUTIONTYPE  LIKE '%${institutiontype}%'  </if>
+			<if test="@Ognl@isNotEmpty(major_pro)"> AND a.F_MAJOR_PRO  LIKE '%${major_pro}%'  </if>
+			<if test="@Ognl@isNotEmpty(sideline_pro)"> AND a.F_SIDELINE_PRO  LIKE '%${sideline_pro}%'  </if>
+			<if test="@Ognl@isNotEmpty(licenseno)"> AND a.F_LICENSENO  LIKE '%${licenseno}%'  </if>
+			<if test="@Ognl@isNotEmpty(major)"> AND a.F_MAJOR  LIKE '%${major}%'  </if>
+			<if test="@Ognl@isNotEmpty(sideline)"> AND a.F_SIDELINE  LIKE '%${sideline}%'  </if>
+			and a.F_isshow=1
+			
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.qualification.AttorneyStamp">
+		INSERT INTO W_ATTORNEY_STAMP
+		(ID,
+		F_APPLICANTID,F_ORGID,F_APPLICANT,F_ORG,F_SUBMITTIME,F_CERNO,F_NAME,F_LIMITTIME,F_SIGNTIME,F_REPRESENTOR,F_AGE,F_WORKNO,F_MAJOR_PRO,F_SIDELINE_PRO,F_LICENSENO,F_MAJOR,F_SIDELINE,F_privilege,F_job,F_economicnature,F_businessnum)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{applicantID,jdbcType=VARCHAR}, #{orgID,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{org,jdbcType=VARCHAR}, #{submittime,jdbcType=DATE}, #{cerno,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{limittime,jdbcType=DATE}, #{signtime,jdbcType=DATE}, #{representor,jdbcType=VARCHAR}, #{age,jdbcType=NUMERIC}, #{workno,jdbcType=VARCHAR}, #{major_pro,jdbcType=VARCHAR}, #{sideline_pro,jdbcType=VARCHAR}, #{licenseno,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, #{sideline,jdbcType=VARCHAR}
+		,#{privilege,jdbcType=VARCHAR},#{job,jdbcType=VARCHAR},#{businessnum,jdbcType=VARCHAR},#{economicnature,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_ATTORNEY_STAMP 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.qualification.AttorneyStamp">
+		UPDATE W_ATTORNEY_STAMP SET
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_ORGID=#{orgID,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_ORG=#{org,jdbcType=VARCHAR},
+		F_SUBMITTIME=#{submittime,jdbcType=DATE},
+		F_CERNO=#{cerno,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_LIMITTIME=#{limittime,jdbcType=DATE},
+		F_SIGNTIME=#{signtime,jdbcType=DATE},
+		F_REPRESENTOR=#{representor,jdbcType=VARCHAR},
+		F_AGE=#{age,jdbcType=NUMERIC},
+		F_WORKNO=#{workno,jdbcType=VARCHAR},
+		<!-- F_INSTITUTIONNO=#{institutionno,jdbcType=VARCHAR}, -->
+		<!-- F_INSTITUTIONTYPE=#{institutiontype,jdbcType=VARCHAR}, -->
+		F_MAJOR_PRO=#{major_pro,jdbcType=VARCHAR},
+		F_SIDELINE_PRO=#{sideline_pro,jdbcType=VARCHAR},
+		F_LICENSENO=#{licenseno,jdbcType=VARCHAR},
+		F_MAJOR=#{major,jdbcType=VARCHAR},
+		F_SIDELINE=#{sideline,jdbcType=VARCHAR},
+		F_privilege=#{privilege,jdbcType=VARCHAR},
+		F_job=#{job,jdbcType=VARCHAR},
+		F_businessnum=#{businessnum,jdbcType=VARCHAR},
+		F_economicnature=#{economicnature,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="AttorneyStamp">
+		SELECT <include refid="wfColumns"/>
+		FROM W_ATTORNEY_STAMP 
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="AttorneyStamp">
+		SELECT <include refid="columns"/>,b.runid
+		FROM W_ATTORNEY_STAMP a  INNER JOIN  bpm_pro_run_his b on a.ID=b.BUSINESSKEY 
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

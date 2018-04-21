@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.questionnaire.QuestionnaireOption">
+	<resultMap id="AssetAbandonment"
+		type="com.hotent.makshi.model.questionnaire.QuestionnaireOption">
+		<id property="id" column="ID" jdbcType="NUMERIC" />
+		<result property="questionnaire_id" column="F_questionnaire_id"
+			jdbcType="NUMERIC" />
+		<result property="questionnaire_ques_id" column="F_questionnaire_ques_id"
+			jdbcType="NUMERIC" />
+		<result property="desc" column="F_desc" jdbcType="VARCHAR" />
+		<result property="del" column="F_del" jdbcType="BIT" />
+	</resultMap>
+
+	<sql id="columns">
+		ID,
+		F_questionnaire_id,
+		F_questionnaire_ques_id,
+		F_desc,
+		F_del
+	</sql>
+
+	<sql id="dynamicWhere">
+		<where>
+		<if test="@Ognl@isNotEmpty(questionnaire_id)"> AND F_questionnaire_id =#{questionnaire_id} </if>
+		<if test="@Ognl@isNotEmpty(questionnaire_ques_id)"> AND F_questionnaire_ques_id =#{questionnaire_ques_id} </if>
+			<if test="@Ognl@isNotEmpty(use_nameID)"> AND F_USE_NAMEID LIKE '%${use_nameID}%'  </if>
+			<if test="@Ognl@isNotEmpty(buy_date)"> AND F_BUY_DATE =#{buy_date} </if>
+			<if test="@Ognl@isNotEmpty(application_time_begin)"> AND F_APPLICATION_TIME
+				>=#{application_time_begin,jdbcType=DATE}
+			</if>
+			<if test="@Ognl@isNotEmpty(application_time_end)">
+				AND F_APPLICATION_TIME  <![CDATA[ <=#{application_time_end,jdbcType=DATE}]]>
+			</if>
+		</where>
+	</sql>
+
+	<insert id="add"
+		parameterType="com.hotent.makshi.model.questionnaire.QuestionnaireOption">
+		INSERT INTO w_questionnaire_option
+		(ID,
+		F_questionnaire_id,
+		F_questionnaire_ques_id,
+		F_desc,
+		F_del)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{questionnaire_id,jdbcType=NUMERIC},
+		#{questionnaire_ques_id,jdbcType=NUMERIC},
+		#{desc,jdbcType=VARCHAR},
+		#{del,jdbcType=BIT}
+		)
+	</insert>
+
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM
+		w_questionnaire_option
+		WHERE
+		ID=#{id}
+	</delete>
+	<delete id="delByQuestionnaireId" parameterType="java.lang.Long">
+		DELETE FROM
+		w_questionnaire_option
+		WHERE
+		F_questionnaire_id=#{id}
+	</delete>
+
+	<update id="update"
+		parameterType="com.hotent.makshi.model.questionnaire.QuestionnaireOption">
+		UPDATE w_questionnaire_option SET
+		F_questionnaire_id=#{questionnaire_id,jdbcType=NUMERIC},
+		F_questionnaire_ques_id=#{questionnaire_ques_id,jdbcType=NUMERIC},
+		F_desc=#{desc,jdbcType=VARCHAR},
+		F_del=#{del,jdbcType=BIT}
+		}
+		WHERE
+		ID=#{id}
+	</update>
+
+	<select id="getById" parameterType="java.lang.Long" resultMap="AssetAbandonment">
+		SELECT
+		<include refid="columns" />
+		FROM w_questionnaire_option
+		WHERE
+		ID=#{id}
+	</select>
+
+	<select id="getAll" resultMap="AssetAbandonment">
+		SELECT
+		<include refid="columns" />
+		FROM w_questionnaire_option
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by ID
+		</if>
+	</select>
+
+</mapper>

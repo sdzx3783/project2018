@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.contract.ContractNumAndMoney">
+	<resultMap id="ContractNumAndMoney" type="com.hotent.makshi.model.contract.ContractNumAndMoney">
+		<result property="num" column="num" jdbcType="INTEGER" />
+		<result property="money" column="money" jdbcType="DOUBLE" />
+	</resultMap>
+	<select id="getAllInfo" parameterType="map" resultMap="ContractNumAndMoney">
+		SELECT count(*) num,
+			CASE WHEN sum(F_contract_money) IS NULL THEN 0.0 ELSE sum(F_contract_money) END money FROM w_contractinfo 
+			WHERE F_contracttype = #{type}
+			AND Year(F_singing_time) = #{year}
+	</select>
+	
+	<select id="getColInfo" parameterType="map" resultMap="ContractNumAndMoney">
+		SELECT count(*) num,CASE WHEN sum(F_contract_money) IS NULL THEN 0.0 ELSE sum(F_contract_money) END money FROM w_contractinfo 
+			WHERE Year(F_singing_time) = #{year}
+			AND  F_contracttype in
+			<foreach collection="contractTypeArry" item="contractTypeArry" index="index" open="(" close=")" separator="," >  
+				 #{contractTypeArry,jdbcType=VARCHAR}
+			</foreach>  
+	</select>
+</mapper>

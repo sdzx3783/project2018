@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.qualification.PersonalQualification">
+	<resultMap id="PersonalQualification" type="com.hotent.makshi.model.qualification.PersonalQualification">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="account" column="F_ACCOUNT" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="sex" column="F_SEX" jdbcType="VARCHAR"/>
+		<result property="nation" column="F_NATION" jdbcType="VARCHAR"/>
+		<result property="ID_number" column="F_ID_NUMBER" jdbcType="VARCHAR"/>
+		<result property="xl" column="F_XL" jdbcType="VARCHAR"/>
+		<result property="graduation_school" column="F_GRADUATION_SCHOOL" jdbcType="VARCHAR"/>
+		<result property="graduation_date" column="F_GRADUATION_DATE" jdbcType="DATE"/>
+		<result property="positional_degree_one" column="F_POSITIONAL_DEGREE_ONE" jdbcType="VARCHAR"/>
+		<result property="positional_major_one" column="F_POSITIONAL_MAJOR_ONE" jdbcType="VARCHAR"/>
+		<result property="positional_degree_two" column="F_POSITIONAL_DEGREE_TWO" jdbcType="VARCHAR"/>
+		<result property="positional_major_two" column="F_POSITIONAL_MAJOR_TWO" jdbcType="VARCHAR"/>
+		<result property="positional_degree_three" column="F_POSITIONAL_DEGREE_THREE" jdbcType="VARCHAR"/>
+		<result property="positional_major_three" column="F_POSITIONAL_MAJOR_THREE" jdbcType="VARCHAR"/>
+		<result property="certificate_type" column="F_CERTIFICATE_TYPE" jdbcType="VARCHAR"/>
+		<result property="certificate_id" column="F_CERTIFICATE_ID" jdbcType="VARCHAR"/>
+		<result property="certificate_date" column="F_CERTIFICATE_DATE" jdbcType="DATE"/>
+		<result property="certified_id" column="F_CERTIFIED_ID" jdbcType="VARCHAR"/>
+		<result property="certificate_major" column="F_CERTIFICATE_MAJOR" jdbcType="VARCHAR"/>
+		<result property="send_unit" column="F_SEND_UNIT" jdbcType="VARCHAR"/>
+		<result property="out_date" column="F_OUT_DATE" jdbcType="DATE"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="isregist" column="F_ISREGIST" jdbcType="VARCHAR"/>
+		<result property="certificate_regist_id" column="F_CERTIFICATE_REGIST_ID" jdbcType="VARCHAR"/>
+		<result property="regist_id" column="F_REGIST_ID" jdbcType="VARCHAR"/>
+		<result property="get_date" column="F_GET_DATE" jdbcType="DATE"/>
+		<result property="last_effectice_date" column="F_LAST_EFFECTICE_DATE" jdbcType="DATE"/>
+		<result property="regist_major" column="F_REGIST_MAJOR" jdbcType="VARCHAR"/>
+		<result property="seal_id" column="F_SEAL_ID" jdbcType="VARCHAR"/>
+		<result property="regist_out_date" column="F_REGIST_OUT_DATE" jdbcType="DATE"/>
+		<result property="regist_send_unit" column="F_REGIST_SEND_UNIT" jdbcType="VARCHAR"/>
+		<result property="lasted_regist_type" column="F_LASTED_REGIST_TYPE" jdbcType="VARCHAR"/>
+		<result property="lasted_regist_date" column="F_LASTED_REGIST_DATE" jdbcType="DATE"/>
+		<result property="keep_edu_status" column="F_KEEP_EDU_STATUS" jdbcType="VARCHAR"/>
+		<result property="regist_elective" column="F_reg_elective" jdbcType="VARCHAR"/>
+		<result property="regist_compulsory" column="F_reg_compulsory" jdbcType="VARCHAR"/>
+		<result property="regist_period" column="F_reg_period" jdbcType="VARCHAR"/>
+		<result property="regist_remark" column="F_REGIST_REMARK" jdbcType="VARCHAR"/>
+		<result property="regist_attachment" column="F_REGIST_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="userId" column="F_USERID" jdbcType="VARCHAR"/>
+		<result property="in_date" column="F_IN_DATE" jdbcType="DATE"/>
+		<result property="regist_date" column="F_REGIST_DATE" jdbcType="DATE"/>
+		<result property="learnMajor" column="F_LEARNMAJOR" jdbcType="VARCHAR"/>
+		<result property="isBinding" column="F_ISBINDING" jdbcType="INTEGER"/>
+		<result property="occ_type" column="F_OCC_TYPE" jdbcType="VARCHAR"/>
+		<result property="occ_certificate_id" column="F_OCC_CERTIFICATE_ID" jdbcType="VARCHAR"/>
+		<result property="occ_get_date" column="F_OCC_GET_DATE" jdbcType="DATE"/>
+		<result property="occ_period_of_validity" column="F_OCC_PERIOD_OF_VALIDITY" jdbcType="DATE"/>
+		<result property="occ_major" column="F_OCC_MAJOR" jdbcType="VARCHAR"/>
+		<result property="occ_out_date" column="F_OCC_OUT_DATE" jdbcType="DATE"/>
+		<result property="occ_in_date" column="F_OCC_IN_DATE" jdbcType="DATE"/>
+		<result property="occ_send_unit" column="F_OCC_SEND_UNIT" jdbcType="VARCHAR"/>
+		<result property="occ_type_work" column="F_OCC_TYPE_WORK" jdbcType="VARCHAR"/>
+		<result property="occ_degree_work" column="F_OCC_DEGREE_WORK" jdbcType="VARCHAR"/>
+		<result property="occ_contine_edu_comple" column="F_OCC_CONTINE_EDU_COMPLE" jdbcType="VARCHAR"/>
+		<result property="occ_elective" column="F_OCC_elective" jdbcType="VARCHAR"/>
+		<result property="occ_compulsory" column="F_OCC_compulsory" jdbcType="VARCHAR"/>
+		<result property="occ_period" column="F_OCC_period" jdbcType="VARCHAR"/>
+		<result property="occ_remark" column="F_OCC_REMARK" jdbcType="VARCHAR"/>
+		<result property="occ_attachment" column="F_OCC_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="effictiveDate" column="F_EFFICTIVEDATE" jdbcType="DATE"/>
+		<result property="regist_secondMajor" column="F_secondMajor" jdbcType="VARCHAR"/>
+		<result property="regist_thirdMajor" column="F_thirdMajor" jdbcType="VARCHAR"/>
+		<result property="occ_secondMajor" column="F_occ_secondMajor" jdbcType="VARCHAR"/>
+		<result property="switchs" column="switchs" jdbcType="INTEGER"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_USERID,F_ACCOUNT,F_NAME,F_SEX,F_NATION,F_ID_NUMBER,F_XL,F_GRADUATION_SCHOOL,F_GRADUATION_DATE,F_POSITIONAL_DEGREE_ONE,F_POSITIONAL_MAJOR_ONE,F_POSITIONAL_DEGREE_TWO,F_POSITIONAL_MAJOR_TWO,F_POSITIONAL_DEGREE_THREE,F_POSITIONAL_MAJOR_THREE,F_CERTIFICATE_TYPE,F_CERTIFICATE_ID,F_CERTIFICATE_DATE,F_CERTIFIED_ID,F_CERTIFICATE_MAJOR,F_SEND_UNIT,F_OUT_DATE,F_REMARK,F_ATTACHMENT,F_ISREGIST,F_CERTIFICATE_REGIST_ID,F_REGIST_ID,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_REGIST_MAJOR,F_SEAL_ID,F_REGIST_OUT_DATE,F_REGIST_SEND_UNIT,F_LASTED_REGIST_TYPE,F_LASTED_REGIST_DATE,F_KEEP_EDU_STATUS,F_REGIST_REMARK,F_REGIST_ATTACHMENT
+		,F_IN_DATE,F_LEARNMAJOR,F_REGIST_DATE,switchs,
+		F_OCC_TYPE,F_OCC_CERTIFICATE_ID,F_OCC_GET_DATE,F_OCC_PERIOD_OF_VALIDITY,F_OCC_MAJOR,F_OCC_OUT_DATE,F_OCC_IN_DATE,F_OCC_SEND_UNIT,F_OCC_TYPE_WORK,F_OCC_DEGREE_WORK,
+		F_OCC_CONTINE_EDU_COMPLE,F_OCC_REMARK,F_OCC_ATTACHMENT,
+		F_EFFICTIVEDATE,F_OCC_elective,F_OCC_compulsory,F_OCC_period,F_reg_elective,F_reg_compulsory,F_reg_period,F_secondMajor,F_thirdMajor,F_occ_secondMajor
+	</sql>
+	<sql id="wfColumns">
+		ID,F_USERID,F_ACCOUNT,F_NAME,F_SEX,F_NATION,F_ID_NUMBER,F_XL,F_GRADUATION_SCHOOL,F_GRADUATION_DATE,F_POSITIONAL_DEGREE_ONE,F_POSITIONAL_MAJOR_ONE,F_POSITIONAL_DEGREE_TWO,F_POSITIONAL_MAJOR_TWO,F_POSITIONAL_DEGREE_THREE,F_POSITIONAL_MAJOR_THREE,F_CERTIFICATE_TYPE,F_CERTIFICATE_ID,F_CERTIFICATE_DATE,F_CERTIFIED_ID,F_CERTIFICATE_MAJOR,F_SEND_UNIT,F_OUT_DATE,F_REMARK,F_ATTACHMENT,F_ISREGIST,F_CERTIFICATE_REGIST_ID,F_REGIST_ID,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_REGIST_MAJOR,F_SEAL_ID,F_REGIST_OUT_DATE,F_REGIST_SEND_UNIT,F_LASTED_REGIST_TYPE,F_LASTED_REGIST_DATE,F_KEEP_EDU_STATUS,F_REGIST_REMARK,F_REGIST_ATTACHMENT
+		,F_IN_DATE，F_LEARNMAJOR
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+		 deleted = 0
+			<if test="@Ognl@isNotEmpty(account)"> AND F_ACCOUNT  LIKE '%${account}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(sex)"> AND F_SEX  LIKE '%${sex}%'  </if>
+			<if test="@Ognl@isNotEmpty(nation)"> AND F_NATION  LIKE '%${nation}%'  </if>
+			<if test="@Ognl@isNotEmpty(ID_number)"> AND F_ID_NUMBER  LIKE '%${ID_number}%'  </if>
+			<if test="@Ognl@isNotEmpty(xl)"> AND F_XL  LIKE '%${xl}%'  </if>
+			<if test="@Ognl@isNotEmpty(graduation_school)"> AND F_GRADUATION_SCHOOL  LIKE '%${graduation_school}%'  </if>
+			<if test="@Ognl@isNotEmpty(graduation_date)"> AND F_GRADUATION_DATE  =#{graduation_date} </if>
+			<if test="@Ognl@isNotEmpty(begingraduation_date)"> AND F_GRADUATION_DATE  >=#{begingraduation_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endgraduation_date)"> AND F_GRADUATION_DATE <![CDATA[ <=#{endgraduation_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(positional_degree_one)"> AND F_POSITIONAL_DEGREE_ONE  LIKE '%${positional_degree_one}%'  </if>
+			<if test="@Ognl@isNotEmpty(positional_major_one)"> AND F_POSITIONAL_MAJOR_ONE  LIKE '%${positional_major_one}%'  </if>
+			<if test="@Ognl@isNotEmpty(positional_degree_two)"> AND F_POSITIONAL_DEGREE_TWO  LIKE '%${positional_degree_two}%'  </if>
+			<if test="@Ognl@isNotEmpty(positional_major_two)"> AND F_POSITIONAL_MAJOR_TWO  LIKE '%${positional_major_two}%'  </if>
+			<if test="@Ognl@isNotEmpty(positional_degree_three)"> AND F_POSITIONAL_DEGREE_THREE  LIKE '%${positional_degree_three}%'  </if>
+			<if test="@Ognl@isNotEmpty(positional_major_three)"> AND F_POSITIONAL_MAJOR_THREE  LIKE '%${positional_major_three}%'  </if>
+			<if test="@Ognl@isNotEmpty(certificate_type)"> AND F_CERTIFICATE_TYPE  LIKE '%${certificate_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(certificate_id)"> AND F_CERTIFICATE_ID  LIKE '%${certificate_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(certificate_date)"> AND F_CERTIFICATE_DATE  =#{certificate_date} </if>
+			<if test="@Ognl@isNotEmpty(begincertificate_date)"> AND F_CERTIFICATE_DATE  >=#{begincertificate_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endcertificate_date)"> AND F_CERTIFICATE_DATE <![CDATA[ <=#{endcertificate_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(certified_id)"> AND F_CERTIFIED_ID  LIKE '%${certified_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(certificate_major)"> AND F_CERTIFICATE_MAJOR  LIKE '%${certificate_major}%'  </if>
+			<if test="@Ognl@isNotEmpty(send_unit)"> AND F_SEND_UNIT  LIKE '%${send_unit}%'  </if>
+			<if test="@Ognl@isNotEmpty(out_date)"> AND F_OUT_DATE  =#{out_date} </if>
+			<if test="@Ognl@isNotEmpty(beginout_date)"> AND F_OUT_DATE  >=#{beginout_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endout_date)"> AND F_OUT_DATE <![CDATA[ <=#{endout_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(isregist)"> AND F_ISREGIST  LIKE '%${isregist}%'  </if>
+			<if test="@Ognl@isNotEmpty(certificate_regist_id)"> AND F_CERTIFICATE_REGIST_ID  LIKE '%${certificate_regist_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_id)"> AND F_REGIST_ID  LIKE '%${regist_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(get_date)"> AND F_GET_DATE  =#{get_date} </if>
+			<if test="@Ognl@isNotEmpty(beginget_date)"> AND F_GET_DATE  >=#{beginget_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endget_date)"> AND F_GET_DATE <![CDATA[ <=#{endget_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(last_effectice_date)"> AND F_LAST_EFFECTICE_DATE  =#{last_effectice_date} </if>
+			<if test="@Ognl@isNotEmpty(beginlast_effectice_date)"> AND F_LAST_EFFECTICE_DATE  >=#{beginlast_effectice_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endlast_effectice_date)"> AND F_LAST_EFFECTICE_DATE <![CDATA[ <=#{endlast_effectice_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(regist_major)"> AND F_REGIST_MAJOR  LIKE '%${regist_major}%'  </if>
+			<if test="@Ognl@isNotEmpty(seal_id)"> AND F_SEAL_ID  LIKE '%${seal_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_out_date)"> AND F_REGIST_OUT_DATE  =#{regist_out_date} </if>
+			<if test="@Ognl@isNotEmpty(beginregist_out_date)"> AND F_REGIST_OUT_DATE  >=#{beginregist_out_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endregist_out_date)"> AND F_REGIST_OUT_DATE <![CDATA[ <=#{endregist_out_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(regist_send_unit)"> AND F_REGIST_SEND_UNIT  LIKE '%${regist_send_unit}%'  </if>
+			<if test="@Ognl@isNotEmpty(lasted_regist_type)"> AND F_LASTED_REGIST_TYPE  LIKE '%${lasted_regist_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(lasted_regist_date)"> AND F_LASTED_REGIST_DATE  =#{lasted_regist_date} </if>
+			<if test="@Ognl@isNotEmpty(beginlasted_regist_date)"> AND F_LASTED_REGIST_DATE  >=#{beginlasted_regist_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endlasted_regist_date)"> AND F_LASTED_REGIST_DATE <![CDATA[ <=#{endlasted_regist_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(keep_edu_status)"> AND F_KEEP_EDU_STATUS  LIKE '%${keep_edu_status}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_remark)"> AND F_REGIST_REMARK  LIKE '%${regist_remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_attachment)"> AND F_REGIST_ATTACHMENT  LIKE '%${regist_attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.qualification.PersonalQualification">
+		INSERT INTO W_PERSONAL_QUALIFICATION_REGIST
+		(ID,switchs,
+		F_ACCOUNT,F_USERID,F_NAME,F_SEX,F_NATION,F_ID_NUMBER,F_XL,F_GRADUATION_SCHOOL,F_GRADUATION_DATE,F_POSITIONAL_DEGREE_ONE,F_POSITIONAL_MAJOR_ONE,F_POSITIONAL_DEGREE_TWO,F_POSITIONAL_MAJOR_TWO,F_POSITIONAL_DEGREE_THREE,F_POSITIONAL_MAJOR_THREE,F_CERTIFICATE_TYPE,F_CERTIFICATE_ID,F_CERTIFICATE_DATE,F_CERTIFIED_ID,F_CERTIFICATE_MAJOR,F_SEND_UNIT,F_OUT_DATE,F_REMARK,F_ATTACHMENT,F_ISREGIST,F_CERTIFICATE_REGIST_ID,F_REGIST_ID,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_REGIST_MAJOR,F_SEAL_ID,F_REGIST_OUT_DATE,F_REGIST_SEND_UNIT,F_LASTED_REGIST_TYPE,F_LASTED_REGIST_DATE,F_KEEP_EDU_STATUS,F_REGIST_REMARK,F_REGIST_ATTACHMENT
+		,F_IN_DATE,F_LEARNMAJOR,f_isBinding,F_REGIST_DATE,
+		F_OCC_TYPE,F_OCC_CERTIFICATE_ID,F_OCC_GET_DATE,F_OCC_PERIOD_OF_VALIDITY,
+		F_OCC_MAJOR,F_OCC_OUT_DATE,F_OCC_IN_DATE,F_OCC_SEND_UNIT,F_OCC_TYPE_WORK,
+		F_OCC_DEGREE_WORK,F_OCC_CONTINE_EDU_COMPLE,F_OCC_REMARK,F_OCC_ATTACHMENT,
+		F_EFFICTIVEDATE,F_OCC_elective,F_OCC_compulsory,F_OCC_period,F_reg_elective,F_reg_compulsory,F_reg_period,F_secondMajor,F_thirdMajor,F_occ_secondMajor
+		)
+		VALUES
+		(#{id,jdbcType=NUMERIC},#{switchs,jdbcType=INTEGER},
+		#{account,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{nation,jdbcType=VARCHAR}, #{ID_number,jdbcType=VARCHAR}, #{xl,jdbcType=VARCHAR}, #{graduation_school,jdbcType=VARCHAR}, #{graduation_date,jdbcType=DATE}, #{positional_degree_one,jdbcType=VARCHAR}, #{positional_major_one,jdbcType=VARCHAR}, #{positional_degree_two,jdbcType=VARCHAR}, #{positional_major_two,jdbcType=VARCHAR}, #{positional_degree_three,jdbcType=VARCHAR}, #{positional_major_three,jdbcType=VARCHAR}, #{certificate_type,jdbcType=VARCHAR}, #{certificate_id,jdbcType=VARCHAR}, #{certificate_date,jdbcType=DATE}, #{certified_id,jdbcType=VARCHAR}, #{certificate_major,jdbcType=VARCHAR}, #{send_unit,jdbcType=VARCHAR}, #{out_date,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, #{isregist,jdbcType=VARCHAR}, #{certificate_regist_id,jdbcType=VARCHAR}, #{regist_id,jdbcType=VARCHAR}, #{get_date,jdbcType=DATE}, #{last_effectice_date,jdbcType=DATE}, #{regist_major,jdbcType=VARCHAR}, #{seal_id,jdbcType=VARCHAR}, #{regist_out_date,jdbcType=DATE}, #{regist_send_unit,jdbcType=VARCHAR}, #{lasted_regist_type,jdbcType=VARCHAR}, #{lasted_regist_date,jdbcType=DATE}, #{keep_edu_status,jdbcType=VARCHAR}, #{regist_remark,jdbcType=VARCHAR}, #{regist_attachment,jdbcType=VARCHAR}
+		,#{in_date,jdbcType=DATE},#{learnMajor,jdbcType=VARCHAR},#{isBinding,jdbcType=INTEGER},#{regist_date,jdbcType=DATE},
+		#{occ_type,jdbcType=VARCHAR},#{occ_certificate_id,jdbcType=VARCHAR},#{occ_get_date,jdbcType=DATE},#{occ_period_of_validity,jdbcType=DATE},
+		#{occ_major,jdbcType=VARCHAR},#{occ_out_date,jdbcType=DATE},#{occ_in_date,jdbcType=DATE},#{occ_send_unit,jdbcType=VARCHAR},#{occ_type_work,jdbcType=VARCHAR},
+		#{occ_degree_work,jdbcType=VARCHAR},#{occ_contine_edu_comple,jdbcType=VARCHAR},#{occ_remark,jdbcType=VARCHAR},#{occ_attachment,jdbcType=VARCHAR},
+		#{effictiveDate,jdbcType=DATE},#{occ_elective,jdbcType=VARCHAR},#{occ_compulsory,jdbcType=VARCHAR},#{occ_period,jdbcType=VARCHAR},
+		#{regist_elective,jdbcType=VARCHAR},#{regist_compulsory,jdbcType=VARCHAR},#{regist_period,jdbcType=VARCHAR},#{regist_secondMajor,jdbcType=VARCHAR},#{regist_thirdMajor,jdbcType=VARCHAR},#{occ_secondMajor,jdbcType=VARCHAR}
+		)
+	</insert>
+	<delete id="delById" parameterType="java.lang.Long">
+		update  W_PERSONAL_QUALIFICATION_REGIST 
+		set deleted = 1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.qualification.PersonalQualification">
+		UPDATE W_PERSONAL_QUALIFICATION_REGIST SET
+		F_USERID=#{userId,jdbcType=VARCHAR},
+		switchs = #{switchs,jdbcType=INTEGER},
+		F_ACCOUNT=#{account,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_SEX=#{sex,jdbcType=VARCHAR},
+		F_NATION=#{nation,jdbcType=VARCHAR},
+		F_ID_NUMBER=#{ID_number,jdbcType=VARCHAR},
+		F_XL=#{xl,jdbcType=VARCHAR},
+		F_GRADUATION_SCHOOL=#{graduation_school,jdbcType=VARCHAR},
+		F_GRADUATION_DATE=#{graduation_date,jdbcType=DATE},
+		F_POSITIONAL_DEGREE_ONE=#{positional_degree_one,jdbcType=VARCHAR},
+		F_POSITIONAL_MAJOR_ONE=#{positional_major_one,jdbcType=VARCHAR},
+		F_POSITIONAL_DEGREE_TWO=#{positional_degree_two,jdbcType=VARCHAR},
+		F_POSITIONAL_MAJOR_TWO=#{positional_major_two,jdbcType=VARCHAR},
+		F_POSITIONAL_DEGREE_THREE=#{positional_degree_three,jdbcType=VARCHAR},
+		F_POSITIONAL_MAJOR_THREE=#{positional_major_three,jdbcType=VARCHAR},
+		F_CERTIFICATE_TYPE=#{certificate_type,jdbcType=VARCHAR},
+		F_CERTIFICATE_ID=#{certificate_id,jdbcType=VARCHAR},
+		F_CERTIFICATE_DATE=#{certificate_date,jdbcType=DATE},
+		F_CERTIFIED_ID=#{certified_id,jdbcType=VARCHAR},
+		F_CERTIFICATE_MAJOR=#{certificate_major,jdbcType=VARCHAR},
+		F_SEND_UNIT=#{send_unit,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_OUT_DATE=#{out_date,jdbcType=DATE},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_ISREGIST=#{isregist,jdbcType=VARCHAR},
+		F_CERTIFICATE_REGIST_ID=#{certificate_regist_id,jdbcType=VARCHAR},
+		F_REGIST_ID=#{regist_id,jdbcType=VARCHAR},
+		F_GET_DATE=#{get_date,jdbcType=DATE},
+		F_LAST_EFFECTICE_DATE=#{last_effectice_date,jdbcType=DATE},
+		F_REGIST_MAJOR=#{regist_major,jdbcType=VARCHAR},
+		F_SEAL_ID=#{seal_id,jdbcType=VARCHAR},
+		F_REGIST_OUT_DATE=#{regist_out_date,jdbcType=DATE},
+		F_REGIST_SEND_UNIT=#{regist_send_unit,jdbcType=VARCHAR},
+		F_LASTED_REGIST_TYPE=#{lasted_regist_type,jdbcType=VARCHAR},
+		F_LASTED_REGIST_DATE=#{lasted_regist_date,jdbcType=DATE},
+		F_KEEP_EDU_STATUS=#{keep_edu_status,jdbcType=VARCHAR},
+		F_REGIST_REMARK=#{regist_remark,jdbcType=VARCHAR},
+		F_REGIST_ATTACHMENT=#{regist_attachment,jdbcType=VARCHAR},
+		F_IN_DATE =#{in_date,jdbcType=DATE},
+		F_LEARNMAJOR =#{learnMajor,jdbcType=VARCHAR},
+		F_OCC_TYPE =#{occ_type,jdbcType=VARCHAR},
+		F_OCC_CERTIFICATE_ID=#{occ_certificate_id,jdbcType=VARCHAR},
+		F_OCC_GET_DATE=#{occ_get_date,jdbcType=DATE},
+		F_OCC_PERIOD_OF_VALIDITY=#{occ_period_of_validity,jdbcType=DATE},
+		F_OCC_MAJOR=#{occ_major,jdbcType=VARCHAR},
+		F_OCC_OUT_DATE=#{occ_out_date,jdbcType=DATE},
+		F_OCC_IN_DATE=#{occ_in_date,jdbcType=DATE},
+		F_OCC_SEND_UNIT=#{occ_send_unit,jdbcType=VARCHAR},
+		F_OCC_TYPE_WORK=#{occ_type_work,jdbcType=VARCHAR},
+		F_OCC_DEGREE_WORK=#{occ_degree_work,jdbcType=VARCHAR},
+		F_OCC_CONTINE_EDU_COMPLE=#{occ_contine_edu_comple,jdbcType=VARCHAR},
+		F_OCC_elective=#{occ_elective,jdbcType=VARCHAR},
+		F_OCC_compulsory=#{occ_compulsory,jdbcType=VARCHAR},
+		F_OCC_period=#{occ_period,jdbcType=VARCHAR},
+		F_OCC_REMARK=#{occ_remark,jdbcType=VARCHAR},
+		F_OCC_ATTACHMENT=#{occ_attachment,jdbcType=VARCHAR},
+		F_EFFICTIVEDATE=#{effictiveDate,jdbcType=DATE},
+		F_reg_elective=#{regist_elective,jdbcType=DATE},
+		F_reg_compulsory=#{regist_compulsory,jdbcType=DATE},
+		F_reg_period=#{regist_period,jdbcType=DATE},
+		F_secondMajor=#{regist_secondMajor,jdbcType=VARCHAR},
+		F_thirdMajor=#{regist_thirdMajor,jdbcType=VARCHAR},
+		F_occ_secondMajor = #{occ_secondMajor,jdbcType=VARCHAR},
+		F_regist_date=#{regist_date,jdbcType=DATE}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="PersonalQualification">
+		SELECT 
+			ID,F_USERID,F_ACCOUNT,F_NAME,F_SEX,F_NATION,F_ID_NUMBER,F_XL,F_GRADUATION_SCHOOL,F_GRADUATION_DATE,F_POSITIONAL_DEGREE_ONE,F_POSITIONAL_MAJOR_ONE,F_POSITIONAL_DEGREE_TWO,F_POSITIONAL_MAJOR_TWO,F_POSITIONAL_DEGREE_THREE,F_POSITIONAL_MAJOR_THREE,F_CERTIFICATE_TYPE,F_CERTIFICATE_ID,F_CERTIFICATE_DATE,F_CERTIFIED_ID,F_CERTIFICATE_MAJOR,F_SEND_UNIT,F_OUT_DATE,F_REMARK,F_ATTACHMENT,F_ISREGIST,F_CERTIFICATE_REGIST_ID,F_REGIST_ID,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_REGIST_MAJOR,F_SEAL_ID,F_REGIST_OUT_DATE,F_REGIST_SEND_UNIT,F_LASTED_REGIST_TYPE,F_LASTED_REGIST_DATE,F_KEEP_EDU_STATUS,F_REGIST_REMARK,F_REGIST_ATTACHMENT
+			,F_IN_DATE,F_LEARNMAJOR,F_period F_reg_period,F_compulsory F_reg_compulsory,F_elective F_reg_elective,F_EFFICTIVEDATE,F_secondMajor,F_thirdMajor
+		FROM W_PERSONAL_QUALIFICATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getByIdTable" parameterType="java.lang.Long" resultMap="PersonalQualification">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_QUALIFICATION_REGIST
+		WHERE
+		ID=#{id}
+		AND deleted = 0
+	</select>
+	
+	<select id="getSealByIdTable" parameterType="String" resultMap="PersonalQualification">
+		SELECT F_holder F_NAME,F_holderID F_USERID,ACCOUNT F_ACCOUNT FROM sys_user c
+			RIGHT JOIN
+			(
+			SELECT F_holderID,F_holder FROM w_cer_bor a,w_personal_seal b WHERE a.certifateId = b.F_seal_num
+			AND b.F_holder = #{userName}
+			) t
+			ON c.userId = t.F_holderID
+			GROUP BY F_holderID
+	</select>
+	
+	<select id="getAllInfo" resultMap="PersonalQualification">
+		SELECT 
+			ID,F_USERID,F_ACCOUNT,F_NAME,F_SEX,F_NATION,F_ID_NUMBER,F_XL,F_GRADUATION_SCHOOL,F_GRADUATION_DATE,F_POSITIONAL_DEGREE_ONE,F_POSITIONAL_MAJOR_ONE,F_POSITIONAL_DEGREE_TWO,F_POSITIONAL_MAJOR_TWO,F_POSITIONAL_DEGREE_THREE,F_POSITIONAL_MAJOR_THREE,F_CERTIFICATE_TYPE,F_CERTIFICATE_ID,F_CERTIFICATE_DATE,F_CERTIFIED_ID,F_CERTIFICATE_MAJOR,F_SEND_UNIT,F_OUT_DATE,F_REMARK,F_ATTACHMENT,F_ISREGIST,F_CERTIFICATE_REGIST_ID,F_REGIST_ID,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_REGIST_MAJOR,F_SEAL_ID,F_REGIST_OUT_DATE,F_REGIST_SEND_UNIT,F_LASTED_REGIST_TYPE,F_LASTED_REGIST_DATE,F_KEEP_EDU_STATUS,F_REGIST_REMARK,F_REGIST_ATTACHMENT
+			,F_IN_DATE,F_LEARNMAJOR,F_period F_reg_period,F_compulsory F_reg_compulsory,F_elective F_reg_elective,F_EFFICTIVEDATE,F_secondMajor,F_thirdMajor
+		FROM W_PERSONAL_QUALIFICATION
+	</select>
+	<select id="getBySeal" resultMap="PersonalQualification">
+		SELECT 
+			ID,F_USERID,F_ACCOUNT,F_NAME,F_SEX,F_NATION,F_ID_NUMBER,F_XL,F_GRADUATION_SCHOOL,F_GRADUATION_DATE,F_POSITIONAL_DEGREE_ONE,F_POSITIONAL_MAJOR_ONE,F_POSITIONAL_DEGREE_TWO,F_POSITIONAL_MAJOR_TWO,F_POSITIONAL_DEGREE_THREE,F_POSITIONAL_MAJOR_THREE,F_CERTIFICATE_TYPE,F_CERTIFICATE_ID,F_CERTIFICATE_DATE,F_CERTIFIED_ID,F_CERTIFICATE_MAJOR,F_SEND_UNIT,F_OUT_DATE,F_REMARK,F_ATTACHMENT,F_ISREGIST,F_CERTIFICATE_REGIST_ID,F_REGIST_ID,F_GET_DATE,F_LAST_EFFECTICE_DATE,F_REGIST_MAJOR,F_SEAL_ID,F_REGIST_OUT_DATE,F_REGIST_SEND_UNIT,F_LASTED_REGIST_TYPE,F_LASTED_REGIST_DATE,F_KEEP_EDU_STATUS,F_REGIST_REMARK,F_REGIST_ATTACHMENT
+			,F_IN_DATE,F_LEARNMAJOR,F_period F_reg_period,F_compulsory F_reg_compulsory,F_elective F_reg_elective,F_EFFICTIVEDATE,F_secondMajor,F_thirdMajor
+		FROM W_PERSONAL_QUALIFICATION WHERE F_SEAL_ID IS NOT NULL
+	</select>
+	
+	<select id="getAll" resultMap="PersonalQualification">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_QUALIFICATION_REGIST 
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getAllRegist" resultMap="PersonalQualification">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_QUALIFICATION_REGIST where  deleted = 0
+	</select>
+	
+	<select id="getAllPersonal"  parameterType="map" resultMap="PersonalQualification">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_QUALIFICATION_REGIST  
+		WHERE 
+		(switchs is NULL OR switchs = 1)  
+		AND deleted = 0
+		and F_CERTIFICATE_ID = #{certificateId}
+		and F_CERTIFICATE_TYPE = #{certificateType}
+	</select>
+	
+	<select id="getAllOccPersonal"  parameterType="map" resultMap="PersonalQualification">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_QUALIFICATION_REGIST  
+		WHERE 
+		(switchs is NULL OR switchs = 1) AND deleted = 0
+		and F_OCC_TYPE = #{certificateType}
+		and F_OCC_CERTIFICATE_ID = #{certificateId}
+	</select>
+	
+	
+	<update id="completeInfo" parameterType="map" >
+		update W_PERSONAL_QUALIFICATION set 
+		F_account = #{account},
+		F_sex = #{sex},
+		F_userId = #{userId},
+		F_xl = #{education},
+		F_learnMajor = #{major},
+		F_graduation_school = #{school}
+		where F_ID_number = #{idNumber}
+	</update>
+	
+	<update id="backInfo" parameterType="String" >
+		update W_PERSONAL_QUALIFICATION set 
+		F_account = null,
+		F_sex = null,
+		F_userId = null,
+		F_xl = null,
+		F_learnMajor = null,
+		F_graduation_school = null
+		where F_ID_number = #{idNumber}
+	</update>
+	
+	<select id="getByName"  parameterType="java.lang.String" resultMap="PersonalQualification">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_QUALIFICATION
+		where F_name = #{name}
+	</select>
+	
+	<select id="getOccByInfo"  parameterType="map" resultMap="PersonalQualification">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_QUALIFICATION_REGIST
+		where  deleted = 0
+		<if test="userName!=null">
+		and F_name = #{userName} 
+		</if>
+		<if test="userId!=null">
+		and F_userId = #{userId} 
+		</if>
+		<if test="type!=null">
+		and F_OCC_TYPE = #{type}
+		</if>
+		<if test="certificateId!=null"> 
+		and F_OCC_CERTIFICATE_ID = #{certificateId}
+		</if>
+	</select>
+	
+	<select id="getByLinkId"  parameterType="java.lang.Long" resultMap="PersonalQualification">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_QUALIFICATION_REGIST
+		where Id = #{linkId} and deleted = 0
+	</select>
+	
+	<select id="getByAccount" parameterType="map" resultMap="PersonalQualification">
+		select * from W_PERSONAL_QUALIFICATION_REGIST where F_ACCOUNT = #{account} and deleted = 0 order by F_REGIST_ID desc limit 1
+	</select>
+	
+	<select id="getAllDialog" parameterType="map" resultMap="PersonalQualification">
+		select * from W_PERSONAL_QUALIFICATION_REGIST 
+		<where>
+			deleted = 0 
+			<if test="account != null and account != ''">and F_ACCOUNT = #{account}</if>
+			<if test="registNull">and F_REGIST_ID is not null and F_REGIST_ID != ''</if>
+			<if test="sealNull">and F_SEAL_ID is not null and F_SEAL_ID != ''</if>
+		</where>
+	</select>
+	
+</mapper>

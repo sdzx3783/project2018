@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.bidding.BiddingOthers">
+	<resultMap id="BiddingOthers" type="com.hotent.makshi.model.bidding.BiddingOthers">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="others_name" column="F_OTHERS_NAME" jdbcType="VARCHAR"/>
+		<result property="others_evidence" column="F_OTHERS_EVIDENCE" jdbcType="VARCHAR"/>
+		<result property="others_content" column="F_OTHERS_CONTENT" jdbcType="VARCHAR"/>
+		<result property="others_applicant" column="F_OTHERS_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="others_appli_date" column="F_OTHERS_APPLI_DATE" jdbcType="DATE"/>
+		<result property="others_attachment" column="F_OTHERS_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.bidding.BiddingOthers" id="ExtBiddingOthers" extends="BiddingOthers">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_OTHERS_NAME,F_OTHERS_EVIDENCE,F_OTHERS_CONTENT,F_OTHERS_APPLICANT,F_OTHERS_APPLI_DATE,F_OTHERS_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_OTHERS_NAME,F_OTHERS_EVIDENCE,F_OTHERS_CONTENT,F_OTHERS_APPLICANT,F_OTHERS_APPLI_DATE,F_OTHERS_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+		finish = 1 AND deleted = 0
+			<if test="@Ognl@isNotEmpty(others_name)"> AND F_OTHERS_NAME  LIKE '%${others_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(others_evidence)"> AND F_OTHERS_EVIDENCE  LIKE '%${others_evidence}%'  </if>
+			<if test="@Ognl@isNotEmpty(others_content)"> AND F_OTHERS_CONTENT  LIKE '%${others_content}%'  </if>
+			<if test="@Ognl@isNotEmpty(others_applicant)"> AND F_OTHERS_APPLICANT  LIKE '%${others_applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(others_appli_date)"> AND F_OTHERS_APPLI_DATE  =#{others_appli_date} </if>
+			<if test="@Ognl@isNotEmpty(beginothers_appli_date)"> AND F_OTHERS_APPLI_DATE  >=#{beginothers_appli_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endothers_appli_date)"> AND F_OTHERS_APPLI_DATE <![CDATA[ <=#{endothers_appli_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(others_attachment)"> AND F_OTHERS_ATTACHMENT  LIKE '%${others_attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.bidding.BiddingOthers">
+		INSERT INTO W_BIDDING_OTHERS
+		(ID,
+		F_OTHERS_NAME,F_OTHERS_EVIDENCE,F_OTHERS_CONTENT,F_OTHERS_APPLICANT,F_OTHERS_APPLI_DATE,F_OTHERS_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{others_name,jdbcType=VARCHAR}, #{others_evidence,jdbcType=VARCHAR}, #{others_content,jdbcType=VARCHAR}, #{others_applicant,jdbcType=VARCHAR}, #{others_appli_date,jdbcType=DATE}, #{others_attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		UPDATE W_BIDDING_OTHERS SET
+		DELETED = 1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.bidding.BiddingOthers">
+		UPDATE W_BIDDING_OTHERS SET
+		F_OTHERS_NAME=#{others_name,jdbcType=VARCHAR},
+		F_OTHERS_EVIDENCE=#{others_evidence,jdbcType=VARCHAR},
+		F_OTHERS_CONTENT=#{others_content,jdbcType=VARCHAR},
+		F_OTHERS_APPLICANT=#{others_applicant,jdbcType=VARCHAR},
+		F_OTHERS_APPLI_DATE=#{others_appli_date,jdbcType=DATE},
+		F_OTHERS_ATTACHMENT=#{others_attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="BiddingOthers">
+		SELECT <include refid="columns"/>
+		FROM W_BIDDING_OTHERS
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="BiddingOthers">
+		SELECT <include refid="columns"/>
+		FROM W_BIDDING_OTHERS   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="BiddingOthers">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_BIDDING_OTHERS A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtBiddingOthers">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_OTHERS A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_OTHERS A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_OTHERS A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_OTHERS A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_OTHERS A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="BiddingOthers">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_BIDDING_OTHERS A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

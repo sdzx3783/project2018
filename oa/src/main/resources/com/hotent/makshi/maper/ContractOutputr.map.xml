@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.contract.ContractOutput">
+	<resultMap id="ContractOutput" type="com.hotent.makshi.model.contract.ContractOutput">
+		<result property="contractType" column="contractType" jdbcType="VARCHAR" />
+		<result property="contractNum" column="contractNum" jdbcType="VARCHAR" />
+		<result property="contractName" column="contractName" jdbcType="VARCHAR" />
+		<result property="totalInvestment" column="totalInvestment" jdbcType="DOUBLE" />
+		<result property="theOutput" column="monthOut" jdbcType="VARCHAR" />
+		<result property="firstParty" column="firstParty" jdbcType="VARCHAR" />
+		<result property="department" column="department" jdbcType="VARCHAR" />
+		<result property="projectDirector" column="projectDirector" jdbcType="VARCHAR" />
+		<result property="projectLeader" column="projectLeader" jdbcType="VARCHAR" />
+		<result property="sesonOne" column="sesonOne" jdbcType="DOUBLE" />
+		<result property="sesonTwo" column="sesonTwo" jdbcType="DOUBLE" />
+		<result property="sesonThree" column="sesonThree" jdbcType="DOUBLE" />
+		<result property="sesonFour" column="sesonFour" jdbcType="DOUBLE" />
+		<result property="yearPut" column="yearPut" jdbcType="DOUBLE" />
+		<result property="contractHandler" column="contractHandler" jdbcType="VARCHAR" />
+		<result property="Id" column="ID" jdbcType="NUMERIC" />
+	</resultMap>
+	<select id="getAll" parameterType="map" resultMap="ContractOutput">
+	select * from(
+		select *,(sesonOne+sesonTwo+sesonThree+sesonFour) yearPut
+		from(
+		select ID,
+			GREATEST(  datediff(
+							(LEAST(STR_TO_DATE(concat(#{selectYear},'-03-30'),'%Y-%m-%d'),last_day(F_end_time))),
+							(GREATEST(STR_TO_DATE(concat(#{selectYear},'-01-01'),'%Y-%m-%d'),date_add(F_start_time, interval - day(F_start_time) + 1 day)))
+					  ) div 28,0
+				)*monthOut sesonOne,
+			GREATEST(  datediff(
+							(LEAST(STR_TO_DATE(concat(#{selectYear},'-06-30'),'%Y-%m-%d'),last_day(F_end_time))),
+							(GREATEST(STR_TO_DATE(concat(#{selectYear},'-04-01'),'%Y-%m-%d'),date_add(F_start_time, interval - day(F_start_time) + 1 day)))
+					  ) div 28,0
+				)*monthOut sesonTwo,
+			GREATEST(  datediff(
+			
+							(LEAST(STR_TO_DATE(concat(#{selectYear},'-09-30'),'%Y-%m-%d'),last_day(F_end_time))),
+							(GREATEST(STR_TO_DATE(concat(#{selectYear},'-07-01'),'%Y-%m-%d'),date_add(F_start_time, interval - day(F_start_time) + 1 day)))
+					  ) div 28,0
+				)*monthOut sesonThree,
+			GREATEST(  datediff(
+							(LEAST(STR_TO_DATE(concat(#{selectYear},'-12-31'),'%Y-%m-%d'),last_day(F_end_time))),
+							(GREATEST(STR_TO_DATE(concat(#{selectYear},'-10-01'),'%Y-%m-%d'),date_add(F_start_time, interval - day(F_start_time) + 1 day)))
+					  ) div 28,0
+				)*monthOut sesonFour,
+				<if test="selectMonth!=null">
+		CASE WHEN
+			LEAST(STR_TO_DATE(concat(#{selectYear},'-${selectMonth}'),'%Y-%m'),F_end_time) = STR_TO_DATE(concat(#{selectYear}, '-${selectMonth}'),'%Y-%m')
+			AND
+			GREATEST(STR_TO_DATE(concat(#{selectYear},'-${selectMonth}'),'%Y-%m'),STR_TO_DATE(F_start_time,'%Y-%m')) = STR_TO_DATE(concat(#{selectYear}, '-${selectMonth}'),'%Y-%m')
+		THEN monthOut
+		ELSE 0.0
+		END monthOut,
+			</if>
+		contractType,
+		contractNum,
+		F_start_time,
+		F_end_time,
+		contractName,
+		case when totalInvestment is null then 0.0
+		else totalInvestment end totalInvestment,
+		firstParty,
+		department,
+		projectDirector,
+		projectLeader,
+	 	contractHandler
+		from
+		(
+			SELECT ID,F_contract_department department,CASE WHEN F_contract_money/TIMESTAMPDIFF(MONTH,concat(date_format(LAST_DAY(F_start_time),'%Y-%m-'),'01'),concat(date_format(LAST_DAY(DATE_add(F_end_time,INTERVAL 1 MONTH)),'%Y-%m-'),'01')) IS NULL THEN 0.0 ELSE
+					 F_contract_money/TIMESTAMPDIFF(MONTH,concat(date_format(LAST_DAY(F_start_time),'%Y-%m-'),'01'),concat(date_format(LAST_DAY(DATE_add(F_end_time,INTERVAL 1 MONTH)),'%Y-%m-'),'01')) END monthOut,F_start_time,F_end_time, F_contracttype contractType,F_contract_name contractName,
+					 F_contract_num contractNum,F_total_investment totalInvestment,F_first_party firstParty,F_project_director projectDirector,F_project_leader projectLeader,
+					 F_contract_handler contractHandler
+			FROM w_contractinfo
+			WHERE F_start_time is NOT NULL AND F_end_time is NOT NULL
+			AND Year(F_start_time)&lt;=#{selectYear}
+			AND Year(F_end_time)&gt;=#{selectYear}
+			<if test="department!=null">
+			AND F_contract_department = "${department}"
+			</if>
+			)t 	WHERE contractType &lt;&gt; '采购合同'
+			)z
+			union
+			SELECT 
+			sum(sesonOne) totalSesonOne,sum(sesonTwo) totalSesonTwo,sum(sesonThree) totalSesonThree,sum(sesonFour) totalSesonFour,<if test="selectMonth!=null">sum(monthOut),</if>'合计',null,null,null,null,null,sum(totalInvestment),null,null,null,null,null,sum(yearPut) totalYearPut
+			FROM(
+				select *,(sesonOne+sesonTwo+sesonThree+sesonFour) yearPut
+		from(
+		select ID,
+			GREATEST(  datediff(
+							(LEAST(STR_TO_DATE(concat(#{selectYear},'-03-30'),'%Y-%m-%d'),last_day(F_end_time))),
+							(GREATEST(STR_TO_DATE(concat(#{selectYear},'-01-01'),'%Y-%m-%d'),date_add(F_start_time, interval - day(F_start_time) + 1 day)))
+					  ) div 28,0
+				)*monthOut sesonOne,
+			GREATEST(  datediff(
+							(LEAST(STR_TO_DATE(concat(#{selectYear},'-06-30'),'%Y-%m-%d'),last_day(F_end_time))),
+							(GREATEST(STR_TO_DATE(concat(#{selectYear},'-04-01'),'%Y-%m-%d'),date_add(F_start_time, interval - day(F_start_time) + 1 day)))
+					  ) div 28,0
+				)*monthOut sesonTwo,
+			GREATEST(  datediff(
+			
+							(LEAST(STR_TO_DATE(concat(#{selectYear},'-09-30'),'%Y-%m-%d'),last_day(F_end_time))),
+							(GREATEST(STR_TO_DATE(concat(#{selectYear},'-07-01'),'%Y-%m-%d'),date_add(F_start_time, interval - day(F_start_time) + 1 day)))
+					  ) div 28,0
+				)*monthOut sesonThree,
+			GREATEST(  datediff(
+							(LEAST(STR_TO_DATE(concat(#{selectYear},'-12-31'),'%Y-%m-%d'),last_day(F_end_time))),
+							(GREATEST(STR_TO_DATE(concat(#{selectYear},'-10-01'),'%Y-%m-%d'),date_add(F_start_time, interval - day(F_start_time) + 1 day)))
+					  ) div 28,0
+				)*monthOut sesonFour,
+				<if test="selectMonth!=null">
+		CASE WHEN
+			LEAST(STR_TO_DATE(concat(#{selectYear},'-${selectMonth}'),'%Y-%m'),F_end_time) = STR_TO_DATE(concat(#{selectYear}, '-${selectMonth}'),'%Y-%m')
+			AND
+			GREATEST(STR_TO_DATE(concat(#{selectYear},'-${selectMonth}'),'%Y-%m'),STR_TO_DATE(F_start_time,'%Y-%m')) = STR_TO_DATE(concat(#{selectYear}, '-${selectMonth}'),'%Y-%m')
+		THEN monthOut
+		ELSE 0.0
+		END monthOut,
+			</if>
+		contractType,
+		contractNum,
+		F_start_time,
+		F_end_time,
+		contractName,
+		case when totalInvestment is null then 0.0
+		else totalInvestment end totalInvestment,
+		firstParty,
+		department,
+		projectDirector,
+		projectLeader,
+	 	contractHandler
+		from
+		(
+			SELECT ID,F_contract_department department,CASE WHEN F_contract_money/TIMESTAMPDIFF(MONTH,concat(date_format(LAST_DAY(F_start_time),'%Y-%m-'),'01'),concat(date_format(LAST_DAY(DATE_add(F_end_time,INTERVAL 1 MONTH)),'%Y-%m-'),'01')) IS NULL THEN 0.0 ELSE
+					 F_contract_money/TIMESTAMPDIFF(MONTH,concat(date_format(LAST_DAY(F_start_time),'%Y-%m-'),'01'),concat(date_format(LAST_DAY(DATE_add(F_end_time,INTERVAL 1 MONTH)),'%Y-%m-'),'01')) END monthOut,F_start_time,F_end_time, F_contracttype contractType,F_contract_name contractName,
+					 F_contract_num contractNum,F_total_investment totalInvestment,F_first_party firstParty,F_project_director projectDirector,F_project_leader projectLeader,
+					 F_contract_handler contractHandler
+			FROM w_contractinfo
+			WHERE F_start_time is NOT NULL AND F_end_time is NOT NULL
+			AND Year(F_start_time)&lt;=#{selectYear}
+			AND Year(F_end_time)&gt;=#{selectYear}
+			<if test="department!=null">
+			AND F_contract_department = "${department}"
+			</if>
+			)t 	WHERE contractType &lt;&gt; '采购合同'
+			)z
+			) su
+			) st 
+		<if test="contractTypes.size>0">
+			WHERE  contractType in	
+			<foreach collection="contractTypes" index="index" item="contractTypes" open="(" separator="," close=")">
+	            #{contractTypes}
+	        </foreach>
+        </if>
+       
+	</select>
+</mapper>

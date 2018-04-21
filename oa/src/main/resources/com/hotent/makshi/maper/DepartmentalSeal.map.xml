@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.seal.DepartmentalSeal">
+	<resultMap id="DepartmentalSeal" type="com.hotent.makshi.model.seal.DepartmentalSeal">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="applyerID" column="F_APPLYERID" jdbcType="VARCHAR"/>
+		<result property="project_leaderID" column="F_PROJECT_LEADERID" jdbcType="VARCHAR"/>
+		<result property="job_id" column="F_JOB_ID" jdbcType="VARCHAR"/>
+		<result property="applyer" column="F_APPLYER" jdbcType="VARCHAR"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="use_time" column="F_USE_TIME" jdbcType="DATE"/>
+		<result property="contract_id" column="F_CONTRACT_ID" jdbcType="VARCHAR"/>
+		<result property="contract_name" column="F_CONTRACT_NAME" jdbcType="VARCHAR"/>
+		<result property="material_content" column="F_MATERIAL_CONTENT" jdbcType="VARCHAR"/>
+		<result property="copies" column="F_COPIES" jdbcType="NUMERIC"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="project_leader" column="F_PROJECT_LEADER" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_APPLYERID,F_PROJECT_LEADERID,F_JOB_ID,F_APPLYER,F_TYPE,F_USE_TIME,F_CONTRACT_ID,F_CONTRACT_NAME,F_MATERIAL_CONTENT,F_COPIES,F_ATTACHMENT,F_PROJECT_LEADER
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPLYERID,F_PROJECT_LEADERID,F_JOB_ID,F_APPLYER,F_TYPE,F_USE_TIME,F_CONTRACT_ID,F_CONTRACT_NAME,F_MATERIAL_CONTENT,F_COPIES,F_ATTACHMENT,F_PROJECT_LEADER
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+		F_isFinished = 1
+			<if test="@Ognl@isNotEmpty(applyerID)"> AND F_APPLYERID  LIKE '%${applyerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_leaderID)"> AND F_PROJECT_LEADERID  LIKE '%${project_leaderID}%'  </if>
+			<if test="@Ognl@isNotEmpty(job_id)"> AND F_JOB_ID  LIKE '%${job_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(applyer)"> AND F_APPLYER  LIKE '%${applyer}%'  </if>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  LIKE '%${type}%'  </if>
+			<if test="@Ognl@isNotEmpty(use_time)"> AND F_USE_TIME  =#{use_time} </if>
+			<if test="@Ognl@isNotEmpty(beginuse_time)"> AND F_USE_TIME  >=#{beginuse_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(enduse_time)"> AND F_USE_TIME <![CDATA[ <=#{enduse_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(contract_id)"> AND F_CONTRACT_ID  LIKE '%${contract_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(contract_name)"> AND F_CONTRACT_NAME  LIKE '%${contract_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(material_content)"> AND F_MATERIAL_CONTENT  LIKE '%${material_content}%'  </if>
+			<if test="@Ognl@isNotEmpty(copies)"> AND F_COPIES  =#{copies} </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_leader)"> AND F_PROJECT_LEADER  LIKE '%${project_leader}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.seal.DepartmentalSeal">
+		INSERT INTO W_DEPARTMENTAL_SEAL
+		(ID,
+		F_APPLYERID,F_PROJECT_LEADERID,F_JOB_ID,F_APPLYER,F_TYPE,F_USE_TIME,F_CONTRACT_ID,F_CONTRACT_NAME,F_MATERIAL_CONTENT,F_COPIES,F_ATTACHMENT,F_PROJECT_LEADER)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{applyerID,jdbcType=VARCHAR}, #{project_leaderID,jdbcType=VARCHAR}, #{job_id,jdbcType=VARCHAR}, #{applyer,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{use_time,jdbcType=DATE}, #{contract_id,jdbcType=VARCHAR}, #{contract_name,jdbcType=VARCHAR}, #{material_content,jdbcType=VARCHAR}, #{copies,jdbcType=NUMERIC}, #{attachment,jdbcType=VARCHAR}, #{project_leader,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_DEPARTMENTAL_SEAL 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.seal.DepartmentalSeal">
+		UPDATE W_DEPARTMENTAL_SEAL SET
+		F_APPLYERID=#{applyerID,jdbcType=VARCHAR},
+		F_PROJECT_LEADERID=#{project_leaderID,jdbcType=VARCHAR},
+		F_JOB_ID=#{job_id,jdbcType=VARCHAR},
+		F_APPLYER=#{applyer,jdbcType=VARCHAR},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_USE_TIME=#{use_time,jdbcType=DATE},
+		F_CONTRACT_ID=#{contract_id,jdbcType=VARCHAR},
+		F_CONTRACT_NAME=#{contract_name,jdbcType=VARCHAR},
+		F_MATERIAL_CONTENT=#{material_content,jdbcType=VARCHAR},
+		F_COPIES=#{copies,jdbcType=NUMERIC},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_PROJECT_LEADER=#{project_leader,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="DepartmentalSeal">
+		SELECT <include refid="columns"/>
+		FROM W_DEPARTMENTAL_SEAL
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="DepartmentalSeal">
+		SELECT <include refid="columns"/>
+		FROM W_DEPARTMENTAL_SEAL   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

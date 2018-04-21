@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.worksheet.WorkCount">
+	<resultMap id="WorkCount" type="com.hotent.makshi.model.worksheet.WorkCount">
+		<id property="fullnameID" column="F_FULLNAMEID" jdbcType="VARCHAR"/>
+		<id property="sdate" column="F_SDATE" jdbcType="DATE"/>
+		<result property="orgID" column="F_orgID" jdbcType="VARCHAR"/>
+		<result property="fullname" column="F_FULLNAME" jdbcType="VARCHAR"/>
+		<result property="org" column="F_ORG" jdbcType="VARCHAR"/>
+		<result property="year" column="F_YEAR" jdbcType="INTEGER"/>
+		<result property="workDay" column="F_WORKDAY" jdbcType="INTEGER"/>
+		<result property="clockCount" column="F_CLOCKCOUNT" jdbcType="DOUBLE"/>
+		<result property="reClockCount" column="F_RECLOCKCOUNT" jdbcType="DOUBLE"/>
+		<result property="leaveCount" column="F_LEAVECOUNT" jdbcType="DOUBLE"/>
+		<result property="createTime" column="F_CREATE_TIME" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		F_FULLNAME,F_FULLNAMEID,F_ORG,F_ORGID,F_YEAR,F_SDATE,F_WORKDAY,F_CLOCKCOUNT,F_RECLOCKCOUNT,F_LEAVECOUNT,F_CREATE_TIME
+	</sql>
+	<sql id="wfColumns">
+		F_FULLNAME,F_FULLNAMEID,F_ORG,F_ORGID,F_YEAR,F_SDATE,F_WORKDAY,F_CLOCKCOUNT,F_RECLOCKCOUNT,F_LEAVECOUNT,F_CREATE_TIME
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(fullnameID)"> AND F_FULLNAMEID =#{fullnameID}  </if>
+			<if test="@Ognl@isNotEmpty(orgID)"> AND F_ORGID =#{orgID}  </if>
+			<if test="@Ognl@isNotEmpty(fullname)"> AND F_FULLNAME  LIKE '%${fullname}%'  </if>
+			<if test="@Ognl@isNotEmpty(org)"> AND F_ORG  LIKE '%${org}%'</if>
+			<if test="@Ognl@isNotEmpty(year)"> AND F_YEAR =#{year}</if>
+			<if test="@Ognl@isNotEmpty(sdate)"> AND F_SDATE =#{sdate}</if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.worksheet.WorkCount">
+		INSERT INTO W_WORK_COUNT
+		(F_FULLNAMEID,F_ORGID,F_FULLNAME,F_ORG,F_YEAR,F_SDATE,F_WORKDAY,F_CLOCKCOUNT,F_RECLOCKCOUNT,F_LEAVECOUNT,F_CREATE_TIME)
+		VALUES
+		(#{fullnameID,jdbcType=VARCHAR}, #{orgID,jdbcType=VARCHAR},#{fullname,jdbcType=VARCHAR},
+		  #{org,jdbcType=VARCHAR}, #{year,jdbcType=INTEGER}, #{sdate}, #{workDay,jdbcType=INTEGER}, #{clockCount,jdbcType=DOUBLE},
+		  #{reClockCount,jdbcType=DOUBLE},#{leaveCount,jdbcType=DOUBLE},#{createTime}
+		  )
+	</insert>
+	
+	<delete id="delById">
+		DELETE FROM W_WORK_COUNT 
+		WHERE F_FULLNAMEID=#{fullnameID} and F_SDATE=#{sdate}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.worksheet.WorkCount">
+		UPDATE W_WORK_COUNT SET
+		F_FULLNAMEID=#{fullnameID,JDBCTYPE=VARCHAR},
+		F_ORGID=#{orgID,JDBCTYPE=VARCHAR},
+		F_FULLNAME=#{fullname,JDBCTYPE=VARCHAR},
+		F_ORG=#{org,JDBCTYPE=VARCHAR},
+		F_YEAR=#{year,JDBCTYPE=INTEGER},
+		F_SDATE=#{sdate},
+		F_WORKDAY=#{workDay},
+		F_CLOCKCOUNT=#{clockCount},
+		F_RECLOCKCOUNT=#{reClockCount},
+		F_LEAVECOUNT=#{leaveCount},
+		F_CREATE_TIME=#{createTime},
+		WHERE
+		WHERE F_FULLNAMEID=#{fullnameID} and F_SDATE=#{sdate}
+	</update>
+	
+		    
+	<select id="getById" resultMap="WorkCount">
+		SELECT <include refid="columns"/>
+		FROM W_WORK_COUNT
+		WHERE
+		WHERE F_FULLNAMEID=#{fullnameID} and F_SDATE=#{sdate}
+	</select>
+	
+	<select id="getAll" resultMap="WorkCount">
+		SELECT <include refid="columns"/>
+		FROM W_WORK_COUNT   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	<insert id="replaceByMap" parameterType="Map">
+		REPLACE into W_WORK_COUNT(
+			F_FULLNAME,F_FULLNAMEID,F_ORG,F_ORGID,F_YEAR,F_SDATE,F_WORKDAY,F_CLOCKCOUNT,F_RECLOCKCOUNT,F_LEAVECOUNT,F_CREATE_TIME
+		) 
+		values
+		<foreach item="item" separator="," collection="countList"> 
+			(#{item.fullname},#{item.fullnameID},#{item.org},#{item.orgID},#{item.year},#{item.sdate},#{item.workDay},
+			#{item.clockCount},#{item.reClockCount},#{item.leaveCount},#{item.createTime})
+		</foreach>
+	</insert>
+	
+	
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.inhouseregistration.InHouseRegistration">
+	<resultMap id="InHouseRegistration" type="com.hotent.makshi.model.inhouseregistration.InHouseRegistration">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="house_id" column="F_HOUSE_ID" jdbcType="VARCHAR"/>
+		<result property="address" column="F_ADDRESS" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_HOUSE_ID,F_ADDRESS
+	</sql>
+	<sql id="wfColumns">
+		ID,F_HOUSE_ID,F_ADDRESS
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(house_id)"> AND F_HOUSE_ID  LIKE '%${house_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(address)"> AND F_ADDRESS  LIKE '%${address}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.inhouseregistration.InHouseRegistration">
+		INSERT INTO W_IN_HOUSE_REGISTRATION
+		(ID,
+		F_HOUSE_ID,F_ADDRESS)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{house_id,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_IN_HOUSE_REGISTRATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.inhouseregistration.InHouseRegistration">
+		UPDATE W_IN_HOUSE_REGISTRATION SET
+		F_HOUSE_ID=#{house_id,jdbcType=VARCHAR},
+		F_ADDRESS=#{address,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="InHouseRegistration">
+		SELECT <include refid="columns"/>
+		FROM W_IN_HOUSE_REGISTRATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getByHouseId" parameterType="map" resultMap="InHouseRegistration">
+		SELECT <include refid="columns"/>
+		FROM W_IN_HOUSE_REGISTRATION
+		WHERE
+		F_house_id=#{houseId}
+	</select>
+	
+	<select id="getAll" resultMap="InHouseRegistration">
+		SELECT <include refid="columns"/>
+		FROM W_IN_HOUSE_REGISTRATION 
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.qualification.AllQualificationLoans">
+	<resultMap id="AllQualificationLoans" type="com.hotent.makshi.model.qualification.AllQualificationLoans">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="orgID" column="F_ORGID" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="org" column="F_ORG" jdbcType="VARCHAR"/>
+		<result property="appDate" column="F_APPDATE" jdbcType="DATE"/>
+		<result property="usedate" column="F_USEDATE" jdbcType="DATE"/>
+		<result property="exbacktime" column="F_EXBACKTIME" jdbcType="DATE"/>
+		<result property="tableBpmRemark" column="F_TABLEBPMREMARK" jdbcType="VARCHAR"/>
+		<result property="abstracts" column="F_ABSTRACT" jdbcType="VARCHAR"/>
+		<result property="file" column="F_FILE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_APPLICANTID,F_ORGID,F_APPLICANT,F_ORG,F_APPDATE,F_USEDATE,F_EXBACKTIME,F_TABLEBPMREMARK,F_ABSTRACT,F_FILE
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPLICANTID,F_ORGID,F_APPLICANT,F_ORG,F_APPDATE,F_USEDATE,F_EXBACKTIME,F_TABLEBPMREMARK,F_ABSTRACT,F_FILE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(orgID)"> AND F_ORGID  LIKE '%${orgID}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(org)"> AND F_ORG  LIKE '%${org}%'  </if>
+			<if test="@Ognl@isNotEmpty(appDate)"> AND F_APPDATE  =#{appDate} </if>
+			<if test="@Ognl@isNotEmpty(beginappDate)"> AND F_APPDATE  >=#{beginappDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endappDate)"> AND F_APPDATE <![CDATA[ <=#{endappDate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(usedate)"> AND F_USEDATE  =#{usedate} </if>
+			<if test="@Ognl@isNotEmpty(beginusedate)"> AND F_USEDATE  >=#{beginusedate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endusedate)"> AND F_USEDATE <![CDATA[ <=#{endusedate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(exbacktime)"> AND F_EXBACKTIME  =#{exbacktime} </if>
+			<if test="@Ognl@isNotEmpty(beginexbacktime)"> AND F_EXBACKTIME  >=#{beginexbacktime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endexbacktime)"> AND F_EXBACKTIME <![CDATA[ <=#{endexbacktime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(tableBpmRemark)"> AND F_TABLEBPMREMARK  LIKE '%${tableBpmRemark}%'  </if>
+			<if test="@Ognl@isNotEmpty(abstract)"> AND F_ABSTRACT  LIKE '%${abstract}%'  </if>
+			<if test="@Ognl@isNotEmpty(file)"> AND F_FILE  LIKE '%${file}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.qualification.AllQualificationLoans">
+		INSERT INTO W_ALL_QUALIFICATION_LOANS
+		(ID,
+		F_APPLICANTID,F_ORGID,F_APPLICANT,F_ORG,F_APPDATE,F_USEDATE,F_EXBACKTIME,F_TABLEBPMREMARK,F_ABSTRACT,F_FILE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{applicantID,jdbcType=VARCHAR}, #{orgID,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{org,jdbcType=VARCHAR}, #{appDate,jdbcType=DATE}, #{usedate,jdbcType=DATE}, #{exbacktime,jdbcType=DATE}, #{tableBpmRemark,jdbcType=VARCHAR}, #{abstract,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_ALL_QUALIFICATION_LOANS 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.qualification.AllQualificationLoans">
+		UPDATE W_ALL_QUALIFICATION_LOANS SET
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_ORGID=#{orgID,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_ORG=#{org,jdbcType=VARCHAR},
+		F_APPDATE=#{appDate,jdbcType=DATE},
+		F_USEDATE=#{usedate,jdbcType=DATE},
+		F_EXBACKTIME=#{exbacktime,jdbcType=DATE},
+		F_TABLEBPMREMARK=#{tableBpmRemark,jdbcType=VARCHAR},
+		F_ABSTRACT=#{abstract,jdbcType=VARCHAR},
+		F_FILE=#{file,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="AllQualificationLoans">
+		SELECT <include refid="columns"/>
+		FROM W_ALL_QUALIFICATION_LOANS
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="AllQualificationLoans">
+		SELECT <include refid="columns"/>
+		FROM W_ALL_QUALIFICATION_LOANS   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

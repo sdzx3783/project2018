@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.selfcheck.WorkSelfcheckMonthItem">
+	<resultMap id="BaseResultMap" type="com.hotent.makshi.model.selfcheck.WorkSelfcheckMonthItem">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="main_id" property="mainId" jdbcType="BIGINT" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="requires" property="requires" jdbcType="VARCHAR" />
+		<result column="checks" property="checks" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, main_id, content, requires, checks, status
+	</sql>
+	<update id="delAllByMainId" parameterType="map">
+		delete from w_work_selfcheck_month_item where main_id = #{mainId}
+	</update>
+   <insert id="add" parameterType="com.hotent.makshi.model.selfcheck.WorkSelfcheckMonthItem" >
+    insert into w_work_selfcheck_month_item (id, main_id, content, 
+      requires, checks
+      )
+    values (#{id,jdbcType=BIGINT}, #{mainId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
+      #{requires,jdbcType=VARCHAR}, #{checks,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <select id="getAllByMainId" parameterType="map" resultMap="BaseResultMap">
+  	 select * from w_work_selfcheck_month_item where main_id = #{mainId}
+  </select>
+  
+</mapper>

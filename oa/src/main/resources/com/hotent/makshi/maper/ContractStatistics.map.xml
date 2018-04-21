@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.contract.ContractStatistics">
+	<resultMap id="ContractStatistics"
+		type="com.hotent.makshi.model.contract.ContractStatistics">
+		<result property="singingYear" column="singingYear" jdbcType="VARCHAR" />
+		<result property="allNumber" column="allNumber" jdbcType="VARCHAR" />
+		<result property="allMoney" column="allMoney" jdbcType="DOUBLE" />
+		<result property="cgNumber" column="cgNumber" jdbcType="VARCHAR" />
+		<result property="cgMoney" column="cgMoney" jdbcType="DOUBLE" />
+		<result property="fcgNumber" column="fcgNumber" jdbcType="VARCHAR" />
+		<result property="fcgMoney" column="fcgMoney" jdbcType="DOUBLE" />
+	</resultMap>
+	<select id="getAllContractStatistics" parameterType="java.util.List" resultMap="ContractStatistics">
+		SELECT
+			singingYear,
+			allNumber,
+			allMoney,
+			CASE WHEN cgNumber IS NULL THEN 0 ELSE  cgNumber end cgNumber,
+			CASE WHEN cgMoney IS NULL THEN 0.0 ELSE  cgMoney end cgMoney,
+			CASE WHEN fcgNumber IS NULL THEN 0 ELSE  fcgNumber end fcgNumber,
+			CASE WHEN fcgMoney IS NULL THEN 0.0 ELSE  fcgMoney end fcgMoney
+		FROM
+			(
+				SELECT
+					CAST(YEAR(F_singing_time) AS CHAR(4)) singingYear,
+					count(*) allNumber,
+					CAST(
+						sum(F_contract_money) AS DECIMAL (18, 4)
+					) allMoney
+				FROM
+					w_contractinfo
+				WHERE
+					F_singing_time IS NOT NULL
+				AND YEAR (F_singing_time) in
+				<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+				#{item} 
+				</foreach>
+				GROUP BY
+					YEAR (F_singing_time)
+				ORDER BY
+					YEAR (F_singing_time) DESC
+			) a left join
+			(
+				SELECT
+					CAST(YEAR(F_singing_time) AS CHAR(4)) cgSingingYear,
+					count(*) cgNumber,
+					CAST(
+						sum(F_contract_money) AS DECIMAL (18, 4)
+					) cgMoney
+				FROM
+					w_contractinfo
+				WHERE
+					F_singing_time IS NOT NULL
+				AND F_contract_type = 1
+				AND YEAR (F_singing_time) in
+				<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+				#{item} 
+				</foreach>
+				GROUP BY
+					YEAR (F_singing_time)
+				ORDER BY
+					YEAR (F_singing_time) DESC
+			) b 
+			on	a.singingYear = b.cgsingingYear
+			left join
+			(
+				SELECT
+					CAST(YEAR(F_singing_time) AS CHAR(4)) fcgSingingYear,
+					count(*) fcgNumber,
+					CAST(
+						sum(F_contract_money) AS DECIMAL (18, 4)
+					) fcgMoney
+				FROM
+					w_contractinfo
+				WHERE
+					F_singing_time IS NOT NULL
+				AND F_contract_type = 0 
+				AND YEAR (F_singing_time) in
+				<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+				#{item} 
+				</foreach>
+				GROUP BY
+					YEAR (F_singing_time)
+				ORDER BY
+					YEAR (F_singing_time) DESC
+			) c
+		on
+		 a.singingYear = c.fcgsingingYear
+		UNION
+		SELECT 
+		'合计',sum(allNumber),sum(allMoney),sum(cgNumber),sum(cgMoney),sum(fcgNumber),sum(fcgMoney)
+		FROM
+		(SELECT
+			singingYear,
+			allNumber,
+			allMoney,
+			CASE WHEN cgNumber IS NULL THEN 0 ELSE  cgNumber end cgNumber,
+			CASE WHEN cgMoney IS NULL THEN 0.0 ELSE  cgMoney end cgMoney,
+			CASE WHEN fcgNumber IS NULL THEN 0 ELSE  fcgNumber end fcgNumber,
+			CASE WHEN fcgMoney IS NULL THEN 0.0 ELSE  fcgMoney end fcgMoney
+		FROM
+			(
+				SELECT
+					CAST(YEAR(F_singing_time) AS CHAR(4)) singingYear,
+					count(*) allNumber,
+					CAST(
+						sum(F_contract_money) AS DECIMAL (18, 4)
+					) allMoney
+				FROM
+					w_contractinfo
+				WHERE
+					F_singing_time IS NOT NULL 
+					AND YEAR (F_singing_time) in
+					<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+					#{item} 
+					</foreach>
+				GROUP BY
+					YEAR (F_singing_time)
+				ORDER BY
+					YEAR (F_singing_time) DESC
+			) a left join
+			(
+				SELECT
+					CAST(YEAR(F_singing_time) AS CHAR(4)) cgSingingYear,
+					count(*) cgNumber,
+					CAST(
+						sum(F_contract_money) AS DECIMAL (18, 4)
+					) cgMoney
+				FROM
+					w_contractinfo
+				WHERE
+					F_singing_time IS NOT NULL 
+					AND YEAR (F_singing_time) in
+					<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+					#{item} 
+					</foreach>
+				AND F_contract_type = 1
+				GROUP BY
+					YEAR (F_singing_time)
+				ORDER BY
+					YEAR (F_singing_time) DESC
+			) b
+			on	a.singingYear = b.cgsingingYear
+			left join
+			(
+				SELECT
+					CAST(YEAR(F_singing_time) AS CHAR(4)) fcgSingingYear,
+					count(*) fcgNumber,
+					CAST(
+						sum(F_contract_money) AS DECIMAL (18, 4)
+					) fcgMoney
+				FROM
+					w_contractinfo
+				WHERE
+					F_singing_time IS NOT NULL
+				AND F_contract_type = 0 
+				AND YEAR (F_singing_time) in
+					<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+					#{item} 
+					</foreach>
+				GROUP BY
+					YEAR (F_singing_time)
+				ORDER BY
+					YEAR (F_singing_time) DESC
+			) c
+		on
+		a.singingYear = c.fcgsingingYear)t
+		
+	</select>
+</mapper>

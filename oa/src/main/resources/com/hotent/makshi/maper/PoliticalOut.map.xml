@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hr.PoliticalOut">
+	<resultMap id="PoliticalOut" type="com.hotent.makshi.model.hr.PoliticalOut">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="appi_person" column="F_APPI_PERSON" jdbcType="VARCHAR"/>
+		<result property="appi_date" column="F_APPI_DATE" jdbcType="DATE"/>
+		<result property="user_name" column="F_USER_NAME" jdbcType="VARCHAR"/>
+		<result property="sex" column="F_SEX" jdbcType="VARCHAR"/>
+		<result property="belong_branch" column="F_BELONG_BRANCH" jdbcType="VARCHAR"/>
+		<result property="to_branch" column="F_TO_BRANCH" jdbcType="VARCHAR"/>
+		<result property="pay_month" column="F_PAY_MONTH" jdbcType="VARCHAR"/>
+		<result property="branch_point" column="F_BRANCH_POINT" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_APPI_PERSON,F_APPI_DATE,F_USER_NAME,F_SEX,F_BELONG_BRANCH,F_TO_BRANCH,F_PAY_MONTH,F_BRANCH_POINT,F_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPI_PERSON,F_APPI_DATE,F_USER_NAME,F_SEX,F_BELONG_BRANCH,F_TO_BRANCH,F_PAY_MONTH,F_BRANCH_POINT,F_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(appi_person)"> AND F_APPI_PERSON  LIKE '%${appi_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(appi_date)"> AND F_APPI_DATE  =#{appi_date} </if>
+			<if test="@Ognl@isNotEmpty(beginappi_date)"> AND F_APPI_DATE  >=#{beginappi_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endappi_date)"> AND F_APPI_DATE <![CDATA[ <=#{endappi_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(user_name)"> AND F_USER_NAME  LIKE '%${user_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(sex)"> AND F_SEX  LIKE '%${sex}%'  </if>
+			<if test="@Ognl@isNotEmpty(belong_branch)"> AND F_BELONG_BRANCH  LIKE '%${belong_branch}%'  </if>
+			<if test="@Ognl@isNotEmpty(to_branch)"> AND F_TO_BRANCH  LIKE '%${to_branch}%'  </if>
+			<if test="@Ognl@isNotEmpty(pay_month)"> AND F_PAY_MONTH  LIKE '%${pay_month}%'  </if>
+			<if test="@Ognl@isNotEmpty(branch_point)"> AND F_BRANCH_POINT  LIKE '%${branch_point}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.hr.PoliticalOut">
+		INSERT INTO W_POLITICAL_OUT
+		(ID,
+		F_APPI_PERSON,F_APPI_DATE,F_USER_NAME,F_SEX,F_BELONG_BRANCH,F_TO_BRANCH,F_PAY_MONTH,F_BRANCH_POINT,F_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{appi_person,jdbcType=VARCHAR}, #{appi_date,jdbcType=DATE}, #{user_name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{belong_branch,jdbcType=VARCHAR}, #{to_branch,jdbcType=VARCHAR}, #{pay_month,jdbcType=VARCHAR}, #{branch_point,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_POLITICAL_OUT 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hr.PoliticalOut">
+		UPDATE W_POLITICAL_OUT SET
+		F_APPI_PERSON=#{appi_person,jdbcType=VARCHAR},
+		F_APPI_DATE=#{appi_date,jdbcType=DATE},
+		F_USER_NAME=#{user_name,jdbcType=VARCHAR},
+		F_SEX=#{sex,jdbcType=VARCHAR},
+		F_BELONG_BRANCH=#{belong_branch,jdbcType=VARCHAR},
+		F_TO_BRANCH=#{to_branch,jdbcType=VARCHAR},
+		F_PAY_MONTH=#{pay_month,jdbcType=VARCHAR},
+		F_BRANCH_POINT=#{branch_point,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="PoliticalOut">
+		SELECT <include refid="columns"/>
+		FROM W_POLITICAL_OUT
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="PoliticalOut">
+		SELECT <include refid="columns"/>
+		FROM W_POLITICAL_OUT   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

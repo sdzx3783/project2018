@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.waterprotectpark.WeekPlan">
+	<resultMap id="WeekPlan" type="com.hotent.makshi.model.waterprotectpark.WeekPlan">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<!-- <result property="assessorsID" column="F_ASSESSORSID" jdbcType="VARCHAR"/> -->
+		<result property="assignersID" column="F_ASSIGNERSID" jdbcType="VARCHAR"/>
+		<result property="taskName" column="F_TASKNAME" jdbcType="VARCHAR"/>
+		<result property="assigners" column="F_ASSIGNERS" jdbcType="VARCHAR"/>
+		<result property="meeting_time" column="F_MEETING_TIME" jdbcType="DATE"/>
+		<result property="meeting_addr" column="F_MEETING_ADDR" jdbcType="VARCHAR"/>
+		<result property="assessors" column="F_ASSESSORS" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_ASSIGNERSID,F_TASKNAME,F_ASSIGNERS,F_MEETING_TIME,F_MEETING_ADDR,F_ASSESSORS
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_ASSIGNERSID,F_TASKNAME,F_ASSIGNERS,F_MEETING_TIME,F_MEETING_ADDR,F_ASSESSORS
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			
+			<if test="@Ognl@isNotEmpty(taskName)"> AND F_TASKNAME  LIKE '%${taskName}%'  </if>
+			<if test="@Ognl@isNotEmpty(assigners)"> AND F_ASSIGNERS  LIKE '%${assigners}%'  </if>
+			<if test="@Ognl@isNotEmpty(meeting_time)"> AND F_MEETING_TIME  =#{meeting_time} </if>
+			<if test="@Ognl@isNotEmpty(beginmeeting_time)"> AND F_MEETING_TIME  >=#{beginmeeting_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endmeeting_time)"> AND F_MEETING_TIME <![CDATA[ <=#{endmeeting_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(meeting_addr)"> AND F_MEETING_ADDR  LIKE '%${meeting_addr}%'  </if>
+			<if test="@Ognl@isNotEmpty(assessors)"> AND F_ASSESSORS  LIKE '%${assessors}%'  </if>
+			and F_ISDELETE=0
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.waterprotectpark.WeekPlan">
+		INSERT INTO W_WEEK_PLAN_SBB
+		(ID,REFID,F_ASSIGNERSID,F_TASKNAME,F_ASSIGNERS,F_MEETING_TIME,F_MEETING_ADDR,F_ASSESSORS)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{assignersID,jdbcType=VARCHAR}, #{taskName,jdbcType=VARCHAR}, #{assigners,jdbcType=VARCHAR}, #{meeting_time,jdbcType=DATE}, #{meeting_addr,jdbcType=VARCHAR}, #{assessors,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_WEEK_PLAN_SBB 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.waterprotectpark.WeekPlan">
+		UPDATE W_WEEK_PLAN_SBB SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		F_ASSIGNERSID=#{assignersID,jdbcType=VARCHAR},
+		F_TASKNAME=#{taskName,jdbcType=VARCHAR},
+		F_ASSIGNERS=#{assigners,jdbcType=VARCHAR},
+		F_MEETING_TIME=#{meeting_time,jdbcType=DATE},
+		F_MEETING_ADDR=#{meeting_addr,jdbcType=VARCHAR},
+		F_ASSESSORS=#{assessors,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    update  W_WEEK_PLAN_SBB set F_ISDELETE=1
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getWeekPlanList" resultMap="WeekPlan">
+	    SELECT <include refid="columns"/>
+	    FROM W_WEEK_PLAN_SBB 
+	    WHERE REFID=#{refId} and F_ISDELETE=0
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="WeekPlan">
+		SELECT <include refid="columns"/>
+		FROM W_WEEK_PLAN_SBB
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="WeekPlan">
+		SELECT <include refid="columns"/>
+		FROM W_WEEK_PLAN_SBB   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getWeekPlanInfo" resultType="java.util.Map" parameterType="java.util.Map">
+	    SELECT wp.id projectId,wp.`name` projectName,ws.id stageId,ws.stageName,wt.id taskId,wt.taskName from w_project wp 
+
+		INNER JOIN w_project_stage ws on ws.proId=wp.id and ws.stageName='送审稿阶段'
+		INNER JOIN w_project_stage_task wt on wt.proStageId=ws.id and wt.isDelete=0
+		
+		and EXISTS (SELECT * from w_project_stage_task_field wf where wf.task_id=wt.id and wf.field_name='预计开会时间' and wf.field_type='date' and wf.field_value is not null
+			and str_to_date(wf.field_value,'%Y-%m-%d') &lt;= #{endTime,jdbcType=TIMESTAMP} and str_to_date(wf.field_value,'%Y-%m-%d') &gt;= #{startTime,jdbcType=TIMESTAMP} 
+		 )
+		where wp.classifyLibraryId=#{classifyLibId,jdbcType=BIGINT} and wp.isDelete=0
+	</select>
+	
+	<select id="getTaskAssigneeFields" resultType="string">
+		SELECT field_value from w_project_stage_task_field where task_id in (
+			SELECT id from  w_project_stage_task wt where wt.proStageId=#{stageId,jdbcType=INTEGER} and wt.isDelete=0 and EXISTS(
+			SELECT * from  w_project_stage_task_field wf where task_id=wt.id and wf.field_name='任务被分配人' and wf.isdelete=0
+			) 
+		) and field_name='任务被分配人'
+	
+	</select>
+</mapper>

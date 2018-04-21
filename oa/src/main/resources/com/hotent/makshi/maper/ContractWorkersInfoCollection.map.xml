@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.waterprotectpark.ContractWorkersInfoCollection">
+	<resultMap id="ContractWorkersInfoCollection" type="com.hotent.makshi.model.waterprotectpark.ContractWorkersInfoCollection">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="registererID" column="F_REGISTERERID" jdbcType="VARCHAR"/>
+		<result property="checkerID" column="F_CHECKERID" jdbcType="VARCHAR"/>
+		<result property="managerID" column="F_MANAGERID" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="entry_date" column="F_ENTRY_DATE" jdbcType="DATE"/>
+		<result property="id_card" column="F_ID_CARD" jdbcType="VARCHAR"/>
+		<result property="registerer" column="F_REGISTERER" jdbcType="VARCHAR"/>
+		<result property="address" column="F_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="emergencyer" column="F_EMERGENCYER" jdbcType="VARCHAR"/>
+		<result property="emergency_phone" column="F_EMERGENCY_PHONE" jdbcType="VARCHAR"/>
+		<result property="work_type" column="F_WORK_TYPE" jdbcType="VARCHAR"/>
+		<result property="is_stay" column="F_IS_STAY" jdbcType="VARCHAR"/>
+		<result property="gender" column="F_GENDER" jdbcType="VARCHAR"/>
+		<result property="age" column="F_AGE" jdbcType="NUMERIC"/>
+		<result property="checker" column="F_CHECKER" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="manager" column="F_MANAGER" jdbcType="VARCHAR"/>
+		<result property="status" column="F_STATUS" jdbcType="INTEGER"/>
+		<result property="isfinished" column="F_ISFINISHED" jdbcType="INTEGER"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_REGISTERERID,F_CHECKERID,F_MANAGERID,F_NAME,F_ENTRY_DATE,F_ID_CARD,F_REGISTERER,F_ADDRESS,F_EMERGENCYER,F_EMERGENCY_PHONE,F_WORK_TYPE,F_IS_STAY,F_GENDER,F_AGE,F_CHECKER,F_REMARK,F_ATTACHMENT,F_MANAGER,F_STATUS
+	</sql>
+	<sql id="wfColumns">
+		ID,F_REGISTERERID,F_CHECKERID,F_MANAGERID,F_NAME,F_ENTRY_DATE,F_ID_CARD,F_REGISTERER,F_ADDRESS,F_EMERGENCYER,F_EMERGENCY_PHONE,F_WORK_TYPE,F_IS_STAY,F_GENDER,F_AGE,F_CHECKER,F_REMARK,F_ATTACHMENT,F_MANAGER,F_STATUS
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(registererID)"> AND F_REGISTERERID  LIKE '%${registererID}%'  </if>
+			<if test="@Ognl@isNotEmpty(checkerID)"> AND F_CHECKERID  LIKE '%${checkerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(managerID)"> AND F_MANAGERID  LIKE '%${managerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(entry_date)"> AND F_ENTRY_DATE  =#{entry_date} </if>
+			<if test="@Ognl@isNotEmpty(beginentry_date)"> AND F_ENTRY_DATE  >=#{beginentry_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endentry_date)"> AND F_ENTRY_DATE <![CDATA[ <=#{endentry_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(id_card)"> AND F_ID_CARD  LIKE '%${id_card}%'  </if>
+			<if test="@Ognl@isNotEmpty(registerer)"> AND F_REGISTERER  LIKE '%${registerer}%'  </if>
+			<if test="@Ognl@isNotEmpty(address)"> AND F_ADDRESS  LIKE '%${address}%'  </if>
+			<if test="@Ognl@isNotEmpty(emergencyer)"> AND F_EMERGENCYER  LIKE '%${emergencyer}%'  </if>
+			<if test="@Ognl@isNotEmpty(emergency_phone)"> AND F_EMERGENCY_PHONE  =#{emergency_phone} </if>
+			<if test="@Ognl@isNotEmpty(work_type)"> AND F_WORK_TYPE  = #{work_type}  </if>
+			<if test="@Ognl@isNotEmpty(is_stay)"> AND F_IS_STAY  LIKE '%${is_stay}%'  </if>
+			<if test="@Ognl@isNotEmpty(gender)"> AND F_GENDER  LIKE '%${gender}%'  </if>
+			<if test="@Ognl@isNotEmpty(age)"> AND F_AGE  =#{age} </if>
+			<if test="@Ognl@isNotEmpty(checker)"> AND F_CHECKER  LIKE '%${checker}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(manager)"> AND F_MANAGER  LIKE '%${manager}%'  </if>
+			and F_isFinished=1 and F_isDelete=0
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.waterprotectpark.ContractWorkersInfoCollection">
+		INSERT INTO W_CONTRACT_WORKERS_INFO_COLLECTION
+		(ID,
+		F_REGISTERERID,F_CHECKERID,F_MANAGERID,F_NAME,F_ENTRY_DATE,F_ID_CARD,F_REGISTERER,F_ADDRESS,F_EMERGENCYER,F_EMERGENCY_PHONE,F_WORK_TYPE,F_IS_STAY,F_GENDER,F_AGE,F_CHECKER,F_REMARK,F_ATTACHMENT,F_MANAGER,F_STATUS,F_ISFINISHED)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{registererID,jdbcType=VARCHAR}, #{checkerID,jdbcType=VARCHAR}, #{managerID,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{entry_date,jdbcType=DATE}, #{id_card,jdbcType=VARCHAR}, #{registerer,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{emergencyer,jdbcType=VARCHAR}, #{emergency_phone,jdbcType=VARCHAR}, #{work_type,jdbcType=VARCHAR}, #{is_stay,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, #{age,jdbcType=NUMERIC}, #{checker,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, #{manager,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{isfinished,jdbcType=INTEGER})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		update  W_CONTRACT_WORKERS_INFO_COLLECTION  set F_isDelete=1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.waterprotectpark.ContractWorkersInfoCollection">
+		UPDATE W_CONTRACT_WORKERS_INFO_COLLECTION SET
+		F_REGISTERERID=#{registererID,jdbcType=VARCHAR},
+		F_CHECKERID=#{checkerID,jdbcType=VARCHAR},
+		F_MANAGERID=#{managerID,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_ENTRY_DATE=#{entry_date,jdbcType=DATE},
+		F_ID_CARD=#{id_card,jdbcType=VARCHAR},
+		F_REGISTERER=#{registerer,jdbcType=VARCHAR},
+		F_ADDRESS=#{address,jdbcType=VARCHAR},
+		F_EMERGENCYER=#{emergencyer,jdbcType=VARCHAR},
+		F_EMERGENCY_PHONE=#{emergency_phone,jdbcType=VARCHAR},
+		F_WORK_TYPE=#{work_type,jdbcType=VARCHAR},
+		F_IS_STAY=#{is_stay,jdbcType=VARCHAR},
+		F_GENDER=#{gender,jdbcType=VARCHAR},
+		F_AGE=#{age,jdbcType=NUMERIC},
+		F_CHECKER=#{checker,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_MANAGER=#{manager,jdbcType=VARCHAR},
+		F_STATUS=#{status,jdbcType=INTEGER}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ContractWorkersInfoCollection">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_WORKERS_INFO_COLLECTION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="ContractWorkersInfoCollection">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_WORKERS_INFO_COLLECTION   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+</mapper>

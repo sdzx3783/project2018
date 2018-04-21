@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.contract.ContractBillingApplication">
+	<resultMap id="ContractBillingApplication" type="com.hotent.makshi.model.contract.ContractBillingApplication">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="departmentID" column="F_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="application_time" column="F_APPLICATION_TIME" jdbcType="DATE"/>
+		<result property="urgency_level" column="F_URGENCY_LEVEL" jdbcType="VARCHAR"/>
+		<result property="contract_num" column="F_CONTRACT_NUM" jdbcType="VARCHAR"/>
+		<result property="contract_name" column="F_CONTRACT_NAME" jdbcType="VARCHAR"/>
+		<result property="billing_type" column="F_BILLING_TYPE" jdbcType="VARCHAR"/>
+		<result property="head" column="F_HEAD" jdbcType="VARCHAR"/>
+		<result property="billing_money" column="F_BILLING_MONEY" jdbcType="VARCHAR"/>
+		<result property="tax_num" column="F_TAX_NUM" jdbcType="VARCHAR"/>
+		<result property="billing_num" column="F_BILLING_NUM" jdbcType="VARCHAR"/>
+		<result property="bank_account" column="F_BANK_ACCOUNT" jdbcType="VARCHAR"/>
+		<result property="account_open" column="F_ACCOUNT_OPEN" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="file" column="F_FILE" jdbcType="VARCHAR"/>
+		
+		<result property="buyerName" column="F_buyerName" jdbcType="VARCHAR"/>
+		<result property="goodsName" column="F_goodsName" jdbcType="VARCHAR"/>
+		<result property="taxNum" column="F_taxNum" jdbcType="VARCHAR"/>
+		<result property="buyerAddress" column="F_buyerAddress" jdbcType="VARCHAR"/>
+		<result property="buyerPhone" column="F_buyerPhone" jdbcType="VARCHAR"/>
+		<result property="buyerBank" column="F_buyerBank" jdbcType="VARCHAR"/>
+		<result property="buyerAccount" column="F_buyerAccount" jdbcType="VARCHAR"/>
+		<result property="salerBank" column="F_salerBank" jdbcType="VARCHAR"/>
+		<result property="salerAccount" column="F_salerAccount" jdbcType="VARCHAR"/>
+		<result property="ticketId" column="F_ticketId" jdbcType="VARCHAR"/>
+		<result property="ticketTaker" column="F_ticketTaker" jdbcType="VARCHAR"/>
+		<result property="ticketTakerID" column="F_ticketTakerID" jdbcType="VARCHAR"/>
+		<result property="enterTime" column="F_enterTime" jdbcType="DATE"/>
+		<result property="enterNumber" column="F_enterNumber" jdbcType="DOUBLE"/>
+		<result property="globalflowno" column="GLOBALFLOWNO" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_APPLICANTID,F_DEPARTMENTID,F_APPLICANT,F_DEPARTMENT,F_APPLICATION_TIME,F_URGENCY_LEVEL,F_CONTRACT_NUM,F_CONTRACT_NAME,F_BILLING_TYPE,F_HEAD,F_ABSTRACT,F_BILLING_MONEY,F_TAX_NUM,F_BILLING_NUM,F_BANK_ACCOUNT,F_ACCOUNT_OPEN,F_REMARK,F_FILE,
+		F_buyerName,F_goodsName,F_taxNum,F_buyerAddress,F_buyerPhone,F_buyerBank,F_buyerAccount,F_salerBank,F_salerAccount,F_ticketId,F_ticketTaker,F_ticketTakerID,F_enterTime,F_enterNumber
+	</sql>
+	<sql id="waliascolumns">
+		w.ID,w.F_APPLICANTID,w.F_DEPARTMENTID,w.F_APPLICANT,w.F_DEPARTMENT,w.F_APPLICATION_TIME,w.F_URGENCY_LEVEL,w.F_CONTRACT_NUM,w.F_CONTRACT_NAME,w.F_BILLING_TYPE,w.F_HEAD,w.F_ABSTRACT,w.F_BILLING_MONEY,w.F_TAX_NUM,w.F_BILLING_NUM,w.F_BANK_ACCOUNT,
+		w.F_ACCOUNT_OPEN,w.F_REMARK,w.F_FILE,w.F_buyerName,w.F_goodsName,w.F_taxNum,w.F_buyerAddress,w.F_buyerPhone,w.F_buyerBank,w.F_buyerAccount,w.F_salerBank,w.F_salerAccount,w.F_ticketId,w.F_ticketTaker,w.F_ticketTakerID,w.F_enterTime,w.F_enterNumber
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPLICANTID,F_DEPARTMENTID,F_APPLICANT,F_DEPARTMENT,F_APPLICATION_TIME,F_URGENCY_LEVEL,F_CONTRACT_NUM,F_CONTRACT_NAME,F_BILLING_TYPE,F_HEAD,F_ABSTRACT,F_BILLING_MONEY,F_TAX_NUM,F_BILLING_NUM,F_BANK_ACCOUNT,F_ACCOUNT_OPEN,F_REMARK,F_FILE,
+		F_buyerName,F_goodsName,F_taxNum,F_buyerAddress,F_buyerPhone,F_buyerBank,F_buyerAccount,F_salerBank,F_salerAccount,F_ticketId,F_ticketTaker,F_ticketTakerID,F_enterTime,F_enterNumber
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND w.F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND w.F_DEPARTMENTID  LIKE '%${departmentID}%'  </if>
+			
+			<if test="null != orgIds">
+				and w.F_DEPARTMENTID in
+				<foreach collection="orgIds" item="item" open="(" close=")" separator="," >
+				     #{item}
+				</foreach>
+			</if>
+			
+			<if test="@Ognl@isNotEmpty(applicant)"> AND w.F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND w.F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(application_time)"> AND w.F_APPLICATION_TIME  =#{application_time} </if>
+			<if test="@Ognl@isNotEmpty(beginapplication_time)"> AND w.F_APPLICATION_TIME  >=#{beginapplication_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endapplication_time)"> AND w.F_APPLICATION_TIME <![CDATA[ <=#{endapplication_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(urgency_level)"> AND w.F_URGENCY_LEVEL  LIKE '%${urgency_level}%'  </if>
+			<if test="@Ognl@isNotEmpty(contract_num)"> AND w.F_CONTRACT_NUM  LIKE '%${contract_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(contract_name)"> AND w.F_CONTRACT_NAME  LIKE '%${contract_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(billing_type)"> AND w.F_BILLING_TYPE  LIKE '%${billing_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(head)"> AND w.F_HEAD  LIKE '%${head}%'  </if>
+			<if test="@Ognl@isNotEmpty(abstracts)"> AND w.F_ABSTRACT  LIKE '%${abstracts}%'  </if>
+			<if test="@Ognl@isNotEmpty(billing_money)"> AND w.F_BILLING_MONEY  LIKE '%${billing_money}%'  </if>
+			<if test="@Ognl@isNotEmpty(tax_num)"> AND w.F_TAX_NUM  LIKE '%${tax_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(billing_num)"> AND w.F_BILLING_NUM  LIKE '%${billing_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(bank_account)"> AND w.F_BANK_ACCOUNT  LIKE '%${bank_account}%'  </if>
+			<if test="@Ognl@isNotEmpty(account_open)"> AND w.F_ACCOUNT_OPEN  LIKE '%${account_open}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND w.F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(file)"> AND w.F_FILE  LIKE '%${file}%'  </if>
+			<if test="@Ognl@isNotEmpty(minbillsum)"> AND w.F_BILLING_MONEY  &gt;= '${minbillsum}'  </if>
+			<if test="@Ognl@isNotEmpty(maxbillsum)"> AND w.F_BILLING_MONEY  &lt;= '${maxbillsum}'  </if>
+			<if test="billStatus==0">
+				and w.F_ticketId is null
+			</if>
+			<if test="billStatus==1">
+				and w.F_ticketId is not null
+			</if>
+			and w.F_isFinished =1
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.contract.ContractBillingApplication">
+		INSERT INTO W_CONTRACT_BILLING_APPLICATION
+		(ID,
+		F_APPLICANTID,F_DEPARTMENTID,F_APPLICANT,F_DEPARTMENT,F_APPLICATION_TIME,F_URGENCY_LEVEL,F_CONTRACT_NUM,F_CONTRACT_NAME,F_BILLING_TYPE,F_HEAD,F_ABSTRACT,F_BILLING_MONEY,F_TAX_NUM,F_BILLING_NUM,F_BANK_ACCOUNT,F_ACCOUNT_OPEN,F_REMARK,F_FILE,
+		F_buyerName,F_goodsName,F_taxNum,F_buyerAddress,F_buyerPhone,F_buyerBank,F_buyerAccount,F_salerBank,F_salerAccount,F_ticketId,F_ticketTaker,F_ticketTakerID,F_enterTime,F_enterNumber)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{applicantID,jdbcType=VARCHAR}, #{departmentID,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{application_time,jdbcType=DATE}, #{urgency_level,jdbcType=VARCHAR}, #{contract_num,jdbcType=VARCHAR}, #{contract_name,jdbcType=VARCHAR}, #{billing_type,jdbcType=VARCHAR}, #{head,jdbcType=VARCHAR}, #{abstracts,jdbcType=VARCHAR}, #{billing_money,jdbcType=VARCHAR}, #{tax_num,jdbcType=VARCHAR}, #{billing_num,jdbcType=VARCHAR}, #{bank_account,jdbcType=VARCHAR}, #{account_open,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR},
+		#{buyerName,jdbcType=VARCHAR},#{goodsName,jdbcType=VARCHAR},#{taxNum,jdbcType=VARCHAR},#{buyerAddress,jdbcType=VARCHAR},#{buyerPhone,jdbcType=VARCHAR},#{buyerBank,jdbcType=VARCHAR},#{buyerAccount,jdbcType=VARCHAR},
+		#{salerBank,jdbcType=VARCHAR},#{salerAccount,jdbcType=VARCHAR},#{ticketId,jdbcType=VARCHAR},#{ticketTaker,jdbcType=VARCHAR},#{ticketTakerID,jdbcType=VARCHAR},#{enterTime,jdbcType=DATE},
+		#{enterNumber,jdbcType=DOUBLE}
+		)
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CONTRACT_BILLING_APPLICATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.contract.ContractBillingApplication">
+		UPDATE W_CONTRACT_BILLING_APPLICATION SET
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_DEPARTMENTID=#{departmentID,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_APPLICATION_TIME=#{application_time,jdbcType=DATE},
+		F_URGENCY_LEVEL=#{urgency_level,jdbcType=VARCHAR},
+		F_CONTRACT_NUM=#{contract_num,jdbcType=VARCHAR},
+		F_CONTRACT_NAME=#{contract_name,jdbcType=VARCHAR},
+		F_BILLING_TYPE=#{billing_type,jdbcType=VARCHAR},
+		F_HEAD=#{head,jdbcType=VARCHAR},
+		F_ABSTRACT=#{abstracts,jdbcType=VARCHAR},
+		F_BILLING_MONEY=#{billing_money,jdbcType=VARCHAR},
+		F_TAX_NUM=#{tax_num,jdbcType=VARCHAR},
+		F_BILLING_NUM=#{billing_num,jdbcType=VARCHAR},
+		F_BANK_ACCOUNT=#{bank_account,jdbcType=VARCHAR},
+		F_ACCOUNT_OPEN=#{account_open,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_FILE=#{file,jdbcType=VARCHAR},
+		F_buyerName=#{buyerName,jdbcType=VARCHAR},
+		F_goodsName=#{goodsName,jdbcType=VARCHAR},
+		F_taxNum=#{taxNum,jdbcType=VARCHAR},
+		F_buyerAddress=#{buyerAddress,jdbcType=VARCHAR},
+		F_buyerPhone=#{buyerPhone,jdbcType=VARCHAR},
+		F_buyerBank=#{buyerBank,jdbcType=VARCHAR},
+		F_buyerAccount=#{buyerAccount,jdbcType=VARCHAR},
+		F_salerBank=#{salerBank,jdbcType=VARCHAR},
+		F_salerAccount=#{salerAccount,jdbcType=VARCHAR},
+		F_ticketId=#{ticketId,jdbcType=VARCHAR},
+		F_ticketTaker=#{ticketTaker,jdbcType=VARCHAR},
+		F_ticketTakerID=#{ticketTakerID,jdbcType=VARCHAR},
+		F_enterTime=#{enterTime,jdbcType=DATE},
+		F_enterNumber=#{enterNumber,jdbcType=DOUBLE})
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ContractBillingApplication">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_BILLING_APPLICATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="ContractBillingApplication">
+		SELECT <include refid="waliascolumns"/>,r.GLOBALFLOWNO
+		FROM W_CONTRACT_BILLING_APPLICATION w LEFT JOIN bpm_pro_run_his r on w.ID=r.BUSINESSKEY
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	<select id="getByCancelId" resultMap="ContractBillingApplication">
+			SELECT a.* from w_contract_billing_application a INNER JOIN w_contract_invoice_cancel b on a.F_ticketId=b.F_invoice_num where b.F_invoice_num is NOT null 
+		and b.id=#{cancelId}
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.assetapplication.AssetAll">
+	<resultMap id="AssetAll" type="com.hotent.makshi.model.assetapplication.AssetAll">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="fist_departmentID" column="F_FIST_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="use_nameID" column="F_USE_NAMEID" jdbcType="VARCHAR"/>
+		<result property="second_departmentID" column="F_SECOND_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="user_name" column="F_USER_NAME" jdbcType="VARCHAR"/>
+		<result property="user_id" column="F_USER_ID" jdbcType="VARCHAR"/>
+		<result property="fist_department" column="F_FIST_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="use_name" column="F_USE_NAME" jdbcType="VARCHAR"/>
+		<result property="second_department" column="F_SECOND_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="asset_name" column="F_ASSET_NAME" jdbcType="VARCHAR"/>
+		<result property="number" column="F_NUMBER" jdbcType="NUMERIC"/>
+		<result property="specifications" column="F_SPECIFICATIONS" jdbcType="VARCHAR"/>
+		<result property="standard" column="F_STANDARD" jdbcType="VARCHAR"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="buy_type" column="F_BUY_TYPE" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="device_id" column="F_DEVICE_ID" jdbcType="VARCHAR"/>
+		<result property="application_time" column="F_APPLICATION_TIME" jdbcType="DATE"/>
+		<result property="state" column="F_STATE" jdbcType="VARCHAR"/>
+		<result property="globalflowno" column="F_GLOBALFLOWNO" jdbcType="VARCHAR"/>
+		<result property="assetType" column="F_ASSETTYPE" jdbcType="VARCHAR"/>
+		<result property="assetId" column="F_ASSETID" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.assetapplication.AssetAll" id="ExtAssetAll" extends="AssetAll">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID, F_FIST_DEPARTMENTID,F_USE_NAMEID, F_SECOND_DEPARTMENTID,F_USER_NAME,
+		a.orgname F_FIST_DEPARTMENT,F_USE_NAME,b.orgname F_SECOND_DEPARTMENT,
+		F_ASSET_NAME,F_NUMBER,F_SPECIFICATIONS,F_STANDARD,F_TYPE,F_BUY_TYPE,F_ATTACHMENT,
+		F_DEVICE_ID,g.CREATETIME F_APPLICATION_TIME,F_STATE,g.GLOBALFLOWNO F_GLOBALFLOWNO,
+		F_ASSETTYPE,F_ASSETID
+	</sql>
+	<sql id="wfColumns">
+		ID,F_FIST_DEPARTMENTID,F_USE_NAMEID,F_SECOND_DEPARTMENTID,F_USER_NAME,F_FIST_DEPARTMENT,F_USE_NAME,F_SECOND_DEPARTMENT,F_ASSET_NAME,F_NUMBER,F_SPECIFICATIONS,F_STANDARD,F_TYPE,F_BUY_TYPE,F_ATTACHMENT,F_DEVICE_ID,F_APPLICATION_TIME,F_STATE,F_GLOBALFLOWNO
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(fist_departmentID)"> AND F_FIST_DEPARTMENTID  LIKE '%${fist_departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(use_nameID)"> AND F_USE_NAMEID  LIKE '%${use_nameID}%'  </if>
+			<if test="@Ognl@isNotEmpty(second_departmentID)"> AND F_SECOND_DEPARTMENTID  LIKE '%${second_departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_name)"> AND F_USER_NAME  LIKE '%${user_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(fist_department)"> AND F_FIST_DEPARTMENT  LIKE '%${fist_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(use_name)"> AND F_USE_NAME  LIKE '%${use_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(second_department)"> AND F_SECOND_DEPARTMENT  LIKE '%${second_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(asset_name)"> AND F_ASSET_NAME  LIKE '%${asset_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(number)"> AND F_NUMBER  =#{number} </if>
+			<if test="@Ognl@isNotEmpty(specifications)"> AND F_SPECIFICATIONS  LIKE '%${specifications}%'  </if>
+			<if test="@Ognl@isNotEmpty(standard)"> AND F_STANDARD  LIKE '%${standard}%'  </if>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  LIKE '%${type}%'  </if>
+			<if test="@Ognl@isNotEmpty(buy_type)"> AND F_BUY_TYPE  LIKE '%${buy_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(device_id)"> AND F_DEVICE_ID  LIKE '%${device_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(application_time_begin)"> AND s.F_APPLICATION_TIME  >=#{application_time_begin,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(application_time_end)"> AND s.F_APPLICATION_TIME <![CDATA[ <=#{application_time_end,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(state)"> AND F_STATE  LIKE '%${state}%'  </if>
+			<if test="@Ognl@isNotEmpty(globalflowno)"> AND s.F_GLOBALFLOWNO  LIKE '%${globalflowno}%'  </if>
+			<if test="@Ognl@isNotEmpty(asseType)"> AND F_ASSETTYPE  LIKE '%${assetType}%'  </if>
+			<if test="@Ognl@isNotEmpty(assetId)"> AND F_ASSETID  LIKE '%${assetId}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.assetapplication.AssetAll">
+		INSERT INTO W_ASSET_ALL
+		(ID,
+		F_FIST_DEPARTMENTID,F_USE_NAMEID,F_SECOND_DEPARTMENTID,F_USER_NAME,F_FIST_DEPARTMENT,F_USE_NAME,
+		F_SECOND_DEPARTMENT,F_ASSET_NAME,F_NUMBER,F_SPECIFICATIONS,F_STANDARD,F_TYPE,F_BUY_TYPE,F_ATTACHMENT,
+		F_DEVICE_ID,F_APPLICATION_TIME,F_STATE,F_GLOBALFLOWNO,F_ASSETTYPE,F_ASSETID)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{fist_departmentID,jdbcType=VARCHAR}, #{use_nameID,jdbcType=VARCHAR}, #{second_departmentID,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, #{fist_department,jdbcType=VARCHAR},
+	    #{use_name,jdbcType=VARCHAR}, #{second_department,jdbcType=VARCHAR}, #{asset_name,jdbcType=VARCHAR}, 
+	    #{number,jdbcType=NUMERIC}, #{specifications,jdbcType=VARCHAR}, #{standard,jdbcType=VARCHAR}, 
+	    #{type,jdbcType=VARCHAR}, #{buy_type,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, 
+	    #{device_id,jdbcType=VARCHAR}, #{application_time,jdbcType=DATE}, #{state,jdbcType=VARCHAR}, 
+	    #{globalflowno,jdbcType=VARCHAR},#{assetType,jdbcType=VARCHAR},#{assetId,jdbcType=VARCHAR},
+	    )
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_ASSET_ALL 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.assetapplication.AssetAll">
+		UPDATE W_ASSET_ALL SET
+		F_FIST_DEPARTMENTID=#{fist_departmentID,jdbcType=VARCHAR},
+		F_USE_NAMEID=#{use_nameID,jdbcType=VARCHAR},
+		F_SECOND_DEPARTMENTID=#{second_departmentID,jdbcType=VARCHAR},
+		F_USER_NAME=#{user_name,jdbcType=VARCHAR},
+		F_FIST_DEPARTMENT=#{fist_department,jdbcType=VARCHAR},
+		F_USE_NAME=#{use_name,jdbcType=VARCHAR},
+		F_SECOND_DEPARTMENT=#{second_department,jdbcType=VARCHAR},
+		F_ASSET_NAME=#{asset_name,jdbcType=VARCHAR},
+		F_NUMBER=#{number,jdbcType=NUMERIC},
+		F_SPECIFICATIONS=#{specifications,jdbcType=VARCHAR},
+		F_STANDARD=#{standard,jdbcType=VARCHAR},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_BUY_TYPE=#{buy_type,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_DEVICE_ID=#{device_id,jdbcType=VARCHAR},
+		F_APPLICATION_TIME=#{application_time,jdbcType=DATE},
+		F_STATE=#{state,jdbcType=VARCHAR},
+		F_GLOBALFLOWNO=#{globalflowno,jdbcType=VARCHAR},
+		F_ASSETTYPE=#{assetType,jdbcType=VARCHAR},
+		F_ASSETID=#{assetId,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="AssetAll">
+		SELECT <include refid="columns"/>
+		FROM W_ASSET_ALL w 
+		LEFT JOIN  BPM_PRO_RUN_HIS g ON g.BUSINESSKEY = w.ID
+		left join sys_org a on w.f_fist_department = a.orgid 
+		left join sys_org b on w.f_second_department = b.orgid
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="AssetAll">
+		select * from (
+		SELECT <include refid="columns"/>
+		FROM
+		w_asset_all w
+		LEFT JOIN  BPM_PRO_RUN_HIS g ON g.BUSINESSKEY = w.ID
+		LEFT JOIN sys_org a ON w.f_fist_department = a.orgid
+		LEFT JOIN sys_org b ON w.f_second_department = b.orgid
+		AND g.parentId = 0  
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+		) s
+		<include refid="dynamicWhere" />
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="AssetAll">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_ASSET_ALL A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtAssetAll">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_ASSET_ALL A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_ASSET_ALL A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_ASSET_ALL A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_ASSET_ALL A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_ASSET_ALL A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="AssetAll">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_ASSET_ALL A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

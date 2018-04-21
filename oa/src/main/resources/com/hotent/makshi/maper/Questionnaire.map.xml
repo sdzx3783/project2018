@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.questionnaire.Questionnaire">
+	<resultMap id="AssetAbandonment"
+		type="com.hotent.makshi.model.questionnaire.Questionnaire">
+		<id property="id" column="ID" jdbcType="NUMERIC" />
+		<result property="title" column="F_title" jdbcType="VARCHAR" />
+		<result property="desc" column="F_desc" jdbcType="VARCHAR" />
+		<result property="creater" column="F_creater" jdbcType="VARCHAR" />
+		<result property="creater_id" column="F_creater_id" jdbcType="VARCHAR" />
+		<result property="creater_partin" column="F_creater_partin"	jdbcType="BIT" />
+		<result property="begin_date" column="F_begin_date" jdbcType="TIMESTAMP" />
+		<result property="end_date" column="F_end_date" jdbcType="TIMESTAMP" />
+		<result property="status" column="F_status" jdbcType="INTEGER" />
+		<result property="repeat_time" column="F_repeat_time" jdbcType="INTEGER" />
+		<result property="limit_ip" column="F_limit_ip" jdbcType="BIT" />
+		<result property="limit_cookie" column="F_limit_cookie"	jdbcType="BIT" />
+	</resultMap>
+
+	<sql id="columns">
+		ID,
+		F_title,
+		F_desc,
+		F_creater,
+		F_creater_id,
+		F_creater_partin,
+		F_begin_date,
+		F_end_date,
+		F_status,
+		F_repeat_time,
+		F_limit_ip,
+		F_limit_cookie
+	</sql>
+
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(use_nameID)"> AND F_USE_NAMEID LIKE '%${use_nameID}%'  </if>
+			<if test="@Ognl@isNotEmpty(buy_date)"> AND F_BUY_DATE =#{buy_date} </if>
+			<if test="@Ognl@isNotEmpty(application_time_begin)"> AND F_APPLICATION_TIME
+				>=#{application_time_begin,jdbcType=DATE}
+			</if>
+			<if test="@Ognl@isNotEmpty(application_time_end)">
+				AND F_APPLICATION_TIME  <![CDATA[ <=#{application_time_end,jdbcType=DATE}]]>
+			</if>
+			<if test="@Ognl@isNotEmpty(filters)">
+			and (
+				<if test="@Ognl@isNotEmpty(creater_id_or)">F_creater_id =#{creater_id_or} </if>
+				<if test="@Ognl@isNotEmpty(ids)">
+					or ID in
+					<foreach collection="ids" item="id" open="(" close=")"
+						separator=",">
+						#{id}
+					</foreach>
+				</if>
+				)
+			</if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.questionnaire.Questionnaire">
+		INSERT INTO w_questionnaire
+		(ID,
+		F_title,
+		F_desc,
+		F_creater,
+		F_creater_id,
+		F_creater_partin,
+		F_begin_date,
+		F_end_date,
+		F_status,
+		F_repeat_time,
+		F_limit_ip,
+		F_limit_cookie)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{title,jdbcType=VARCHAR},
+		#{desc,jdbcType=VARCHAR},
+		#{creater,jdbcType=VARCHAR},
+		#{creater_id,jdbcType=VARCHAR},
+		#{creater_partin,jdbcType=BIT},
+		#{begin_date,jdbcType=TIMESTAMP},
+		#{end_date,jdbcType=TIMESTAMP},
+		#{status,jdbcType=INTEGER},
+		#{repeat_time,jdbcType=INTEGER},
+		#{limit_ip,jdbcType=BIT},
+		#{limit_cookie,jdbcType=BIT})
+	</insert>
+
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM
+		w_questionnaire
+		WHERE
+		ID=#{id}
+	</delete>
+
+	<update id="update" parameterType="com.hotent.makshi.model.questionnaire.Questionnaire">
+		UPDATE w_questionnaire SET
+		F_title=#{title,jdbcType=VARCHAR},
+		F_desc=#{desc,jdbcType=VARCHAR},
+		F_creater=#{creater,jdbcType=VARCHAR},
+		F_creater_id=#{creater_id,jdbcType=VARCHAR},
+		F_creater_partin=#{creater_partin,jdbcType=BIT},
+		F_begin_date=#{begin_date,jdbcType=TIMESTAMP},
+		F_end_date=#{end_date,jdbcType=TIMESTAMP},
+		F_status=#{status,jdbcType=INTEGER},
+		F_repeat_time=#{repeat_time,jdbcType=INTEGER},
+		F_limit_ip=#{limit_ip,jdbcType=BIT},
+		F_limit_cookie=#{limit_cookie,jdbcType=BIT}
+		WHERE
+		ID=#{id}
+	</update>
+
+	<select id="getById" parameterType="java.lang.Long" resultMap="AssetAbandonment">
+		SELECT
+		<include refid="columns" />
+		FROM w_questionnaire
+		WHERE
+		ID=#{id}
+	</select>
+
+	<select id="getAll" resultMap="AssetAbandonment">
+		SELECT
+		<include refid="columns" />
+		FROM w_questionnaire
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by ID desc
+		</if>
+	</select>
+
+</mapper>

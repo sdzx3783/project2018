@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.contract.ContractNumAdmin">
+	<resultMap id="ContractNumAdmin" type="com.hotent.makshi.model.contract.ContractNumAdmin">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="contractNo" column="F_CONTRACTNO" jdbcType="VARCHAR"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="contract_num" column="F_CONTRACT_NUM" jdbcType="VARCHAR"/>
+		<result property="flowNo" column="F_FLOWNO" jdbcType="VARCHAR"/>
+		<result property="year" column="F_YEAR" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_CONTRACTNO,F_TYPE,F_CONTRACT_NUM,F_FLOWNO,F_YEAR
+	</sql>
+	<sql id="wfColumns">
+		ID,F_CONTRACTNO,F_TYPE,F_CONTRACT_NUM,F_FLOWNO,F_YEAR
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(contractNo)"> AND F_CONTRACTNO  LIKE '%${contractNo}%'  </if>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  LIKE '%${type}%'  </if>
+			<if test="@Ognl@isNotEmpty(contract_num)"> AND F_CONTRACT_NUM  LIKE '%${contract_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(flowNo)"> AND F_FLOWNO  LIKE '%${flowNo}%'  </if>
+			<if test="@Ognl@isNotEmpty(year)"> AND F_YEAR  LIKE '%${year}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.contract.ContractNumAdmin">
+		INSERT INTO W_CONTRACT_NUM_ADMIN
+		(ID,
+		F_CONTRACTNO,F_TYPE,F_CONTRACT_NUM,F_FLOWNO,F_YEAR)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{contractNo,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{contract_num,jdbcType=VARCHAR}, #{flowNo,jdbcType=VARCHAR},#{year,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CONTRACT_NUM_ADMIN 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.contract.ContractNumAdmin">
+		UPDATE W_CONTRACT_NUM_ADMIN SET
+		F_CONTRACTNO=#{contractNo,jdbcType=VARCHAR},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_CONTRACT_NUM=#{contract_num,jdbcType=VARCHAR},
+		F_FLOWNO=#{flowNo,jdbcType=VARCHAR},
+		F_YEAR=#{year,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ContractNumAdmin">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_NUM_ADMIN
+		WHERE
+		ID=#{id}
+	</select>
+	
+	
+	
+	<select id="getContractNumAdminByType" parameterType="java.lang.String" resultMap="ContractNumAdmin">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_NUM_ADMIN
+		WHERE
+		F_type=#{type}
+	</select>
+	
+	<select id="getByIdAndYear" parameterType="map" resultMap="ContractNumAdmin">
+		SELECT
+			a.ID,
+			a.F_contractNo,
+			a.F_type,
+			a.F_contract_num,
+			b.flowNo
+		FROM
+			w_contract_num_admin a
+		LEFT JOIN 
+			w_contract_num_year b 
+		ON  a.ID = b.contractId
+		WHERE
+			a.ID=#{id}
+		AND b. YEAR = #{year}
+	</select>
+	
+	<select id="getLoadList" parameterType="map" resultMap="ContractNumAdmin">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_NUM_ADMIN   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="updateFlowNo">
+		UPDATE w_contract_num_admin 
+			SET F_flowNo = F_flowNo + 1
+		WHERE
+		F_type = #{contracttype,jdbcType=VARCHAR}
+		and F_flowNo=#{flow,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getAll"  resultMap="ContractNumAdmin" >
+    SELECT F_contract_num,F_type,F_contract_name F_CONTRACTNO,F_contract_handler F_FLOWNO FROM(
+		SELECT F_contract_num ,F_type,F_contract_name,F_contract_handler FROM  w_contractinfo WHERE F_CONTRACT_NUM LIKE '${contracType}_%'
+		UNION
+		SELECT F_contract_num,F_type,F_contract_name,F_contract_handler FROM  w_contract_seal_application WHERE F_CONTRACT_NUM LIKE '${contracType}_%'
+		AND F_CONTRACT_NUM NOT in(SELECT F_contract_num FROM  w_contractinfo WHERE F_CONTRACT_NUM LIKE '${contracType}_%'
+		)
+	) t
+	ORDER BY
+	cast(
+		SUBSTR(
+			F_contract_num,
+			(
+				LOCATE('-', F_contract_num) - 4
+			),
+			4
+		) AS signed
+	) DESC,
+	cast(
+		RIGHT (
+			F_contract_num,
+			(
+				LENGTH(F_contract_num) - LOCATE('-', F_contract_num)
+			)
+		) AS signed
+	)
+  </select>
+  
+  
+</mapper>

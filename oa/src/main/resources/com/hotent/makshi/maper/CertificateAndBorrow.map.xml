@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.qualification.CertificateAndBorrow">
+	<resultMap id="CertificateAndBorrow" type="com.hotent.makshi.model.qualification.CertificateAndBorrow">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="type" column="type" jdbcType="INTEGER"/>
+		<result property="name" column="name" jdbcType="VARCHAR"/>
+		<result property="userId" column="userId" jdbcType="NUMERIC"/>
+		<result property="linkId" column="linkId" jdbcType="NUMERIC"/>
+		<result property="borrower" column="borrower" jdbcType="VARCHAR"/>
+		<result property="borrowerId" column="borrowerId" jdbcType="VARCHAR"/>
+		<result property="certifateId" column="certifateId" jdbcType="VARCHAR"/>
+		<result property="effictivedate" column="effictivedate" jdbcType="DATE"/>
+		<result property="switchs" column="switchs" jdbcType="INTEGER"/>
+		<result property="deleted" column="deleted" jdbcType="INTEGER"/>
+	</resultMap>
+
+	<sql id="columns">
+	id,type,name,userId,linkId,borrower,borrowerId,certifateId,effictivedate,switchs,deleted	
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.qualification.CertificateAndBorrow">
+		INSERT INTO w_cer_bor
+		(id,type,name,userId,linkId,borrower,borrowerId,certifateId,effictivedate,switchs
+		)
+		VALUES
+		(#{id,jdbcType=NUMERIC},#{type,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{userId,jdbcType=NUMERIC},
+		 #{linkId,jdbcType=NUMERIC}, #{borrower,jdbcType=VARCHAR}, #{borrowerId,jdbcType=VARCHAR},
+		 #{certifateId,jdbcType=VARCHAR}, #{effictivedate,jdbcType=DATE}, #{switchs,jdbcType=INTEGER}
+		 )
+	</insert>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.qualification.CertificateAndBorrow">
+		UPDATE w_cer_bor SET
+		type=#{type,jdbcType=INTEGER},
+		name = #{name,jdbcType=VARCHAR},
+		userId=#{userId,jdbcType=NUMERIC},
+		linkId=#{linkId,jdbcType=NUMERIC},
+		borrower=#{borrower,jdbcType=VARCHAR},
+		borrowerId=#{borrowerId,jdbcType=VARCHAR},
+		certifateId=#{certifateId,jdbcType=VARCHAR},
+		effictivedate=#{effictivedate,jdbcType=DATE},
+		switchs=#{switchs,jdbcType=INTEGER},
+		deleted=#{deleted,jdbcType=INTEGER}
+		WHERE
+		ID=#{id}
+	</update>
+		
+	<update id="updateByCertificateId" parameterType="com.hotent.makshi.model.qualification.CertificateAndBorrow">
+		UPDATE w_cer_bor SET
+		name = #{name,jdbcType=VARCHAR},
+		userId=#{userId,jdbcType=NUMERIC},
+		linkId=#{linkId,jdbcType=NUMERIC},
+		borrower=#{borrower,jdbcType=VARCHAR},
+		borrowerId=#{borrowerId,jdbcType=VARCHAR},
+		effictivedate=#{effictivedate,jdbcType=DATE},
+		switchs=#{switchs,jdbcType=INTEGER},
+		deleted=#{deleted,jdbcType=INTEGER}
+		WHERE deleted =0 AND type=#{type} and certifateId = #{certificateId}
+	</update>
+	
+	<select id="getById" parameterType="java.lang.Long" resultMap="CertificateAndBorrow">
+		SELECT <include refid="columns"/>
+		FROM w_cer_bor
+		WHERE
+		ID=#{id}
+		AND deleted = 0
+	</select>
+	
+	<delete id="delByLinkId" parameterType="java.lang.Long" >
+		delete FROM w_cer_bor
+		WHERE
+		linkID=#{id}
+	</delete>
+	
+	<select id="getByCertifateId" parameterType="java.lang.Long" resultMap="CertificateAndBorrow">
+		SELECT <include refid="columns"/>
+		FROM w_cer_bor
+		WHERE
+		linkId=#{linkId}
+		AND deleted = 0
+		and type = 3
+	</select>
+	
+	<select id="getInfoByCertifateId" parameterType="java.lang.Long" resultMap="CertificateAndBorrow">
+		SELECT <include refid="columns"/>
+		FROM w_cer_bor
+		WHERE
+		linkId=#{linkId}
+		AND deleted = 0
+		
+	</select>
+	
+	<select id="getInfoByUserId" parameterType="map" resultMap="CertificateAndBorrow">
+		SELECT a.*
+		FROM w_cer_bor a,w_personal_qualification_regist b
+		WHERE
+		a.linkId = b.id
+		and (b.switchs=1 or b.switchs is null)
+		and a.userId=#{userId}
+		AND type = #{type}
+		AND a.deleted = 0
+		AND b.deleted = 0
+		AND a.certifateId IS NOT NULL 
+		AND a.certifateId &lt;&gt; ''
+	</select>
+	
+	<select id="getSealInfoByUserId" parameterType="map" resultMap="CertificateAndBorrow">
+		SELECT
+			id,F_seal_name name,F_holderID userId,id linkId,F_borrower borrower,F_borrowerId borrowerId,F_seal_num certifateId,F_effictivedate effictivedate,F_switchs switchs,F_switchs deleted
+		 FROM w_personal_seal 
+		WHERE F_switchs = 1
+		and F_holderID=#{userId}
+	</select>
+	
+	<select id="getSealInfoByUserName" parameterType="map" resultMap="CertificateAndBorrow">
+		SELECT
+		 id,F_seal_name name,F_holderID userId,id linkId,F_borrower borrower,F_borrowerId borrowerId,F_seal_num certifateId,F_effictivedate effictivedate,F_switchs switchs,F_switchs deleted
+		 FROM w_personal_seal 
+		WHERE F_switchs = 1
+		and F_holder =#{userName}
+	</select>
+	
+	<select id="getInfoByUserName" parameterType="map" resultMap="CertificateAndBorrow">
+		SELECT a.* FROM w_cer_bor a ,w_personal_qualification_regist b 
+		WHERE a.linkId = b.ID AND a.deleted =0 AND (b.switchs=1 or b.switchs is null)
+		AND b.F_name =#{userName}
+		AND type = #{type}
+		AND userId is null
+	</select>
+	
+	<select id="getDuplicateName" parameterType="map" resultMap="CertificateAndBorrow">
+		SELECT a.*,b.F_name FROM w_cer_bor a ,w_personal_qualification_regist b 
+		WHERE a.linkId = b.ID AND a.deleted =0 AND (b.switchs=1 or b.switchs is null)
+		and type = #{type} AND F_name =#{userName}
+		GROUP BY USERID 
+		<if test="userId != null and userId!=''">
+		having userId = #{userId}
+		</if>
+	</select>
+	
+	<select id="getSealDuplicateName" parameterType="map" resultMap="CertificateAndBorrow">
+		SELECT 
+		id,F_seal_name name,F_holderID userId,id linkId,F_borrower borrower,F_borrowerId borrowerId,F_seal_num certifateId,F_effictivedate effictivedate,F_switchs switchs,F_switchs deleted
+		FROM w_personal_seal 
+		WHERE F_switchs =1
+		AND F_holder =#{userName}
+		GROUP BY USERID 
+		<if test="userId != null and userId!='' and userId != 0">
+		having F_holderID = #{userId}
+		</if>
+		<if test="userId != null and userId!='' and userId == 0">
+		having F_holderID is null
+		</if>
+	</select>
+	
+	<select id="getAccount" parameterType="map" resultMap="CertificateAndBorrow">
+		SELECT a.*,b.F_name FROM w_cer_bor a ,w_personal_qualification_regist b 
+		WHERE a.linkId = b.ID AND a.deleted =0 AND (b.switchs=1 or b.switchs is null)
+		and type = 1 AND 
+		F_name =#{userName} AND b.F_account IS NOT NULL
+		GROUP BY USERID 
+	</select>
+	
+	<select id="getByTypeAndCertificateId" parameterType="map" resultMap="CertificateAndBorrow">
+		SELECT * FROM w_cer_bor 
+		WHERE deleted =0 AND type=#{type} AND name=#{name} and certifateId = #{certificateId}
+	</select>
+	
+	<select id="getByLinkId" parameterType="java.lang.Long" resultMap="CertificateAndBorrow">
+		SELECT * FROM w_cer_bor 
+		WHERE deleted =0
+		 AND linkId=#{linkId} 
+		 and type = #{type}
+	</select>
+	
+	<select id="getByIdAndType" parameterType="map" resultMap="CertificateAndBorrow">
+		SELECT * FROM w_cer_bor 
+		WHERE deleted =0 
+		<if test="type!=null">
+		AND type=#{type}
+		</if>
+		<if test="certificateId!=null">
+		AND certifateId=#{certificateId}
+		</if>
+		<if test="linkId!=null">
+		AND linkId=#{linkId}
+		</if>
+	</select>
+	
+	<select id="getByBorrowerId" parameterType="java.lang.Long" resultMap="CertificateAndBorrow">
+		SELECT 
+		a.name name,b.F_name borrower,a.certifateId
+		FROM w_cer_bor a LEFT JOIN w_personal_qualification_regist b ON a.linkId = b.Id
+		WHERE a.deleted =0
+		AND a.borrowerId=#{userId} 
+		AND type in (1,2)
+	</select>
+</mapper>

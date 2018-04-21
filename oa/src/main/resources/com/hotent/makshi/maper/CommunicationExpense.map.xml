@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.communicationExpense.CommunicationExpense">
+	<resultMap id="CommunicationExpense" type="com.hotent.makshi.model.communicationExpense.CommunicationExpense">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="order_id" column="F_ORDER_ID" jdbcType="VARCHAR"/>
+		<result property="address" column="F_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="tel_number" column="F_TEL_NUMBER" jdbcType="VARCHAR"/>
+		<result property="user_name" column="F_USER_NAME" jdbcType="VARCHAR"/>
+		<result property="limit" column="F_LIMIT" jdbcType="VARCHAR"/>
+		<result property="money" column="F_MONEY" jdbcType="VARCHAR"/>
+		<result property="thepackage" column="F_PACKAGE" jdbcType="VARCHAR"/>
+		<result property="quota" column="F_QUOTA" jdbcType="VARCHAR"/>
+		<result property="max_quota" column="F_MAX_QUOTA" jdbcType="VARCHAR"/>
+		<result property="need_pay" column="F_NEED_PAY" jdbcType="VARCHAR"/>
+		<result property="date" column="F_DATE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_ORDER_ID,F_ADDRESS,F_TEL_NUMBER,F_USER_NAME,F_LIMIT,F_MONEY,F_PACKAGE,F_QUOTA,F_MAX_QUOTA,F_NEED_PAY,F_DATE
+	</sql>
+	<sql id="wfColumns">
+		ID,F_ORDER_ID,F_ADDRESS,F_TEL_NUMBER,F_USER_NAME,F_LIMIT,F_MONEY,F_PACKAGE,F_QUOTA,F_MAX_QUOTA,F_NEED_PAY,F_DATE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(order_id)"> AND F_ORDER_ID  LIKE '%${order_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(address)"> AND F_ADDRESS  LIKE '%${address}%'  </if>
+			<if test="@Ognl@isNotEmpty(tel_number)"> AND F_TEL_NUMBER  LIKE '%${tel_number}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_name)"> AND F_USER_NAME  LIKE '%${user_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(limit)"> AND F_LIMIT  LIKE '%${limit}%'  </if>
+			<if test="@Ognl@isNotEmpty(money)"> AND F_MONEY  LIKE '%${money}%'  </if>
+			<if test="@Ognl@isNotEmpty(thepackage)"> AND F_PACKAGE  LIKE '%${thepackage}%'  </if>
+			<if test="@Ognl@isNotEmpty(quota)"> AND F_QUOTA  LIKE '%${quota}%'  </if>
+			<if test="@Ognl@isNotEmpty(max_quota)"> AND F_MAX_QUOTA  LIKE '%${max_quota}%'  </if>
+			<if test="@Ognl@isNotEmpty(need_pay)"> AND F_NEED_PAY  LIKE '%${need_pay}%'  </if>
+			<if test="@Ognl@isNotEmpty(date)"> AND F_DATE  LIKE '%${date}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.communicationExpense.CommunicationExpense">
+		INSERT INTO W_COMMUNICATION_EXPENSE
+		(ID,
+		F_ORDER_ID,F_ADDRESS,F_TEL_NUMBER,F_USER_NAME,F_LIMIT,F_MONEY,F_PACKAGE,F_QUOTA,F_MAX_QUOTA,F_NEED_PAY,F_DATE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{order_id,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{tel_number,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, #{limit,jdbcType=VARCHAR}, #{money,jdbcType=VARCHAR}, #{thepackage,jdbcType=VARCHAR}, #{quota,jdbcType=VARCHAR}, #{max_quota,jdbcType=VARCHAR}, #{need_pay,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_COMMUNICATION_EXPENSE 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.communicationExpense.CommunicationExpense">
+		UPDATE W_COMMUNICATION_EXPENSE SET
+		F_ORDER_ID=#{order_id,jdbcType=VARCHAR},
+		F_ADDRESS=#{address,jdbcType=VARCHAR},
+		F_TEL_NUMBER=#{tel_number,jdbcType=VARCHAR},
+		F_USER_NAME=#{user_name,jdbcType=VARCHAR},
+		F_LIMIT=#{limit,jdbcType=VARCHAR},
+		F_MONEY=#{money,jdbcType=VARCHAR},
+		F_PACKAGE=#{thepackage,jdbcType=VARCHAR},
+		F_QUOTA=#{quota,jdbcType=VARCHAR},
+		F_MAX_QUOTA=#{max_quota,jdbcType=VARCHAR},
+		F_NEED_PAY=#{need_pay,jdbcType=VARCHAR},
+		F_DATE=#{date,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="CommunicationExpense">
+		SELECT <include refid="columns"/>
+		FROM W_COMMUNICATION_EXPENSE
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="CommunicationExpense">
+		SELECT <include refid="columns"/>
+		FROM W_COMMUNICATION_EXPENSE   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

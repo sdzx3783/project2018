@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.operation.OverAndAdjust">
+	<resultMap id="OverAndAdjust" type="com.hotent.makshi.model.operation.OverAndAdjust">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="startDate" column="startDate" jdbcType="DATE"/>
+		<result property="endDate" column="endDate" jdbcType="DATE"/>
+		<result property="morning" column="morning" jdbcType="INTEGER"/>
+		<result property="afternoon" column="afternoon" jdbcType="INTEGER"/>
+		<result property="days" column="days" jdbcType="DOUBLE"/>
+	</resultMap>
+	
+	<sql id="columns">
+		ID,startDate,endDate,front,later,days
+	</sql>
+	
+	<select id="getAll"  resultMap="OverAndAdjust" >
+		select F_overTime_start startDate,F_overTime_end endDate,null morning,null afternoon,null days
+		from w_overtime
+		where F_applicantID = ${userId} 
+			 and (  (F_overTime_start&lt;'${end}' and F_overTime_end&gt;='${end}') 
+				  or(F_overTime_start&gt;='${start}' and F_overTime_end&lt;='${end}') 
+				  or(F_overTime_start&lt;='${start}' and F_overTime_end&gt;'${start}')
+				 ) 
+	</select>
+	
+	<select id="getAllAdjustByDate" parameterType="map" resultMap="OverAndAdjust" >
+		select F_adjust_start startDate,F_adjust_end endDate,null morning,null afternoon,null days
+		from w_adjust
+		where F_applicantID = #{userId} 
+			 and (  (F_adjust_start&lt;'${end}' and F_adjust_end&gt;='${end}') 
+				  or(F_adjust_start&gt;='${start}' and F_adjust_end&lt;='${end}') 
+				  or(F_adjust_start&lt;='${start}' and F_adjust_end&gt;'${start}')
+				 ) 
+	</select>
+	
+	<select id="getOverListByUsrId" parameterType="java.lang.Long" resultMap="OverAndAdjust">
+		SELECT 
+					id,
+					F_overTime_start startDate,
+					F_overTime_end endDate,
+					F_overTime_start_point morning,
+					F_overTime_end_point afternoon,
+					(
+							CASE (
+								f_overTime_end_point - f_overTime_start_point
+							)
+							WHEN 1 THEN
+								1
+							WHEN 0 THEN
+								0.5
+							WHEN - 1 THEN
+								0
+							END
+						) + (
+							CASE F_include_front
+							WHEN 1 THEN
+								0.5
+							WHEN 0 THEN
+								0
+							END
+						) + (
+							CASE F_include_later
+							WHEN 1 THEN
+								0.5
+							WHEN 0 THEN
+								0
+							END
+						) + datediff(
+							f_overTime_end,
+							f_overTime_start
+							) days
+				FROM w_overtime
+				WHERE
+					F_finish = 1
+				AND F_isdeleted !=1
+				AND F_APPLICANTID = #{id}
+	</select>
+	
+	<select id="getAdjustListByUsrId" parameterType="java.lang.Long" resultMap="OverAndAdjust">
+		SELECT
+			id,
+			F_adjust_start startDate,
+			F_adjust_end endDate,
+			F_adjust_start_point morning,
+			F_adjust_end_point afternoon,
+			F_offdays days
+			FROM
+				w_adjust
+			WHERE
+				F_finish = 1
+			AND F_isdeleted !=1
+			AND F_APPLICANTID = #{id}
+	</select>
+	<update id="cleanInfo">
+		UPDATE w_adjust SET F_isdeleted =1
+	</update>
+	
+	<select id="queryAdjustList" resultMap="OverAndAdjust">
+		SELECT
+			id,
+			F_adjust_start startDate,
+			F_adjust_end endDate,
+			F_adjust_start_point morning,
+			F_adjust_end_point afternoon,
+			F_offdays days
+			FROM
+				w_adjust
+			WHERE
+				F_finish = 1
+			AND F_APPLICANTID = #{userid}
+			and F_adjust_start &lt;=#{applicant_time}
+			and F_adjust_end &gt;=#{applicant_time}
+	</select>
+</mapper>

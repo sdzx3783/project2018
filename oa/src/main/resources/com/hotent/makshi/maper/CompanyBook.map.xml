@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.addrBook.CompanyBook">
+	<resultMap id="CompanyBook" type="com.hotent.makshi.model.addrBook.CompanyBook">
+		<id property="userPosId" column="USERPOSID" jdbcType="NUMERIC"/>
+		<result property="orgId" column="ORGID" jdbcType="NUMERIC"/>
+		<result property="orgPath" column="PATH" jdbcType="VARCHAR"/>
+		<result property="posId" column="POSID" jdbcType="NUMERIC"/>
+		<result property="jobId" column="JOBID" jdbcType="NUMERIC"/>
+		<result property="userId" column="USERID" jdbcType="NUMERIC"/>
+		<result property="isPrimary" column="ISPRIMARY" jdbcType="NUMERIC"/>
+		<result property="isCharge" column="ISCHARGE" jdbcType="NUMERIC"/>
+		<result property="isDelete" column="ISDELETE" jdbcType="NUMERIC"/>
+		<result property="mobile" column="MOBILE" jdbcType="VARCHAR"/>
+		<result property="phone" column="PHONE" jdbcType="VARCHAR"/>
+		<result property="sex" column="SEX" jdbcType="NUMERIC"/>
+		<result property="email" column="EMAIL" jdbcType="VARCHAR"/>
+		<result property="sjdh" column="F_sjdh" jdbcType="VARCHAR"/>
+		<result property="department" column="department" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<sql id="columns">
+		a.USERPOSID,a.ORGID,a.POSID,a.USERID,a.ISPRIMARY,a.ISCHARGE,a.ISDELETE,a.JOBID
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(userPosId)"> AND a.USERPOSID  =#{userPosId} </if>
+			<if test="@Ognl@isNotEmpty(orgId)"> AND a.ORGID  =#{orgId} </if>
+			<if test="@Ognl@isNotEmpty(posId)"> AND a.POSID  =#{posId} </if>
+			<if test="@Ognl@isNotEmpty(userId)"> AND a.USERID  =#{userId} </if>
+			<if test="@Ognl@isNotEmpty(isPrimary)"> AND a.ISPRIMARY  =#{isPrimary} </if>
+			<if test="@Ognl@isNotEmpty(isCharge)"> AND a.ISCHARGE  =#{isCharge} </if>
+				<if test="@Ognl@isNotEmpty(isCharge)"> AND a.JOBID  =#{jobId} </if>
+			<!--  
+			<if test="@Ognl@isNotEmpty(isDelete)"> AND a.ISDELETE  =#{isDelete} </if>
+			-->
+			 AND a.ISDELETE  =0 
+			 and u.userstatus&lt;&gt;"离职"
+		</where>
+	</sql>
+	<sql id="getAll_Tables">
+
+		SELECT  <include refid="columns"/>, o.ORGPATHNAME,o.PATH,CASE WHEN o.ORGTYPE=4 THEN o.orgName ELSE NULL END department,o.orgName,p.posName,u.fullname as username,u.account,u.status,u.phone,u.mobile,u.sex,
+		u.email,w.F_sjdh
+		FROM SYS_USER_POS   a
+		 inner join sys_user u on a.userid=u.userid
+	    inner join sys_org o   on a.orgid=o.orgid  
+	    inner join sys_pos p   on p.posid=a.posid  AND NOT EXISTS(SELECT * from sys_user_pos sp where sp.userid=u.USERID and sp.ISDELETE=0 AND sp.ISPRIMARY>a.ISPRIMARY)
+	    inner join w_user_infomation w on a.userid=w.F_userId
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(fullname)"> AND u.fullname  like #{fullname} </if>
+		<if test="@Ognl@isNotEmpty(account)"> AND u.account  like #{account} </if>
+		<if test="@Ognl@isNotEmpty(mobile)"> AND u.mobile  like #{mobile} </if>
+		<if test="@Ognl@isNotEmpty(phone)"> AND u.phone  like #{phone} </if>
+		<if test="@Ognl@isNotEmpty(email)"> AND u.email  like #{email} </if>
+		<if test="@Ognl@isNotEmpty(qq)"> AND w.F_QQ  like #{qq} </if>
+		<if test="@Ognl@isNotEmpty(sjdh)"> AND w.F_sjdh  like #{sjdh} </if>
+	</sql>
+	<select id="getAll" resultMap="CompanyBook">
+		select * from
+		(
+			<include refid="getAll_Tables" />
+		) as tab1 
+		GROUP BY USERID 
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by
+		(case when posName REGEXP '董事长$' then 0 when posName REGEXP '公司领导$'  then 1 when posName REGEXP '部门经理$' then 2 when posName REGEXP '部门副经理$' then 3
+		when posName REGEXP '片区经理$' then 4 when posName REGEXP '部门主管$' then 5  when posName REGEXP '负责人$' then 6 else 7 end),ACCOUNT asc
+		
+		</if>
+	</select>
+	<!-- 无分页  查询所有数据 -->
+	<select id="getAlls" resultMap="CompanyBook">
+		select * from
+		(
+			<include refid="getAll_Tables" />
+		) as tab1 
+		GROUP BY USERID 
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by
+		(case when posName REGEXP '董事长$' then 0 when posName REGEXP '公司领导$'  then 1 when posName REGEXP '部门经理$' then 2 when posName REGEXP '部门副经理$' then 3
+		when posName REGEXP '片区经理$' then 4 when posName REGEXP '部门主管$' then 5  when posName REGEXP '负责人$' then 6 else 7 end),ACCOUNT asc
+		
+		</if>
+	</select>
+	
+	<select id="exportAll" resultMap="CompanyBook">
+		select * from
+		(
+			<include refid="getAll_Tables" />
+		) as tab1 
+		GROUP BY USERID 
+		order by path asc,
+		(case when posName REGEXP '董事长$' then 0 when posName REGEXP '公司领导$'  then 1 when posName REGEXP '部门经理$' then 2 when posName REGEXP '部门副经理$' then 3
+		when posName REGEXP '片区经理$' then 4 when posName REGEXP '部门主管$' then 5  when posName REGEXP '负责人$' then 6 else 7 end),ACCOUNT asc
+	</select>
+</mapper>

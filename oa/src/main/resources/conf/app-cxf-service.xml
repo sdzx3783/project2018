@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:soap="http://cxf.apache.org/bindings/soap"
+	xsi:schemaLocation="http://cxf.apache.org/core 
+	                    http://cxf.apache.org/schemas/core.xsd 
+	                    http://www.springframework.org/schema/beans 
+	                    http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://cxf.apache.org/jaxws 
+						http://cxf.apache.org/schemas/jaxws.xsd
+						http://cxf.apache.org/jaxrs    
+						http://cxf.apache.org/schemas/jaxrs.xsd
+						">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	<!-- <import resource="classpath:META-INF/cxf/cxf-extension-jaxrs-binding.xml" />  --> 
+	
+	<!-- IP地址输入拦截器 -->  
+	<bean id="addressInInterceptor"  
+		class="com.hotent.platform.webservice.impl.util.AddressInInterceptor" />  
+	<bean id="afterInterceptor"  
+		class="com.hotent.platform.webservice.impl.util.AfterInterceptor" />  
+	<!-- 参数校验拦截 -->
+	<bean id="parameterinInterceptor" 
+		class="com.hotent.platform.webservice.impl.util.ParameterinInterceptor" />
+	
+	<!-- 登录状态拦截 -->
+	<bean id="userLoginCheckinInterceptor"  
+		class="com.hotent.platform.webservice.impl.util.UserLoginCheckinInterceptor" />  
+	<!-- 自定义异常拦截 -->
+	<bean id="apiExcetpionExceptionMapper"
+		class="com.hotent.platform.webservice.exception.ApiExcetpionExceptionMapper"/>
+	<!-- 未捕获的异常 -->
+	<bean id="uncatchedExceptionMapper"
+		class="com.hotent.platform.webservice.exception.UncatchedExceptionMapper"/>
+		
+		
+	
+ 	<bean id="UserLoginServiceImpl" class="com.hotent.platform.webservice.impl.UserLoginServiceImpl"/>
+<!--  	<jaxrs:server id="NoLoginService" address="/">
+        <jaxrs:extensionMappings>  
+            <entry key="json" value="application/json" />  
+            <entry key="xml" value="application/xml" />  
+        </jaxrs:extensionMappings>  
+	
+		<jaxrs:inInterceptors>    
+			<ref bean="parameterinInterceptor" />  
+        </jaxrs:inInterceptors>
+		<jaxrs:serviceBeans>
+			不需要登陆校验的 webservice bean
+			用户登录
+			<ref bean="UserLoginServiceImpl" />
+		</jaxrs:serviceBeans>
+        <jaxrs:outInterceptors>
+        	<ref bean="afterInterceptor" />
+        </jaxrs:outInterceptors>
+        <jaxrs:outFaultInterceptors>    
+        	自定义异常拦截（拦截器中）
+            <bean id="outFaultInterceptor" class="com.hotent.platform.webservice.impl.util.OutFaultInterceptor" />   
+        </jaxrs:outFaultInterceptors>  
+         <jaxrs:providers>
+         	自定义异常拦截（业务中）
+            <ref bean="apiExcetpionExceptionMapper" />
+            其他异常拦截 （业务中）
+            <ref bean="uncatchedExceptionMapper" />
+        </jaxrs:providers>
+	</jaxrs:server>	 -->
+	  <!-- 	<bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">  
+        <property name="dropRootElement" value="true"/>  
+        <property name="dropCollectionWrapperElement" value="false"/>  
+        <property name="serializeAsArray" value="true"/>  
+	</bean> -->
+	<bean id="appApiUtil" class="com.hotent.makshi.webservice.AppApiUtil"/>
+	<bean id="CompanyBookServiceImpl" class="com.hotent.makshi.webservice.impl.CompanyBookServiceImpl"/>
+	<bean id="SysuserServiceImpl" class="com.hotent.makshi.webservice.impl.SysuserServiceImpl"/>
+	<bean id="SysuserSelectorImpl" class="com.hotent.makshi.webservice.impl.SysuserSelectorImpl"/>
+	<bean id="FlowServiceImpl" class="com.hotent.platform.webservice.impl.FlowServiceImpl"/>
+	<bean id="ProjectServiceImpl" class="com.hotent.makshi.webservice.impl.ProjectServiceImpl"/>
+	<bean id="DocInfoServiceImpl" class="com.hotent.makshi.webservice.impl.DocInfoServiceImpl"/>
+	<bean id="StationMessageServiceImpl" class="com.hotent.makshi.webservice.impl.StationMessageServiceImpl"/>
+	<bean id="WorkHourServiceImpl" class="com.hotent.makshi.webservice.impl.WorkHourServiceImpl"/>
+	<bean id="workHourApplicationController" class="com.hotent.makshi.controller.finance.WorkHourApplicationController" scope="prototype"/>
+	<jaxrs:server id="NeedLoginService" address="/">
+        <jaxrs:extensionMappings>  
+            <entry key="json" value="application/json" />  
+            <entry key="xml" value="application/xml" />  
+        </jaxrs:extensionMappings>  
+	
+		<jaxrs:inInterceptors>
+			<ref bean="parameterinInterceptor" />
+			<!-- ref bean="userLoginCheckinInterceptor" / -->   
+        </jaxrs:inInterceptors>
+		<jaxrs:serviceBeans>
+			<ref bean="UserLoginServiceImpl" />
+			<ref bean="FlowServiceImpl" />
+			<ref bean="ProcessServiceImpl" />
+			<ref bean="UserOrgServiceImpl" />
+			<ref bean="CompanyBookServiceImpl" />
+			<ref bean="SysuserServiceImpl" /> 
+			<ref bean="SysuserSelectorImpl" />
+			<ref bean="WorkHourServiceImpl" />
+			<ref bean="ProjectServiceImpl" />
+			<ref bean="DocInfoServiceImpl" />
+			<ref bean="StationMessageServiceImpl" />
+		</jaxrs:serviceBeans>
+<!--         <jaxrs:outInterceptors>
+        	<ref bean="afterInterceptor" />
+        </jaxrs:outInterceptors> -->
+        <jaxrs:outFaultInterceptors>    
+        	<!-- 自定义异常拦截（拦截器中） -->
+            <bean id="outFaultInterceptor" class="com.hotent.platform.webservice.impl.util.OutFaultInterceptor" />   
+        </jaxrs:outFaultInterceptors>  
+         <jaxrs:providers>
+         	<!-- 自定义异常拦截（业务中） -->
+            <ref bean="apiExcetpionExceptionMapper" />
+            <!-- 其他异常拦截 （业务中）-->
+            <ref bean="uncatchedExceptionMapper" />
+           <!--  <ref bean="jsonProvider" /> -->
+        </jaxrs:providers>
+
+	</jaxrs:server>
+	
+	<!-- 反回登陆用户-->
+ 	<bean id="UserDetailsServiceImpl" class="com.hotent.platform.webservice.impl.UserDetailsServiceImpl"/>
+	<jaxws:endpoint    
+		id="UserDetailsService"    
+		implementor="#UserDetailsServiceImpl" 
+		implementorClass="com.hotent.platform.webservice.impl.UserDetailsServiceImpl"	
+		address="/UserDetailsService" >
+		<jaxws:inInterceptors>  
+			<ref bean="addressInInterceptor" />  
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<ref bean="afterInterceptor" /> 
+		</jaxws:outInterceptors>
+	</jaxws:endpoint> 	
+	
+	<!-- 返回权限资源-->
+	<bean id="SystemResourcesServiceImpl" class="com.hotent.platform.webservice.impl.SystemResourcesServiceImpl"/> 
+	<jaxws:endpoint
+		id="SystemResourcesService"
+		implementor="#SystemResourcesServiceImpl"
+		implementorClass="com.hotent.platform.webservice.impl.SystemResourcesServiceImpl"	
+		address="/SystemResourcesService" >
+		<jaxws:inInterceptors>  
+			<ref bean="addressInInterceptor" />  
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<ref bean="afterInterceptor" /> 
+		</jaxws:outInterceptors>
+	</jaxws:endpoint>
+	
+	<!--流程web服务类 -->  	
+	<bean id="ProcessServiceImpl" class="com.hotent.makshi.webservice.impl.ProcessServiceImpl"/>
+	<!--<bean id="ProcessServiceImpl" class="com.hotent.platform.webservice.impl.ProcessServiceImpl"/>
+	 <jaxws:endpoint id="ProcessService"	implementor="#ProcessServiceImpl" 
+		implementorClass="com.hotent.platform.webservice.impl.ProcessServiceImpl"	address="/ProcessService" >
+		<jaxws:inInterceptors>  
+			<ref bean="addressInInterceptor" />  
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<ref bean="afterInterceptor" /> 
+		</jaxws:outInterceptors>
+	</jaxws:endpoint> -->
+	<!--流程web服务类 -->  
+	
+<!-- 	<bean id="TestRestImpl" class="com.hotent.platform.webservice.impl.TestRestImpl"/>
+	<jaxrs:server id="TestService" address="/test">
+		<jaxrs:serviceBeans>
+			<ref bean="TestRestImpl" />
+		</jaxrs:serviceBeans>
+		<jaxrs:extensionMappings>
+        <entry key="json" value="application/json"/>
+     	</jaxrs:extensionMappings>
+      <jaxrs:languageMappings>
+         <entry key="cn" value="cn-ZH"/>  
+     </jaxrs:languageMappings> 
+	</jaxrs:server> -->
+    
+	
+<!-- 	<jaxws:endpoint id="FlowService"	implementor="#FlowServiceImpl" 
+		implementorClass="com.hotent.platform.webservice.impl.FlowServiceImpl"	address="/FlowService" >
+		<jaxws:inInterceptors>  
+			<ref bean="addressInInterceptor" />  
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<ref bean="afterInterceptor" /> 
+		</jaxws:outInterceptors>
+	</jaxws:endpoint> -->
+	
+	<!--流程表单服务类 -->  	
+	<bean id="FormServiceImpl" class="com.hotent.platform.webservice.impl.FormServiceImpl"/>
+	<jaxws:endpoint id="FormService" implementor="#FormServiceImpl" address="/FormService" >
+		<jaxws:inInterceptors>
+			<ref bean="addressInInterceptor" />
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<ref bean="afterInterceptor" />  
+		</jaxws:outInterceptors>
+	</jaxws:endpoint>
+	
+	<!-- 返回登陆用户-->
+ 	<bean id="UserOrgServiceImpl" class="com.hotent.platform.webservice.impl.UserOrgServiceImpl"/>
+	<!-- <jaxws:endpoint    
+		id="UserOrgService"    
+		implementor="#UserOrgServiceImpl" 
+		implementorClass="com.hotent.platform.webservice.impl.UserOrgServiceImpl"	
+		address="/UserOrgService" >
+		<jaxws:inInterceptors>  
+			<ref bean="addressInInterceptor" />  
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<ref bean="afterInterceptor" /> 
+		</jaxws:outInterceptors>
+	</jaxws:endpoint> -->
+</beans>

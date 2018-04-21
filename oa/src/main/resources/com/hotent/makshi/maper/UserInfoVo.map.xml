@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.finance.UserInfoVo">
+	<resultMap id="SysUser" type="com.hotent.makshi.model.finance.UserInfoVo">
+		<id property="userId" column="userId" jdbcType="NUMERIC"/>
+		<result property="fullname" column="fullname" jdbcType="VARCHAR"/>
+		<result property="account" column="account" jdbcType="VARCHAR"/>
+		<result property="password" column="password" jdbcType="VARCHAR"/>
+		<result property="isExpired" column="isExpired" jdbcType="NUMERIC"/>
+		<result property="isLock" column="isLock" jdbcType="NUMERIC"/>
+		<result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+		<result property="creator" column="CREATOR" jdbcType="VARCHAR"/>
+		<result property="creatorId" column="CREATORID" jdbcType="VARCHAR"/>
+		<result property="status" column="status" jdbcType="NUMERIC"/>
+		<result property="email" column="email" jdbcType="VARCHAR"/>
+		<result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+		<result property="weixinid" column="weixinid" jdbcType="VARCHAR"/>
+		<result property="phone" column="phone" jdbcType="VARCHAR"/>
+		<result property="sex" column="sex" jdbcType="VARCHAR"/>
+		<result property="picture" column="picture" jdbcType="VARCHAR"/>
+		<result property="fromType" column="fromType" jdbcType="NUMERIC"/>
+		<result property="hasSyncToWx" column="hasSyncToWx" jdbcType="NUMERIC"/>
+		<result property="entryDate" column="entrydate" jdbcType="TIMESTAMP"/>
+		<result property="userStatus" column="userStatus" jdbcType="VARCHAR"/>
+		<result property="pwdUpdTime" column="pwdUpdTime" jdbcType="TIMESTAMP"/>
+		<result property="updateTime" column="UPDATETIME" jdbcType="TIMESTAMP"/>
+		<result property="updateor" column="UPDATEOR" jdbcType="VARCHAR"/>
+		<result property="updateorId" column="UPDATEORID" jdbcType="VARCHAR"/>
+		<result property="formalDate" column="FORMALDATE" jdbcType="TIMESTAMP"/>
+		<result property="resignationDate" column="RESIGNATIONDATE" jdbcType="TIMESTAMP"/>
+		<result property="birthday" column="F_birthday" jdbcType="DATE"/>
+	</resultMap>
+	
+	<sql id="columns">
+		userId,fullname,account,password,isExpired,isLock,createtime,status,email,mobile,phone,
+		sex,picture,fromType,entryDate,userStatus,pwdUpdTime,hasSyncToWx,weixinid,
+		UPDATEOR,UPDATEORID,CREATOR,CREATORID,UPDATETIME,RESIGNATIONDATE,FORMALDATE
+	</sql>
+	
+	<select id="getAll" resultType="com.hotent.makshi.model.finance.UserInfoVo">
+		SELECT DISTINCT a.*,b.userPosId,b.orgId,b.posId as posId1,b.jobId
+	    FROM sys_user a left join sys_user_pos b on a.userid = b.userid and b.ISDELETE=0 and  b.USERPOSID=(select b1.USERPOSID from sys_user_pos b1 where b1.userid=b.userid and b1.isdelete=0 order by ISCHARGE desc LIMIT 1)
+		where 1 = 1 and a.account &lt;&gt; 'admin' and a.status &lt;&gt; -1
+		<if test="@Ognl@isNotEmpty(fullname)"> AND fullname  LIKE #{fullname}  </if>
+		<if test="@Ognl@isNotEmpty(orgname)"> AND  b.orgid  in (select orgid from sys_org where ORGPATHNAME like #{orgname})</if>
+		<if test="@Ognl@isNotEmpty(jobname)"> AND  b.jobId  in (select jobid from sys_job where jobname like #{jobname})</if>
+		<if test="@Ognl@isNotEmpty(mobile)"> AND a.mobile  LIKE #{mobile}  </if>
+		<if test="@Ognl@isNotEmpty(userstatus)"> AND userstatus  =#{userstatus} </if>
+		<if test="@Ognl@isNotEmpty(isLock)"> AND isLock  =#{isLock} </if>
+		<if test="@Ognl@isNotEmpty(isExpired)"> AND isExpired  =#{isExpired} </if>
+		<if test="@Ognl@isNotEmpty(status)"> AND status  =#{status} </if>
+		<if test="@Ognl@isNotEmpty(queryTime)"> AND ENTRYDATE is not null and YEAR(ENTRYDATE)=YEAR(#{queryTime}) and MONTH(ENTRYDATE)=MONTH(#{queryTime})</if>
+		<if test="@Ognl@isNotEmpty(formalDate)"> AND FORMALDATE is not null and YEAR(FORMALDATE)=YEAR(#{formalDate}) and MONTH(FORMALDATE)=MONTH(#{formalDate})</if>
+		<if test="@Ognl@isNotEmpty(orgPath)"> AND b.orgid  in (select orgid from sys_org where path like #{orgPath}) </if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by a.userId  desc
+		</if>
+	</select>
+	
+	<select id="getTransferList"  resultType="com.hotent.makshi.model.finance.UserInfoVo">
+		SELECT DISTINCT a.*,b.userPosId,b.orgId,b.posId as posId1,b.jobId
+	    FROM sys_user a left join sys_user_pos b on a.userid = b.userid and b.ISDELETE=0 and  b.USERPOSID=(select b1.USERPOSID from sys_user_pos b1 where b1.userid=b.userid and b1.isdelete=0 order by ISCHARGE desc LIMIT 1)
+		where 1 = 1 and a.account &lt;&gt; 'admin' and a.status &lt;&gt; -1 and
+		a.userId in
+		(SELECT distinct F_userId
+		FROM W_TRANSFERPOSITION
+		WHERE
+		F_isFinished=1
+		<if test="@Ognl@isNotEmpty(queryTime)"> AND F_month is not null and F_month = #{queryTime}</if>
+		order by id DESC)
+	</select>
+	
+</mapper>

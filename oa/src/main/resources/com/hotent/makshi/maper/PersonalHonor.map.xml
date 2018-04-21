@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.honor.PersonalHonor">
+	<resultMap id="PersonalHonor" type="com.hotent.makshi.model.honor.PersonalHonor">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="nameID" column="F_NAMEID" jdbcType="VARCHAR"/>
+		<result property="honor_num" column="F_HONOR_NUM" jdbcType="VARCHAR"/>
+		<result property="user_num" column="F_USER_NUM" jdbcType="VARCHAR"/>
+		<result property="honor_name" column="F_HONOR_NAME" jdbcType="VARCHAR"/>
+		<result property="honor_level" column="F_HONOR_LEVEL" jdbcType="VARCHAR"/>
+		<result property="issuing_authority" column="F_ISSUING_AUTHORITY" jdbcType="VARCHAR"/>
+		<result property="issue_date" column="F_ISSUE_DATE" jdbcType="DATE"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="query_url" column="F_QUERY_URL" jdbcType="VARCHAR"/>
+	    <result property="file" column="F_FILE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_HONOR_NUM,F_USER_NUM,F_HONOR_NAME,F_HONOR_LEVEL,F_ISSUING_AUTHORITY,F_ISSUE_DATE,F_REMARK,F_QUERY_URL,F_FILE,F_NAME,F_NAMEID
+	</sql>
+	<sql id="wfColumns">
+		ID,F_HONOR_NUM,F_USER_NUM,F_HONOR_NAME,F_HONOR_LEVEL,F_ISSUING_AUTHORITY,F_ISSUE_DATE,F_REMARK,F_QUERY_URL,F_FILE,F_NAME,F_NAMEID
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(honor_num)"> AND F_HONOR_NUM  LIKE '%${honor_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_num)"> AND F_USER_NUM  LIKE '%${user_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(honor_name)"> AND F_HONOR_NAME  LIKE '%${honor_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(honor_level)"> AND F_HONOR_LEVEL  LIKE '%${honor_level}%'  </if>
+			<if test="@Ognl@isNotEmpty(issuing_authority)"> AND F_ISSUING_AUTHORITY  LIKE '%${issuing_authority}%'  </if>
+			<if test="@Ognl@isNotEmpty(issue_date)"> AND F_ISSUE_DATE  =#{issue_date} </if>
+			<if test="@Ognl@isNotEmpty(beginissue_date)"> AND F_ISSUE_DATE  >=#{beginissue_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endissue_date)"> AND F_ISSUE_DATE <![CDATA[ <=#{endissue_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(query_url)"> AND F_QUERY_URL  LIKE '%${query_url}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.honor.PersonalHonor">
+		INSERT INTO W_PERSONAL_HONOR
+		(ID,
+		F_HONOR_NUM,F_USER_NUM,F_HONOR_NAME,F_HONOR_LEVEL,F_ISSUING_AUTHORITY,F_ISSUE_DATE,F_REMARK,F_QUERY_URL,F_FILE,F_NAME,F_NAMEID)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{honor_num,jdbcType=VARCHAR}, #{user_num,jdbcType=VARCHAR}, #{honor_name,jdbcType=VARCHAR}, #{honor_level,jdbcType=VARCHAR}, #{issuing_authority,jdbcType=VARCHAR}, #{issue_date,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{query_url,jdbcType=VARCHAR},#{file,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},#{nameID,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_PERSONAL_HONOR 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.honor.PersonalHonor">
+		UPDATE W_PERSONAL_HONOR SET
+		F_HONOR_NUM=#{honor_num,jdbcType=VARCHAR},
+		F_USER_NUM=#{user_num,jdbcType=VARCHAR},
+		F_HONOR_NAME=#{honor_name,jdbcType=VARCHAR},
+		F_HONOR_LEVEL=#{honor_level,jdbcType=VARCHAR},
+		F_ISSUING_AUTHORITY=#{issuing_authority,jdbcType=VARCHAR},
+		F_ISSUE_DATE=#{issue_date,jdbcType=DATE},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_QUERY_URL=#{query_url,jdbcType=VARCHAR},
+		F_FILE=#{file,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_NAMEID=#{nameID,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="PersonalHonor">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_HONOR
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="PersonalHonor">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_HONOR   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getByUid" parameterType="java.lang.Long" resultMap="PersonalHonor">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_HONOR
+		WHERE
+		F_user_num=#{uid}
+	</select>
+	
+	
+</mapper>

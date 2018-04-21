@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.plan.PlanReply" >
+  <resultMap id="BaseResultMap" type="com.hotent.makshi.model.plan.PlanReply" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
+    <result column="reply" property="reply" jdbcType="VARCHAR" />
+    <result column="cuser" property="cuser" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="isdelete" property="isdelete" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, plan_id, reply, cuser, ctime,isdelete
+  </sql>
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from w_plan_reply
+    where id = #{id}
+  </select>
+  <delete id="delById" parameterType="java.lang.Long" >
+    delete from w_plan_reply
+    where id = #{id}
+  </delete>
+  <insert id="add" parameterType="com.hotent.makshi.model.plan.PlanReply" >
+    insert into w_plan_reply (id, plan_id, reply, 
+      cuser, ctime,isdelete)
+    values (#{id,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{reply,jdbcType=VARCHAR}, 
+      #{cuser,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP},#{isdelete,jdbcType=INTEGER})
+  </insert>
+  <update id="update" parameterType="com.hotent.makshi.model.plan.PlanReply" >
+    update w_plan_reply
+    <set >
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="reply != null" >
+        reply = #{reply,jdbcType=VARCHAR},
+      </if>
+      <if test="cuser != null" >
+        cuser = #{cuser,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="isdelete != null" >
+        isdelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <select id="getReplyByPId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select  a.id, a.plan_id,a.reply, b.fullname as cuser, a.ctime,a.isdelete
+    from w_plan_reply a
+    LEFT JOIN SYS_USER b on a.cuser = b.userid
+    where a.plan_id = #{pId}
+  </select>
+</mapper>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.userinfo.EntryVocationQualification">
+	<resultMap id="EntryVocationQualification" type="com.hotent.makshi.model.userinfo.EntryVocationQualification">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="num" column="F_NUM" jdbcType="VARCHAR"/>
+		<result property="organization" column="F_ORGANIZATION" jdbcType="VARCHAR"/>
+		<result property="major" column="F_MAJOR" jdbcType="VARCHAR"/>
+		<result property="achieve_time" column="F_ACHIEVE_TIME" jdbcType="DATE"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="switchs" column="F_SWITCHS" jdbcType="VARCHAR"/>
+		<result property="borrower" column="F_borrower" jdbcType="VARCHAR" />
+	    <result property="borrowerID" column="F_borrowerID"  jdbcType="VARCHAR" />
+	    <result property="status" column="F_status"  jdbcType="VARCHAR" />
+		<result property="userId" column="F_USERID" jdbcType="NUMERIC"/>
+		<result property="linkId" column="F_LINKID" jdbcType="NUMERIC"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_USERID,F_NAME,F_NUM,F_ORGANIZATION,F_MAJOR,F_ACHIEVE_TIME,F_ATTACHMENT,F_SWITCHS,F_borrower,F_borrowerID,F_status,F_LINKID
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_USERID,F_NAME,F_NUM,F_ORGANIZATION,F_MAJOR,F_ACHIEVE_TIME,F_ATTACHMENT,F_SWITCHS,F_borrower,F_borrowerID,F_status,F_LINKID
+	</sql>
+	
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(organization)"> AND F_ORGANIZATION  LIKE '%${organization}%'  </if>
+			<if test="@Ognl@isNotEmpty(major)"> AND F_MAJOR  LIKE '%${major}%'  </if>
+			<if test="@Ognl@isNotEmpty(achieve_time)"> AND F_ACHIEVE_TIME  =#{achieve_time} </if>
+			<if test="@Ognl@isNotEmpty(beginachieve_time)"> AND F_ACHIEVE_TIME  >=#{beginachieve_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endachieve_time)"> AND F_ACHIEVE_TIME <![CDATA[ <=#{endachieve_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(switchs)"> AND F_SWITCHS  LIKE '%${switchs}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.userinfo.EntryVocationQualification">
+		INSERT INTO W_ENTRY_VOCATION_QUALIFICATION
+		(ID,REFID,F_USERID,F_LINKID,F_NUM,F_NAME,F_ORGANIZATION,F_MAJOR,F_ACHIEVE_TIME,F_ATTACHMENT,F_SWITCHS,F_status)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},#{userId,jdbcType=NUMERIC},#{linkId,jdbcType=NUMERIC},
+		#{num,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR}, #{organization,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR},
+	    #{achieve_time,jdbcType=DATE}, #{attachment,jdbcType=VARCHAR}, #{switchs,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_ENTRY_VOCATION_QUALIFICATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<delete id="delByLinkId" parameterType="java.lang.Long">
+		DELETE FROM W_ENTRY_VOCATION_QUALIFICATION 
+		WHERE
+		F_LINKID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.userinfo.EntryVocationQualification">
+		UPDATE W_ENTRY_VOCATION_QUALIFICATION SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		F_USERID=#{userId,jdbcType=NUMERIC},
+		F_LINKID=#{linkId,jdbcType=NUMERIC},
+		F_NUM=#{num,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_ORGANIZATION=#{organization,jdbcType=VARCHAR},
+		F_MAJOR=#{major,jdbcType=VARCHAR},
+		F_ACHIEVE_TIME=#{achieve_time,jdbcType=DATE},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_SWITCHS=#{switchs,jdbcType=VARCHAR},
+        F_borrowerID = #{borrowerID,jdbcType=VARCHAR},
+        F_borrower = #{borrower,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_ENTRY_VOCATION_QUALIFICATION
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getEntryVocationQualificationList" resultMap="EntryVocationQualification">
+	    SELECT <include refid="columns"/>
+	    FROM W_ENTRY_VOCATION_QUALIFICATION 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="EntryVocationQualification">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY_VOCATION_QUALIFICATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<update id="updateByLinkId" parameterType="java.lang.Long" >
+		UPDATE W_ENTRY_VOCATION_QUALIFICATION SET
+		F_SWITCHS=#{switchs,jdbcType=VARCHAR}
+		WHERE
+		F_linkId=#{linkId}
+	</update>
+	
+	<select id="getByLinkId" parameterType="String" resultMap="EntryVocationQualification">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY_VOCATION_QUALIFICATION
+		WHERE
+		F_linkId=#{linkId}
+	</select>
+	
+	<select id="getByCertificateId" parameterType="String" resultMap="EntryVocationQualification">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY_VOCATION_QUALIFICATION
+		WHERE
+		F_NUM=#{num}
+	</select>
+	
+	<select id="getByUserId" parameterType="java.lang.Long" resultMap="EntryVocationQualification">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY_VOCATION_QUALIFICATION
+		WHERE
+		F_USERID=#{userId}
+	</select>
+	
+	<select id="getAll" resultMap="EntryVocationQualification">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY_VOCATION_QUALIFICATION   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

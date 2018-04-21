@@ -1,0 +1,151 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    color: #555;
+    line-height: 1.7;
+    font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+    -webkit-font-smoothing: subpixel-antialiased;
+    background: url(../images/login_bg.png) no-repeat center center;
+    background-size: cover;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/login_bg.png', sizingMethod='scale');
+}
+
+.header {
+    background: #fff;
+    padding-left: 40px;
+}
+
+.top {
+    height: 60px;
+    line-height: 60px;
+}
+
+.top h1 {
+    font-size: 26px;
+}
+
+.main {
+    min-width: 1280px;
+    padding-left: 40px;
+    padding-top: 110px;
+}
+
+.form {
+    box-sizing: border-box;
+    margin-right: 80px;
+    float: right;
+    width: 346px;
+    background: #fff;
+    border-radius: 5px;
+    padding: 30px 30px 45px;
+    box-shadow: 0 8px 8px 6px #329ed6;
+}
+
+.form h2 {
+    font-size: 18px;
+    font-weight: bolder;
+    margin-bottom: 35px;
+}
+
+.form-line {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.clear {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 42px;
+    background: url(../images/clear_icon.png) no-repeat center;
+}
+
+.clear.view {
+    display: block;
+}
+
+.input {
+    font-size: 16px;
+    width: 100%;
+    height: 42px;
+    line-height: 42px;
+    box-sizing: border-box;
+}
+
+.user-line {
+    margin-bottom: 24px;
+}
+
+.user-line input {
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    padding-left: 54px;
+    padding-right: 40px;
+    background: #fafafa url(../images/phone_icon.png) no-repeat 21px center;
+}
+
+.pswd-line {
+    margin-bottom: 16px;
+}
+
+.pswd-line input {
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    padding-left: 54px;
+    padding-right: 40px;
+    background: #fafafa url(../images/lock_icon.png) no-repeat 21px center;
+}
+
+.line {
+    font-size: 14px;
+    margin-bottom: 50px;
+}
+
+.save-label {
+    cursor: pointer;
+    margin: 0;
+    margin-right: 5px;
+    margin-top: -3px;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    background: url(../images/agree_icon.png) no-repeat;
+}
+
+.save-label.active {
+    background-position: 0px -14px;
+}
+
+.save-input {
+    visibility: hidden;
+}
+
+.submit-line input {
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+    background: #3d80d3;
+    border: 0;
+    border-radius: 3px;
+}
+
+.msg-line {
+    color: red;
+}
+
+.forget {
+    color: #333;
+    text-decoration: none;
+    float: right;
+}
+
+.error-msg .error {
+    color: red;
+}

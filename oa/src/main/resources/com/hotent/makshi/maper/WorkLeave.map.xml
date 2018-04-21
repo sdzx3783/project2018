@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.worksheet.WorkLeave">
+	<resultMap id="WorkLeave" type="com.hotent.makshi.model.worksheet.WorkLeave">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="fullnameID" column="F_FULLNAMEID" jdbcType="VARCHAR"/>
+		<result property="orgID" column="F_orgID" jdbcType="VARCHAR"/>
+		<result property="roleID" column="F_roleID" jdbcType="VARCHAR"/>
+		<result property="fullname" column="F_FULLNAME" jdbcType="VARCHAR"/>
+		<result property="org" column="F_org" jdbcType="VARCHAR"/>
+		<result property="rolename" column="F_rolename" jdbcType="VARCHAR"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="create_time" column="F_CREATE_TIME" jdbcType="TIMESTAMP"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="leave_time" column="F_LEAVE_TIME" jdbcType="DATE"/>
+		<result property="leave_range" column="F_leave_range" jdbcType="INTEGER"/>
+		<result property="count_flag" column="F_count_flag" jdbcType="INTEGER"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_FULLNAMEID,F_ORGID,F_ROLEID,F_FULLNAME,F_ORG,F_ROLENAME,F_TYPE,F_CREATE_TIME,F_REMARK,F_LEAVE_TIME,F_LEAVE_RANGE,F_COUNT_FLAG
+	</sql>
+	<sql id="wfColumns">
+		ID,F_FULLNAMEID,F_ORGID,F_ROLEID,F_FULLNAME,F_ORG,F_ROLENAME,F_TYPE,F_CREATE_TIME,F_REMARK,F_LEAVE_TIME,F_LEAVE_RANGE,F_COUNT_FLAG
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(fullnameID)"> AND F_FULLNAMEID  =#{fullnameID}  </if>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_ORGID  =#{orgID}  </if>
+			<if test="@Ognl@isNotEmpty(positionID)"> AND F_ROLEID =#{roleID}  </if>
+			<if test="@Ognl@isNotEmpty(fullname)"> AND F_FULLNAME  LIKE '${fullname}'  </if>
+			<if test="@Ognl@isNotEmpty(org)"> AND F_ORG  LIKE '${org}'  </if>
+			<if test="@Ognl@isNotEmpty(position)"> AND F_ROLENAME  LIKE '${rolename}'  </if>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE =#{type}  </if>
+			<if test="@Ognl@isNotEmpty(count_flag)"> AND F_count_flag = #{count_flag}  </if>
+			<if test="@Ognl@isNotEmpty(create_time)"> AND F_CREATE_TIME  =#{create_time} </if>
+			<if test="@Ognl@isNotEmpty(begincreate_time)"> AND F_CREATE_TIME  >=#{begincreate_time} </if>
+			<if test="@Ognl@isNotEmpty(endcreate_time)"> AND F_CREATE_TIME <![CDATA[ <=#{endcreate_time}]]> </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(leave_time)"> AND F_LEAVE_TIME  =#{leave_time} </if>
+			<if test="@Ognl@isNotEmpty(beginleave_time)"> AND F_LEAVE_TIME  >=#{beginleave_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endleave_time)"> AND F_LEAVE_TIME <![CDATA[ <=#{endleave_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(typeList)">
+				AND F_TYPE in
+				<foreach collection="typeList" separator="," open="(" close=")" item="item" >
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.worksheet.WorkLeave">
+		INSERT INTO W_WORK_LEAVE
+		(ID,
+		F_FULLNAMEID,F_ORGID,F_ROLEID,F_FULLNAME,F_ORG,F_ROLENAME,F_TYPE,F_CREATE_TIME,F_REMARK,F_LEAVE_TIME,F_LEAVE_RANGE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{fullnameID,jdbcType=VARCHAR}, #{orgID,jdbcType=VARCHAR}, #{roleID,jdbcType=VARCHAR},
+		 #{fullname,jdbcType=VARCHAR}, #{org,jdbcType=VARCHAR}, #{rolename,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{create_time}, #{remark,jdbcType=VARCHAR},
+		  #{leave_time,jdbcType=DATE},
+		  #{leave_range,jdbcType=INTEGER}
+		  )
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_WORK_LEAVE 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.worksheet.WorkLeave">
+		UPDATE W_WORK_LEAVE SET
+		F_FULLNAMEID=#{FULLNAMEID,JDBCTYPE=VARCHAR},
+		F_ORGID=#{ORGID,JDBCTYPE=VARCHAR},
+		F_ROLEID=#{ROLEID,JDBCTYPE=VARCHAR},
+		F_FULLNAME=#{FULLNAME,JDBCTYPE=VARCHAR},
+		F_ORG=#{ORG,JDBCTYPE=VARCHAR},
+		F_ROLENAME=#{ROLENAME,JDBCTYPE=VARCHAR},
+		F_TYPE=#{TYPE,JDBCTYPE=VARCHAR},
+		F_CREATE_TIME=#{CREATE_TIME},
+		F_REMARK=#{REMARK,JDBCTYPE=VARCHAR},
+		F_LEAVE_TIME=#{LEAVE_TIME,JDBCTYPE=DATE},
+		F_LEAVE_RANGE=#{LEAVE_RANGE}
+		WHERE
+		ID=#{ID}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="WorkLeave">
+		SELECT <include refid="columns"/>
+		FROM W_WORK_LEAVE
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="WorkLeave">
+		SELECT <include refid="columns"/>
+		FROM W_WORK_LEAVE   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getVacation" resultType="Map" parameterType="Map">
+	select F_applicant as fullname,F_user_num as fullnameID,F_departmentID as orgID,
+	F_department as org,F_leave_type as type, F_application_date as create_time,F_reason as remark,
+	DATE_FORMAT(F_startTime,'%Y-%m-%d') as startTime,DATE_FORMAT(F_endTime,'%Y-%m-%d') as endTime,F_leaveStartSolt as leaveStartRange,F_leaveEndSolt
+	as leaveEndRange from w_vaction
+	 where 1=1
+	 <if test="id!=null">
+	 	and id=#{id}
+	 </if>
+	 <if test="fullnameID!=null">
+	 	and F_user_num=#{fullnameID}
+	 </if>
+	 <if test="startTimeBegion!=null">
+	 	and startTime>=#{startTimeBegion}
+	 </if>
+	 <if test="startTimeEnd!=null">
+	 	and startTime &lt;=#{startTimeEnd} 
+	 </if>
+	  <if test="entTimeBegion!=null">
+	 	and endTime>=#{entTimeBegion}
+	 </if>
+	 <if test="entTimeEnd!=null">
+	 	and endTime &lt;=#{entTimeEnd} 
+	 </if>
+	 
+	 <if test="durJudge!=null">
+	 	and ((F_startTime >=#{startTimeBegin} and F_endTime &lt;=#{endTimeEnd}) or 
+	 	(F_startTime >=#{startTimeBegin} and F_startTime &lt;=#{endTimeEnd} and #{endTimeEnd} &lt;= F_endTime) or (F_startTime &lt;=#{startTimeBegin} and F_endTime &lt;=#{endTimeEnd}
+	 	 and F_endTime>=#{startTimeBegin}))
+	 </if>
+	
+	</select>
+	
+	<insert id="replaceByMap" parameterType="Map">
+		REPLACE into W_WORK_LEAVE(
+			ID,F_FULLNAMEID,F_ORGID,F_ROLEID,F_FULLNAME,F_ORG,F_ROLENAME,F_TYPE,F_CREATE_TIME,F_REMARK,F_LEAVE_TIME,F_LEAVE_RANGE,F_COUNT_FLAG
+		) 
+		values
+		<foreach item="item" separator="," collection="leaveList"> 
+			(#{item.id},#{item.fullnameID},#{item.orgID},#{item.roleID},#{item.fullname},#{item.org},#{item.rolename},
+			#{item.type},#{item.create_time},#{item.remark},#{item.leave_time},#{item.leave_range},#{item.count_flag})
+		</foreach>
+	</insert>
+	
+</mapper>

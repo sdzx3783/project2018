@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hr.PoliticalIn">
+	<resultMap id="PoliticalIn" type="com.hotent.makshi.model.hr.PoliticalIn">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="user_name" column="F_USER_NAME" jdbcType="VARCHAR"/>
+		<result property="user_id" column="F_USER_ID" jdbcType="VARCHAR"/>
+		<result property="sex" column="F_SEX" jdbcType="VARCHAR"/>
+		<result property="birthday" column="F_BIRTHDAY" jdbcType="VARCHAR"/>
+		<result property="pic" column="F_PIC" jdbcType="VARCHAR"/>
+		<result property="nation" column="F_NATION" jdbcType="VARCHAR"/>
+		<result property="home" column="F_HOME" jdbcType="VARCHAR"/>
+		<result property="marrige_status" column="F_MARRIGE_STATUS" jdbcType="VARCHAR"/>
+		<result property="join_date" column="F_JOIN_DATE" jdbcType="VARCHAR"/>
+		<result property="beformal_date" column="F_BEFORMAL_DATE" jdbcType="VARCHAR"/>
+		<result property="start_work_date" column="F_START_WORK_DATE" jdbcType="VARCHAR"/>
+		<result property="join_branch" column="F_JOIN_BRANCH" jdbcType="VARCHAR"/>
+		<result property="beformal_branch" column="F_BEFORMAL_BRANCH" jdbcType="VARCHAR"/>
+		<result property="introducer" column="F_INTRODUCER" jdbcType="VARCHAR"/>
+		<result property="now_branch" column="F_NOW_BRANCH" jdbcType="VARCHAR"/>
+		<result property="in_branch_date" column="F_IN_BRANCH_DATE" jdbcType="VARCHAR"/>
+		<result property="job_in_branch" column="F_JOB_IN_BRANCH" jdbcType="VARCHAR"/>
+		<result property="edu" column="F_EDU" jdbcType="VARCHAR"/>
+		<result property="degree" column="F_DEGREE" jdbcType="VARCHAR"/>
+		<result property="college" column="F_COLLEGE" jdbcType="VARCHAR"/>
+		<result property="major" column="F_MAJOR" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="relative_address" column="F_RELATIVE_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="home_address" column="F_HOME_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="living_address" column="F_LIVING_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="id_number" column="F_ID_NUMBER" jdbcType="VARCHAR"/>
+		<result property="connect_tel" column="F_CONNECT_TEL" jdbcType="NUMERIC"/>
+		<result property="qq" column="F_QQ" jdbcType="VARCHAR"/>
+		<result property="pay_amount" column="F_PAY_AMOUNT" jdbcType="VARCHAR"/>
+		<result property="weixin" column="F_WEIXIN" jdbcType="VARCHAR"/>
+		<result property="pay_date" column="F_PAY_DATE" jdbcType="VARCHAR"/>
+		<result property="is_out" column="F_IS_OUT" jdbcType="VARCHAR"/>
+		<result property="is_in" column="F_IS_IN" jdbcType="VARCHAR"/>
+		<result property="out_date" column="F_OUT_DATE" jdbcType="DATE"/>
+		<result property="in_date" column="F_IN_DATE" jdbcType="DATE"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_USER_NAME,F_USER_ID,F_SEX,F_BIRTHDAY,F_PIC,F_NATION,F_HOME,F_MARRIGE_STATUS,F_JOIN_DATE,F_BEFORMAL_DATE,F_START_WORK_DATE,F_JOIN_BRANCH,F_BEFORMAL_BRANCH,F_INTRODUCER,F_NOW_BRANCH,F_IN_BRANCH_DATE,F_JOB_IN_BRANCH,F_EDU,F_DEGREE,F_COLLEGE,F_MAJOR,F_DEPARTMENT,F_RELATIVE_ADDRESS,F_HOME_ADDRESS,F_LIVING_ADDRESS,F_ID_NUMBER,F_CONNECT_TEL,F_QQ,F_PAY_AMOUNT,F_WEIXIN,F_PAY_DATE,F_IS_OUT,F_IS_IN,F_OUT_DATE
+	</sql>
+	<sql id="wfColumns">
+		ID,F_USER_NAME,F_USER_ID,F_SEX,F_BIRTHDAY,F_PIC,F_NATION,F_HOME,F_MARRIGE_STATUS,F_JOIN_DATE,F_BEFORMAL_DATE,F_START_WORK_DATE,F_JOIN_BRANCH,F_BEFORMAL_BRANCH,F_INTRODUCER,F_NOW_BRANCH,F_IN_BRANCH_DATE,F_JOB_IN_BRANCH,F_EDU,F_DEGREE,F_COLLEGE,F_MAJOR,F_DEPARTMENT,F_RELATIVE_ADDRESS,F_HOME_ADDRESS,F_LIVING_ADDRESS,F_ID_NUMBER,F_CONNECT_TEL,F_QQ,F_PAY_AMOUNT,F_WEIXIN,F_PAY_DATE,F_IS_OUT,F_IS_IN,F_OUT_DATE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			AND F_IS_IN = 1
+			<if test="@Ognl@isNotEmpty(user_name)"> AND F_USER_NAME  LIKE '%${user_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(sex)"> AND F_SEX  LIKE '%${sex}%'  </if>
+			<if test="@Ognl@isNotEmpty(birthday)"> AND F_BIRTHDAY  =#{birthday} </if>
+			<if test="@Ognl@isNotEmpty(beginbirthday)"> AND F_BIRTHDAY  >=#{beginbirthday,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endbirthday)"> AND F_BIRTHDAY <![CDATA[ <=#{endbirthday,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(pic)"> AND F_PIC  LIKE '%${pic}%'  </if>
+			<if test="@Ognl@isNotEmpty(nation)"> AND F_NATION  LIKE '%${nation}%'  </if>
+			<if test="@Ognl@isNotEmpty(home)"> AND F_HOME  LIKE '%${home}%'  </if>
+			<if test="@Ognl@isNotEmpty(marrige_status)"> AND F_MARRIGE_STATUS  LIKE '%${marrige_status}%'  </if>
+			<if test="@Ognl@isNotEmpty(join_date)"> AND F_JOIN_DATE  =#{join_date} </if>
+			<if test="@Ognl@isNotEmpty(beginjoin_date)"> AND F_JOIN_DATE  >=#{beginjoin_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endjoin_date)"> AND F_JOIN_DATE <![CDATA[ <=#{endjoin_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(beformal_date)"> AND F_BEFORMAL_DATE  =#{beformal_date} </if>
+			<if test="@Ognl@isNotEmpty(beginbeformal_date)"> AND F_BEFORMAL_DATE  >=#{beginbeformal_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endbeformal_date)"> AND F_BEFORMAL_DATE <![CDATA[ <=#{endbeformal_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(start_work_date)"> AND F_START_WORK_DATE  =#{start_work_date} </if>
+			<if test="@Ognl@isNotEmpty(beginstart_work_date)"> AND F_START_WORK_DATE  >=#{beginstart_work_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstart_work_date)"> AND F_START_WORK_DATE <![CDATA[ <=#{endstart_work_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(join_branch)"> AND F_JOIN_BRANCH  LIKE '%${join_branch}%'  </if>
+			<if test="@Ognl@isNotEmpty(beformal_branch)"> AND F_BEFORMAL_BRANCH  LIKE '%${beformal_branch}%'  </if>
+			<if test="@Ognl@isNotEmpty(introducer)"> AND F_INTRODUCER  LIKE '%${introducer}%'  </if>
+			<if test="@Ognl@isNotEmpty(now_branch)"> AND F_NOW_BRANCH  LIKE '%${now_branch}%'  </if>
+			<if test="@Ognl@isNotEmpty(in_branch_date)"> AND F_IN_BRANCH_DATE  =#{in_branch_date} </if>
+			<if test="@Ognl@isNotEmpty(beginin_branch_date)"> AND F_IN_BRANCH_DATE  >=#{beginin_branch_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endin_branch_date)"> AND F_IN_BRANCH_DATE <![CDATA[ <=#{endin_branch_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(job_in_branch)"> AND F_JOB_IN_BRANCH  LIKE '%${job_in_branch}%'  </if>
+			<if test="@Ognl@isNotEmpty(edu)"> AND F_EDU  LIKE '%${edu}%'  </if>
+			<if test="@Ognl@isNotEmpty(degree)"> AND F_DEGREE  LIKE '%${degree}%'  </if>
+			<if test="@Ognl@isNotEmpty(college)"> AND F_COLLEGE  LIKE '%${college}%'  </if>
+			<if test="@Ognl@isNotEmpty(major)"> AND F_MAJOR  LIKE '%${major}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(relative_address)"> AND F_RELATIVE_ADDRESS  LIKE '%${relative_address}%'  </if>
+			<if test="@Ognl@isNotEmpty(home_address)"> AND F_HOME_ADDRESS  LIKE '%${home_address}%'  </if>
+			<if test="@Ognl@isNotEmpty(living_address)"> AND F_LIVING_ADDRESS  LIKE '%${living_address}%'  </if>
+			<if test="@Ognl@isNotEmpty(id_number)"> AND F_ID_NUMBER  LIKE '%${id_number}%'  </if>
+			<if test="@Ognl@isNotEmpty(connect_tel)"> AND F_CONNECT_TEL  =#{connect_tel} </if>
+			<if test="@Ognl@isNotEmpty(qq)"> AND F_QQ  LIKE '%${qq}%'  </if>
+			<if test="@Ognl@isNotEmpty(pay_amount)"> AND F_PAY_AMOUNT  LIKE '%${pay_amount}%'  </if>
+			<if test="@Ognl@isNotEmpty(weixin)"> AND F_WEIXIN  LIKE '%${weixin}%'  </if>
+			<if test="@Ognl@isNotEmpty(pay_date)"> AND F_PAY_DATE  =#{pay_date} </if>
+			<if test="@Ognl@isNotEmpty(beginpay_date)"> AND F_PAY_DATE  >=#{beginpay_date,jdbcType=VARCHAR} </if>
+			<if test="@Ognl@isNotEmpty(endpay_date)"> AND F_PAY_DATE <![CDATA[ <=#{endpay_date,jdbcType=VARCHAR}]]> </if>
+			<if test="@Ognl@isNotEmpty(is_out)"> AND F_IS_OUT  LIKE '%${is_out}%'  </if>
+			<if test="@Ognl@isNotEmpty(in_date)"> AND F_IN_DATE  =#{in_date} </if>
+			<if test="@Ognl@isNotEmpty(beginin_date)"> AND F_IN_DATE  >=#{beginin_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endin_date)"> AND F_IN_DATE <![CDATA[ <=#{endin_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(out_date)"> AND F_OUT_DATE  =#{out_date} </if>
+			<if test="@Ognl@isNotEmpty(beginout_date)"> AND F_OUT_DATE  >=#{beginout_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endout_date)"> AND F_OUT_DATE <![CDATA[ <=#{endout_date,jdbcType=DATE}]]> </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.hr.PoliticalIn">
+		INSERT INTO W_POLITICAL_IN
+		(ID,
+		F_USER_NAME,F_SEX,F_BIRTHDAY,F_PIC,F_NATION,F_HOME,F_MARRIGE_STATUS,F_JOIN_DATE,F_BEFORMAL_DATE,F_START_WORK_DATE,F_JOIN_BRANCH,F_BEFORMAL_BRANCH,F_INTRODUCER,F_NOW_BRANCH,F_IN_BRANCH_DATE,F_JOB_IN_BRANCH,F_EDU,F_DEGREE,F_COLLEGE,F_MAJOR,
+		F_DEPARTMENT,F_RELATIVE_ADDRESS,F_HOME_ADDRESS,F_LIVING_ADDRESS,F_ID_NUMBER,F_CONNECT_TEL,F_QQ,F_PAY_AMOUNT,F_WEIXIN,F_PAY_DATE,F_IS_OUT,F_IS_IN,F_OUT_DATE,F_IN_DATE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{user_name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, #{nation,jdbcType=VARCHAR}, #{home,jdbcType=VARCHAR}, #{marrige_status,jdbcType=VARCHAR}, #{join_date,jdbcType=VARCHAR}, #{beformal_date,jdbcType=VARCHAR}, #{start_work_date,jdbcType=VARCHAR}, #{join_branch,jdbcType=VARCHAR}, #{beformal_branch,jdbcType=VARCHAR}, #{introducer,jdbcType=VARCHAR}, #{now_branch,jdbcType=VARCHAR}, #{in_branch_date,jdbcType=VARCHAR}, #{job_in_branch,jdbcType=VARCHAR}, #{edu,jdbcType=VARCHAR}, #{degree,jdbcType=VARCHAR}, #{college,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{relative_address,jdbcType=VARCHAR}, #{home_address,jdbcType=VARCHAR}, #{living_address,jdbcType=VARCHAR}, #{id_number,jdbcType=VARCHAR}, #{connect_tel,jdbcType=NUMERIC}, #{qq,jdbcType=VARCHAR}, #{pay_amount,jdbcType=VARCHAR}, #{weixin,jdbcType=VARCHAR},
+		#{pay_date,jdbcType=VARCHAR}, #{is_out,jdbcType=VARCHAR}, #{is_in,jdbcType=VARCHAR}, #{out_date,jdbcType=DATE}, #{in_date,jdbcType=DATE})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_POLITICAL_IN 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hr.PoliticalIn">
+		UPDATE W_POLITICAL_IN SET
+		F_USER_NAME=#{user_name,jdbcType=VARCHAR},
+		F_SEX=#{sex,jdbcType=VARCHAR},
+		F_BIRTHDAY=#{birthday,jdbcType=VARCHAR},
+		F_PIC=#{pic,jdbcType=VARCHAR},
+		F_NATION=#{nation,jdbcType=VARCHAR},
+		F_HOME=#{home,jdbcType=VARCHAR},
+		F_MARRIGE_STATUS=#{marrige_status,jdbcType=VARCHAR},
+		F_JOIN_DATE=#{join_date,jdbcType=VARCHAR},
+		F_BEFORMAL_DATE=#{beformal_date,jdbcType=VARCHAR},
+		F_START_WORK_DATE=#{start_work_date,jdbcType=VARCHAR},
+		F_JOIN_BRANCH=#{join_branch,jdbcType=VARCHAR},
+		F_BEFORMAL_BRANCH=#{beformal_branch,jdbcType=VARCHAR},
+		F_INTRODUCER=#{introducer,jdbcType=VARCHAR},
+		F_NOW_BRANCH=#{now_branch,jdbcType=VARCHAR},
+		F_IN_BRANCH_DATE=#{in_branch_date,jdbcType=VARCHAR},
+		F_JOB_IN_BRANCH=#{job_in_branch,jdbcType=VARCHAR},
+		F_EDU=#{edu,jdbcType=VARCHAR},
+		F_DEGREE=#{degree,jdbcType=VARCHAR},
+		F_COLLEGE=#{college,jdbcType=VARCHAR},
+		F_MAJOR=#{major,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_RELATIVE_ADDRESS=#{relative_address,jdbcType=VARCHAR},
+		F_HOME_ADDRESS=#{home_address,jdbcType=VARCHAR},
+		F_LIVING_ADDRESS=#{living_address,jdbcType=VARCHAR},
+		F_ID_NUMBER=#{id_number,jdbcType=VARCHAR},
+		F_CONNECT_TEL=#{connect_tel,jdbcType=NUMERIC},
+		F_QQ=#{qq,jdbcType=VARCHAR},
+		F_PAY_AMOUNT=#{pay_amount,jdbcType=VARCHAR},
+		F_WEIXIN=#{weixin,jdbcType=VARCHAR},
+		F_IS_OUT=#{is_out,jdbcType=VARCHAR},
+		F_OUT_DATE=#{out_date,jdbcType=DATE},
+		<if test="@Ognl@isNotEmpty(in_date)">
+		F_IN_DATE=#{in_date,jdbcType=DATE},
+		</if>
+		F_IS_IN=#{is_in,jdbcType=VARCHAR},
+		F_PAY_DATE=#{pay_date,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="PoliticalIn">
+		SELECT <include refid="columns"/>
+		FROM W_POLITICAL_IN
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="PoliticalIn">
+		SELECT <include refid="columns"/>
+		FROM W_POLITICAL_IN   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+    <select id="getByUserName" parameterType="string" resultMap="PoliticalIn">
+		SELECT <include refid="columns"/>
+		FROM W_POLITICAL_IN   
+		where F_user_name = #{user_name}
+		and F_is_in = 1
+	</select>
+	
+	<select id="getByUserid" parameterType="string" resultMap="PoliticalIn">
+		SELECT <include refid="columns"/>
+		FROM W_POLITICAL_IN   
+		where F_user_id = #{user_id}
+		and F_is_in = 1
+	</select>
+	
+</mapper>

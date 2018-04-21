@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.stationery.StationeryPurchase">
+	<resultMap id="StationeryPurchase" type="com.hotent.makshi.model.stationery.StationeryPurchase">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="user_name" column="F_USER_NAME" jdbcType="VARCHAR"/>
+		<result property="first_department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="user_id" column="F_USER_ID" jdbcType="VARCHAR"/>
+		<result property="second_department" column="F_SECOND_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="state" column="F_STATE" jdbcType="VARCHAR"/>
+		<result property="application_time" column="F_APPLICATION_TIME" jdbcType="VARCHAR"/>
+		<result property="globalflowno" column="F_GLOBALFLOWNO" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="purchase_number" column="F_PURCHASE_NUMBER" jdbcType="VARCHAR"/>
+		<result property="specification" column="F_SPECIFICATION" jdbcType="VARCHAR"/>
+		<result property="account" column="F_account" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.stationery.StationeryPurchase" id="ExtStationeryPurchase" extends="StationeryPurchase">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_USER_NAME,B.orgname F_FIRST_DEPARTMENT,F_USER_ID,C.orgname F_SECOND_DEPARTMENT,F_STATE,F_APPLICATION_TIME,F_GLOBALFLOWNO,F_DEPARTMENT
+		,F_account
+	</sql>
+	<sql id="wfColumns">
+		ID,F_USER_NAME,F_FIRST_DEPARTMENT,F_USER_ID,F_SECOND_DEPARTMENT,F_STATE,F_APPLICATION_TIME,F_GLOBALFLOWNO
+		,F_account
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(user_name)"> AND F_USER_NAME  LIKE '%${user_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(first_department)"> AND B.orgname   LIKE '%${first_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_id)"> AND F_USER_ID  LIKE '%${user_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(second_department)"> AND F_SECOND_DEPARTMENT  LIKE '%${second_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(state)"> AND F_STATE  LIKE '%${state}%'  </if>
+			<if test="@Ognl@isNotEmpty(application_time)"> AND F_APPLICATION_TIME  LIKE '%${application_time}%'  </if>
+			<if test="@Ognl@isNotEmpty(globalflowno)"> AND F_GLOBALFLOWNO  LIKE '%${globalflowno}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(purchase_number)"> AND F_PURCHASE_NUMBER  = ${purchase_number}  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.stationery.StationeryPurchase">
+		INSERT INTO W_STATIONERY_PURCHASE
+		(ID,
+		F_USER_NAME,F_FIRST_DEPARTMENT,F_USER_ID,F_SECOND_DEPARTMENT,F_STATE,F_APPLICATION_TIME,F_GLOBALFLOWNO
+		,F_account)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{user_name,jdbcType=VARCHAR}, #{first_department,jdbcType=VARCHAR}, #{user_id,jdbcType=VARCHAR}, #{second_department,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{application_time,jdbcType=VARCHAR}, #{globalflowno,jdbcType=VARCHAR}
+		,#{account,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_STATIONERY_PURCHASE 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.stationery.StationeryPurchase">
+		UPDATE W_STATIONERY_PURCHASE SET
+		F_USER_NAME=#{user_name,jdbcType=VARCHAR},
+		F_FIRST_DEPARTMENT=#{first_department,jdbcType=VARCHAR},
+		F_USER_ID=#{user_id,jdbcType=VARCHAR},
+		F_SECOND_DEPARTMENT=#{second_department,jdbcType=VARCHAR},
+		F_STATE=#{state,jdbcType=VARCHAR},
+		F_APPLICATION_TIME=#{application_time,jdbcType=VARCHAR},
+		F_GLOBALFLOWNO=#{globalflowno,jdbcType=VARCHAR},
+		F_account = #{account,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="StationeryPurchase">
+		SELECT <include refid="columns"/>
+		FROM W_STATIONERY_PURCHASE	A  left join sys_org B on  A.F_FIRST_DEPARTMENT = B.orgid left join sys_org C  on  A.F_SECOND_DEPARTMENT = C.orgid 
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="StationeryPurchase">
+		SELECT
+			A.ID,
+			F_USER_NAME,
+			F_FIRST_DEPARTMENT,
+			F_DEPARTMENT,
+			F_USER_ID,
+			F_SECOND_DEPARTMENT,
+			F_STATE,
+			F_APPLICATION_TIME,
+			F_GLOBALFLOWNO,
+			F_NAME,
+			F_PURCHASE_NUMBER,
+			F_SPECIFICATION
+		FROM
+			W_STATIONERY_PURCHASE A
+		LEFT JOIN w_stationery_stock D ON A.ID = D.REFID
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="StationeryPurchase">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_STATIONERY_PURCHASE A,BPM_PRO_RUN B 
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtStationeryPurchase">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_STATIONERY_PURCHASE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_STATIONERY_PURCHASE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_STATIONERY_PURCHASE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_STATIONERY_PURCHASE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_STATIONERY_PURCHASE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="StationeryPurchase">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_STATIONERY_PURCHASE A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

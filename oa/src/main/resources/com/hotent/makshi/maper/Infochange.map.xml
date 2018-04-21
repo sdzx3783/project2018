@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hr.Infochange">
+	<resultMap id="Infochange" type="com.hotent.makshi.model.hr.Infochange">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="shortNum" column="F_SHORTNUM" jdbcType="VARCHAR"/>
+		<result property="account" column="F_ACCOUNT" jdbcType="VARCHAR"/>
+		<result property="eduBefore" column="F_EDUBEFORE" jdbcType="VARCHAR"/>
+		<result property="eduAfter" column="F_EDUAFTER" jdbcType="VARCHAR"/>
+		<result property="schoolBefore" column="F_SCHOOLBEFORE" jdbcType="VARCHAR"/>
+		<result property="schoolAfter" column="F_SCHOOLAFTER" jdbcType="VARCHAR"/>
+		<result property="majorBefore" column="F_MAJORBEFORE" jdbcType="VARCHAR"/>
+		<result property="majorAfter" column="F_MAJORAFTER" jdbcType="VARCHAR"/>
+		<result property="marrigeStatusBefore" column="F_MARRIGESTATUSBEFORE" jdbcType="VARCHAR"/>
+		<result property="marrigeStatusAfter" column="F_MARRIGESTATUSAFTER" jdbcType="VARCHAR"/>
+		<result property="spouseNameBefore" column="F_SPOUSENAMEBEFORE" jdbcType="VARCHAR"/>
+		<result property="spouseNameAfter" column="F_SPOUSENAMEAFTER" jdbcType="VARCHAR"/>
+		<result property="spouseIdBefore" column="F_SPOUSEIDBEFORE" jdbcType="VARCHAR"/>
+		<result property="spouseIdAfter" column="F_SPOUSEIDAFTER" jdbcType="VARCHAR"/>
+		<result property="startDateBefore" column="F_STARTDATEBEFORE" jdbcType="DATE"/>
+		<result property="startDateAfter" column="F_STARTDATEAFTER" jdbcType="DATE"/>
+		<result property="endDateBefore" column="F_ENDDATEBEFORE" jdbcType="DATE"/>
+		<result property="endDateAfter" column="F_ENDDATEAFTER" jdbcType="DATE"/>
+		<result property="eduAttachment" column="F_EDUATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="positionIdBefore" column="F_POSITIONIDBEFORE" jdbcType="VARCHAR"/>
+		<result property="positionIdAfter" column="F_POSITIONIDAFTER" jdbcType="VARCHAR"/>
+		<result property="positonNameBefore" column="F_POSITONNAMEBEFORE" jdbcType="VARCHAR"/>
+		<result property="positionNameAfter" column="F_POSITIONNAMEAFTER" jdbcType="VARCHAR"/>
+		<result property="organizationBefore" column="F_ORGANIZATIONBEFORE" jdbcType="VARCHAR"/>
+		<result property="organizationAfter" column="F_ORGANIZATIONAFTER" jdbcType="VARCHAR"/>
+		<result property="positionMajorBofer" column="F_POSITIONMAJORBOFER" jdbcType="VARCHAR"/>
+		<result property="positionMajorAfter" column="F_POSITIONMAJORAFTER" jdbcType="VARCHAR"/>
+		<result property="positionGetDateBefore" column="F_POSITIONGETDATEBEFORE" jdbcType="DATE"/>
+		<result property="positionGetDateAfter" column="F_POSITIONGETDATEAFTER" jdbcType="DATE"/>
+		<result property="positionalAttachment" column="F_POSITIONALATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="addressType" column="F_ADDRESSTYPE" jdbcType="VARCHAR"/>
+		
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_ATTACHMENT,F_NAME,F_DEPARTMENT,F_SHORTNUM,F_ACCOUNT,F_EDUBEFORE,F_EDUAFTER,F_SCHOOLBEFORE,F_SCHOOLAFTER,F_MAJORBEFORE,F_MAJORAFTER,F_MARRIGESTATUSBEFORE,F_MARRIGESTATUSAFTER,F_SPOUSENAMEBEFORE,F_SPOUSENAMEAFTER,F_SPOUSEIDBEFORE,F_SPOUSEIDAFTER,F_STARTDATEBEFORE,F_STARTDATEAFTER,F_ENDDATEBEFORE,F_ENDDATEAFTER,F_EDUATTACHMENT,F_POSITIONIDBEFORE,F_POSITIONIDAFTER,F_POSITONNAMEBEFORE,F_POSITIONNAMEAFTER,F_ORGANIZATIONBEFORE,F_ORGANIZATIONAFTER,F_POSITIONMAJORBOFER,F_POSITIONMAJORAFTER,F_POSITIONGETDATEBEFORE,F_POSITIONGETDATEAFTER,F_POSITIONALATTACHMENT,F_ADDRESSTYPE
+	</sql>
+	<sql id="wfColumns">
+		ID,F_ATTACHMENT,F_NAME,F_DEPARTMENT,F_SHORTNUM,F_ACCOUNT,F_EDUBEFORE,F_EDUAFTER,F_SCHOOLBEFORE,F_SCHOOLAFTER,F_MAJORBEFORE,F_MAJORAFTER,F_MARRIGESTATUSBEFORE,F_MARRIGESTATUSAFTER,F_SPOUSENAMEBEFORE,F_SPOUSENAMEAFTER,F_SPOUSEIDBEFORE,F_SPOUSEIDAFTER,F_STARTDATEBEFORE,F_STARTDATEAFTER,F_ENDDATEBEFORE,F_ENDDATEAFTER,F_EDUATTACHMENT,F_POSITIONIDBEFORE,F_POSITIONIDAFTER,F_POSITONNAMEBEFORE,F_POSITIONNAMEAFTER,F_ORGANIZATIONBEFORE,F_ORGANIZATIONAFTER,F_POSITIONMAJORBOFER,F_POSITIONMAJORAFTER,F_POSITIONGETDATEBEFORE,F_POSITIONGETDATEAFTER,F_POSITIONALATTACHMENT,F_ADDRESSTYPE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(shortNum)"> AND F_SHORTNUM  LIKE '%${shortNum}%'  </if>
+			<if test="@Ognl@isNotEmpty(account)"> AND F_ACCOUNT  LIKE '%${account}%'  </if>
+			<if test="@Ognl@isNotEmpty(eduBefore)"> AND F_EDUBEFORE  LIKE '%${eduBefore}%'  </if>
+			<if test="@Ognl@isNotEmpty(eduAfter)"> AND F_EDUAFTER  LIKE '%${eduAfter}%'  </if>
+			<if test="@Ognl@isNotEmpty(schoolBefore)"> AND F_SCHOOLBEFORE  LIKE '%${schoolBefore}%'  </if>
+			<if test="@Ognl@isNotEmpty(schoolAfter)"> AND F_SCHOOLAFTER  LIKE '%${schoolAfter}%'  </if>
+			<if test="@Ognl@isNotEmpty(majorBefore)"> AND F_MAJORBEFORE  LIKE '%${majorBefore}%'  </if>
+			<if test="@Ognl@isNotEmpty(majorAfter)"> AND F_MAJORAFTER  LIKE '%${majorAfter}%'  </if>
+			<if test="@Ognl@isNotEmpty(marrigeStatusBefore)"> AND F_MARRIGESTATUSBEFORE  LIKE '%${marrigeStatusBefore}%'  </if>
+			<if test="@Ognl@isNotEmpty(marrigeStatusAfter)"> AND F_MARRIGESTATUSAFTER  LIKE '%${marrigeStatusAfter}%'  </if>
+			<if test="@Ognl@isNotEmpty(spouseNameBefore)"> AND F_SPOUSENAMEBEFORE  LIKE '%${spouseNameBefore}%'  </if>
+			<if test="@Ognl@isNotEmpty(spouseNameAfter)"> AND F_SPOUSENAMEAFTER  LIKE '%${spouseNameAfter}%'  </if>
+			<if test="@Ognl@isNotEmpty(spouseIdBefore)"> AND F_SPOUSEIDBEFORE  LIKE '%${spouseIdBefore}%'  </if>
+			<if test="@Ognl@isNotEmpty(spouseIdAfter)"> AND F_SPOUSEIDAFTER  LIKE '%${spouseIdAfter}%'  </if>
+			<if test="@Ognl@isNotEmpty(startDateBefore)"> AND F_STARTDATEBEFORE  =#{startDateBefore} </if>
+			<if test="@Ognl@isNotEmpty(beginstartDateBefore)"> AND F_STARTDATEBEFORE  >=#{beginstartDateBefore,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstartDateBefore)"> AND F_STARTDATEBEFORE <![CDATA[ <=#{endstartDateBefore,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(startDateAfter)"> AND F_STARTDATEAFTER  =#{startDateAfter} </if>
+			<if test="@Ognl@isNotEmpty(beginstartDateAfter)"> AND F_STARTDATEAFTER  >=#{beginstartDateAfter,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstartDateAfter)"> AND F_STARTDATEAFTER <![CDATA[ <=#{endstartDateAfter,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(endDateBefore)"> AND F_ENDDATEBEFORE  =#{endDateBefore} </if>
+			<if test="@Ognl@isNotEmpty(beginendDateBefore)"> AND F_ENDDATEBEFORE  >=#{beginendDateBefore,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endendDateBefore)"> AND F_ENDDATEBEFORE <![CDATA[ <=#{endendDateBefore,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(endDateAfter)"> AND F_ENDDATEAFTER  =#{endDateAfter} </if>
+			<if test="@Ognl@isNotEmpty(beginendDateAfter)"> AND F_ENDDATEAFTER  >=#{beginendDateAfter,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endendDateAfter)"> AND F_ENDDATEAFTER <![CDATA[ <=#{endendDateAfter,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(eduAttachment)"> AND F_EDUATTACHMENT  LIKE '%${eduAttachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(positionIdBefore)"> AND F_POSITIONIDBEFORE  LIKE '%${positionIdBefore}%'  </if>
+			<if test="@Ognl@isNotEmpty(positionIdAfter)"> AND F_POSITIONIDAFTER  LIKE '%${positionIdAfter}%'  </if>
+			<if test="@Ognl@isNotEmpty(positonNameBefore)"> AND F_POSITONNAMEBEFORE  LIKE '%${positonNameBefore}%'  </if>
+			<if test="@Ognl@isNotEmpty(positionNameAfter)"> AND F_POSITIONNAMEAFTER  LIKE '%${positionNameAfter}%'  </if>
+			<if test="@Ognl@isNotEmpty(organizationBefore)"> AND F_ORGANIZATIONBEFORE  LIKE '%${organizationBefore}%'  </if>
+			<if test="@Ognl@isNotEmpty(organizationAfter)"> AND F_ORGANIZATIONAFTER  LIKE '%${organizationAfter}%'  </if>
+			<if test="@Ognl@isNotEmpty(positionMajorBofer)"> AND F_POSITIONMAJORBOFER  LIKE '%${positionMajorBofer}%'  </if>
+			<if test="@Ognl@isNotEmpty(positionMajorAfter)"> AND F_POSITIONMAJORAFTER  LIKE '%${positionMajorAfter}%'  </if>
+			<if test="@Ognl@isNotEmpty(positionGetDateBefore)"> AND F_POSITIONGETDATEBEFORE  =#{positionGetDateBefore} </if>
+			<if test="@Ognl@isNotEmpty(beginpositionGetDateBefore)"> AND F_POSITIONGETDATEBEFORE  >=#{beginpositionGetDateBefore,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endpositionGetDateBefore)"> AND F_POSITIONGETDATEBEFORE <![CDATA[ <=#{endpositionGetDateBefore,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(positionGetDateAfter)"> AND F_POSITIONGETDATEAFTER  =#{positionGetDateAfter} </if>
+			<if test="@Ognl@isNotEmpty(beginpositionGetDateAfter)"> AND F_POSITIONGETDATEAFTER  >=#{beginpositionGetDateAfter,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endpositionGetDateAfter)"> AND F_POSITIONGETDATEAFTER <![CDATA[ <=#{endpositionGetDateAfter,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(positionalAttachment)"> AND F_POSITIONALATTACHMENT  LIKE '%${positionalAttachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.hr.Infochange">
+		INSERT INTO W_INFOCHANGE
+		(ID,
+		F_ATTACHMENT,F_NAME,F_DEPARTMENT,F_SHORTNUM,F_ACCOUNT,F_EDUBEFORE,F_EDUAFTER,F_SCHOOLBEFORE,F_SCHOOLAFTER,F_MAJORBEFORE,F_MAJORAFTER,F_MARRIGESTATUSBEFORE,F_MARRIGESTATUSAFTER,F_SPOUSENAMEBEFORE,F_SPOUSENAMEAFTER,F_SPOUSEIDBEFORE,F_SPOUSEIDAFTER,F_STARTDATEBEFORE,F_STARTDATEAFTER,F_ENDDATEBEFORE,F_ENDDATEAFTER,F_EDUATTACHMENT,F_POSITIONIDBEFORE,F_POSITIONIDAFTER,F_POSITONNAMEBEFORE,F_POSITIONNAMEAFTER,F_ORGANIZATIONBEFORE,F_ORGANIZATIONAFTER,F_POSITIONMAJORBOFER,F_POSITIONMAJORAFTER,F_POSITIONGETDATEBEFORE,F_POSITIONGETDATEAFTER,F_POSITIONALATTACHMENT,F_ADDRESSTYPE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{attachment,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{shortNum,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{eduBefore,jdbcType=VARCHAR}, #{eduAfter,jdbcType=VARCHAR}, #{schoolBefore,jdbcType=VARCHAR}, #{schoolAfter,jdbcType=VARCHAR}, #{majorBefore,jdbcType=VARCHAR}, #{majorAfter,jdbcType=VARCHAR}, #{marrigeStatusBefore,jdbcType=VARCHAR}, #{marrigeStatusAfter,jdbcType=VARCHAR}, #{spouseNameBefore,jdbcType=VARCHAR}, #{spouseNameAfter,jdbcType=VARCHAR}, #{spouseIdBefore,jdbcType=VARCHAR}, #{spouseIdAfter,jdbcType=VARCHAR}, #{startDateBefore,jdbcType=DATE}, #{startDateAfter,jdbcType=DATE}, #{endDateBefore,jdbcType=DATE}, #{endDateAfter,jdbcType=DATE}, #{eduAttachment,jdbcType=VARCHAR}, #{positionIdBefore,jdbcType=VARCHAR}, #{positionIdAfter,jdbcType=VARCHAR}, #{positonNameBefore,jdbcType=VARCHAR}, #{positionNameAfter,jdbcType=VARCHAR}, #{organizationBefore,jdbcType=VARCHAR}, #{organizationAfter,jdbcType=VARCHAR}, #{positionMajorBofer,jdbcType=VARCHAR}, #{positionMajorAfter,jdbcType=VARCHAR}, #{positionGetDateBefore,jdbcType=DATE}, #{positionGetDateAfter,jdbcType=DATE}, #{positionalAttachment,jdbcType=VARCHAR},#{addressType,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_INFOCHANGE 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hr.Infochange">
+		UPDATE W_INFOCHANGE SET
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_SHORTNUM=#{shortNum,jdbcType=VARCHAR},
+		F_ACCOUNT=#{account,jdbcType=VARCHAR},
+		F_EDUBEFORE=#{eduBefore,jdbcType=VARCHAR},
+		F_EDUAFTER=#{eduAfter,jdbcType=VARCHAR},
+		F_SCHOOLBEFORE=#{schoolBefore,jdbcType=VARCHAR},
+		F_SCHOOLAFTER=#{schoolAfter,jdbcType=VARCHAR},
+		F_MAJORBEFORE=#{majorBefore,jdbcType=VARCHAR},
+		F_MAJORAFTER=#{majorAfter,jdbcType=VARCHAR},
+		F_MARRIGESTATUSBEFORE=#{marrigeStatusBefore,jdbcType=VARCHAR},
+		F_MARRIGESTATUSAFTER=#{marrigeStatusAfter,jdbcType=VARCHAR},
+		F_SPOUSENAMEBEFORE=#{spouseNameBefore,jdbcType=VARCHAR},
+		F_SPOUSENAMEAFTER=#{spouseNameAfter,jdbcType=VARCHAR},
+		F_SPOUSEIDBEFORE=#{spouseIdBefore,jdbcType=VARCHAR},
+		F_SPOUSEIDAFTER=#{spouseIdAfter,jdbcType=VARCHAR},
+		F_STARTDATEBEFORE=#{startDateBefore,jdbcType=DATE},
+		F_STARTDATEAFTER=#{startDateAfter,jdbcType=DATE},
+		F_ENDDATEBEFORE=#{endDateBefore,jdbcType=DATE},
+		F_ENDDATEAFTER=#{endDateAfter,jdbcType=DATE},
+		F_EDUATTACHMENT=#{eduAttachment,jdbcType=VARCHAR},
+		F_POSITIONIDBEFORE=#{positionIdBefore,jdbcType=VARCHAR},
+		F_POSITIONIDAFTER=#{positionIdAfter,jdbcType=VARCHAR},
+		F_POSITONNAMEBEFORE=#{positonNameBefore,jdbcType=VARCHAR},
+		F_POSITIONNAMEAFTER=#{positionNameAfter,jdbcType=VARCHAR},
+		F_ORGANIZATIONBEFORE=#{organizationBefore,jdbcType=VARCHAR},
+		F_ORGANIZATIONAFTER=#{organizationAfter,jdbcType=VARCHAR},
+		F_POSITIONMAJORBOFER=#{positionMajorBofer,jdbcType=VARCHAR},
+		F_POSITIONMAJORAFTER=#{positionMajorAfter,jdbcType=VARCHAR},
+		F_POSITIONGETDATEBEFORE=#{positionGetDateBefore,jdbcType=DATE},
+		F_POSITIONGETDATEAFTER=#{positionGetDateAfter,jdbcType=DATE},
+		F_POSITIONALATTACHMENT=#{positionalAttachment,jdbcType=VARCHAR},
+		F_ADDRESSTYPE=#{addressType,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="Infochange">
+		SELECT <include refid="columns"/>
+		FROM W_INFOCHANGE
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="Infochange">
+		SELECT <include refid="columns"/>
+		FROM W_INFOCHANGE   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

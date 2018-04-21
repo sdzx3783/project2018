@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.contract.ContractCustomers">
+	<resultMap id="ContractCustomers" type="com.hotent.makshi.model.contract.ContractCustomers">
+		<result property="department" column="department" jdbcType="VARCHAR" />
+		<result property="allAccount" column="allAccount" jdbcType="DOUBLE" />
+		<result property="rate" column="rate" jdbcType="DOUBLE" />
+	</resultMap>
+	<select id="getAll" parameterType="map" resultMap="ContractCustomers">
+		SELECT F_first_party department,allAccount,CAST((allAccount / allMoney) * 100 AS DECIMAL (18, 2)) rate
+			FROM ( SELECT F_first_party,sum(allAccount) allAccount,(
+																	SELECT
+																		sum(F_contract_money)
+																	FROM
+																		(
+																			SELECT
+																				F_first_party,
+																				F_contract_money,
+																				YEAR (F_singing_time) singingYear
+																			FROM
+																				w_contractinfo
+																			WHERE
+																				F_contract_type = 0
+																			AND F_first_party IS NOT NULL
+																			AND F_singing_time IS NOT NULL
+																		) g
+																	WHERE
+																		singingYear &gt;= #{startYear}  and singingYear &lt;= #{endYear}
+																) allMoney
+					FROM
+						(
+							SELECT F_first_party,sum(F_contract_money) allAccount,singingYear
+							FROM
+								(
+									SELECT F_first_party,F_contract_money,YEAR (F_singing_time) singingYear
+									FROM w_contractinfo
+									WHERE
+										F_contract_type = 0
+										AND F_first_party IS NOT NULL
+										AND F_singing_time IS NOT NULL
+										AND F_contract_money IS NOT NULL
+								) t1
+							GROUP BY
+								F_first_party,
+								singingYear
+						) t2
+					WHERE
+						singingYear &gt;= #{startYear}  and singingYear &lt;= #{endYear}
+					GROUP BY
+						F_first_party
+					ORDER BY
+						allAccount DESC
+				) t3
+	UNION
+	SELECT "合计",sum(allAccount),"100"
+		FROM(
+			SELECT F_first_party department,allAccount,CAST((allAccount / allMoney) * 100 AS DECIMAL (18, 2)) rate
+			FROM ( SELECT F_first_party,sum(allAccount) allAccount,(
+																	SELECT
+																		sum(F_contract_money)
+																	FROM
+																		(
+																			SELECT
+																				F_first_party,
+																				F_contract_money,
+																				YEAR (F_singing_time) singingYear
+																			FROM
+																				w_contractinfo
+																			WHERE
+																				F_contract_type = 0
+																			AND F_first_party IS NOT NULL
+																			AND F_singing_time IS NOT NULL
+																		) g
+																	WHERE
+																		singingYear &gt;= #{startYear}  and singingYear &lt;= #{endYear}
+																) allMoney
+					FROM
+						(
+							SELECT F_first_party,sum(F_contract_money) allAccount,singingYear
+							FROM
+								(
+									SELECT F_first_party,F_contract_money,YEAR (F_singing_time) singingYear
+									FROM w_contractinfo
+									WHERE
+										F_contract_type = 0
+										AND F_first_party IS NOT NULL
+										AND F_singing_time IS NOT NULL
+										AND F_contract_money IS NOT NULL
+								) t1
+							GROUP BY
+								F_first_party,
+								singingYear
+						) t2
+					WHERE
+						singingYear &gt;= #{startYear}  and singingYear &lt;= #{endYear}
+					GROUP BY
+						F_first_party
+					ORDER BY
+						allAccount DESC
+				) t3
+		)t4
+	</select>
+</mapper>

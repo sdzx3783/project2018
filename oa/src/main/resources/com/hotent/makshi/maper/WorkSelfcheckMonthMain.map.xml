@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.selfcheck.WorkSelfcheckMonthMain">
+	<resultMap id="BaseResultMap" type="com.hotent.makshi.model.selfcheck.WorkSelfcheckMonthMain">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="submit_at" property="submitAt" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, username, user_id, submit_at, status
+	</sql>
+	
+	<sql id="querywhere">
+		<if test="null != userId and userId != ''">
+			and user_id = #{userId}
+		</if>
+		<if test="null != submitAt and submitAt != ''">
+			and submit_at = #{submitAt}
+		</if>
+		<if test="null != status and status != ''">
+			and status = #{status}
+		</if>
+	</sql>
+	<select id="count" parameterType="map" resultType="java.lang.Integer">
+		select count(1) from w_work_selfcheck_month_main where status != 0
+		<include refid="querywhere"/>
+	</select>
+	
+	
+	<select id="page" parameterType="map" resultMap="BaseResultMap">
+		select * from w_work_selfcheck_month_main where status != 0
+		<include refid="querywhere"/>
+		order by submit_at desc
+		limit #{begNum},#{pageSize}
+	</select>
+	
+	
+	<select id="getAll" resultMap="BaseResultMap">
+		select * from w_work_selfcheck_month_main where status != 0
+		<if test="null != userId and userId != ''">
+			and user_id = #{userId}
+		</if>
+		<if test="null != submitAt and submitAt != ''">
+			and submit_at = #{submitAt}
+		</if>
+		<if test="null != status and status != ''">
+			and status = #{status}
+		</if>
+	</select>
+	
+	<insert id="add" parameterType="com.hotent.makshi.model.selfcheck.WorkSelfcheckMonthMain" >
+    insert into w_work_selfcheck_month_main (id, username, user_id, 
+      submit_at)
+    values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{submitAt,jdbcType=VARCHAR})
+  </insert>
+  
+   <update id="update" parameterType="com.hotent.makshi.model.selfcheck.WorkSelfcheckMonthMain" >
+    update w_work_selfcheck_month_main
+     set 
+      submit_at = #{submitAt,jdbcType=VARCHAR}
+     where id = #{id}
+   </update>
+  
+   <update id="delById" parameterType="java.lang.Long">
+    update w_work_selfcheck_month_main  set  status = 0 where id = #{id}
+   </update>
+	
+	<select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT <include refid="Base_Column_List"/>
+		FROM w_work_selfcheck_month_main
+		WHERE
+		id=#{id}
+	</select>
+	
+	<select id="getLastId" resultType="java.lang.Long" parameterType="map">
+		select id from w_work_selfcheck_month_main where user_id = #{userId} order by submit_at desc limit 1
+	</select>
+	
+	<update id="submit" parameterType="map">
+		update w_work_selfcheck_month_main  set  status = 2 where id = #{id}
+	</update>
+	
+	<select id="getBySubmitAtNotExculetId" parameterType="map" resultType="java.lang.Integer">
+		select count(1) from w_work_selfcheck_month_main where status != 0
+		<if test="null != userId and userId != ''">
+			and user_id = #{userId}
+		</if>
+		<if test="null != submitAt and submitAt != ''">
+			and submit_at = #{submitAt}
+		</if>
+		<if test="null != id and id != ''">
+			and id != #{id}
+		</if>
+	</select>
+</mapper>

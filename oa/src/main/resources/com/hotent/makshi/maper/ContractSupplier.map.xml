@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.contract.ContractSupplier">
+	<resultMap id="ContractSupplier"
+		type="com.hotent.makshi.model.contract.ContractSupplier">
+		<result property="ownerName" column="F_second_party" jdbcType="VARCHAR" />
+		<result property="contractMoney" column="contract_money" jdbcType="DOUBLE" />
+		<result property="rate" column="rate" jdbcType="DOUBLE" />
+	</resultMap>
+	<select id="getAllSupplier" parameterType="map" resultMap="ContractSupplier">
+		SELECT b.*,cast(contract_money*100/(SELECT SUM(contract_money) FROM (SELECT F_owner_name,sum(cast( F_contract_money AS DECIMAL(10,4))) contract_money,F_singing_time  
+																			  FROM w_contractinfo a
+																			  WHERE F_contract_type = 1
+																			  AND F_contract_money is NOT null 
+																			  AND F_singing_time &gt; #{startDate}
+																			  AND F_singing_time &lt; #{endDate}
+																			  GROUP BY F_owner_name
+																			  ORDER BY contract_money DESC
+																			  ) c) AS DECIMAL(10,2)) rate
+		FROM(
+				SELECT F_second_party,sum(cast( F_contract_money AS DECIMAL(10,4))) contract_money,F_singing_time  FROM w_contractinfo a
+				WHERE F_contract_type = 1
+				AND F_contract_money is NOT null 
+				AND F_singing_time &gt; #{startDate}
+			    AND F_singing_time &lt; #{endDate}
+				GROUP BY F_second_party
+				ORDER BY contract_money DESC
+			) b
+		UNION
+		SELECT '合计',sum(contract_money),NULL,sum(rate)
+		FROM
+		(SELECT b.*,cast(contract_money*100/(
+											SELECT SUM(contract_money) FROM 
+											(SELECT F_owner_name,sum(cast( F_contract_money AS DECIMAL(10,4))) contract_money,F_singing_time  FROM w_contractinfo a
+											WHERE F_contract_type = 1
+											AND F_contract_money is NOT null 
+											AND F_singing_time &gt; #{startDate}
+			    							AND F_singing_time &lt; #{endDate}
+											GROUP BY F_owner_name
+											ORDER BY contract_money DESC
+											) c) AS DECIMAL(10,2)) rate
+		FROM(
+			SELECT F_second_party,sum(cast( F_contract_money AS DECIMAL(10,4))) contract_money,F_singing_time  FROM w_contractinfo a
+			WHERE F_contract_type = 1
+			AND F_contract_money is NOT null 
+			AND F_singing_time &gt; #{startDate}
+		    AND F_singing_time &lt; #{endDate}
+			GROUP BY F_second_party
+			ORDER BY contract_money DESC) b
+		)t
+	</select>
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.title.Practicesteal">
+	<resultMap id="Practicesteal" type="com.hotent.makshi.model.title.Practicesteal">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="fullnameID" column="F_FULLNAMEID" jdbcType="VARCHAR"/>
+		<result property="fullname" column="F_FULLNAME" jdbcType="VARCHAR"/>
+		<result property="user_id" column="F_USER_ID" jdbcType="VARCHAR"/>
+		<result property="gh" column="F_GH" jdbcType="VARCHAR"/>
+		<result property="steal_name" column="F_STEAL_NAME" jdbcType="VARCHAR"/>
+		<result property="project_name" column="F_PROJECT_NAME" jdbcType="VARCHAR"/>
+		<result property="reason" column="F_REASON" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="steal_num" column="F_STEAL_NUM" jdbcType="VARCHAR"/>
+		<result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="appliDate" column="F_appliDate" jdbcType="DATE"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_FULLNAMEID,F_FULLNAME,F_USER_ID,F_GH,F_STEAL_NAME,F_PROJECT_NAME,F_REASON,F_REMARK,F_STEAL_NUM,F_APPLICANTID,F_APPLICANT,F_appliDate
+	</sql>
+	<sql id="wfColumns">
+		ID,F_FULLNAMEID,F_FULLNAME,F_USER_ID,F_GH,F_STEAL_NAME,F_PROJECT_NAME,F_REASON,F_REMARK,F_STEAL_NUM,F_APPLICANTID,F_APPLICANT,F_appliDate
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(fullnameID)"> AND F_FULLNAMEID  LIKE '%${fullnameID}%'  </if>
+			<if test="@Ognl@isNotEmpty(fullname)"> AND F_FULLNAME  LIKE '%${fullname}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_id)"> AND F_USER_ID  LIKE '%${user_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(gh)"> AND F_GH  LIKE '%${gh}%'  </if>
+			<if test="@Ognl@isNotEmpty(steal_name)"> AND F_STEAL_NAME  LIKE '%${steal_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_name)"> AND F_PROJECT_NAME  LIKE '%${project_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(reason)"> AND F_REASON  LIKE '%${reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(steal_num)"> AND F_STEAL_NUM  LIKE '%${steal_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.title.Practicesteal">
+		INSERT INTO W_PRACTICESTEAL
+		(ID,
+		F_FULLNAMEID,F_FULLNAME,F_USER_ID,F_GH,F_STEAL_NAME,F_PROJECT_NAME,F_REASON,F_REMARK,F_STEAL_NUM,F_APPLICANTID,F_APPLICANT,F_appliDate)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{fullnameID,jdbcType=VARCHAR}, #{fullname,jdbcType=VARCHAR}, #{user_id,jdbcType=VARCHAR}, #{gh,jdbcType=VARCHAR}, #{steal_name,jdbcType=VARCHAR}, #{project_name,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{steal_num,jdbcType=VARCHAR}, #{applicantID,jdbcType=VARCHAR},
+	    #{applicant,jdbcType=VARCHAR}, #{appliDate,jdbcType=DATE})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_PRACTICESTEAL 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.title.Practicesteal">
+		UPDATE W_PRACTICESTEAL SET
+		F_FULLNAMEID=#{fullnameID,jdbcType=VARCHAR},
+		F_FULLNAME=#{fullname,jdbcType=VARCHAR},
+		F_USER_ID=#{user_id,jdbcType=VARCHAR},
+		F_GH=#{gh,jdbcType=VARCHAR},
+		F_STEAL_NAME=#{steal_name,jdbcType=VARCHAR},
+		F_PROJECT_NAME=#{project_name,jdbcType=VARCHAR},
+		F_REASON=#{reason,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_STEAL_NUM=#{steal_num,jdbcType=VARCHAR},
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_appliDate = #{appliDate,jdbcType=DATE}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="Practicesteal">
+		SELECT <include refid="columns"/>
+		FROM W_PRACTICESTEAL
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="Practicesteal">
+		SELECT <include refid="columns"/>
+		FROM W_PRACTICESTEAL   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

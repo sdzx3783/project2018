@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.assess.EmployeeAssess">
+	<resultMap id="BaseResultMap" type="com.hotent.makshi.model.assess.EmployeeAssess">
+		<id column="ID" property="id" jdbcType="BIGINT" />
+		<result column="F_employee" property="employee" jdbcType="VARCHAR" />
+		<result column="F_employeeID" property="employeeID" jdbcType="VARCHAR" />
+		<result column="F_department" property="department" jdbcType="VARCHAR" />
+		<result column="F_departmentID" property="departmentID" jdbcType="VARCHAR" />
+		<result column="F_post_name" property="post_name" jdbcType="VARCHAR" />
+		<result column="F_evaluation_at" property="evaluation_at" jdbcType="TIMESTAMP" />
+		<result column="F_self_zy_self1" property="self_zy_self1" jdbcType="DECIMAL" />
+		<result column="F_self_zy_depart1" property="self_zy_depart1" jdbcType="VARCHAR" />
+		<result column="F_self_zy_leader1" property="self_zy_leader1" jdbcType="VARCHAR" />
+		<result column="F_self_zy_self2" property="self_zy_self2" jdbcType="VARCHAR" />
+		<result column="F_self_zy_depart2" property="self_zy_depart2" jdbcType="VARCHAR" />
+		<result column="F_self_zy_leader2" property="self_zy_leader2" jdbcType="VARCHAR" />
+		<result column="F_self_zy_self3" property="self_zy_self3" jdbcType="VARCHAR" />
+		<result column="F_self_zy_depart3" property="self_zy_depart3" jdbcType="VARCHAR" />
+		<result column="F_self_zy_leader3" property="self_zy_leader3" jdbcType="VARCHAR" />
+		<result column="F_self_zy_self4" property="self_zy_self4" jdbcType="VARCHAR" />
+		<result column="F_self_zy_depart4" property="self_zy_depart4" jdbcType="VARCHAR" />
+		<result column="F_self_zy_leader4" property="self_zy_leader4" jdbcType="VARCHAR" />
+		<result column="F_self_td_self1" property="self_td_self1" jdbcType="DECIMAL" />
+		<result column="F_self_td_depart1" property="self_td_depart1" jdbcType="VARCHAR" />
+		<result column="F_self_td_leader1" property="self_td_leader1" jdbcType="VARCHAR" />
+		<result column="F_self_td_self2" property="self_td_self2" jdbcType="VARCHAR" />
+		<result column="F_self_td_depart2" property="self_td_depart2" jdbcType="VARCHAR" />
+		<result column="F_self_td_leader2" property="self_td_leader2" jdbcType="VARCHAR" />
+		<result column="F_self_td_self3" property="self_td_self3" jdbcType="VARCHAR" />
+		<result column="F_self_td_depart3" property="self_td_depart3" jdbcType="VARCHAR" />
+		<result column="F_self_td_leader3" property="self_td_leader3" jdbcType="VARCHAR" />
+		<result column="F_self_td_self4" property="self_td_self4" jdbcType="VARCHAR" />
+		<result column="F_self_td_depart4" property="self_td_depart4" jdbcType="VARCHAR" />
+		<result column="F_self_td_leader4" property="self_td_leader4" jdbcType="VARCHAR" />
+		<result column="F_self_nl_self1" property="self_nl_self1" jdbcType="DECIMAL" />
+		<result column="F_self_nl_depart1" property="self_nl_depart1" jdbcType="VARCHAR" />
+		<result column="F_self_nl_leader1" property="self_nl_leader1" jdbcType="VARCHAR" />
+		<result column="F_self_nl_self2" property="self_nl_self2" jdbcType="VARCHAR" />
+		<result column="F_self_nl_depart2" property="self_nl_depart2" jdbcType="VARCHAR" />
+		<result column="F_self_nl_leader2" property="self_nl_leader2" jdbcType="VARCHAR" />
+		<result column="F_self_nl_self3" property="self_nl_self3" jdbcType="VARCHAR" />
+		<result column="F_self_nl_depart3" property="self_nl_depart3" jdbcType="VARCHAR" />
+		<result column="F_self_nl_leader3" property="self_nl_leader3" jdbcType="VARCHAR" />
+		<result column="F_self_nl_self4" property="self_nl_self4" jdbcType="VARCHAR" />
+		<result column="F_self_nl_depart4" property="self_nl_depart4" jdbcType="VARCHAR" />
+		<result column="F_self_nl_leader4" property="self_nl_leader4" jdbcType="VARCHAR" />
+		<result column="F_self_xg_self1" property="self_xg_self1" jdbcType="DECIMAL" />
+		<result column="F_self_xg_depart1" property="self_xg_depart1" jdbcType="VARCHAR" />
+		<result column="F_self_xg_leader1" property="self_xg_leader1" jdbcType="VARCHAR" />
+		<result column="F_self_xg_self2" property="self_xg_self2" jdbcType="VARCHAR" />
+		<result column="F_self_xg_depart2" property="self_xg_depart2" jdbcType="VARCHAR" />
+		<result column="F_self_xg_leader2" property="self_xg_leader2" jdbcType="VARCHAR" />
+		<result column="F_self_xg_self3" property="self_xg_self3" jdbcType="VARCHAR" />
+		<result column="F_self_xg_depart3" property="self_xg_depart3" jdbcType="VARCHAR" />
+		<result column="F_self_xg_leader3" property="self_xg_leader3" jdbcType="VARCHAR" />
+		<result column="F_self_xg_self4" property="self_xg_self4" jdbcType="VARCHAR" />
+		<result column="F_self_xg_depart4" property="self_xg_depart4" jdbcType="VARCHAR" />
+		<result column="F_self_xg_leader4" property="self_xg_leader4" jdbcType="VARCHAR" />
+		<result column="F_self_total" property="self_total" jdbcType="DECIMAL" />
+		<result column="F_depart_total" property="depart_total" jdbcType="VARCHAR" />
+		<result column="F_leader_total" property="leader_total" jdbcType="VARCHAR" />
+		<result column="F_status" property="status" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, F_employee, F_employeeID, F_department, F_departmentID, F_post_name, F_evaluation_at,
+		F_self_zy_self1, F_self_zy_depart1, F_self_zy_leader1, F_self_zy_self2, F_self_zy_depart2,
+		F_self_zy_leader2, F_self_zy_self3, F_self_zy_depart3, F_self_zy_leader3, F_self_zy_self4,
+		F_self_zy_depart4, F_self_zy_leader4, F_self_td_self1, F_self_td_depart1, F_self_td_leader1,
+		F_self_td_self2, F_self_td_depart2, F_self_td_leader2, F_self_td_self3, F_self_td_depart3,
+		F_self_td_leader3, F_self_td_self4, F_self_td_depart4, F_self_td_leader4, F_self_nl_self1,
+		F_self_nl_depart1, F_self_nl_leader1, F_self_nl_self2, F_self_nl_depart2, F_self_nl_leader2,
+		F_self_nl_self3, F_self_nl_depart3, F_self_nl_leader3, F_self_nl_self4, F_self_nl_depart4,
+		F_self_nl_leader4, F_self_xg_self1, F_self_xg_depart1, F_self_xg_leader1, F_self_xg_self2,
+		F_self_xg_depart2, F_self_xg_leader2, F_self_xg_self3, F_self_xg_depart3, F_self_xg_leader3,
+		F_self_xg_self4, F_self_xg_depart4, F_self_xg_leader4, F_self_total, F_depart_total,
+		F_leader_total, F_status
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.assess.EmployeeAssess">
+		insert into w_employee_assess (ID, F_employee, F_employeeID,
+		F_department, F_departmentID, F_post_name,
+		F_evaluation_at,
+		F_self_zy_self1,
+		F_self_zy_self2,
+		F_self_zy_self3,
+		F_self_zy_self4,
+		F_self_td_self1,
+		F_self_td_self2,
+		F_self_td_self3,
+		F_self_td_self4,
+		F_self_nl_self1,
+		F_self_nl_self2,
+		F_self_nl_self3,
+		F_self_nl_self4,
+		F_self_xg_self1,
+		F_self_xg_self2,
+		F_self_xg_self3,
+		F_self_xg_self4,
+		F_self_total,
+		f_status)
+		values (#{id,jdbcType=BIGINT}, #{employee,jdbcType=VARCHAR}, #{employeeID,jdbcType=VARCHAR},
+		#{department,jdbcType=VARCHAR}, #{departmentID,jdbcType=VARCHAR}, #{post_name,jdbcType=VARCHAR},
+		#{evaluation_at,jdbcType=TIMESTAMP},
+		#{self_zy_self1,jdbcType=DECIMAL},
+		#{self_zy_self2,jdbcType=VARCHAR},
+		#{self_zy_self3,jdbcType=VARCHAR},
+		#{self_zy_self4,jdbcType=VARCHAR},
+		#{self_td_self1,jdbcType=DECIMAL},
+		#{self_td_self2,jdbcType=DECIMAL},
+		#{self_td_self3,jdbcType=DECIMAL},
+		#{self_td_self4,jdbcType=DECIMAL},
+		#{self_nl_self1,jdbcType=DECIMAL},
+		#{self_nl_self2,jdbcType=DECIMAL},
+		#{self_nl_self3,jdbcType=DECIMAL},
+		#{self_nl_self4,jdbcType=DECIMAL},
+		#{self_xg_self1,jdbcType=DECIMAL},
+		#{self_xg_self2,jdbcType=DECIMAL},
+		#{self_xg_self3,jdbcType=DECIMAL},
+		#{self_xg_self4,jdbcType=DECIMAL},
+		#{self_total,jdbcType=DECIMAL},
+		#{status,jdbcType=DECIMAL})
+	</insert>
+
+	<update id="update" parameterType="com.hotent.makshi.model.assess.EmployeeAssess">
+		update w_employee_assess
+		set F_employee = #{employee,jdbcType=VARCHAR},
+		F_employeeID = #{employeeID,jdbcType=VARCHAR},
+		F_department = #{department,jdbcType=VARCHAR},
+		F_departmentID = #{departmentID,jdbcType=VARCHAR},
+		F_post_name = #{post_name,jdbcType=VARCHAR},
+		F_evaluation_at = #{evaluation_at,jdbcType=TIMESTAMP},
+		F_self_zy_self1 = #{self_zy_self1,jdbcType=DECIMAL},
+		F_self_zy_self2 = #{self_zy_self2,jdbcType=VARCHAR},
+		F_self_zy_self3 = #{self_zy_self3,jdbcType=VARCHAR},
+		F_self_zy_self4 = #{self_zy_self4,jdbcType=VARCHAR},
+		F_self_td_self1 = #{self_td_self1,jdbcType=DECIMAL},
+		F_self_td_self2 = #{self_td_self2,jdbcType=VARCHAR},
+		F_self_td_self3 = #{self_td_self3,jdbcType=VARCHAR},
+		F_self_td_self4 = #{self_td_self4,jdbcType=VARCHAR},
+		F_self_nl_self1 = #{self_nl_self1,jdbcType=DECIMAL},
+		F_self_nl_self2 = #{self_nl_self2,jdbcType=VARCHAR},
+		F_self_nl_self3 = #{self_nl_self3,jdbcType=VARCHAR},
+		F_self_nl_self4 = #{self_nl_self4,jdbcType=VARCHAR},
+		F_self_xg_self1 = #{self_xg_self1,jdbcType=DECIMAL},
+		F_self_xg_self2 = #{self_xg_self2,jdbcType=VARCHAR},
+		F_self_xg_self3 = #{self_xg_self3,jdbcType=VARCHAR},
+		F_self_xg_self4 = #{self_xg_self4,jdbcType=VARCHAR},
+		F_self_total = #{self_total,jdbcType=DECIMAL}
+		where ID = #{id,jdbcType=BIGINT}
+	</update>
+
+	<sql id="querywhere">
+		<if test="null != userId and userId != ''">
+			and F_employeeID = #{userId}
+		</if>
+		<if test="null != submitAt and submitAt != ''">
+			and F_evaluation_at = #{submitAt}
+		</if>
+		<if test="null != status and status != ''">
+			<if test="2 != status">
+				and f_status = #{status}
+			</if>
+			<if test="2 == status">
+				and f_status in (2,3)
+			</if>
+		</if>
+	</sql>
+
+	<select id="count" parameterType="map" resultType="java.lang.Integer">
+		select count(1) from w_employee_assess where f_status != 0
+		<include refid="querywhere" />
+	</select>
+
+
+	<select id="page" parameterType="map" resultMap="BaseResultMap">
+		select * from w_employee_assess where f_status != 0
+		<include refid="querywhere" />
+		order by F_evaluation_at desc
+		limit #{begNum},#{pageSize}
+	</select>
+
+	<update id="delById" parameterType="java.lang.Long">
+		update w_employee_assess set f_status = 0 where id = #{id}
+	</update>
+	
+	<update id="delForeverById" parameterType="java.lang.Long">
+		delete w_employee_assess where id = #{id}
+	</update>
+
+	<select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM w_employee_assess
+		WHERE
+		id=#{id}
+	</select>
+
+	<update id="submit" parameterType="map">
+		update w_employee_assess set f_status = 2 where id = #{id}
+	</update>
+
+	<select id="getBySubmitAtNotExculetId" parameterType="map" resultType="java.lang.Integer">
+		select count(1) from w_employee_assess where f_status != 0 
+		<if test="null != userId and userId != ''">
+			and F_employeeID = #{userId}
+		</if>
+		<if test="null != submitAt and submitAt != ''">
+			and F_evaluation_at = #{submitAt}
+		</if>
+		<if test="null != id and id != ''">
+			and id != #{id}
+		</if>
+	</select>
+</mapper>

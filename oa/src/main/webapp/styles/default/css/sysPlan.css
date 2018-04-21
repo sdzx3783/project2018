@@ -1,0 +1,26 @@
+/*.fc-day-header{
+	height: 25px;
+	line-height: 25px;
+	font-size: 14px;
+	font-weight: bold;
+	background-color: highlight;
+}
+.event{
+	height: 25px ;
+	font-size: 14px;
+	line-height: 25px;
+}
+.notstart{
+	background-color: silver;
+}
+.running{
+	background-color: green;
+}
+.finished{
+	background-color: orange;
+}*/
+
+.oa-body-container{
+    width: 900px;
+    margin: 0 auto;
+}

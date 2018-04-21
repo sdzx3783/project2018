@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.stock.StationeryStock">
+	<resultMap id="StationeryStock" type="com.hotent.makshi.model.stock.StationeryStock">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="specification" column="F_SPECIFICATION" jdbcType="VARCHAR"/>
+		<result property="purchase_number" column="F_PURCHASE_NUMBER" jdbcType="VARCHAR"/>
+		<result property="purchase_last_month" column="F_PURCHASE_LAST_MONTH" jdbcType="VARCHAR"/>
+		<result property="send_last_month" column="F_SEND_LAST_MONTH" jdbcType="VARCHAR"/>
+		<result property="stock" column="F_STOCK" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.stock.StationeryStock" id="ExtStationeryStock" extends="StationeryStock">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,REFID,F_NAME,F_SPECIFICATION,F_PURCHASE_NUMBER,F_PURCHASE_LAST_MONTH,F_SEND_LAST_MONTH,F_STOCK
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_NAME,F_SPECIFICATION,F_PURCHASE_NUMBER,F_PURCHASE_LAST_MONTH,F_SEND_LAST_MONTH,F_STOCK
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(specification)"> AND F_SPECIFICATION  LIKE '%${specification}%'  </if>
+			<if test="@Ognl@isNotEmpty(purchase_number)"> AND F_PURCHASE_NUMBER  =#{purchase_number} </if>
+			<if test="@Ognl@isNotEmpty(purchase_last_month)"> AND F_PURCHASE_LAST_MONTH  =#{purchase_last_month} </if>
+			<if test="@Ognl@isNotEmpty(send_last_month)"> AND F_SEND_LAST_MONTH  =#{send_last_month} </if>
+			<if test="@Ognl@isNotEmpty(stock)"> AND F_STOCK  =#{stock} </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.stock.StationeryStock">
+		INSERT INTO W_STATIONERY_STOCK
+		(ID,REFID,
+		F_NAME,F_SPECIFICATION,F_PURCHASE_NUMBER,F_PURCHASE_LAST_MONTH,F_SEND_LAST_MONTH,F_STOCK)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{name,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, #{purchase_number,jdbcType=VARCHAR}, #{purchase_last_month,jdbcType=VARCHAR}, #{send_last_month,jdbcType=VARCHAR}, #{stock,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_STATIONERY_STOCK 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.stock.StationeryStock">
+		UPDATE W_STATIONERY_STOCK SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_SPECIFICATION=#{specification,jdbcType=VARCHAR},
+		F_PURCHASE_NUMBER=#{purchase_number,jdbcType=VARCHAR},
+		F_PURCHASE_LAST_MONTH=#{purchase_last_month,jdbcType=VARCHAR},
+		F_SEND_LAST_MONTH=#{send_last_month,jdbcType=VARCHAR},
+		F_STOCK=#{stock,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_STATIONERY_STOCK
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getStationeryStockList" resultMap="StationeryStock">
+	    SELECT <include refid="columns"/>
+	    FROM W_STATIONERY_STOCK 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="StationeryStock">
+		SELECT <include refid="columns"/>
+		FROM W_STATIONERY_STOCK
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="StationeryStock">
+		SELECT <include refid="columns"/>
+		FROM W_STATIONERY_STOCK   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="StationeryStock">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_STATIONERY_STOCK A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtStationeryStock">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_STATIONERY_STOCK A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_STATIONERY_STOCK A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_STATIONERY_STOCK A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_STATIONERY_STOCK A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_STATIONERY_STOCK A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="StationeryStock">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_STATIONERY_STOCK A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

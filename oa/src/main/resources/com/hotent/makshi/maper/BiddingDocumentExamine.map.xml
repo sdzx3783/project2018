@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.bidding.BiddingDocumentExamine">
+	<resultMap id="BiddingDocumentExamine" type="com.hotent.makshi.model.bidding.BiddingDocumentExamine">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="document_first_check_personID" column="F_DOCUMENT_FIRST_CHECK_PERSONID" jdbcType="VARCHAR"/>
+		<result property="document_name" column="F_DOCUMENT_NAME" jdbcType="VARCHAR"/>
+		<result property="document_evidence" column="F_DOCUMENT_EVIDENCE" jdbcType="VARCHAR"/>
+		<result property="document_content" column="F_DOCUMENT_CONTENT" jdbcType="VARCHAR"/>
+		<result property="document_contract_num" column="F_DOCUMENT_CONTRACT_NUM" jdbcType="VARCHAR"/>
+		<result property="document_contract_name" column="F_DOCUMENT_CONTRACT_NAME" jdbcType="VARCHAR"/>
+		<result property="document_applicant" column="F_DOCUMENT_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="document_appli_date" column="F_DOCUMENT_APPLI_DATE" jdbcType="DATE"/>
+		<result property="document_payer" column="F_DOCUMENT_PAYER" jdbcType="VARCHAR"/>
+		<result property="document_first_check_person" column="F_DOCUMENT_FIRST_CHECK_PERSON" jdbcType="VARCHAR"/>
+		<result property="document_attachment" column="F_DOCUMENT_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="documrnt_money" column="F_DOCUMRNT_MONEY" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.bidding.BiddingDocumentExamine" id="ExtBiddingDocumentExamine" extends="BiddingDocumentExamine">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_DOCUMENT_FIRST_CHECK_PERSONID,F_DOCUMENT_NAME,F_DOCUMENT_EVIDENCE,F_DOCUMENT_CONTENT,F_DOCUMENT_CONTRACT_NUM,F_DOCUMENT_CONTRACT_NAME,F_DOCUMENT_APPLICANT,F_DOCUMENT_APPLI_DATE,F_DOCUMENT_PAYER,F_DOCUMENT_FIRST_CHECK_PERSON,F_DOCUMENT_ATTACHMENT,F_DOCUMRNT_MONEY
+	</sql>
+	<sql id="wfColumns">
+		ID,F_DOCUMENT_FIRST_CHECK_PERSONID,F_DOCUMENT_NAME,F_DOCUMENT_EVIDENCE,F_DOCUMENT_CONTENT,F_DOCUMENT_CONTRACT_NUM,F_DOCUMENT_CONTRACT_NAME,F_DOCUMENT_APPLICANT,F_DOCUMENT_APPLI_DATE,F_DOCUMENT_PAYER,F_DOCUMENT_FIRST_CHECK_PERSON,F_DOCUMENT_ATTACHMENT,F_DOCUMRNT_MONEY
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+		finish = 1 AND deleted = 0
+			<if test="@Ognl@isNotEmpty(document_first_check_personID)"> AND F_DOCUMENT_FIRST_CHECK_PERSONID  LIKE '%${document_first_check_personID}%'  </if>
+			<if test="@Ognl@isNotEmpty(document_name)"> AND F_DOCUMENT_NAME  LIKE '%${document_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(document_evidence)"> AND F_DOCUMENT_EVIDENCE  LIKE '%${document_evidence}%'  </if>
+			<if test="@Ognl@isNotEmpty(document_content)"> AND F_DOCUMENT_CONTENT  LIKE '%${document_content}%'  </if>
+			<if test="@Ognl@isNotEmpty(document_contract_num)"> AND (F_DOCUMENT_CONTRACT_NUM  LIKE '%${document_contract_num}%' OR F_DOCUMENT_CONTRACT_NUM  LIKE '%${contractNumHis}%' )  </if>
+			<if test="@Ognl@isNotEmpty(document_contract_name)"> AND F_DOCUMENT_CONTRACT_NAME  LIKE '%${document_contract_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(document_applicant)"> AND F_DOCUMENT_APPLICANT  LIKE '%${document_applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(document_appli_date)"> AND F_DOCUMENT_APPLI_DATE  =#{document_appli_date} </if>
+			<if test="@Ognl@isNotEmpty(begindocument_appli_date)"> AND F_DOCUMENT_APPLI_DATE  >=#{begindocument_appli_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(enddocument_appli_date)"> AND F_DOCUMENT_APPLI_DATE <![CDATA[ <=#{enddocument_appli_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(document_payer)"> AND F_DOCUMENT_PAYER  LIKE '%${document_payer}%'  </if>
+			<if test="@Ognl@isNotEmpty(document_first_check_person)"> AND F_DOCUMENT_FIRST_CHECK_PERSON  LIKE '%${document_first_check_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(document_attachment)"> AND F_DOCUMENT_ATTACHMENT  LIKE '%${document_attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(documrnt_money)"> AND F_DOCUMRNT_MONEY  LIKE '%${documrnt_money}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.bidding.BiddingDocumentExamine">
+		INSERT INTO W_BIDDING_DOCUMENT_EXAMINE
+		(ID,
+		F_DOCUMENT_FIRST_CHECK_PERSONID,F_DOCUMENT_NAME,F_DOCUMENT_EVIDENCE,F_DOCUMENT_CONTENT,F_DOCUMENT_CONTRACT_NUM,F_DOCUMENT_CONTRACT_NAME,F_DOCUMENT_APPLICANT,F_DOCUMENT_APPLI_DATE,F_DOCUMENT_PAYER,F_DOCUMENT_FIRST_CHECK_PERSON,F_DOCUMENT_ATTACHMENT,F_DOCUMRNT_MONEY)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{document_first_check_personID,jdbcType=VARCHAR}, #{document_name,jdbcType=VARCHAR}, #{document_evidence,jdbcType=VARCHAR}, #{document_content,jdbcType=VARCHAR}, #{document_contract_num,jdbcType=VARCHAR}, #{document_contract_name,jdbcType=VARCHAR}, #{document_applicant,jdbcType=VARCHAR}, #{document_appli_date,jdbcType=DATE}, #{document_payer,jdbcType=VARCHAR}, #{document_first_check_person,jdbcType=VARCHAR}, #{document_attachment,jdbcType=VARCHAR}, #{documrnt_money,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		UPDATE W_BIDDING_DOCUMENT_EXAMINE SET
+		DELETED = 1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.bidding.BiddingDocumentExamine">
+		UPDATE W_BIDDING_DOCUMENT_EXAMINE SET
+		F_DOCUMENT_FIRST_CHECK_PERSONID=#{document_first_check_personID,jdbcType=VARCHAR},
+		F_DOCUMENT_NAME=#{document_name,jdbcType=VARCHAR},
+		F_DOCUMENT_EVIDENCE=#{document_evidence,jdbcType=VARCHAR},
+		F_DOCUMENT_CONTENT=#{document_content,jdbcType=VARCHAR},
+		F_DOCUMENT_CONTRACT_NUM=#{document_contract_num,jdbcType=VARCHAR},
+		F_DOCUMENT_CONTRACT_NAME=#{document_contract_name,jdbcType=VARCHAR},
+		F_DOCUMENT_APPLICANT=#{document_applicant,jdbcType=VARCHAR},
+		F_DOCUMENT_APPLI_DATE=#{document_appli_date,jdbcType=DATE},
+		F_DOCUMENT_PAYER=#{document_payer,jdbcType=VARCHAR},
+		F_DOCUMENT_FIRST_CHECK_PERSON=#{document_first_check_person,jdbcType=VARCHAR},
+		F_DOCUMENT_ATTACHMENT=#{document_attachment,jdbcType=VARCHAR},
+		F_DOCUMRNT_MONEY=#{documrnt_money,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="BiddingDocumentExamine">
+		SELECT <include refid="columns"/>
+		FROM W_BIDDING_DOCUMENT_EXAMINE
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="BiddingDocumentExamine">
+		SELECT <include refid="columns"/>
+		FROM W_BIDDING_DOCUMENT_EXAMINE   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="BiddingDocumentExamine">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_BIDDING_DOCUMENT_EXAMINE A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtBiddingDocumentExamine">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_DOCUMENT_EXAMINE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_DOCUMENT_EXAMINE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_DOCUMENT_EXAMINE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_DOCUMENT_EXAMINE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_DOCUMENT_EXAMINE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="BiddingDocumentExamine">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_BIDDING_DOCUMENT_EXAMINE A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

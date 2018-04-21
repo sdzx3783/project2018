@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.finance.ProjectTaskHour">
+	<resultMap id="ProjectTaskHour" type="com.hotent.makshi.model.finance.ProjectTaskHour">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="projectName" column="F_PROJECTNAME" jdbcType="VARCHAR"/>
+		<result property="proid" column="F_PROID" jdbcType="VARCHAR"/>
+		<result property="taskName" column="F_TASKNAME" jdbcType="VARCHAR"/>
+		<result property="taskid" column="F_TASKID" jdbcType="VARCHAR"/>
+		<result property="work_hour" column="F_WORK_HOUR" jdbcType="VARCHAR"/>
+		<result property="overtime_hour" column="F_OVERTIME_HOUR" jdbcType="VARCHAR"/>
+		<result property="progress_rate" column="F_PROGRESS_RATE" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="workcount" column="workcount" jdbcType="VARCHAR"/>
+		<result property="overcount" column="overcount" jdbcType="VARCHAR"/>
+		<result property="project_work_rate" column="F_project_work_rate" jdbcType="INTEGER"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_PROJECTNAME,F_PROID,F_TASKNAME,F_TASKID,F_WORK_HOUR,F_OVERTIME_HOUR,F_PROGRESS_RATE,F_REMARK,F_project_work_rate
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_PROJECTNAME,F_PROID,F_TASKNAME,F_TASKID,F_WORK_HOUR,F_OVERTIME_HOUR,F_PROGRESS_RATE,F_REMARK,F_project_work_rate
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(projectName)"> AND F_PROJECTNAME  LIKE '%${projectName}%'  </if>
+			<if test="@Ognl@isNotEmpty(proid)"> AND F_PROID  LIKE '%${proid}%'  </if>
+			<if test="@Ognl@isNotEmpty(taskName)"> AND F_TASKNAME  LIKE '%${taskName}%'  </if>
+			<if test="@Ognl@isNotEmpty(taskid)"> AND F_TASKID  LIKE '%${taskid}%'  </if>
+			<if test="@Ognl@isNotEmpty(work_hour)"> AND F_WORK_HOUR  LIKE '%${work_hour}%'  </if>
+			<if test="@Ognl@isNotEmpty(overtime_hour)"> AND F_OVERTIME_HOUR  LIKE '%${overtime_hour}%'  </if>
+			<if test="@Ognl@isNotEmpty(progress_rate)"> AND F_PROGRESS_RATE  LIKE '%${progress_rate}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.finance.ProjectTaskHour">
+		INSERT INTO W_PROJECT_TASK_HOUR
+		(ID,REFID,
+		F_PROJECTNAME,F_PROID,F_TASKNAME,F_TASKID,F_WORK_HOUR,F_OVERTIME_HOUR,F_PROGRESS_RATE,F_REMARK,F_project_work_rate)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{projectName,jdbcType=VARCHAR}, #{proid,jdbcType=VARCHAR}, #{taskName,jdbcType=VARCHAR}, #{taskid,jdbcType=VARCHAR}, #{work_hour,jdbcType=VARCHAR}, #{overtime_hour,jdbcType=VARCHAR}, #{progress_rate,jdbcType=VARCHAR}
+		, #{remark,jdbcType=VARCHAR},#{project_work_rate,jdbcType=INTEGER})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_PROJECT_TASK_HOUR 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.finance.ProjectTaskHour">
+		UPDATE W_PROJECT_TASK_HOUR SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		F_PROJECTNAME=#{projectName,jdbcType=VARCHAR},
+		F_PROID=#{proid,jdbcType=VARCHAR},
+		F_TASKNAME=#{taskName,jdbcType=VARCHAR},
+		F_TASKID=#{taskid,jdbcType=VARCHAR},
+		F_WORK_HOUR=#{work_hour,jdbcType=VARCHAR},
+		F_OVERTIME_HOUR=#{overtime_hour,jdbcType=VARCHAR},
+		F_PROGRESS_RATE=#{progress_rate,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_project_work_rate=#{project_work_rate,jdbcType=INTEGER}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_PROJECT_TASK_HOUR
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getProjectTaskHourList" resultMap="ProjectTaskHour">
+	    SELECT <include refid="columns"/>
+	    FROM W_PROJECT_TASK_HOUR 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ProjectTaskHour">
+		SELECT <include refid="columns"/>
+		FROM W_PROJECT_TASK_HOUR
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="ProjectTaskHour">
+		SELECT <include refid="columns"/>
+		FROM W_PROJECT_TASK_HOUR   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="queryProHour" resultMap="ProjectTaskHour">
+		SELECT p.F_proid,p.F_projectName,sum(IFNULL(p.F_work_hour, 0)) AS 'workcount',
+				sum(IFNULL(p.F_overtime_hour, 0)) AS 'overcount'
+		FROM
+			w_project_task_hour p
+		WHERE
+			p.F_proid IS not null and
+			p.REFID IN (
+				SELECT
+					w.ID
+				FROM
+					w_work_hour_application w 
+					<if test="@Ognl@isNotEmpty(orgid)">
+					,
+					(select path from sys_org z where z.ORGID=#{orgid} ) org
+					</if>
+				WHERE
+					w.F_isFinished = 1
+				AND DATE_FORMAT(w.F_applicant_time, '%Y-%m') = #{queryTime}
+				<if test="@Ognl@isNotEmpty(userid)">
+						AND w.F_applicantID = #{userid}
+				</if>
+				<if test="@Ognl@isNotEmpty(orgid)">
+						AND( w.F_orgID = #{orgid} or
+							exists(
+								 select * from sys_org o where o.ORGID=w.F_orgID  and o.path like concat('%',org.path,'%')
+							)
+						)
+				</if>
+			)
+		GROUP BY
+			p.F_proid 
+		<if test="@Ognl@isNotEmpty(queryProid)">
+			HAVING F_proid=#{queryProid}
+		</if>
+	</select>
+	
+	<select id="getUserIds" resultType="java.util.HashMap">
+		SELECT DISTINCT
+			w.F_applicantID as userid,w.F_applicant as username
+		FROM
+			w_work_hour_application w,
+			(select path from sys_org z where z.ORGID=#{orgid} ) org
+		WHERE
+			w.F_isFinished = 1
+		AND DATE_FORMAT(w.F_applicant_time, '%Y-%m') = #{queryTime}
+		<if test="@Ognl@isNotEmpty(orgid)">
+			AND (w.F_orgID = #{orgid} or 
+			exists(
+				select * from sys_org o where o.ORGID=w.F_orgID  and o.path like concat('%',org.path,'%')
+				)
+			)
+		</if>
+	</select>
+	
+</mapper>

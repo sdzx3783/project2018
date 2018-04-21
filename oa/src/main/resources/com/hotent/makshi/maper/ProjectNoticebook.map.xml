@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.director.ProjectNoticebook">
+	<resultMap id="ProjectNoticebook" type="com.hotent.makshi.model.director.ProjectNoticebook">
+		<id property="id" column="ID" jdbcType="NUMERIC" />
+		<result property="applyer" column="F_applyer" jdbcType="VARCHAR" />
+		<result property="applyerID" column="F_applyerID" jdbcType="VARCHAR" />
+		<result property="department" column="F_department" jdbcType="VARCHAR" />
+		<result property="departmentID" column="F_departmentID" jdbcType="VARCHAR" />
+		<result property="apply_at" column="F_apply_at" jdbcType="VARCHAR" />
+		<result property="director_name" column="F_director_name" jdbcType="VARCHAR" />
+		<result property="director_nameID" column="F_director_nameID" jdbcType="VARCHAR" />
+		<result property="project_name" column="F_project_name" jdbcType="VARCHAR" />
+		<result property="build_name" column="F_build_name" jdbcType="VARCHAR" />
+		<result property="auto_num" column="F_auto_num" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="count" parameterType="map" resultType="java.lang.Integer" >
+		select count(1) from w_project_noticebook 
+	</select>
+	
+	<select id="pages" parameterType="map" resultMap="ProjectNoticebook">
+		select * from w_project_noticebook order by id desc  limit #{begNum},#{pageSize}
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.title.PersonalSeal">
+	<resultMap id="PersonalSeal" type="com.hotent.makshi.model.title.PersonalSeal">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="seal_num" column="F_SEAL_NUM" jdbcType="VARCHAR"/>
+		<result property="seal_name" column="F_SEAL_NAME" jdbcType="VARCHAR"/>
+		<result property="borrower" column="F_BORROWER" jdbcType="VARCHAR"/>
+		<result property="borrowerID" column="F_BORROWERID" jdbcType="VARCHAR"/>
+		<result property="holder" column="F_HOLDER" jdbcType="VARCHAR"/>
+		<result property="holderID" column="F_HOLDERID" jdbcType="VARCHAR"/>
+		<result property="status" column="F_STATUS" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="effictiveDate" column="F_EFFICTIVEDATE" jdbcType="DATE"/>
+		<result property="linkId" column="F_linkid" jdbcType="NUMERIC"/>
+		<result property="switchs" column="F_switchs" jdbcType="VARCHAR"/>
+		<result property="borrowDate" column="F_borrowDate" jdbcType="DATE"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_SEAL_NUM,F_SEAL_NAME,F_BORROWER,F_BORROWERID,F_HOLDER,F_HOLDERID,F_STATUS,F_REMARK,F_EFFICTIVEDATE,F_linkid,F_switchs,F_borrowDate
+	</sql>
+	<sql id="wfColumns">
+		ID,F_SEAL_NUM,F_SEAL_NAME,F_BORROWER,F_BORROWERID,F_HOLDER,F_HOLDERID,F_STATUS,F_REMARK,F_EFFICTIVEDATE,F_linkid,F_switchs,F_borrowDate
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+		
+			<if test="@Ognl@isNotEmpty(seal_num)"> AND F_SEAL_NUM  LIKE '%${seal_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(seal_name)"> AND F_SEAL_NAME  LIKE '%${seal_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(borrower)"> AND F_BORROWER  LIKE '%${borrower}%'  </if>
+			<if test="@Ognl@isNotEmpty(holderId)"> AND F_HOLDERID =#{holderId}  </if>
+			<if test="@Ognl@isNotEmpty(holder)"> AND F_HOLDER  LIKE '%${holder}%'  </if>
+			<if test="@Ognl@isNotEmpty(status)"> AND F_STATUS  LIKE '%${status}%'  </if>
+			<if test="@Ognl@isNotEmpty(statusValue)"> AND F_STATUS =#{statusValue}  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.title.PersonalSeal">
+		INSERT INTO W_PERSONAL_SEAL
+		(ID,
+		F_SEAL_NUM,F_SEAL_NAME,F_BORROWER,F_BORROWERID,F_HOLDER,F_HOLDERID,F_STATUS,F_REMARK,F_EFFICTIVEDATE,F_linkid,F_switchs,F_borrowDate)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{seal_num,jdbcType=VARCHAR}, #{seal_name,jdbcType=VARCHAR}, #{borrower,jdbcType=VARCHAR},#{borrowerID,jdbcType=VARCHAR},
+		 #{holder,jdbcType=VARCHAR},#{holderID,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},#{effictiveDate,jdbcType=DATE},
+		 #{linkId,jdbcType=NUMERIC}, #{switchs,jdbcType=VARCHAR},#{borrowDate,jdbcType=DATE})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		update   W_PERSONAL_SEAL  set
+		 F_switchs = 0
+		WHERE
+		ID=#{id}
+	</delete>
+	<delete id="delByLinkId" parameterType="java.lang.Long">
+		update   W_PERSONAL_SEAL  set
+		F_switchs = 1
+		WHERE
+		F_linkid=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.title.PersonalSeal">
+		UPDATE W_PERSONAL_SEAL SET
+		F_SEAL_NUM=#{seal_num,jdbcType=VARCHAR},
+		F_SEAL_NAME=#{seal_name,jdbcType=VARCHAR},
+		F_BORROWER=#{borrower,jdbcType=VARCHAR},
+		F_BORROWERID=#{borrowerID,jdbcType=VARCHAR},
+		F_HOLDER=#{holder,jdbcType=VARCHAR},
+		F_HOLDERID=#{holderID,jdbcType=VARCHAR},
+		F_STATUS=#{status,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_EFFICTIVEDATE = #{effictiveDate,jdbcType=DATE},
+		F_linkid = #{linkId,jdbcType=NUMERIC},
+		F_switchs = #{switchs,jdbcType=VARCHAR},
+		F_borrowDate = #{borrowDate,jdbcType=DATE}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="PersonalSeal">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_SEAL
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getByHolderId" parameterType="map" resultMap="PersonalSeal">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_SEAL
+		WHERE
+		F_holderID=#{holderId}
+		limit 1
+	</select>
+	
+	<select id="getByBorrowUid" parameterType="java.lang.Long" resultMap="PersonalSeal">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_SEAL
+		WHERE
+		F_borrowerID=#{uid}
+	</select>
+	
+	
+	<select id="getAll" resultMap="PersonalSeal">
+		SELECT ID,F_SEAL_NUM,F_SEAL_NAME, F_BORROWER,F_BORROWERID,F_HOLDER,F_HOLDERID,F_STATUS,F_switchs,F_REMARK,F_EFFICTIVEDATE,F_borrowDate
+		FROM W_PERSONAL_SEAL 
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getAllInfo" resultMap="PersonalSeal">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_SEAL 
+	</select>
+	
+	<select id="getByCertificateId" parameterType="String" resultMap="PersonalSeal">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_SEAL
+		WHERE F_HOLDER =#{userName}
+		and F_seal_name=#{name}
+		and F_SEAL_NUM=#{certificateId}
+		and F_switchs = 1
+	</select>
+	
+	<select id="getByLinkId" parameterType="Long" resultMap="PersonalSeal">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_SEAL 
+		WHERE
+		F_linkid=#{linkId}
+	</select>
+	<select id="getBySealNum" parameterType="String" resultMap="PersonalSeal">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_SEAL
+		WHERE
+		F_SEAL_NUM=#{num}
+	</select>
+	
+	<select id="getBySealNumAndName" parameterType="map" resultMap="PersonalSeal">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_SEAL
+		WHERE
+		F_SEAL_NUM=#{num} and F_SEAL_NAME=#{name}
+	</select>
+	
+</mapper>

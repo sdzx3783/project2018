@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.river.HdOvertimeApplications">
+	<resultMap id="HdOvertimeApplications" type="com.hotent.makshi.model.river.HdOvertimeApplications">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		
+		<!-- <result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="departmentID" column="F_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="project_leaderID" column="F_PROJECT_LEADERID" jdbcType="VARCHAR"/>
+		<result property="area_headID" column="F_AREA_HEADID" jdbcType="VARCHAR"/>
+		<result property="managerID" column="F_MANAGERID" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="position" column="F_POSITION" jdbcType="VARCHAR"/>
+		<result property="overTime_appliDate" column="F_OVERTIME_APPLIDATE" jdbcType="DATE"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="overTime_start" column="F_OVERTIME_START" jdbcType="DATE"/>
+		<result property="overTime_start_point" column="F_OVERTIME_START_POINT" jdbcType="VARCHAR"/>
+		<result property="include_front" column="F_INCLUDE_FRONT" jdbcType="VARCHAR"/>
+		<result property="overTime_end" column="F_OVERTIME_END" jdbcType="DATE"/>
+		<result property="overTime_end_point" column="F_OVERTIME_END_POINT" jdbcType="VARCHAR"/>
+		<result property="include_later" column="F_INCLUDE_LATER" jdbcType="VARCHAR"/>
+		<result property="overTime_reason" column="F_OVERTIME_REASON" jdbcType="VARCHAR"/>
+		<result property="overTime_remark" column="F_OVERTIME_REMARK" jdbcType="VARCHAR"/>
+		<result property="overTime_attachment" column="F_OVERTIME_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="finish" column="F_FINISH" jdbcType="VARCHAR"/>
+		<result property="isdeleted" column="F_ISDELETED" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="project_leader" column="F_PROJECT_LEADER" jdbcType="VARCHAR"/>
+		<result property="area_head" column="F_AREA_HEAD" jdbcType="VARCHAR"/>
+		<result property="manager" column="F_MANAGER" jdbcType="VARCHAR"/>
+	     -->
+	    <result property="name" column="userName" jdbcType="VARCHAR"/>
+		<result property="userId" column="userId" jdbcType="VARCHAR"/>
+	    <result property="overTimeDays" column="overTimeDays" jdbcType="DOUBLE"/>
+		<result property="adjustDays" column="adjustDays" jdbcType="DOUBLE"/>
+		<result property="leftAdjustDays" column="leftAdjustDays" jdbcType="DOUBLE"/>
+	</resultMap>
+	<!-- 
+	<resultMap type="com.hotent.makshi.model.river.HdOvertimeApplications" id="ExtHdOvertimeApplications" extends="HdOvertimeApplications">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+     -->
+    <sql id="columns">
+		ID,name,userId,overTimeDays,leftAdjustDays
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(carId)"> AND F_CARID  LIKE '%${carId}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(seats)"> AND F_SEATS  LIKE '%${seats}%'  </if>
+			<if test="@Ognl@isNotEmpty(color)"> AND F_COLOR  LIKE '%${color}%'  </if>
+			<if test="@Ognl@isNotEmpty(userId)"> AND d.f_applicantId =#{userId}  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND d.f_F_department LIKE '%${department}%' </if>
+		</where>
+	</sql>
+    
+    <delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CAR_REGIST 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="HdOvertimeApplications">
+		SELECT <include refid="columns"/>
+		FROM W_CAR_REGIST
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getUser" resultMap="HdOvertimeApplications">
+		SELECT d.F_applicant userName,d.f_applicantId userId, overTimeDays,adjustDays,(d.overTimeDays-c.adjustDays) leftAdjustDays
+		FROM
+			(
+				SELECT
+					sum(
+						(
+							CASE (
+								f_adjust_end_point - f_adjust_start_point
+							)
+							WHEN 1 THEN
+								1
+							WHEN 0 THEN
+								0.5
+							WHEN - 1 THEN
+								0
+							END
+						) + datediff(
+							F_adjust_end,
+							F_adjust_start
+						)
+					) adjustDays,
+					f_applicantId f_applicantId,
+					F_applicant F_applicant
+				FROM
+					w_hd_paid_leave a
+				WHERE
+					a.F_finish = 1
+				AND a.F_isdeleted !=1
+				GROUP BY
+					F_applicantID
+				) c
+				RIGHT   JOIN
+				(
+				SELECT
+					b.F_applicant,
+					b.f_applicantId,
+					b.F_department,
+					b.F_departmentID,
+					sum(
+						(
+							CASE (
+								f_overTime_end_point - f_overTime_start_point
+							)
+							WHEN 1 THEN
+								1
+							WHEN 0 THEN
+								0.5
+							WHEN - 1 THEN
+								0
+							END
+						) + (
+							CASE F_include_front
+							WHEN 1 THEN
+								0.5
+							WHEN 0 THEN
+								0
+							END
+						) + (
+							CASE F_include_later
+							WHEN 1 THEN
+								0.5
+							WHEN 0 THEN
+								0
+							END
+						) + datediff(
+							f_overTime_end,
+							f_overTime_start
+						)
+					) overTimeDays
+				FROM
+					w_hd_overtime_applications b
+				WHERE
+					b.F_finish = 1
+				AND b.F_isdeleted !=1
+				GROUP BY
+					F_applicantID
+				) d
+				ON 
+				c.f_applicantId = d.f_applicantId  
+	   </select>
+	
+	<select id="getAll" resultMap="HdOvertimeApplications">
+		SELECT d.F_applicant userName,d.f_applicantId userId, overTimeDays,adjustDays,(d.overTimeDays-c.adjustDays) leftAdjustDays
+		FROM
+			(
+				SELECT
+					sum(
+						(
+							CASE (
+								f_adjust_end_point - f_adjust_start_point
+							)
+							WHEN 1 THEN
+								1
+							WHEN 0 THEN
+								0.5
+							WHEN - 1 THEN
+								0
+							END
+						) + datediff(
+							F_adjust_end,
+							F_adjust_start
+						)
+					) adjustDays,
+					f_applicantId f_applicantId,
+					F_applicant F_applicant
+				FROM
+					w_hd_paid_leave a
+				WHERE
+					a.F_finish = 1
+				AND a.F_isdeleted !=1
+				GROUP BY
+					F_applicantID
+				) c
+				RIGHT   JOIN
+				(
+				SELECT
+					b.F_applicant,
+					b.f_applicantId,
+					b.F_department,
+					b.F_departmentID,
+					sum(
+						(
+							CASE (
+								f_overTime_end_point - f_overTime_start_point
+							)
+							WHEN 1 THEN
+								1
+							WHEN 0 THEN
+								0.5
+							WHEN - 1 THEN
+								0
+							END
+						) + (
+							CASE F_include_front
+							WHEN 1 THEN
+								0.5
+							WHEN 0 THEN
+								0
+							END
+						) + (
+							CASE F_include_later
+							WHEN 1 THEN
+								0.5
+							WHEN 0 THEN
+								0
+							END
+						) + datediff(
+							f_overTime_end,
+							f_overTime_start
+						)
+					) overTimeDays
+				FROM
+					w_hd_overtime_applications b
+				WHERE
+					b.F_finish = 1
+				AND b.F_isdeleted !=1
+				GROUP BY
+					F_applicantID
+				) d
+				ON 
+				c.f_applicantId = d.f_applicantId  
+		 <include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<!-- <if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>  -->
+	</select>
+	
+	<select id="getPast" resultMap="HdOvertimeApplications" parameterType="java.lang.Long">
+	SELECT * from
+	(
+		SELECT
+			d.F_applicant userName,
+			d.f_applicantId userId,
+			overTimeDays,
+			d.appliYear appliYear,
+			CASE
+		WHEN adjustDays IS NULL THEN
+			0
+		ELSE
+			adjustDays
+		END adjustDays,
+		 CASE
+		WHEN (
+			d.overTimeDays - c.adjustDays
+		) IS NULL THEN
+			0
+		ELSE
+			(
+				d.overTimeDays - c.adjustDays
+			)
+		END leftAdjustDays
+		FROM
+			(
+				SELECT
+					sum(
+						(
+							CASE (
+								f_adjust_end_point - f_adjust_start_point
+							)
+							WHEN 1 THEN
+								1
+							WHEN 0 THEN
+								0.5
+							WHEN - 1 THEN
+								0
+							END
+						) + datediff(
+							F_adjust_end,
+							F_adjust_start
+						)
+					) adjustDays,
+					f_applicantId f_applicantId,
+					F_applicant F_applicant,
+		YEAR (F_adjust_end) appliYear
+				FROM
+					w_hd_paid_leave a
+				WHERE
+					a.F_finish = 1
+				AND a.F_isdeleted = 1
+				GROUP BY
+					F_applicantID,
+					YEAR (F_adjust_end)
+			) c
+		RIGHT JOIN (
+			SELECT
+				b.F_applicant,
+				b.f_applicantId,
+				b.F_department,
+				b.F_departmentID,
+				sum(
+					(
+						CASE (
+							f_overTime_end_point - f_overTime_start_point
+						)
+						WHEN 1 THEN
+							1
+						WHEN 0 THEN
+							0.5
+						WHEN - 1 THEN
+							0
+						END
+					) + (
+						CASE F_include_front
+						WHEN 1 THEN
+							0.5
+						WHEN 0 THEN
+							0
+						END
+					) + (
+						CASE F_include_later
+						WHEN 1 THEN
+							0.5
+						WHEN 0 THEN
+							0
+						END
+					) + datediff(
+						f_overTime_end,
+						f_overTime_start
+					)
+				) overTimeDays,
+			YEAR (F_overTime_end) appliYear
+			FROM
+				w_hd_overtime_applications b
+			WHERE
+				b.F_finish = 1
+			AND b.F_isdeleted = 1
+			GROUP BY
+				F_applicantID,
+				YEAR (F_overTime_end)
+		) d ON c.f_applicantId = d.f_applicantId AND c.appliYear = d.appliYear
+		) j
+		where userId = #{userId}
+	</select>
+	
+	<update id="cleanInfo">
+		UPDATE w_hd_overtime_applications SET F_isdeleted =1
+	</update>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+	<!-- <sql id="columns">
+		ID,F_APPLICANTID,F_DEPARTMENTID,F_PROJECT_LEADERID,F_AREA_HEADID,F_MANAGERID,F_APPLICANT,F_POSITION,F_OVERTIME_APPLIDATE,F_TYPE,F_OVERTIME_START,F_OVERTIME_START_POINT,F_INCLUDE_FRONT,F_OVERTIME_END,F_OVERTIME_END_POINT,F_INCLUDE_LATER,F_OVERTIME_REASON,F_OVERTIME_REMARK,F_OVERTIME_ATTACHMENT,F_FINISH,F_ISDELETED,F_DEPARTMENT,F_PROJECT_LEADER,F_AREA_HEAD,F_MANAGER
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPLICANTID,F_DEPARTMENTID,F_PROJECT_LEADERID,F_AREA_HEADID,F_MANAGERID,F_APPLICANT,F_POSITION,F_OVERTIME_APPLIDATE,F_TYPE,F_OVERTIME_START,F_OVERTIME_START_POINT,F_INCLUDE_FRONT,F_OVERTIME_END,F_OVERTIME_END_POINT,F_INCLUDE_LATER,F_OVERTIME_REASON,F_OVERTIME_REMARK,F_OVERTIME_ATTACHMENT,F_FINISH,F_ISDELETED,F_DEPARTMENT,F_PROJECT_LEADER,F_AREA_HEAD,F_MANAGER
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_DEPARTMENTID  LIKE '%${departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_leaderID)"> AND F_PROJECT_LEADERID  LIKE '%${project_leaderID}%'  </if>
+			<if test="@Ognl@isNotEmpty(area_headID)"> AND F_AREA_HEADID  LIKE '%${area_headID}%'  </if>
+			<if test="@Ognl@isNotEmpty(managerID)"> AND F_MANAGERID  LIKE '%${managerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(position)"> AND F_POSITION  LIKE '%${position}%'  </if>
+			<if test="@Ognl@isNotEmpty(overTime_appliDate)"> AND F_OVERTIME_APPLIDATE  =#{overTime_appliDate} </if>
+			<if test="@Ognl@isNotEmpty(beginoverTime_appliDate)"> AND F_OVERTIME_APPLIDATE  >=#{beginoverTime_appliDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endoverTime_appliDate)"> AND F_OVERTIME_APPLIDATE <![CDATA[ <=#{endoverTime_appliDate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  LIKE '%${type}%'  </if>
+			<if test="@Ognl@isNotEmpty(overTime_start)"> AND F_OVERTIME_START  =#{overTime_start} </if>
+			<if test="@Ognl@isNotEmpty(beginoverTime_start)"> AND F_OVERTIME_START  >=#{beginoverTime_start,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endoverTime_start)"> AND F_OVERTIME_START <![CDATA[ <=#{endoverTime_start,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(overTime_start_point)"> AND F_OVERTIME_START_POINT  LIKE '%${overTime_start_point}%'  </if>
+			<if test="@Ognl@isNotEmpty(include_front)"> AND F_INCLUDE_FRONT  LIKE '%${include_front}%'  </if>
+			<if test="@Ognl@isNotEmpty(overTime_end)"> AND F_OVERTIME_END  =#{overTime_end} </if>
+			<if test="@Ognl@isNotEmpty(beginoverTime_end)"> AND F_OVERTIME_END  >=#{beginoverTime_end,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endoverTime_end)"> AND F_OVERTIME_END <![CDATA[ <=#{endoverTime_end,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(overTime_end_point)"> AND F_OVERTIME_END_POINT  LIKE '%${overTime_end_point}%'  </if>
+			<if test="@Ognl@isNotEmpty(include_later)"> AND F_INCLUDE_LATER  LIKE '%${include_later}%'  </if>
+			<if test="@Ognl@isNotEmpty(overTime_reason)"> AND F_OVERTIME_REASON  LIKE '%${overTime_reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(overTime_remark)"> AND F_OVERTIME_REMARK  LIKE '%${overTime_remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(overTime_attachment)"> AND F_OVERTIME_ATTACHMENT  LIKE '%${overTime_attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(finish)"> AND F_FINISH  LIKE '%${finish}%'  </if>
+			<if test="@Ognl@isNotEmpty(isdeleted)"> AND F_ISDELETED  LIKE '%${isdeleted}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_leader)"> AND F_PROJECT_LEADER  LIKE '%${project_leader}%'  </if>
+			<if test="@Ognl@isNotEmpty(area_head)"> AND F_AREA_HEAD  LIKE '%${area_head}%'  </if>
+			<if test="@Ognl@isNotEmpty(manager)"> AND F_MANAGER  LIKE '%${manager}%'  </if>
+		</where>
+	</sql> -->
+
+	<!-- <insert id="add" parameterType="com.hotent.makshi.model.river.HdOvertimeApplications">
+		INSERT INTO W_HD_OVERTIME_APPLICATIONS
+		(ID,
+		F_APPLICANTID,F_DEPARTMENTID,F_PROJECT_LEADERID,F_AREA_HEADID,F_MANAGERID,F_APPLICANT,F_POSITION,F_OVERTIME_APPLIDATE,F_TYPE,F_OVERTIME_START,F_OVERTIME_START_POINT,F_INCLUDE_FRONT,F_OVERTIME_END,F_OVERTIME_END_POINT,F_INCLUDE_LATER,F_OVERTIME_REASON,F_OVERTIME_REMARK,F_OVERTIME_ATTACHMENT,F_FINISH,F_ISDELETED,F_DEPARTMENT,F_PROJECT_LEADER,F_AREA_HEAD,F_MANAGER)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{applicantID,jdbcType=VARCHAR}, #{departmentID,jdbcType=VARCHAR}, #{project_leaderID,jdbcType=VARCHAR}, #{area_headID,jdbcType=VARCHAR}, #{managerID,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{overTime_appliDate,jdbcType=DATE}, #{type,jdbcType=VARCHAR}, #{overTime_start,jdbcType=DATE}, #{overTime_start_point,jdbcType=VARCHAR}, #{include_front,jdbcType=VARCHAR}, #{overTime_end,jdbcType=DATE}, #{overTime_end_point,jdbcType=VARCHAR}, #{include_later,jdbcType=VARCHAR}, #{overTime_reason,jdbcType=VARCHAR}, #{overTime_remark,jdbcType=VARCHAR}, #{overTime_attachment,jdbcType=VARCHAR}, #{finish,jdbcType=VARCHAR}, #{isdeleted,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{project_leader,jdbcType=VARCHAR}, #{area_head,jdbcType=VARCHAR}, #{manager,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_HD_OVERTIME_APPLICATIONS 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.river.HdOvertimeApplications">
+		UPDATE W_HD_OVERTIME_APPLICATIONS SET
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_DEPARTMENTID=#{departmentID,jdbcType=VARCHAR},
+		F_PROJECT_LEADERID=#{project_leaderID,jdbcType=VARCHAR},
+		F_AREA_HEADID=#{area_headID,jdbcType=VARCHAR},
+		F_MANAGERID=#{managerID,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_POSITION=#{position,jdbcType=VARCHAR},
+		F_OVERTIME_APPLIDATE=#{overTime_appliDate,jdbcType=DATE},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_OVERTIME_START=#{overTime_start,jdbcType=DATE},
+		F_OVERTIME_START_POINT=#{overTime_start_point,jdbcType=VARCHAR},
+		F_INCLUDE_FRONT=#{include_front,jdbcType=VARCHAR},
+		F_OVERTIME_END=#{overTime_end,jdbcType=DATE},
+		F_OVERTIME_END_POINT=#{overTime_end_point,jdbcType=VARCHAR},
+		F_INCLUDE_LATER=#{include_later,jdbcType=VARCHAR},
+		F_OVERTIME_REASON=#{overTime_reason,jdbcType=VARCHAR},
+		F_OVERTIME_REMARK=#{overTime_remark,jdbcType=VARCHAR},
+		F_OVERTIME_ATTACHMENT=#{overTime_attachment,jdbcType=VARCHAR},
+		F_FINISH=#{finish,jdbcType=VARCHAR},
+		F_ISDELETED=#{isdeleted,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_PROJECT_LEADER=#{project_leader,jdbcType=VARCHAR},
+		F_AREA_HEAD=#{area_head,jdbcType=VARCHAR},
+		F_MANAGER=#{manager,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="HdOvertimeApplications">
+		SELECT <include refid="columns"/>
+		FROM W_HD_OVERTIME_APPLICATIONS
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="HdOvertimeApplications">
+		SELECT <include refid="columns"/>
+		FROM W_HD_OVERTIME_APPLICATIONS   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="HdOvertimeApplications">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HD_OVERTIME_APPLICATIONS A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtHdOvertimeApplications">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_OVERTIME_APPLICATIONS A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_OVERTIME_APPLICATIONS A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_OVERTIME_APPLICATIONS A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_OVERTIME_APPLICATIONS A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_OVERTIME_APPLICATIONS A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="HdOvertimeApplications">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HD_OVERTIME_APPLICATIONS A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	 -->
+	
+</mapper>

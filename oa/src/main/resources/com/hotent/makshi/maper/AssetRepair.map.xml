@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.assetrepair.AssetRepair">
+	<resultMap id="AssetRepair" type="com.hotent.makshi.model.assetrepair.AssetRepair">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="check_personID" column="F_CHECK_PERSONID" jdbcType="VARCHAR"/>
+		<result property="asset_id" column="F_ASSET_ID" jdbcType="VARCHAR"/>
+		<result property="repari_unit" column="F_REPARI_UNIT" jdbcType="VARCHAR"/>
+		<result property="date" column="F_DATE" jdbcType="DATE"/>
+		<result property="check_person" column="F_CHECK_PERSON" jdbcType="VARCHAR"/>
+		<result property="repair_conten" column="F_REPAIR_CONTEN" jdbcType="VARCHAR"/>
+		<result property="remarks" column="F_REMARKS" jdbcType="VARCHAR"/>
+		<result property="user_name" column="F_USER_NAME" jdbcType="VARCHAR"/>
+		<result property="state" column="F_STATE" jdbcType="VARCHAR"/>
+		<result property="application_date" column="F_APPLICATION_DATE" jdbcType="TIMESTAMP"/>
+		<result property="globalflowno" column="F_GLOBALFLOWNO" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.assetrepair.AssetRepair" id="ExtAssetRepair" extends="AssetRepair">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_CHECK_PERSONID,F_ASSET_ID,F_REPARI_UNIT,F_DATE,F_CHECK_PERSON,F_REPAIR_CONTEN,F_REMARKS,F_USER_NAME,F_STATE,g.CREATETIME F_APPLICATION_DATE,g.GLOBALFLOWNO F_GLOBALFLOWNO
+	</sql>
+	<sql id="wfColumns">
+		ID,F_CHECK_PERSONID,F_ASSET_ID,F_REPARI_UNIT,F_DATE,F_CHECK_PERSON,F_REPAIR_CONTEN,F_REMARKS,F_USER_NAME,F_STATE,F_APPLICATION_DATE,F_GLOBALFLOWNO
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(check_personID)"> AND F_CHECK_PERSONID  LIKE '%${check_personID}%'  </if>
+			<if test="@Ognl@isNotEmpty(asset_id)"> AND F_ASSET_ID  LIKE '%${asset_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(repari_unit)"> AND F_REPARI_UNIT  LIKE '%${repari_unit}%'  </if>
+			<if test="@Ognl@isNotEmpty(date)"> AND F_DATE  =#{date} </if>
+			<if test="@Ognl@isNotEmpty(begindate)"> AND F_DATE  >=#{begindate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(enddate)"> AND F_DATE <![CDATA[ <=#{enddate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(check_person)"> AND F_CHECK_PERSON  LIKE '%${check_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(repair_conten)"> AND F_REPAIR_CONTEN  LIKE '%${repair_conten}%'  </if>
+			<if test="@Ognl@isNotEmpty(remarks)"> AND F_REMARKS  LIKE '%${remarks}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_name)"> AND F_USER_NAME  LIKE '%${user_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(state)"> AND F_STATE  LIKE '%${state}%'  </if>
+			<if test="@Ognl@isNotEmpty(application_time_begin)"> AND F_APPLICATION_DATE  >=#{application_time_begin,jdbcType=DATE}  </if>
+			<if test="@Ognl@isNotEmpty(application_time_end)"> AND F_APPLICATION_DATE  <![CDATA[ <=#{application_time_end,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(globalflowno)"> AND F_GLOBALFLOWNO  LIKE '%${globalflowno}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.assetrepair.AssetRepair">
+		INSERT INTO W_asset_repair
+		(ID,
+		F_CHECK_PERSONID,F_ASSET_ID,F_REPARI_UNIT,F_DATE,F_CHECK_PERSON,F_REPAIR_CONTEN,F_REMARKS,F_USER_NAME,F_STATE,F_APPLICATION_DATE,F_GLOBALFLOWNO)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{check_personID,jdbcType=VARCHAR}, #{asset_id,jdbcType=VARCHAR}, #{repari_unit,jdbcType=VARCHAR}, #{date,jdbcType=DATE}, #{check_person,jdbcType=VARCHAR}, #{repair_conten,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{application_date,jdbcType=TIMESTAMP}, #{globalflowno,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_asset_repair 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.assetrepair.AssetRepair">
+		UPDATE W_asset_repair SET
+		F_CHECK_PERSONID=#{check_personID,jdbcType=VARCHAR},
+		F_ASSET_ID=#{asset_id,jdbcType=VARCHAR},
+		F_REPARI_UNIT=#{repari_unit,jdbcType=VARCHAR},
+		F_DATE=#{date,jdbcType=DATE},
+		F_CHECK_PERSON=#{check_person,jdbcType=VARCHAR},
+		F_REPAIR_CONTEN=#{repair_conten,jdbcType=VARCHAR},
+		F_REMARKS=#{remarks,jdbcType=VARCHAR},
+		F_USER_NAME=#{user_name,jdbcType=VARCHAR},
+		F_STATE=#{state,jdbcType=VARCHAR},
+		F_APPLICATION_DATE=#{application_date,jdbcType=TIMESTAMP},
+		F_GLOBALFLOWNO=#{globalflowno,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="AssetRepair">
+		SELECT <include refid="columns"/>
+		FROM W_asset_repair
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="AssetRepair">
+		select * from (
+			SELECT <include refid="columns"/>
+			FROM W_asset_repair  w
+			LEFT JOIN  BPM_PRO_RUN_HIS g ON g.BUSINESSKEY = w.ID
+			AND g.parentId = 0  
+			<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+			</if>
+			<if test="@Ognl@isEmpty(orderField)">
+			order by ID  desc
+			</if>
+		) s
+		<include refid="dynamicWhere" />
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="AssetRepair">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_asset_repair A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtAssetRepair">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_asse_trepair A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_asset_repair A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_asset_repair A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_asset_repair A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_asset_repair A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="AssetRepair">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_asset_repair A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.contract.MonthlyCollection">
+	<resultMap id="MonthlyCollection"
+		type="com.hotent.makshi.model.contract.MonthlyCollection">
+		<!-- <id property="id" column="ID" jdbcType="NUMERIC"/> -->
+		<result property="department" column="department" jdbcType="VARCHAR" />
+		<result property="january" column="January" jdbcType="DOUBLE" />
+		<result property="february" column="February" jdbcType="DOUBLE" />
+		<result property="march" column="March" jdbcType="DOUBLE" />
+		<result property="april" column="April" jdbcType="DOUBLE" />
+		<result property="may" column="May" jdbcType="DOUBLE" />
+		<result property="june" column="June" jdbcType="DOUBLE" />
+		<result property="july" column="July" jdbcType="DOUBLE" />
+		<result property="august" column="August" jdbcType="DOUBLE" />
+		<result property="september" column="September" jdbcType="DOUBLE" />
+		<result property="october" column="October" jdbcType="DOUBLE" />
+		<result property="november" column="November" jdbcType="DOUBLE" />
+		<result property="december" column="December" jdbcType="DOUBLE" />
+		<result property="invoiceAmount" column="invoiceAmount" jdbcType="DOUBLE" />
+		<result property="payRate" column="payRate" jdbcType="DOUBLE" />
+		<result property="leftMoney" column="leftMoney" jdbcType="DOUBLE" />
+		<result property="billingMoney" column="billingMoney" jdbcType="DOUBLE" />
+		<result property="pointLeft" column="pointLeft" jdbcType="DOUBLE" />
+	</resultMap>
+	<sql id="columns">
+		department,January,February,March,April,May,June,July,August,September,October,November,December,invoiceAmount,payRate,leftMoney
+	</sql>
+	<select id="getAllDepartment" parameterType="map" resultMap="MonthlyCollection">
+		SELECT
+		d.F_contract_department department,
+		CAST(
+		d.F_contract_money AS
+		DECIMAL (18, 4)
+		) F_contract_money,
+		CAST(d.leftMoney AS DECIMAL(18, 4)) leftMoney,
+		CAST(
+		d.F_invoice_amount AS DECIMAL (18, 4)
+		) invoiceAmount,
+		CAST(
+		(
+		CASE
+		WHEN o.F_billing_money IS NULL THEN
+		0.00
+		ELSE
+		o.F_billing_money
+		END
+		) AS DECIMAL (18, 4)
+		) billingMoney,
+		CAST(
+		(
+		CASE
+		WHEN o.F_billing_money IS NULL THEN
+		d.leftMoney
+		ELSE
+		o.F_billing_money + d.leftMoney
+		END
+		) AS DECIMAL (18, 4)
+		) pointLeft,
+		CASE
+		WHEN d.pay_rate IS NULL THEN
+		0.00
+		ELSE
+		d.pay_rate
+		END
+		payRate,
+		CASE
+		WHEN p.January IS NULL THEN
+		0.00
+		ELSE
+		p.January
+		END January,
+		CASE
+		WHEN p.February IS NULL THEN
+		0.00
+		ELSE
+		p.February
+		END February,
+		CASE
+		WHEN p.March IS NULL THEN
+		0.00
+		ELSE
+		p.March
+		END March,
+		CASE
+		WHEN p.April IS
+		NULL THEN
+		0.00
+		ELSE
+		p.April
+		END April,
+		CASE
+		WHEN p.May IS NULL THEN
+		0.00
+		ELSE
+		p.May
+		END May,
+		CASE
+		WHEN p.June IS NULL THEN
+		0.00
+		ELSE
+		p.June
+		END June,
+		CASE
+		WHEN p.July IS NULL THEN
+		0.00
+		ELSE
+		p.July
+		END July,
+		CASE
+		WHEN p.August IS
+		NULL THEN
+		0.00
+		ELSE
+		p.August
+		END August,
+		CASE
+		WHEN p.September IS NULL THEN
+		0.00
+		ELSE
+		p.September
+		END September,
+		CASE
+		WHEN p.October IS NULL THEN
+		0.00
+		ELSE
+		p.October
+		END October,
+		CASE
+		WHEN p.November IS NULL THEN
+		0.00
+		ELSE
+		p.November
+		END November,
+		CASE
+		WHEN p.December IS NULL THEN
+		0.00
+		ELSE
+		p.December
+		END December
+		FROM
+		(
+		SELECT
+		a.F_department,
+		sum(
+		CASE
+		WHEN MONTH
+		(a.F_application_time) = 1 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) January,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 2 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) February,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 3
+		THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) March,
+		sum(
+		CASE
+		WHEN MONTH
+		(a.F_application_time) = 4 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) April,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 5 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) May,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 6 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) June,
+		sum(
+		CASE
+		WHEN MONTH
+		(a.F_application_time) = 7 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) July,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 8 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) August,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 9 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) September,
+		sum(
+		CASE
+		WHEN MONTH
+		(a.F_application_time) = 10 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		)
+		October,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 11 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) November,
+		sum(
+		CASE
+		WHEN MONTH
+		(a.F_application_time) = 12 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		)
+		December
+		FROM
+		w_contract_billing_application a
+		WHERE
+		YEAR
+		(a.F_application_time) = #{year}
+		GROUP BY
+		a.F_department
+		) p
+		RIGHT JOIN (
+		SELECT
+		SUM(f.F_billing_money) F_billing_money,
+		F_department
+		FROM
+		(
+		SELECT
+		SUM(a.F_billing_money) F_billing_money,
+		F_department,
+		YEAR
+		(a.F_application_time) the_year,
+		MONTH (a.F_application_time) the_month
+		FROM
+		w_contract_billing_application a
+		GROUP BY
+		F_department,
+		the_year,
+		the_month
+		) f
+		WHERE
+		f.the_year &gt; #{year}
+		OR (
+		f.the_month &gt;=#{month}
+		AND f.the_year = #{year}
+		)
+		GROUP BY
+		F_department
+		) o ON p.F_department =
+		o.F_department
+		RIGHT JOIN (
+		SELECT
+		b.F_contract_department,
+		IFNULL(sum(F_invoice_amount), 0) F_invoice_amount,
+		sum(F_contract_money) F_contract_money,
+		IFNULL(
+		sum(F_contract_money) -
+		sum(F_invoice_amount),
+		0
+		) leftMoney,
+		CAST(
+		sum(F_invoice_amount) * 1.00 /
+		sum(F_contract_money) * 100 AS DECIMAL (18, 2)
+		) pay_rate
+		FROM
+		w_contractinfo b
+		WHERE
+		F_contract_department IS NOT NULL
+		GROUP BY
+		b.F_contract_department
+		) d ON o.F_department = d.F_contract_department
+		UNION
+		SELECT
+		'合计',
+		SUM(F_contract_money),
+		sum(leftMoney),
+		SUM(invoiceAmount),
+		SUM(billingMoney),
+		SUM(pointLeft),
+		CAST(
+		sum(invoiceAmount) * 1.00 / sum(F_contract_money) * 100 AS DECIMAL
+		(18, 2)
+		) pay_rate,
+		SUM(January),
+		SUM(February),
+		SUM(March),
+		SUM(April),
+		SUM(May),
+		SUM(June),
+		SUM(July),
+		SUM(August),
+		SUM(September),
+		SUM(October),
+		SUM(November),
+		SUM(December)
+		FROM
+		(
+		SELECT
+		d.F_contract_department
+		department,
+		CAST(
+		d.F_contract_money AS DECIMAL (18, 4)
+		) F_contract_money,
+		CAST(d.leftMoney AS DECIMAL(18, 4)) leftMoney,
+		CAST(
+		d.F_invoice_amount AS DECIMAL (18, 4)
+		) invoiceAmount,
+		CAST(
+		(
+		CASE
+		WHEN o.F_billing_money IS NULL THEN
+		0.00
+		ELSE
+		o.F_billing_money
+		END
+		) AS DECIMAL (18, 4)
+		) billingMoney,
+		CAST(
+		(
+		CASE
+		WHEN o.F_billing_money IS NULL THEN
+		d.leftMoney
+		ELSE
+		o.F_billing_money + d.leftMoney
+		END
+		) AS DECIMAL (18, 4)
+		) pointLeft,
+		CASE
+		WHEN d.pay_rate IS NULL THEN
+		0.00
+		ELSE
+		d.pay_rate
+		END
+		payRate,
+		CASE
+		WHEN p.January IS NULL THEN
+		0.00
+		ELSE
+		p.January
+		END January,
+		CASE
+		WHEN p.February IS NULL THEN
+		0.00
+		ELSE
+		p.February
+		END February,
+		CASE
+		WHEN p.March IS NULL THEN
+		0.00
+		ELSE
+		p.March
+		END March,
+		CASE
+		WHEN p.April IS
+		NULL THEN
+		0.00
+		ELSE
+		p.April
+		END April,
+		CASE
+		WHEN p.May IS NULL THEN
+		0.00
+		ELSE
+		p.May
+		END May,
+		CASE
+		WHEN p.June IS NULL THEN
+		0.00
+		ELSE
+		p.June
+		END June,
+		CASE
+		WHEN p.July IS NULL THEN
+		0.00
+		ELSE
+		p.July
+		END July,
+		CASE
+		WHEN p.August IS
+		NULL THEN
+		0.00
+		ELSE
+		p.August
+		END August,
+		CASE
+		WHEN p.September IS NULL THEN
+		0.00
+		ELSE
+		p.September
+		END September,
+		CASE
+		WHEN p.October IS NULL THEN
+		0.00
+		ELSE
+		p.October
+		END October,
+		CASE
+		WHEN p.November IS NULL THEN
+		0.00
+		ELSE
+		p.November
+		END November,
+		CASE
+		WHEN p.December IS NULL THEN
+		0.00
+		ELSE
+		p.December
+		END December
+		FROM
+		(
+		SELECT
+		a.F_department,
+		sum(
+		CASE
+		WHEN MONTH
+		(a.F_application_time) = 1 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) January,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 2 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) February,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 3
+		THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) March,
+		sum(
+		CASE
+		WHEN MONTH
+		(a.F_application_time) = 4 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) April,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 5 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) May,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 6 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) June,
+		sum(
+		CASE
+		WHEN MONTH
+		(a.F_application_time) = 7 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) July,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 8 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) August,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 9 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) September,
+		sum(
+		CASE
+		WHEN MONTH
+		(a.F_application_time) = 10 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		)
+		October,
+		sum(
+		CASE
+		WHEN MONTH (a.F_application_time) = 11 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		) November,
+		sum(
+		CASE
+		WHEN MONTH
+		(a.F_application_time) = 12 THEN
+		(a.F_billing_money)
+		ELSE
+		0.0
+		END
+		)
+		December
+		FROM
+		w_contract_billing_application a
+		WHERE
+		YEAR
+		(a.F_application_time) = #{year}
+		GROUP BY
+		a.F_department
+		) p
+		RIGHT JOIN (
+		SELECT
+		SUM(f.F_billing_money) F_billing_money,
+		F_department
+		FROM
+		(
+		SELECT
+		SUM(a.F_billing_money) F_billing_money,
+		F_department,
+		YEAR
+		(a.F_application_time) the_year,
+		MONTH (a.F_application_time) the_month
+		FROM
+		w_contract_billing_application a
+		GROUP BY
+		F_department,
+		the_year,
+		the_month
+		) f
+		WHERE
+		f.the_year &gt;#{year}
+		OR (
+		f.the_month &gt;=#{month}
+		AND f.the_year = #{year}
+		)
+		GROUP BY
+		F_department
+		) o ON p.F_department =
+		o.F_department
+		RIGHT JOIN (
+		SELECT
+		b.F_contract_department,
+		IFNULL(sum(F_invoice_amount), 0) F_invoice_amount,
+		sum(F_contract_money) F_contract_money,
+		IFNULL(
+		sum(F_contract_money) -
+		sum(F_invoice_amount),
+		0
+		) leftMoney,
+		CAST(
+		sum(F_invoice_amount) * 1.00 /
+		sum(F_contract_money) * 100 AS DECIMAL (18, 2)
+		) pay_rate
+		FROM
+		w_contractinfo b
+		WHERE
+		F_contract_department IS NOT NULL
+		GROUP BY
+		b.F_contract_department
+		) d ON o.F_department = d.F_contract_department
+		) t
+	</select>
+	
+	
+	
+	
+	<select id="getMonthlyNewCollection" parameterType="map" resultMap="MonthlyCollection">
+		select 
+		tt.F_contract_department department,
+		tt.F_contract_departmentid,
+		ifnull(max(case when mo=1 then money end),0) as January,
+		ifnull(max(case when mo=2 then money end),0) as February,
+		ifnull(max(case when mo=3 then money end),0) as March,
+		ifnull(max(case when mo=4 then money end),0) as April,
+		ifnull(max(case when mo=5 then money end),0) as May,
+		ifnull(max(case when mo=6 then money end),0) as June,
+		ifnull(max(case when mo=7 then money end),0) as July,
+		ifnull(max(case when mo=8 then money end),0) as August,
+		ifnull(max(case when mo=9 then money end),0) as September,
+		ifnull(max(case when mo=10 then money end),0) as October,
+		ifnull(max(case when mo=11 then money end),0) as November,
+		ifnull(max(case when mo=12 then money end),0) as December
+		from (
+		
+		select 
+		b.F_contract_department,
+		b.F_contract_departmentid,
+		MONTH(a.F_application_time) mo,sum(a.F_billing_money) money 
+		from w_contract_billing_application a 
+		join w_contractinfo b on a.F_contract_num = b.F_contract_num
+		WHERE YEAR(b.f_singing_time) between 1998 and #{contractYear}
+		and YEAR(a.F_application_time) = #{contractBillYear}
+		and b.F_contract_departmentid = #{orgId}
+		group by MONTH(a.F_application_time) , b.F_contract_departmentid
+		order by b.F_contract_departmentid ,MONTH(a.F_application_time) asc
+		
+		)tt
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

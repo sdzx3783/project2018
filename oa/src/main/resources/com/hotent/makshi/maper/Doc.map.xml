@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.doc.Doc">
+	<resultMap id="Doc" type="com.hotent.makshi.model.doc.Doc">
+		<id column="DOCID" property="docid" jdbcType="BIGINT" />
+    <result column="ORGID" property="orgid" jdbcType="BIGINT" />
+    <result column="DOCNAME" property="docname" jdbcType="VARCHAR" />
+    <result column="DOCSUPID" property="docsupid" jdbcType="BIGINT" />
+    <result column="DOCTYPE" property="doctype" jdbcType="INTEGER" />
+    <result column="PATH" property="path" jdbcType="VARCHAR" />
+    <result column="PATHNAME" property="pathname" jdbcType="VARCHAR" />
+    <result column="WRITEORGS" property="writeorgs" jdbcType="VARCHAR" />
+    <result column="WRITEORGSID" property="writeorgsID" jdbcType="VARCHAR" />
+    <result column="READORGS" property="readorgs" jdbcType="VARCHAR" />
+    <result column="READORGSID" property="readorgsID" jdbcType="VARCHAR" />
+    <result column="WRITEUSER" property="writeuser" jdbcType="VARCHAR" />
+    <result column="WRITEUSERID" property="writeuserID" jdbcType="VARCHAR" />
+    <result column="READUSER" property="readuser" jdbcType="VARCHAR" />
+    <result column="READUSERID" property="readuserID" jdbcType="VARCHAR" />
+    <result column="CREATORID" property="creatorid" jdbcType="BIGINT" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="UPDATEID" property="updateid" jdbcType="BIGINT" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="ISDELETE" property="isdelete" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="columns">
+		DOCID, ORGID, DOCNAME, DOCSUPID, DOCTYPE, PATH,PATHNAME, WRITEORGS, WRITEORGSID, READORGS, 
+    READORGSID, WRITEUSER, WRITEUSERID, READUSER, READUSERID, CREATORID, CREATETIME, 
+    UPDATEID, UPDATETIME, ISDELETE
+	</sql>
+	
+
+	<insert id="add" parameterType="com.hotent.makshi.model.doc.Doc">
+		insert into w_doc (DOCID, ORGID, DOCNAME, 
+      DOCSUPID, DOCTYPE, PATH, PATHNAME, 
+      WRITEORGS, WRITEORGSID, READORGS, 
+      READORGSID, WRITEUSER, WRITEUSERID, 
+      READUSER, READUSERID, CREATORID, 
+      CREATETIME, UPDATEID, UPDATETIME, 
+      ISDELETE)
+    values (#{docid,jdbcType=BIGINT}, #{orgid,jdbcType=BIGINT}, #{docname,jdbcType=VARCHAR}, 
+      #{docsupid,jdbcType=BIGINT}, #{doctype,jdbcType=INTEGER}, #{path,jdbcType=VARCHAR}, #{pathname,jdbcType=VARCHAR},
+      #{writeorgs,jdbcType=VARCHAR}, #{writeorgsID,jdbcType=VARCHAR}, #{readorgs,jdbcType=VARCHAR}, 
+      #{readorgsID,jdbcType=VARCHAR}, #{writeuser,jdbcType=VARCHAR}, #{writeuserID,jdbcType=VARCHAR}, 
+      #{readuser,jdbcType=VARCHAR}, #{readuserID,jdbcType=VARCHAR}, #{creatorid,jdbcType=BIGINT}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updateid,jdbcType=BIGINT}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{isdelete,jdbcType=INTEGER})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		update  W_DOC set ISDELETE=1
+		WHERE
+		DOCID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.doc.Doc">
+		update w_doc
+    set ORGID = #{orgid,jdbcType=BIGINT},
+      DOCNAME = #{docname,jdbcType=VARCHAR},
+      DOCSUPID = #{docsupid,jdbcType=BIGINT},
+      DOCTYPE = #{doctype,jdbcType=INTEGER},
+      PATH = #{path,jdbcType=VARCHAR},
+      PATHNAME = #{pathname,jdbcType=VARCHAR},
+      WRITEORGS = #{writeorgs,jdbcType=VARCHAR},
+      WRITEORGSID = #{writeorgsID,jdbcType=VARCHAR},
+      READORGS = #{readorgs,jdbcType=VARCHAR},
+      READORGSID = #{readorgsID,jdbcType=VARCHAR},
+      WRITEUSER = #{writeuser,jdbcType=VARCHAR},
+      WRITEUSERID = #{writeuserID,jdbcType=VARCHAR},
+      READUSER = #{readuser,jdbcType=VARCHAR},
+      READUSERID = #{readuserID,jdbcType=VARCHAR},
+      CREATORID = #{creatorid,jdbcType=BIGINT},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      UPDATEID = #{updateid,jdbcType=BIGINT},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      ISDELETE = #{isdelete,jdbcType=INTEGER}
+    where DOCID = #{docid,jdbcType=BIGINT}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="Doc">
+		SELECT <include refid="columns"/>
+		FROM W_DOC
+		WHERE
+		DOCID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="Doc">
+		select <include refid="columns"/>
+		FROM
+		W_DOC 
+	</select>
+	
+	
+	<select id="getDocsByOrg" resultMap="Doc">
+		select  <include refid="columns"/>,(select count(*) from W_DOC t where t.docsupid=w.docid and t.isdelete=0) isLeaf
+		FROM W_DOC w WHERE 1=1 and isdelete=0
+		<if test="orgid!=null">
+			and ORGID=#{orgid}
+		</if>
+		<if test="supid!=null">
+			 and DOCSUPID=#{supid} 
+		</if>
+		order by case when isLeaf=0 then 1 else 0 end,CREATETIME asc;
+	</select>
+	
+	<select id="getDocBySupId" resultMap="Doc">
+		select  <include refid="columns"/>
+		FROM W_DOC WHERE
+		 DOCSUPID=#{supid} and isdelete=0
+	</select>
+	
+	<select id="getDocByParam" resultMap="Doc">
+		select  <include refid="columns"/>
+		FROM W_DOC WHERE 1=1
+		<if test="docsupid!=null">
+			and DOCSUPID=#{docsupid,jdbcType=BIGINT}
+		</if>
+		<if test="orgid!=null">
+			 and ORGID=#{orgid,jdbcType=BIGINT}
+		</if>
+		<if test="docname!=null">
+			and DOCNAME=#{docname,jdbcType=VARCHAR}
+		</if>
+		 <if test="doctype!=null">
+		 	and DOCTYPE=#{doctype,jdbcType=INTEGER}
+		 </if>
+		 <if test="isdelete!=null">
+		 	and isdelete=#{isdelete,jdbcType=INTEGER} 
+		 </if>
+		  order by CREATETIME asc;
+	</select>
+	
+	<select id="getbyDocName" resultMap="Doc">
+		select  <include refid="columns"/>
+		FROM W_DOC WHERE
+	    DOCNAME=#{docName} and isdelete=0
+	</select>
+	
+</mapper>

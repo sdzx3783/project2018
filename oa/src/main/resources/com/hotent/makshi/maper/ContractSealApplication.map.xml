@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.contract.ContractSealApplication">
+	<resultMap id="ContractSealApplication" type="com.hotent.makshi.model.contract.ContractSealApplication">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="contract_departmentID" column="F_CONTRACT_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="contract_name" column="F_CONTRACT_NAME" jdbcType="VARCHAR"/>
+		<result property="project_administratorID" column="F_project_administratorID" jdbcType="VARCHAR"/>
+		<result property="project_administrator" column="F_project_administrator" jdbcType="VARCHAR"/>
+		<result property="project_director" column="F_PROJECT_DIRECTOR" jdbcType="VARCHAR"/>
+		<result property="contracttype" column="F_CONTRACTTYPE" jdbcType="VARCHAR"/>
+		<result property="thirdcontracttype" column="F_THIRDCONTRACTTYPE" jdbcType="VARCHAR"/>
+		<result property="contract_department" column="F_CONTRACT_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="first_party" column="F_FIRST_PARTY" jdbcType="VARCHAR"/>
+		<result property="total_investment" column="F_TOTAL_INVESTMENT" jdbcType="VARCHAR"/>
+		<result property="second_party" column="F_SECOND_PARTY" jdbcType="VARCHAR"/>
+		<result property="contract_money" column="F_CONTRACT_MONEY" jdbcType="VARCHAR"/>
+		<result property="signing_time" column="F_SIGNING_TIME" jdbcType="DATE"/>
+		<result property="settlement_money" column="F_SETTLEMENT_MONEY" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="contract_num" column="F_CONTRACT_NUM" jdbcType="VARCHAR"/>
+		<result property="no" column="F_NO" jdbcType="VARCHAR"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="project_bid_floorprice" column="F_PROJECT_BID_FLOORPRICE" jdbcType="VARCHAR"/>
+		<result property="contract_status" column="F_CONTRACT_STATUS" jdbcType="VARCHAR"/>
+		<result property="project_bid_price" column="F_PROJECT_BID_PRICE" jdbcType="VARCHAR"/>
+		<result property="rate" column="F_RATE" jdbcType="VARCHAR"/>
+		<result property="project_content" column="F_PROJECT_CONTENT" jdbcType="VARCHAR"/>
+		<result property="payment_type" column="F_PAYMENT_TYPE" jdbcType="VARCHAR"/>
+		<result property="project_scale" column="F_PROJECT_SCALE" jdbcType="VARCHAR"/>
+		<result property="isrecord" column="F_ISRECORD" jdbcType="VARCHAR"/>
+		<result property="issave" column="F_ISSAVE" jdbcType="VARCHAR"/>
+		<result property="project_status" column="F_PROJECT_STATUS" jdbcType="VARCHAR"/>
+		<result property="isrecovery" column="F_ISRECOVERY" jdbcType="VARCHAR"/>
+		<result property="inout" column="F_INOUT" jdbcType="VARCHAR"/>
+		<result property="project_place" column="F_PROJECT_PLACE" jdbcType="VARCHAR"/>
+		<result property="start_time" column="F_START_TIME" jdbcType="DATE"/>
+		<result property="owner_name" column="F_OWNER_NAME" jdbcType="VARCHAR"/>
+		<result property="end_time" column="F_END_TIME" jdbcType="DATE"/>
+		<result property="project_origin" column="F_PROJECT_ORIGIN" jdbcType="VARCHAR"/>
+		<result property="project_leader" column="F_PROJECT_LEADER" jdbcType="VARCHAR"/>
+		<result property="bidding_platform" column="F_BIDDING_PLATFORM" jdbcType="VARCHAR"/>
+		<result property="contract_handler" column="F_CONTRACT_HANDLER" jdbcType="VARCHAR"/>
+		<result property="bidding_method" column="F_BIDDING_METHOD" jdbcType="VARCHAR"/>
+		<result property="contract_reviewer" column="F_CONTRACT_REVIEWER" jdbcType="VARCHAR"/>
+		<result property="contract_authorized_person" column="F_CONTRACT_AUTHORIZED_PERSON" jdbcType="VARCHAR"/>
+		<result property="updater" column="F_UPDATER" jdbcType="VARCHAR"/>
+		<result property="creater" column="F_CREATER" jdbcType="VARCHAR"/>
+		<result property="update_time" column="F_UPDATE_TIME" jdbcType="VARCHAR"/>
+		<result property="create_time" column="F_CREATE_TIME" jdbcType="VARCHAR"/>
+		<result property="custodian" column="F_CUSTODIAN" jdbcType="VARCHAR"/>
+		<result property="progress" column="F_PROGRESS" jdbcType="VARCHAR"/>
+		<result property="file" column="F_FILE" jdbcType="VARCHAR"/>
+		<result property="invoice_amount" column="F_invoice_amount" jdbcType="VARCHAR"/>
+		<result property="project_directorID" column="F_project_directorID" jdbcType="VARCHAR"/>
+		<result property="project_leaderID" column="F_project_leaderID" jdbcType="VARCHAR"/>
+		<result property="contract_handlerID" column="F_contract_handlerID" jdbcType="VARCHAR"/>
+		<result property="contract_reviewerID" column="F_contract_reviewerID" jdbcType="VARCHAR"/>
+		<result property="contract_authorized_personID" column="F_contract_authorized_personID" jdbcType="VARCHAR"/>
+		<result property="updaterID" column="F_updaterID" jdbcType="VARCHAR"/>
+		<result property="createrID" column="F_createrID" jdbcType="VARCHAR"/>
+		<result property="custodianID" column="F_custodianID" jdbcType="VARCHAR"/>
+		<result property="projiect_name" column="F_projiect_name" jdbcType="VARCHAR"/>
+		<result property="sections_name" column="F_sections_name" jdbcType="VARCHAR"/>
+		<result property="processStatus" column="state" jdbcType="VARCHAR"/>
+		<result property="creator" column="CREATOR" jdbcType="VARCHAR"/>
+		<result property="createTime" column="CREATETIME" jdbcType="VARCHAR"/>
+		<result property="globalFlowNo" column="GLOBALFLOWNO" jdbcType="VARCHAR"/>
+		
+		<result property="file_second" column="F_fj_second" jdbcType="VARCHAR"/>
+		<result property="file_third" column="F_fj_third" jdbcType="VARCHAR"/>
+		
+		<result property="haveProjectChapter" column="F_haveProjectChapter" jdbcType="VARCHAR"/>
+		<result property="file_copies" column="F_file_copies" jdbcType="INTEGER"/>
+		<result property="fj_second_copies" column="F_fj_second_copies" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.contract.ContractSealApplication" id="ExtContractSealApplication" extends="ContractSealApplication">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_CONTRACT_DEPARTMENTID,F_CONTRACT_NAME,F_PROJECT_DIRECTOR,F_CONTRACTTYPE,F_THIRDCONTRACTTYPE,F_CONTRACT_DEPARTMENT,F_FIRST_PARTY,F_TOTAL_INVESTMENT,F_SECOND_PARTY,F_CONTRACT_MONEY,F_SIGNING_TIME,F_SETTLEMENT_MONEY,F_REMARK,F_CONTRACT_NUM,F_NO,F_TYPE,F_PROJECT_BID_FLOORPRICE,F_CONTRACT_STATUS,F_PROJECT_BID_PRICE,F_RATE,F_PROJECT_CONTENT,F_PAYMENT_TYPE,F_PROJECT_SCALE,F_ISRECORD,F_ISSAVE,F_PROJECT_STATUS,F_ISRECOVERY,F_INOUT,F_PROJECT_PLACE,F_START_TIME,F_OWNER_NAME,F_END_TIME,F_PROJECT_ORIGIN,F_PROJECT_LEADER,F_BIDDING_PLATFORM,F_CONTRACT_HANDLER,F_BIDDING_METHOD,F_CONTRACT_REVIEWER,F_CONTRACT_AUTHORIZED_PERSON,F_UPDATER,F_CREATER,F_UPDATE_TIME,F_CREATE_TIME,F_CUSTODIAN,F_PROGRESS,F_FILE,F_project_administrator,F_project_administratorID,F_invoice_amount
+		,F_project_directorID,F_project_leaderID,F_contract_handlerID,F_contract_reviewerID,F_contract_authorized_personID,F_updaterID,
+		F_createrID,F_custodianID,F_projiect_name,F_sections_name,F_fj_second,F_fj_third,F_haveProjectChapter,F_file_copies,F_fj_second_copies
+	</sql>
+	<sql id="wfColumns">
+		ID,F_CONTRACT_DEPARTMENTID,F_CONTRACT_NAME,F_PROJECT_DIRECTOR,F_CONTRACTTYPE,F_THIRDCONTRACTTYPE,F_CONTRACT_DEPARTMENT,F_FIRST_PARTY,F_TOTAL_INVESTMENT,F_SECOND_PARTY,F_CONTRACT_MONEY,F_SIGNING_TIME,F_SETTLEMENT_MONEY,F_REMARK,F_CONTRACT_NUM,F_NO,F_TYPE,F_PROJECT_BID_FLOORPRICE,F_CONTRACT_STATUS,F_PROJECT_BID_PRICE,F_RATE,F_PROJECT_CONTENT,F_PAYMENT_TYPE,F_PROJECT_SCALE,F_ISRECORD,F_ISSAVE,F_PROJECT_STATUS,F_ISRECOVERY,F_INOUT,F_PROJECT_PLACE,F_START_TIME,F_OWNER_NAME,F_END_TIME,F_PROJECT_ORIGIN,F_PROJECT_LEADER,F_BIDDING_PLATFORM,F_CONTRACT_HANDLER,F_BIDDING_METHOD,F_CONTRACT_REVIEWER,F_CONTRACT_AUTHORIZED_PERSON,F_UPDATER,F_CREATER,F_UPDATE_TIME,F_CREATE_TIME,F_CUSTODIAN,F_PROGRESS,F_FILE,F_project_administrator,F_project_administratorID,F_invoice_amount
+		F_project_directorID,F_project_leaderID,F_contract_handlerID,F_contract_reviewerID,F_contract_authorized_personID,F_updaterID,
+		F_createrID,F_custodianID,F_projiect_name,F_sections_name,F_fj_second,F_fj_third,F_haveProjectChapter,F_file_copies,F_fj_second_copies
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(contract_departmentID)"> AND F_CONTRACT_DEPARTMENTID  LIKE '%${contract_departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_administratorID)"> AND F_PROJECT_ADMINISTRATORID  LIKE '%${project_administratorID}%'  </if>
+			<if test="@Ognl@isNotEmpty(contract_name)"> AND F_CONTRACT_NAME  LIKE '%${contract_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_director)"> AND F_PROJECT_DIRECTOR  LIKE '%${project_director}%'  </if>
+			<if test="@Ognl@isNotEmpty(contract_type)"> AND F_CONTRACTTYPE  LIKE '%${contract_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(contract_department)"> AND F_CONTRACT_DEPARTMENT  LIKE '%${contract_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(first_party)"> AND F_FIRST_PARTY  LIKE '%${first_party}%'  </if>
+			<if test="@Ognl@isNotEmpty(total_investment)"> AND F_TOTAL_INVESTMENT  LIKE '%${total_investment}%'  </if>
+			<if test="@Ognl@isNotEmpty(second_party)"> AND F_SECOND_PARTY  LIKE '%${second_party}%'  </if>
+			<if test="@Ognl@isNotEmpty(contract_money)"> AND F_CONTRACT_MONEY  LIKE '%${contract_money}%'  </if>
+			<if test="@Ognl@isNotEmpty(signing_time)"> AND F_SIGNING_TIME  =#{signing_time} </if>
+			<if test="@Ognl@isNotEmpty(beginsigning_time)"> AND F_SIGNING_TIME  >=#{beginsigning_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endsigning_time)"> AND F_SIGNING_TIME <![CDATA[ <=#{endsigning_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(settlement_money)"> AND F_SETTLEMENT_MONEY  LIKE '%${settlement_money}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_administrator)"> AND F_PROJECT_ADMINISTRATOR  LIKE '%${project_administrator}%'  </if>
+			<if test="@Ognl@isNotEmpty(globalflowno)"> AND b.GLOBALFLOWNO  LIKE #{globalflowno}  </if>
+			<if test="@Ognl@isNotEmpty(creator)"> AND b.CREATOR  LIKE '%${creator}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.contract.ContractSealApplication">
+		INSERT INTO W_CONTRACT_SEAL_APPLICATION
+		(ID,
+		F_CONTRACT_DEPARTMENTID,F_CONTRACT_NAME,F_PROJECT_DIRECTOR,F_CONTRACTTYPE,F_THIRDCONTRACTTYPE,F_CONTRACT_DEPARTMENT,F_FIRST_PARTY,
+		F_TOTAL_INVESTMENT,F_SECOND_PARTY,F_CONTRACT_MONEY,F_SIGNING_TIME,F_SETTLEMENT_MONEY,F_REMARK,F_CONTRACT_NUM,F_NO,F_TYPE,F_PROJECT_BID_FLOORPRICE,F_CONTRACT_STATUS,F_PROJECT_BID_PRICE,F_RATE,F_PROJECT_CONTENT,F_PAYMENT_TYPE,F_PROJECT_SCALE,F_ISRECORD,F_ISSAVE,F_PROJECT_STATUS,F_ISRECOVERY,F_INOUT,F_PROJECT_PLACE,F_START_TIME,F_OWNER_NAME,F_END_TIME,F_PROJECT_ORIGIN,F_PROJECT_LEADER,F_BIDDING_PLATFORM,F_CONTRACT_HANDLER,F_BIDDING_METHOD,F_CONTRACT_REVIEWER,F_CONTRACT_AUTHORIZED_PERSON,F_UPDATER,F_CREATER,F_UPDATE_TIME,F_CREATE_TIME,F_CUSTODIAN,F_PROGRESS,F_FILE,,F_project_administrator,F_project_administratorID,F_invoice_amount,
+		F_project_directorID,F_project_leaderID,F_contract_handlerID,F_contract_reviewerID,F_contract_authorized_personID,F_updaterID,
+		F_createrID,F_custodianID,F_projiect_name,F_sections_name,F_fj_second,F_fj_third)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{contract_departmentID,jdbcType=VARCHAR}, #{contract_name,jdbcType=VARCHAR}, #{project_director,jdbcType=VARCHAR}, #{contracttype,jdbcType=VARCHAR},#{thirdcontracttype,jdbcType=VARCHAR}, #{contract_department,jdbcType=VARCHAR}, #{first_party,jdbcType=VARCHAR}, #{total_investment,jdbcType=VARCHAR}, #{second_party,jdbcType=VARCHAR}, #{contract_money,jdbcType=VARCHAR}, #{signing_time,jdbcType=DATE}, #{settlement_money,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{contract_num,jdbcType=VARCHAR}, #{no,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{project_bid_floorprice,jdbcType=VARCHAR}, #{contract_status,jdbcType=VARCHAR}, #{project_bid_price,jdbcType=VARCHAR}, #{rate,jdbcType=VARCHAR}, #{project_content,jdbcType=VARCHAR}, #{payment_type,jdbcType=VARCHAR}, #{project_scale,jdbcType=VARCHAR}, #{isrecord,jdbcType=VARCHAR}, #{issave,jdbcType=VARCHAR}, #{project_status,jdbcType=VARCHAR}, #{isrecovery,jdbcType=VARCHAR}, #{inout,jdbcType=VARCHAR}, #{project_place,jdbcType=VARCHAR}, #{start_time,jdbcType=DATE}, #{owner_name,jdbcType=VARCHAR}, #{end_time,jdbcType=DATE}, #{project_origin,jdbcType=VARCHAR}, #{project_leader,jdbcType=VARCHAR}, #{bidding_platform,jdbcType=VARCHAR}, #{contract_handler,jdbcType=VARCHAR}, #{bidding_method,jdbcType=VARCHAR}, #{contract_reviewer,jdbcType=VARCHAR}, #{contract_authorized_person,jdbcType=VARCHAR}, #{updater,jdbcType=VARCHAR}, #{creater,jdbcType=VARCHAR}, #{update_time,jdbcType=VARCHAR}, #{create_time,jdbcType=VARCHAR}, #{custodian,jdbcType=VARCHAR}, #{progress,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR},
+		#{project_administrator,jdbcType=VARCHAR},#{project_administratorID,jdbcType=VARCHAR},#{invoice_amount,jdbcType=VARCHAR},
+		#{project_directorID,jdbcType=VARCHAR},#{project_leaderID,jdbcType=VARCHAR},#{contract_handlerID,jdbcType=VARCHAR},#{contract_reviewerID,jdbcType=VARCHAR},
+		#{contract_authorized_personID,jdbcType=VARCHAR},#{updaterID,jdbcType=VARCHAR},#{createrID,jdbcType=VARCHAR},#{custodianID,jdbcType=VARCHAR},
+		#{projiect_name,jdbcType=VARCHAR},#{sections_name,jdbcType=VARCHAR},#{file_second,jdbcType=VARCHAR},#{file_third,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CONTRACT_SEAL_APPLICATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.contract.ContractSealApplication">
+		UPDATE W_CONTRACT_SEAL_APPLICATION SET
+		F_CONTRACT_DEPARTMENTID=#{contract_departmentID,jdbcType=VARCHAR},
+		F_CONTRACT_NAME=#{contract_name,jdbcType=VARCHAR},
+		F_PROJECT_DIRECTOR=#{project_director,jdbcType=VARCHAR},
+		F_CONTRACTTYPE=#{contracttype,jdbcType=VARCHAR},
+		F_THIRDCONTRACTTYPE=#{thirdcontracttype,jdbcType=VARCHAR},
+		F_CONTRACT_DEPARTMENT=#{contract_department,jdbcType=VARCHAR},
+		F_FIRST_PARTY=#{first_party,jdbcType=VARCHAR},
+		F_TOTAL_INVESTMENT=#{total_investment,jdbcType=VARCHAR},
+		F_SECOND_PARTY=#{second_party,jdbcType=VARCHAR},
+		F_CONTRACT_MONEY=#{contract_money,jdbcType=VARCHAR},
+		F_SIGNING_TIME=#{signing_time,jdbcType=DATE},
+		F_SETTLEMENT_MONEY=#{settlement_money,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_CONTRACT_NUM=#{contract_num,jdbcType=VARCHAR},
+		F_NO=#{no,jdbcType=VARCHAR},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_PROJECT_BID_FLOORPRICE=#{project_bid_floorprice,jdbcType=VARCHAR},
+		F_CONTRACT_STATUS=#{contract_status,jdbcType=VARCHAR},
+		F_PROJECT_BID_PRICE=#{project_bid_price,jdbcType=VARCHAR},
+		F_RATE=#{rate,jdbcType=VARCHAR},
+		F_PROJECT_CONTENT=#{project_content,jdbcType=VARCHAR},
+		F_PAYMENT_TYPE=#{payment_type,jdbcType=VARCHAR},
+		F_PROJECT_SCALE=#{project_scale,jdbcType=VARCHAR},
+		F_ISRECORD=#{isrecord,jdbcType=VARCHAR},
+		F_ISSAVE=#{issave,jdbcType=VARCHAR},
+		F_PROJECT_STATUS=#{project_status,jdbcType=VARCHAR},
+		F_ISRECOVERY=#{isrecovery,jdbcType=VARCHAR},
+		F_INOUT=#{inout,jdbcType=VARCHAR},
+		F_PROJECT_PLACE=#{project_place,jdbcType=VARCHAR},
+		F_START_TIME=#{start_time,jdbcType=DATE},
+		F_OWNER_NAME=#{owner_name,jdbcType=VARCHAR},
+		F_END_TIME=#{end_time,jdbcType=DATE},
+		F_PROJECT_ORIGIN=#{project_origin,jdbcType=VARCHAR},
+		F_PROJECT_LEADER=#{project_leader,jdbcType=VARCHAR},
+		F_BIDDING_PLATFORM=#{bidding_platform,jdbcType=VARCHAR},
+		F_CONTRACT_HANDLER=#{contract_handler,jdbcType=VARCHAR},
+		F_BIDDING_METHOD=#{bidding_method,jdbcType=VARCHAR},
+		F_CONTRACT_REVIEWER=#{contract_reviewer,jdbcType=VARCHAR},
+		F_CONTRACT_AUTHORIZED_PERSON=#{contract_authorized_person,jdbcType=VARCHAR},
+		F_UPDATER=#{updater,jdbcType=VARCHAR},
+		F_CREATER=#{creater,jdbcType=VARCHAR},
+		F_UPDATE_TIME=#{update_time,jdbcType=VARCHAR},
+		F_CREATE_TIME=#{create_time,jdbcType=VARCHAR},
+		F_CUSTODIAN=#{custodian,jdbcType=VARCHAR},
+		F_PROGRESS=#{progress,jdbcType=VARCHAR},
+		F_FILE=#{file,jdbcType=VARCHAR},
+		F_project_administrator=#{project_administrator,jdbcType=VARCHAR},
+		F_project_administratorID=#{project_administratorID,jdbcType=VARCHAR},
+		F_invoice_amount=#{invoice_amount,jdbcType=VARCHAR},
+		F_project_directorID=#{project_directorID,jdbcType=VARCHAR},
+		F_project_leaderID=#{project_leaderID,jdbcType=VARCHAR},
+		F_contract_handlerID=#{contract_handlerID,jdbcType=VARCHAR},
+		F_contract_reviewerID=#{contract_reviewerID,jdbcType=VARCHAR},
+		F_contract_authorized_personID=#{contract_authorized_personID,jdbcType=VARCHAR},
+		F_updaterID=#{updaterID,jdbcType=VARCHAR},
+		F_createrID=#{createrID,jdbcType=VARCHAR},
+		F_custodianID=#{custodianID,jdbcType=VARCHAR},
+		F_projiect_name=#{projiect_name,jdbcType=VARCHAR},
+		F_sections_name=#{sections_name,jdbcType=VARCHAR},
+		F_fj_second = #{file_second,jdbcType=VARCHAR},
+		F_fj_third = #{file_third,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ContractSealApplication">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_SEAL_APPLICATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="ContractSealApplication">
+		SELECT <include refid="columns"/>,CREATOR,CREATETIME,GLOBALFLOWNO,(CASE WHEN isnull(`b`.`NAME_`) THEN '流程已结束' ELSE `b`.`NAME_` END ) AS `state`
+		FROM W_CONTRACT_SEAL_APPLICATION    a   
+		LEFT JOIN `run_task` `b` ON  `a`.`ID` = `b`.`BUSINESSKEY`
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+</mapper>

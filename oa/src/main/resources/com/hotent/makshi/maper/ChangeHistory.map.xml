@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.common.WChangeHistory">
+	<resultMap id="ChangeHistory" type="com.hotent.makshi.model.common.WChangeHistory">
+		<id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="type" property="type" jdbcType="VARCHAR" />
+	    <result column="field" property="field" jdbcType="VARCHAR" />
+	    <result column="before" property="before" jdbcType="VARCHAR" />
+	    <result column="after" property="after" jdbcType="VARCHAR" />
+	    <result column="creater" property="creater" jdbcType="VARCHAR" />
+	    <result column="create_id" property="createId" jdbcType="NUMERIC" />
+	    <result column="condition" property="condition" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+
+	<sql id="columns">
+		id, type, field, `before`, `after`, creater,create_id,`condition`, create_time
+	</sql>
+	<sql id="wfColumns">
+		id, type, field, `before`, `after`, creater,create_id,`condition`, create_time
+	</sql>
+	
+
+	<insert id="add" parameterType="com.hotent.makshi.model.common.WChangeHistory">
+		insert into w_change_history (id, type, field,`before`, `after`, creater,create_id,`condition`, create_time) 
+	    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{field,jdbcType=VARCHAR},#{before,jdbcType=VARCHAR},#{after,jdbcType=VARCHAR}, #{creater,jdbcType=VARCHAR},#{createId,jdbcType=NUMERIC},#{condition,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+	</insert>
+	
+  
+	<select id="getById" parameterType="java.lang.Long" resultMap="ChangeHistory">
+		SELECT <include refid="columns"/>
+		FROM w_change_history
+		WHERE
+		ID=#{id}
+	</select>
+	
+	
+	
+	<select id="getAll" resultMap="ChangeHistory">
+		SELECT <include refid="columns"/>
+		FROM w_change_history   
+		ORDER BY create_time desc
+	</select>
+	
+	<select id="getListByType" parameterType="java.lang.String" resultMap="ChangeHistory">
+		SELECT <include refid="columns"/>
+		FROM w_change_history
+		WHERE
+		type=#{type} and `condition`=#{condition}
+		ORDER BY create_time desc
+	</select>
+	
+	
+</mapper>

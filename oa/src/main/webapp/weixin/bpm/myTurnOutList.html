@@ -1,0 +1,137 @@
+<!doctype html>
+<html class="no-js">
+<head>
+<title>我的代理转办</title>
+<meta charset="utf-8">
+<script src="../assets/js/importJs.js"></script>
+<script type="text/javascript">
+	importCss(["/weixin/assets/css/page.css"]);
+	//导入JS
+	importJs(["/weixin/assets/js/pageScroll.js"]);
+	
+	Handlebars.registerHelper("getAssignType",function(assignType){
+		var str="";
+		switch(assignType){
+			case 1:
+				str='<span class="am-badge  am-badge-danger  am-radius">代理</span>';
+				break;
+			case 2:
+				str='<span class="am-badge am-badge-success am-radius">转办</span>';
+				break;
+			case 3:
+				str='<span class="am-badge am-badge-warning am-radius">流转</span>';
+				break;
+			case 4:
+				str='<span class="am-badge am-badge-secondary am-radius">多级转办</span>';
+				break;
+		}
+		return str;
+	     
+	});
+	
+	Handlebars.registerHelper("getStatus",function(status){
+		var str="";
+		switch(status){
+			case 0:
+				str='<span class="am-badge  am-radius">未处理</span>';
+				break;
+			case 1:
+				str='<span class="am-badge am-badge-success am-radius">完成</span>';
+				break;
+			case 2:
+				str='<span class="am-badge am-badge-warning am-radius">取消</span>';
+				break;
+			case 3:
+				str='<span class="am-badge am-badge-primary am-radius">任务完成</span>';
+				break;
+			case 4:
+				str="驳回";
+				str='<span class="am-badge am-badge-secondary am-radius">任务完成</span>';
+				break;
+		}
+		return str;
+	     
+	});
+	
+	
+</script>
+</head>
+<body>
+
+<div class="page">
+  <header data-am-widget="header" class="am-header am-header-default">
+  	<div class="am-header-left am-header-nav">
+		<span class="am-icon-chevron-left" id="btn-back" onclick="history.back();"></span>
+	</div>
+    <h1 class="am-header-title" id="colTitle">
+      	我的代理转办
+    </h1>
+    <div class="am-header-right am-header-nav">
+          <a href="../index.html" class=""  title="返回主页" >
+                <i class="am-header-icon fa fa-home" ></i>
+          </a>
+    </div>
+  </header>
+
+  <div id="wrapper" data-am-widget="list_news"
+       class="am-list-news am-list-news-default">
+    <div class="am-list-news-bd">
+    	
+      <div class="pull-action loading" id="pull-down">
+        <span class="am-icon-arrow-down pull-label"
+              id="pull-down-label"> 下拉刷新</span>
+        <span class="am-icon-spinner am-icon-spin"></span>
+      </div>
+      <ul class="am-list" id="events-list">
+        <li class="am-list-item-desced">
+          <div class="am-list-item-text">正在加载内容... </div>
+        </li>
+      </ul>
+      <div class="pull-action" id="pull-up">
+        <span class="am-icon-arrow-up pull-label"    id="pull-up-label"> 上拉加载更多</span>
+        <span class="am-icon-spinner am-icon-spin"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/x-handlebars-template" id="tpi-list-item">
+  {{#each this}}
+  <li class="am-list-item-desced" data-id="{{runId}}">
+    <a href="getBpmExeById.html?id={{id}}&status={{status}}&runId={{runId}}" class="am-list-item-hd" >{{{subject}}}</a><span class="am-list-date">发起时间:{{formatDate createtime 'yyyy-MM-dd hh:mm'}}</span>
+	<div>转办(代理人):{{assigneeName}},类型:{{{getAssignType assignType}}},状态:{{{getStatus status}}}</div>
+  </li>
+  {{/each}}
+</script>
+
+<script>
+
+
+
+
+$(function() {
+	
+	var callBack=function(data){
+	}
+	
+	var url=__ctx +"/weixin/bpm/getMyTurnOutJson.ht";
+	var app = new EventsList(null, {
+        url: url,
+        params: {
+          page: 1,
+          startFromMobile: 1,
+          pageSize: 10,
+          callback:callBack
+        }
+    });
+    app.init();
+      
+    document.addEventListener('touchmove', function(e) {
+          e.preventDefault();
+    }, false);
+});
+
+</script>
+</body>
+</html>
+

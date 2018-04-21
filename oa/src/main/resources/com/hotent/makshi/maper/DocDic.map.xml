@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.dispatch.DocDic">
+	<resultMap id="DocDic" type="com.hotent.makshi.model.dispatch.DocDic">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="dicId" column="DICID" jdbcType="NUMERIC"/>
+		<result property="docId" column="DOCID" jdbcType="NUMERIC"/>
+		<result property="disId" column="DISID" jdbcType="NUMERIC"/>
+		
+	</resultMap>
+
+	<sql id="columns">ID,DICID,DOCID,DISID</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(countersign_personID)"> AND F_COUNTERSIGN_PERSONID  LIKE '%${countersign_personID}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.dispatch.DocDic">
+		INSERT INTO W_DOC_DIC
+		(ID,DICID,DOCID,DISID)
+		VALUES
+		(#{id,jdbcType=NUMERIC},#{dicId,jdbcType=NUMERIC},#{docId,jdbcType=NUMERIC},#{disId,jdbcType=NUMERIC})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM  W_DOC_DIC
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.dispatch.DocDic">
+		UPDATE W_DOC_DIC SET
+		DICID=#{dicId,jdbcType=NUMERIC},
+		DOCID=#{docId,jdbcType=NUMERIC},
+		DISID=#{disId,jdbcType=NUMERIC}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="DocDic">
+		SELECT *
+		FROM W_DOC_DIC 
+		WHERE
+		ID=#{DisId}
+	</select>
+	
+	<select id="getByDisId" parameterType="java.lang.Long" resultMap="DocDic">
+		SELECT <include refid="columns"/> FROM W_DOC_DIC 
+		WHERE
+		DISID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="DocDic">
+		SELECT <include refid="columns"/> FROM W_DOC_DIC
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+</mapper>

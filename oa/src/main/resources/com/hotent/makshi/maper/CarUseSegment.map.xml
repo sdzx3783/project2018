@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.operation.CarUseSegment">
+	<resultMap id="CarUseSegment" type="com.hotent.makshi.model.operation.CarUseSegment">
+		<result property="carName" column="F_carName" jdbcType="VARCHAR"/>
+		<result property="zeroToSeven" column="zeroToSeven" jdbcType="VARCHAR"/>
+		<result property="sevenToEight" column="sevenToEight" jdbcType="VARCHAR"/>
+		<result property="eightToNine" column="eightToNine" jdbcType="VARCHAR"/>
+		<result property="nineToTen" column="nineToTen" jdbcType="VARCHAR"/>
+		<result property="tenToEleven" column="tenToEleven" jdbcType="VARCHAR"/>
+		<result property="elevenToTwelve" column="elevenToTwelve" jdbcType="VARCHAR"/>
+		<result property="twelveToThirteen" column="twelveToThirteen" jdbcType="VARCHAR"/>
+		<result property="thirteenToFourteen" column="thirteenToFourteen" jdbcType="VARCHAR"/>
+		<result property="fourteenToFifteen" column="fourteenToFifteen" jdbcType="VARCHAR"/>
+		<result property="fifteenToSixteen" column="fifteenToSixteen" jdbcType="VARCHAR"/>
+		<result property="sixteenToSeventeen" column="sixteenToSeventeen" jdbcType="VARCHAR"/>
+		<result property="seventeenToEighteen" column="seventeenToEighteen" jdbcType="VARCHAR"/>
+		<result property="eighteenToNineteen" column="eighteenToNineteen" jdbcType="VARCHAR"/>
+		<result property="nineteenToTwenty" column="nineteenToTwenty" jdbcType="VARCHAR"/>
+		<result property="twentyToTwentyOne" column="twentyToTwentyOne" jdbcType="VARCHAR"/>
+		<result property="twentyOneToTwentyTwo" column="twentyOneToTwentyTwo" jdbcType="VARCHAR"/>
+		<result property="twentyTwoToTwentyThree" column="twentyTwoToTwentyThree" jdbcType="VARCHAR"/>
+		<result property="twentyThreeToTwentyFour" column="twentyThreeToTwentyFour" jdbcType="VARCHAR"/>
+	</resultMap>
+	<select id="getList" resultMap="CarUseSegment">
+	select r.f_carId F_carName,
+			t.zeroToSeven,t.sevenToEight,t.eightToNine,t.nineToTen,t.tenToEleven,t.elevenToTwelve,t.twelveToThirteen,
+			t.thirteenToFourteen,t.fourteenToFifteen,t.fifteenToSixteen,t.sixteenToSeventeen,
+			t.seventeenToEighteen,t.eighteenToNineteen,t.nineteenToTwenty,t.twentyToTwentyOne,
+			t.twentyOneToTwentyTwo,t.twentyTwoToTwentyThree,t.twentyThreeToTwentyFour
+			from(
+		SELECT	F_carName,
+				sum((SELECT count(*)  FROM w_car_use w1 WHERE w1.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 00:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 07:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 00:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 07:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 00:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 07:00:00'))))) 
+				as `zeroToSeven` ,
+				sum((SELECT count(*)  FROM w_car_use w2 WHERE w2.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 07:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 08:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 07:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 08:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 07:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 08:00:00')))))
+				as `sevenToEight` ,
+				sum((SELECT count(*)  FROM w_car_use w3 WHERE w3.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 08:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 09:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 08:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 09:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 08:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 09:00:00')))))
+				as `eightToNine` ,
+				sum((SELECT count(*)  FROM w_car_use w4 WHERE w4.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 09:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 10:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 09:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 10:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 09:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 10:00:00')))))
+				as `nineToTen`,
+				sum((SELECT count(*)  FROM w_car_use w5 WHERE w5.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 10:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 11:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 10:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 11:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 10:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 11:00:00')))))
+				as `tenToEleven`,
+				sum((SELECT count(*)  FROM w_car_use w6 WHERE w6.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 11:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 12:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 11:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 12:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 11:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 12:00:00')))))
+				as `elevenToTwelve`,
+				sum((SELECT count(*)  FROM w_car_use w7 WHERE w7.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 12:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 13:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 12:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 13:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 12:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 13:00:00')))))
+				as `twelveToThirteen`,
+				sum((SELECT count(*)  FROM w_car_use w8 WHERE w8.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 13:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 14:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 13:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 14:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 13:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 14:00:00')))))
+				as `thirteenToFourteen`,
+				sum((SELECT count(*)  FROM w_car_use w9 WHERE w9.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 14:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 15:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 14:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 15:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 14:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 15:00:00')))))
+				as `fourteenToFifteen`,
+				sum((SELECT count(*)  FROM w_car_use w10 WHERE w10.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 15:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 16:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 15:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 16:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 15:00:00')&lt;F_endTime and F_endTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 16:00:00')))))
+				as `fifteenToSixteen`,
+				sum((SELECT count(*)  FROM w_car_use w11 WHERE w11.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 16:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 17:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 16:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 17:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 16:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 17:00:00')))))
+				as `sixteenToSeventeen`,
+				sum((SELECT count(*)  FROM w_car_use w12 WHERE w12.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 17:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 18:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 17:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 18:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 17:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 18:00:00')))))
+				as `seventeenToEighteen`,
+				sum((SELECT count(*)  FROM w_car_use w13 WHERE w13.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 18:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 19:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 18:00:00')&lt;F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 19:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 18:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 19:00:00')))))
+				as `eighteenToNineteen`,
+				sum((SELECT count(*)  FROM w_car_use w14 WHERE w14.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 19:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 20:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 19:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 20:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 19:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 20:00:00')))))
+				as `nineteenToTwenty`,
+				sum((SELECT count(*)  FROM w_car_use w15 WHERE w15.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 20:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 21:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 20:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 21:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 20:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 21:00:00')))))
+				as `twentyToTwentyOne`,
+				sum((SELECT count(*)  FROM w_car_use w16 WHERE w16.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 21:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 22:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 21:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 22:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 21:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 22:00:00')))))
+				as `twentyOneToTwentyTwo`,
+				sum((SELECT count(*)  FROM w_car_use w17 WHERE w17.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 22:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 23:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 22:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 23:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 22:00:00')&lt;F_endTime and F_endTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 23:00:00')))))
+				as `twentyTwoToTwentyThree`,
+				sum((SELECT count(*)  FROM w_car_use w18 WHERE w18.id=w.id 
+				AND ((F_startTime&lt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 23:00:00') AND F_endTime&gt;=CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 24:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 23:00:00')&lt;=F_startTime and  F_startTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 24:00:00'))
+				OR (CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 23:00:00')&lt;F_endTime and F_endTime&lt;CONCAT(#{VARCHAR,jdbcType=VARCHAR},' 24:00:00')))))
+				as `twentyThreeToTwentyFour`
+			 FROM w_car_use w 
+			 where w.finish = 1 and w.deleted !=1
+		 	GROUP BY F_carName 
+			 )t
+			 right join w_car_regist r
+			 on t.f_carName = r.f_carId
+	</select>
+</mapper>

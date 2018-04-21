@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.housereimburse.HouseReimburseRecord">
+	<resultMap id="HouseReimburseRecord"
+		type="com.hotent.makshi.model.housereimburse.HouseReimburseRecord">
+		<id property="id" column="ID" jdbcType="NUMERIC" />
+		<result property="reimburse_id" column="reimburse_id" jdbcType="NUMERIC" />
+		<result property="reimburse_at" column="reimburse_at" jdbcType="VARCHAR" />
+		<result property="moneys" column="moneys" jdbcType="VARCHAR" />
+		<result property="person" column="person" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="getALlByReimburseId" parameterType="map"
+		resultMap="HouseReimburseRecord">
+		select * from w_house_reimburse_record where reimburse_id =
+		#{reimburseId} order by reimburse_at desc
+	</select>
+
+	<insert id="add"
+		parameterType="com.hotent.makshi.model.housereimburse.HouseReimburseRecord">
+		insert into w_house_reimburse_record(id,
+		reimburse_id,
+		reimburse_at,
+		moneys,
+		person)
+		values(#{id,jdbcType=NUMERIC},#{reimburse_id,jdbcType=NUMERIC},#{reimburse_at,jdbcType=VARCHAR},#{moneys,jdbcType=VARCHAR},#{person,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="update"
+		parameterType="com.hotent.makshi.model.housereimburse.HouseReimburseRecord">
+		update w_house_reimburse_record
+		reimburse_id = #{reimburse_id,jdbcType=NUMERIC},
+		reimburse_at = #{reimburse_at,jdbcType=VARCHAR},
+		moneys = #{moneys,jdbcType=VARCHAR},
+		person = #{person,jdbcType=VARCHAR}
+		where
+		id = #{id,jdbcType=NUMERIC}
+	</update>
+
+	<delete id="delAllByReimburseId" parameterType="map">
+		delete from
+		w_house_reimburse_record where reimburse_id = #{reimburseId}
+	</delete>
+</mapper>

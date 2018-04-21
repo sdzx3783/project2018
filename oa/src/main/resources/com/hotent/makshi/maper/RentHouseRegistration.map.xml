@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.renthouseregistration.RentHouseRegistration">
+	<resultMap id="RentHouseRegistration" type="com.hotent.makshi.model.renthouseregistration.RentHouseRegistration">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="departmentID" column="F_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="house_id" column="F_HOUSE_ID" jdbcType="VARCHAR"/>
+		<result property="size" column="F_SIZE" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="money" column="F_MONEY" jdbcType="VARCHAR"/>
+		<result property="landlord" column="F_LANDLORD" jdbcType="VARCHAR"/>
+		<result property="house_type" column="F_HOUSE_TYPE" jdbcType="VARCHAR"/>
+		<result property="rent_person" column="F_RENT_PERSON" jdbcType="VARCHAR"/>
+		<result property="rent_type" column="F_RENT_TYPE" jdbcType="VARCHAR"/>
+		<result property="address" column="F_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="number_people" column="F_NUMBER_PEOPLE" jdbcType="VARCHAR"/>
+		<result property="start_date" column="F_START_DATE" jdbcType="DATE"/>
+		<result property="responsible_person" column="F_RESPONSIBLE_PERSON" jdbcType="VARCHAR"/>
+		<result property="end_date" column="F_END_DATE" jdbcType="DATE"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="remarks" column="F_REMARKS" jdbcType="VARCHAR"/>
+		<result property="deposit" column="F_DEPOSIT" jdbcType="VARCHAR"/>
+		<result property="handle_person" column="F_HANDLE_PERSON" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_DEPARTMENTID,
+		F_HOUSE_ID,
+		F_SIZE,F_DEPARTMENT,F_MONEY,F_LANDLORD,F_HOUSE_TYPE,F_RENT_PERSON,F_RENT_TYPE,F_ADDRESS,F_NUMBER_PEOPLE,F_START_DATE,
+		F_RESPONSIBLE_PERSON,F_END_DATE,F_ATTACHMENT,F_REMARKS,F_DEPOSIT,F_HANDLE_PERSON
+	</sql>
+	<sql id="wfColumns">
+		ID,F_DEPARTMENTID,F_HOUSE_ID,F_SIZE,F_DEPARTMENT,F_MONEY,F_LANDLORD,F_HOUSE_TYPE,F_RENT_PERSON,F_RENT_TYPE,F_ADDRESS,
+		F_NUMBER_PEOPLE,F_START_DATE,F_RESPONSIBLE_PERSON,F_END_DATE,F_ATTACHMENT,F_REMARKS,F_DEPOSIT,F_HANDLE_PERSON
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_DEPARTMENTID  LIKE '%${departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(house_id)"> AND ID  LIKE '%${house_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(size)"> AND F_SIZE  LIKE '%${size}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(money)"> AND F_MONEY  LIKE '%${money}%'  </if>
+			<if test="@Ognl@isNotEmpty(landlord)"> AND F_LANDLORD  LIKE '%${landlord}%'  </if>
+			<if test="@Ognl@isNotEmpty(house_type)"> AND F_HOUSE_TYPE  LIKE '%${house_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(rent_person)"> AND F_RENT_PERSON  LIKE '%${rent_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(rent_type)"> AND F_RENT_TYPE  LIKE '%${rent_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(address)"> AND F_ADDRESS  LIKE '%${address}%'  </if>
+			<if test="@Ognl@isNotEmpty(number_people)"> AND F_NUMBER_PEOPLE  LIKE '%${number_people}%'  </if>
+			<if test="@Ognl@isNotEmpty(start_date)"> AND F_START_DATE  =#{start_date} </if>
+			<if test="@Ognl@isNotEmpty(beginstart_date)"> AND F_START_DATE  >=#{beginstart_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstart_date)"> AND F_START_DATE <![CDATA[ <=#{endstart_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(responsible_person)"> AND F_RESPONSIBLE_PERSON  LIKE '%${responsible_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(end_date)"> AND F_END_DATE  =#{end_date} </if>
+			<if test="@Ognl@isNotEmpty(beginend_date)"> AND F_END_DATE  >=#{beginend_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endend_date)"> AND F_END_DATE <![CDATA[ <=#{endend_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(remarks)"> AND F_REMARKS  LIKE '%${remarks}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.renthouseregistration.RentHouseRegistration">
+		INSERT INTO W_RENT_HOUSE_REGISTRATION
+		(ID,
+		F_DEPARTMENTID,F_HOUSE_ID,F_SIZE,F_DEPARTMENT,F_MONEY,F_LANDLORD,F_HOUSE_TYPE,F_RENT_PERSON,F_RENT_TYPE,F_ADDRESS,F_NUMBER_PEOPLE,
+		F_START_DATE,F_RESPONSIBLE_PERSON,F_END_DATE,F_ATTACHMENT,F_REMARKS,F_DEPOSIT,F_HANDLE_PERSON)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{departmentID,jdbcType=VARCHAR}, #{house_id,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+		#{money,jdbcType=VARCHAR}, #{landlord,jdbcType=VARCHAR}, #{house_type,jdbcType=VARCHAR}, #{rent_person,jdbcType=VARCHAR},
+	    #{rent_type,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{number_people,jdbcType=VARCHAR}, #{start_date,jdbcType=DATE}, 
+	    #{responsible_person,jdbcType=VARCHAR}, #{end_date,jdbcType=DATE}, #{attachment,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR},
+	    #{deposit,jdbcType=VARCHAR},#{handle_person,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_RENT_HOUSE_REGISTRATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.renthouseregistration.RentHouseRegistration">
+		UPDATE W_RENT_HOUSE_REGISTRATION SET
+		F_DEPARTMENTID=#{departmentID,jdbcType=VARCHAR},
+		F_HOUSE_ID=#{house_id,jdbcType=VARCHAR},
+		F_SIZE=#{size,jdbcType=VARCHAR},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_MONEY=#{money,jdbcType=VARCHAR},
+		F_LANDLORD=#{landlord,jdbcType=VARCHAR},
+		F_HOUSE_TYPE=#{house_type,jdbcType=VARCHAR},
+		F_RENT_PERSON=#{rent_person,jdbcType=VARCHAR},
+		F_RENT_TYPE=#{rent_type,jdbcType=VARCHAR},
+		F_ADDRESS=#{address,jdbcType=VARCHAR},
+		F_NUMBER_PEOPLE=#{number_people,jdbcType=VARCHAR},
+		F_START_DATE=#{start_date,jdbcType=DATE},
+		F_RESPONSIBLE_PERSON=#{responsible_person,jdbcType=VARCHAR},
+		F_END_DATE=#{end_date,jdbcType=DATE},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_REMARKS=#{remarks,jdbcType=VARCHAR},
+		F_DEPOSIT=#{deposit,jdbcType=VARCHAR},
+		F_HANDLE_PERSON=#{handle_person,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="RentHouseRegistration">
+		SELECT <include refid="columns"/>
+		FROM W_RENT_HOUSE_REGISTRATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="RentHouseRegistration">
+		SELECT <include refid="columns"/>
+		FROM W_RENT_HOUSE_REGISTRATION   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

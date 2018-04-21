@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.river.HdMeetingMinutes">
+	<resultMap id="HdMeetingMinutes" type="com.hotent.makshi.model.river.HdMeetingMinutes">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="moderatorID" column="F_MODERATORID" jdbcType="VARCHAR"/>
+		<result property="nameID" column="F_NAMEID" jdbcType="VARCHAR"/>
+		<result property="project_leaderID" column="F_PROJECT_LEADERID" jdbcType="VARCHAR"/>
+		<result property="department_headsID" column="F_DEPARTMENT_HEADSID" jdbcType="VARCHAR"/>
+		<result property="finalCheckerID" column="F_FINALCHECKERID" jdbcType="VARCHAR"/>
+		<result property="conference_name" column="F_CONFERENCE_NAME" jdbcType="VARCHAR"/>
+		<result property="number" column="F_NUMBER" jdbcType="VARCHAR"/>
+		<result property="date" column="F_DATE" jdbcType="DATE"/>
+		<result property="moderator" column="F_MODERATOR" jdbcType="VARCHAR"/>
+		<result property="participants" column="F_PARTICIPANTS" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="note" column="F_NOTE" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="project_leader" column="F_PROJECT_LEADER" jdbcType="VARCHAR"/>
+		<result property="department_heads" column="F_DEPARTMENT_HEADS" jdbcType="VARCHAR"/>
+		<result property="isNeedCheck" column="F_ISNEEDCHECK" jdbcType="VARCHAR"/>
+		<result property="finalChecker" column="F_FINALCHECKER" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.river.HdMeetingMinutes" id="ExtHdMeetingMinutes" extends="HdMeetingMinutes">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_MODERATORID,F_NAMEID,F_PROJECT_LEADERID,F_DEPARTMENT_HEADSID,F_FINALCHECKERID,F_CONFERENCE_NAME,F_NUMBER,F_DATE,F_MODERATOR,F_PARTICIPANTS,F_NAME,F_NOTE,F_ATTACHMENT,F_PROJECT_LEADER,F_DEPARTMENT_HEADS,F_ISNEEDCHECK,F_FINALCHECKER
+	</sql>
+	<sql id="wfColumns">
+		ID,F_MODERATORID,F_NAMEID,F_PROJECT_LEADERID,F_DEPARTMENT_HEADSID,F_FINALCHECKERID,F_CONFERENCE_NAME,F_NUMBER,F_DATE,F_MODERATOR,F_PARTICIPANTS,F_NAME,F_NOTE,F_ATTACHMENT,F_PROJECT_LEADER,F_DEPARTMENT_HEADS,F_ISNEEDCHECK,F_FINALCHECKER
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(moderatorID)"> AND F_MODERATORID  LIKE '%${moderatorID}%'  </if>
+			<if test="@Ognl@isNotEmpty(nameID)"> AND F_NAMEID  LIKE '%${nameID}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_leaderID)"> AND F_PROJECT_LEADERID  LIKE '%${project_leaderID}%'  </if>
+			<if test="@Ognl@isNotEmpty(department_headsID)"> AND F_DEPARTMENT_HEADSID  LIKE '%${department_headsID}%'  </if>
+			<if test="@Ognl@isNotEmpty(finalCheckerID)"> AND F_FINALCHECKERID  LIKE '%${finalCheckerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(conference_name)"> AND F_CONFERENCE_NAME  LIKE '%${conference_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(number)"> AND F_NUMBER  LIKE '%${number}%'  </if>
+			<if test="@Ognl@isNotEmpty(date)"> AND F_DATE  =#{date} </if>
+			<if test="@Ognl@isNotEmpty(begindate)"> AND F_DATE  >=#{begindate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(enddate)"> AND F_DATE <![CDATA[ <=#{enddate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(moderator)"> AND F_MODERATOR  LIKE '%${moderator}%'  </if>
+			<if test="@Ognl@isNotEmpty(participants)"> AND F_PARTICIPANTS  LIKE '%${participants}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(note)"> AND F_NOTE  LIKE '%${note}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(project_leader)"> AND F_PROJECT_LEADER  LIKE '%${project_leader}%'  </if>
+			<if test="@Ognl@isNotEmpty(department_heads)"> AND F_DEPARTMENT_HEADS  LIKE '%${department_heads}%'  </if>
+			<if test="@Ognl@isNotEmpty(isNeedCheck)"> AND F_ISNEEDCHECK  LIKE '%${isNeedCheck}%'  </if>
+			<if test="@Ognl@isNotEmpty(finalChecker)"> AND F_FINALCHECKER  LIKE '%${finalChecker}%'  </if>
+		             and F_finish=1
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.river.HdMeetingMinutes">
+		INSERT INTO W_HD_MEETING_MINUTES
+		(ID,
+		F_MODERATORID,F_NAMEID,F_PROJECT_LEADERID,F_DEPARTMENT_HEADSID,F_FINALCHECKERID,F_CONFERENCE_NAME,F_NUMBER,F_DATE,F_MODERATOR,F_PARTICIPANTS,F_NAME,F_NOTE,F_ATTACHMENT,F_PROJECT_LEADER,F_DEPARTMENT_HEADS,F_ISNEEDCHECK,F_FINALCHECKER)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{moderatorID,jdbcType=VARCHAR}, #{nameID,jdbcType=VARCHAR}, #{project_leaderID,jdbcType=VARCHAR}, #{department_headsID,jdbcType=VARCHAR}, #{finalCheckerID,jdbcType=VARCHAR}, #{conference_name,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{date,jdbcType=DATE}, #{moderator,jdbcType=VARCHAR}, #{participants,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, #{project_leader,jdbcType=VARCHAR}, #{department_heads,jdbcType=VARCHAR}, #{isNeedCheck,jdbcType=VARCHAR}, #{finalChecker,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_HD_MEETING_MINUTES 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.river.HdMeetingMinutes">
+		UPDATE W_HD_MEETING_MINUTES SET
+		F_MODERATORID=#{moderatorID,jdbcType=VARCHAR},
+		F_NAMEID=#{nameID,jdbcType=VARCHAR},
+		F_PROJECT_LEADERID=#{project_leaderID,jdbcType=VARCHAR},
+		F_DEPARTMENT_HEADSID=#{department_headsID,jdbcType=VARCHAR},
+		F_FINALCHECKERID=#{finalCheckerID,jdbcType=VARCHAR},
+		F_CONFERENCE_NAME=#{conference_name,jdbcType=VARCHAR},
+		F_NUMBER=#{number,jdbcType=VARCHAR},
+		F_DATE=#{date,jdbcType=DATE},
+		F_MODERATOR=#{moderator,jdbcType=VARCHAR},
+		F_PARTICIPANTS=#{participants,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_NOTE=#{note,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_PROJECT_LEADER=#{project_leader,jdbcType=VARCHAR},
+		F_DEPARTMENT_HEADS=#{department_heads,jdbcType=VARCHAR},
+		F_ISNEEDCHECK=#{isNeedCheck,jdbcType=VARCHAR},
+		F_FINALCHECKER=#{finalChecker,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="HdMeetingMinutes">
+		SELECT <include refid="columns"/>
+		FROM W_HD_MEETING_MINUTES
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="HdMeetingMinutes">
+		SELECT <include refid="columns"/>
+		FROM W_HD_MEETING_MINUTES   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="HdMeetingMinutes">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HD_MEETING_MINUTES A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtHdMeetingMinutes">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_MEETING_MINUTES A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_MEETING_MINUTES A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_MEETING_MINUTES A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_MEETING_MINUTES A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HD_MEETING_MINUTES A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="HdMeetingMinutes">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HD_MEETING_MINUTES A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

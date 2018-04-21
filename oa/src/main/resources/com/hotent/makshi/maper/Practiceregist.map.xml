@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.title.Practiceregist">
+	<resultMap id="Practiceregist" type="com.hotent.makshi.model.title.Practiceregist">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="user_num" column="F_USER_NUM" jdbcType="VARCHAR"/>
+		<result property="issue_date" column="F_ISSUE_DATE" jdbcType="DATE"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="certificate_num" column="F_CERTIFICATE_NUM" jdbcType="VARCHAR"/>
+		<result property="certificate_name" column="F_CERTIFICATE_NAME" jdbcType="VARCHAR"/>
+		<result property="effective_date" column="F_EFFECTIVE_DATE" jdbcType="DATE"/>
+		<result property="regist_num" column="F_REGIST_NUM" jdbcType="VARCHAR"/>
+		<result property="certificate_status" column="F_CERTIFICATE_STATUS" jdbcType="VARCHAR"/>
+		<result property="issuing_authority" column="F_ISSUING_AUTHORITY" jdbcType="VARCHAR"/>
+		<result property="is_safe" column="F_IS_SAFE" jdbcType="VARCHAR"/>
+		<result property="major" column="F_MAJOR" jdbcType="VARCHAR"/>
+		<result property="file" column="F_FILE" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_USER_NUM,F_ISSUE_DATE,F_APPLICANT,F_CERTIFICATE_NUM,F_CERTIFICATE_NAME,F_EFFECTIVE_DATE,F_REGIST_NUM,F_CERTIFICATE_STATUS,F_ISSUING_AUTHORITY,F_IS_SAFE,F_MAJOR,F_FILE,F_REMARK
+	</sql>
+	<sql id="wfColumns">
+		ID,F_USER_NUM,F_ISSUE_DATE,F_APPLICANT,F_CERTIFICATE_NUM,F_CERTIFICATE_NAME,F_EFFECTIVE_DATE,F_REGIST_NUM,F_CERTIFICATE_STATUS,F_ISSUING_AUTHORITY,F_IS_SAFE,F_MAJOR,F_FILE,F_REMARK
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(user_num)"> AND F_USER_NUM  LIKE '%${user_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(issue_date)"> AND F_ISSUE_DATE  =#{issue_date} </if>
+			<if test="@Ognl@isNotEmpty(beginissue_date)"> AND F_ISSUE_DATE  >=#{beginissue_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endissue_date)"> AND F_ISSUE_DATE <![CDATA[ <=#{endissue_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(certificate_num)"> AND F_CERTIFICATE_NUM  LIKE '%${certificate_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(certificate_name)"> AND F_CERTIFICATE_NAME  LIKE '%${certificate_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(effective_date)"> AND F_EFFECTIVE_DATE  =#{effective_date} </if>
+			<if test="@Ognl@isNotEmpty(begineffective_date)"> AND F_EFFECTIVE_DATE  >=#{begineffective_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endeffective_date)"> AND F_EFFECTIVE_DATE <![CDATA[ <=#{endeffective_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(regist_num)"> AND F_REGIST_NUM  LIKE '%${regist_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(certificate_status)"> AND F_CERTIFICATE_STATUS  LIKE '%${certificate_status}%'  </if>
+			<if test="@Ognl@isNotEmpty(issuing_authority)"> AND F_ISSUING_AUTHORITY  LIKE '%${issuing_authority}%'  </if>
+			<if test="@Ognl@isNotEmpty(is_safe)"> AND F_IS_SAFE  LIKE '%${is_safe}%'  </if>
+			<if test="@Ognl@isNotEmpty(major)"> AND F_MAJOR  LIKE '%${major}%'  </if>
+			<if test="@Ognl@isNotEmpty(file)"> AND F_FILE  LIKE '%${file}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.title.Practiceregist">
+		INSERT INTO W_PRACTICEREGIST
+		(ID,
+		F_USER_NUM,F_ISSUE_DATE,F_APPLICANT,F_CERTIFICATE_NUM,F_CERTIFICATE_NAME,F_EFFECTIVE_DATE,F_REGIST_NUM,F_CERTIFICATE_STATUS,F_ISSUING_AUTHORITY,F_IS_SAFE,F_MAJOR,F_FILE,F_REMARK)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{user_num,jdbcType=VARCHAR}, #{issue_date,jdbcType=DATE}, #{applicant,jdbcType=VARCHAR}, #{certificate_num,jdbcType=VARCHAR}, #{certificate_name,jdbcType=VARCHAR}, #{effective_date,jdbcType=DATE}, #{regist_num,jdbcType=VARCHAR}, #{certificate_status,jdbcType=VARCHAR}, #{issuing_authority,jdbcType=VARCHAR}, #{is_safe,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_PRACTICEREGIST 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.title.Practiceregist">
+		UPDATE W_PRACTICEREGIST SET
+		F_USER_NUM=#{user_num,jdbcType=VARCHAR},
+		F_ISSUE_DATE=#{issue_date,jdbcType=DATE},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_CERTIFICATE_NUM=#{certificate_num,jdbcType=VARCHAR},
+		F_CERTIFICATE_NAME=#{certificate_name,jdbcType=VARCHAR},
+		F_EFFECTIVE_DATE=#{effective_date,jdbcType=DATE},
+		F_REGIST_NUM=#{regist_num,jdbcType=VARCHAR},
+		F_CERTIFICATE_STATUS=#{certificate_status,jdbcType=VARCHAR},
+		F_ISSUING_AUTHORITY=#{issuing_authority,jdbcType=VARCHAR},
+		F_IS_SAFE=#{is_safe,jdbcType=VARCHAR},
+		F_MAJOR=#{major,jdbcType=VARCHAR},
+		F_FILE=#{file,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="Practiceregist">
+		SELECT <include refid="columns"/>
+		FROM W_PRACTICEREGIST
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="Practiceregist">
+		SELECT <include refid="columns"/>
+		FROM W_PRACTICEREGIST   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

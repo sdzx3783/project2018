@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.dispatch.Dispatch">
+	<resultMap id="Dispatch" type="com.hotent.makshi.model.dispatch.Dispatch">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="countersign_personID" column="F_COUNTERSIGN_PERSONID" jdbcType="VARCHAR"/>
+		<result property="dispatch_id" column="F_DISPATCH_ID" jdbcType="VARCHAR"/>
+		<result property="time" column="F_TIME" jdbcType="DATE"/>
+		<result property="title" column="F_TITLE" jdbcType="VARCHAR"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="urgency_degree" column="F_URGENCY_DEGREE" jdbcType="VARCHAR"/>
+		<result property="keyword" column="F_KEYWORD" jdbcType="VARCHAR"/>
+		<result property="secret_level" column="F_SECRET_LEVEL" jdbcType="VARCHAR"/>
+		<result property="send_unit" column="F_SEND_UNIT" jdbcType="VARCHAR"/>
+		<result property="cc_unit" column="F_CC_UNIT" jdbcType="VARCHAR"/>
+		<result property="dispatch_content" column="F_DISPATCH_CONTENT" jdbcType="VARCHAR"/>
+		<result property="check_person" column="F_CHECK_PERSON" jdbcType="VARCHAR"/>
+		<result property="countersign_person" column="F_COUNTERSIGN_PERSON" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="draft_personID" column="F_DRAFT_PERSONID" jdbcType="VARCHAR"/>
+		<result property="draft_person" column="F_DRAFT_PERSON" jdbcType="VARCHAR"/>
+		<result property="checkState" column="F_CHECK_STATE" jdbcType="VARCHAR"/>
+		<result property="redState" column="F_RED_STATE" jdbcType="VARCHAR"/>
+		<result property="examineState" column="F_EXAMINE_STATE" jdbcType="VARCHAR"/>
+		<result property="sealState" column="F_SEAL_STATE" jdbcType="VARCHAR"/>
+		<result property="sendState" column="F_SEND_STATE" jdbcType="VARCHAR"/>
+		<result property="cc_unit_person" column="F_cc_unit_person" jdbcType="VARCHAR"/>
+		<result property="cc_unit_personID" column="F_cc_unit_personID" jdbcType="VARCHAR"/>
+		<result property="send_unit_person" column="F_send_unit_person" jdbcType="VARCHAR"/>
+		<result property="send_unit_personID" column="F_send_unit_personID" jdbcType="VARCHAR"/>
+		<result property="send_unit_department" column="F_send_unit_department" jdbcType="VARCHAR"/>
+		<result property="send_unit_departmentID" column="F_send_unit_departmentID" jdbcType="VARCHAR"/>
+		<result property="cc_unit_department" column="F_cc_unit_department" jdbcType="VARCHAR"/>
+		<result property="cc_unit_departmentID" column="F_cc_unit_departmentID" jdbcType="VARCHAR"/>
+		<result property="disOrgs" column="F_disOrgs" jdbcType="VARCHAR"/>
+		<result property="runId" column="RUNID" jdbcType="NUMERIC"/>
+		<result property="state" column="F_STATE" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_COUNTERSIGN_PERSONID,F_DISPATCH_ID,F_TIME,F_TITLE,ITEMNAME F_TYPE,F_URGENCY_DEGREE,F_KEYWORD,F_SECRET_LEVEL,F_SEND_UNIT,F_CC_UNIT,F_DISPATCH_CONTENT,F_CHECK_PERSON,F_COUNTERSIGN_PERSON,F_ATTACHMENT,F_DRAFT_PERSONID,F_DRAFT_PERSON
+		,F_CHECK_STATE,F_RED_STATE,F_EXAMINE_STATE,F_SEAL_STATE,F_SEND_STATE,F_disOrgs,
+		F_cc_unit_departmentID,F_cc_unit_department,F_send_unit_departmentID,F_send_unit_department,
+		F_cc_unit_person,F_cc_unit_personID,F_send_unit_person,F_send_unit_personID,F_STATE
+	</sql>
+	<sql id="wfcolumns">
+		ID,F_COUNTERSIGN_PERSONID,F_DISPATCH_ID,F_TIME,F_TITLE,F_TYPE,F_URGENCY_DEGREE,F_KEYWORD,F_SECRET_LEVEL,F_SEND_UNIT,F_CC_UNIT,F_DISPATCH_CONTENT,F_CHECK_PERSON,F_COUNTERSIGN_PERSON,F_ATTACHMENT,F_DRAFT_PERSONID,F_DRAFT_PERSON
+		,F_CHECK_STATE,F_RED_STATE,F_EXAMINE_STATE,F_SEAL_STATE,F_SEND_STATE,F_disOrgs,
+		F_cc_unit_departmentID,F_cc_unit_department,F_send_unit_departmentID,F_send_unit_department,
+		F_cc_unit_person,F_cc_unit_personID,F_send_unit_person,F_send_unit_personID,F_STATE
+	</sql>
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(countersign_personID)"> AND F_COUNTERSIGN_PERSONID  LIKE '%${countersign_personID}%'  </if>
+			<if test="@Ognl@isNotEmpty(dispatch_id)"> AND F_DISPATCH_ID  LIKE '%${dispatch_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(time)"> AND F_TIME  LIKE '%${time}%'  </if>
+			<if test="@Ognl@isNotEmpty(title)"> AND F_TITLE  LIKE '%${title}%'  </if>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  LIKE '%${type}%'  </if>
+			<if test="@Ognl@isNotEmpty(urgency_degree)"> AND F_URGENCY_DEGREE  LIKE '%${urgency_degree}%'  </if>
+			<if test="@Ognl@isNotEmpty(keyword)"> AND F_KEYWORD  LIKE '%${keyword}%'  </if>
+			<if test="@Ognl@isNotEmpty(secret_level)"> AND F_SECRET_LEVEL  LIKE '%${secret_level}%'  </if>
+			<if test="@Ognl@isNotEmpty(send_unit)"> AND F_SEND_UNIT  LIKE '%${send_unit}%'  </if>
+			<if test="@Ognl@isNotEmpty(cc_unit)"> AND F_CC_UNIT  LIKE '%${cc_unit}%'  </if>
+			<if test="@Ognl@isNotEmpty(dispatch_content)"> AND F_DISPATCH_CONTENT  LIKE '%${dispatch_content}%'  </if>
+			<if test="@Ognl@isNotEmpty(check_person)"> AND F_CHECK_PERSON  LIKE '%${check_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(countersign_person)"> AND F_COUNTERSIGN_PERSON  LIKE '%${countersign_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(draft_personID)"> AND F_DRAFT_PERSONID  LIKE '%${draft_personID}%'  </if>
+			<if test="@Ognl@isNotEmpty(draft_person)"> AND F_DRAFT_PERSON  LIKE '%${draft_person}%'  </if>
+		   <!--  <if test="@Ognl@isNotEmpty(redState)">     AND F_STATE=1 </if> -->
+			<if test="@Ognl@isNotEmpty(checkState)">   AND F_RED_STATE = 1 </if>
+			<if test="@Ognl@isNotEmpty(examineState)"> AND F_RED_STATE = 1 and F_CHECK_STATE = 1</if>
+			<if test="@Ognl@isNotEmpty(sealState)">    AND F_RED_STATE = 1 and F_CHECK_STATE = 1 and F_EXAMINE_STATE = 1 </if>
+			<if test="@Ognl@isNotEmpty(sendState)">    AND F_RED_STATE = 1 and F_CHECK_STATE = 1 and F_EXAMINE_STATE = 1 and F_SEAL_STATE = 1  </if>
+			<if test="@Ognl@isNotEmpty(isSend)">   	   AND F_SEND_STATE = ${isSend} </if>
+			<if test="@Ognl@isNotEmpty(ids)">   	   AND ID IN ${ids} </if>
+			<if test="@Ognl@isNotEmpty(year)">   	   AND year(F_TIME) = ${year} </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.dispatch.Dispatch">
+		INSERT INTO W_DISPATCH
+		(ID,F_COUNTERSIGN_PERSONID,F_DISPATCH_ID,F_TIME,F_TITLE,F_TYPE,F_URGENCY_DEGREE,F_KEYWORD,F_SECRET_LEVEL,F_SEND_UNIT,F_CC_UNIT,F_DISPATCH_CONTENT,F_CHECK_PERSON,F_COUNTERSIGN_PERSON,F_ATTACHMENT,F_DRAFT_PERSONID,F_DRAFT_PERSON,F_disOrgs,
+		 F_cc_unit_departmentID,
+		 F_cc_unit_department,
+		 F_send_unit_departmentID,
+		 F_send_unit_department,
+		 F_cc_unit_person,
+		 F_cc_unit_personID,
+		 F_send_unit_person,
+		 F_send_unit_personID,
+		 F_STATE
+		)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+	    #{countersign_personID,jdbcType=VARCHAR}, #{dispatch_id,jdbcType=VARCHAR}, #{time,jdbcType=DATE}, #{title,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{urgency_degree,jdbcType=VARCHAR}, #{keyword,jdbcType=VARCHAR},
+		#{secret_level,jdbcType=VARCHAR}, #{send_unit,jdbcType=VARCHAR}, #{cc_unit,jdbcType=VARCHAR}, #{dispatch_content,jdbcType=VARCHAR}, #{check_person,jdbcType=VARCHAR}, #{countersign_person,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, 
+		#{draft_personID,jdbcType=VARCHAR}, #{draft_person,jdbcType=VARCHAR}, #{disOrgs,jdbcType=VARCHAR},
+		#{cc_unit_departmentID,jdbcType=VARCHAR},
+		#{cc_unit_department,jdbcType=VARCHAR},
+		#{send_unit_departmentID,jdbcType=VARCHAR},
+		#{send_unit_department,jdbcType=VARCHAR},
+		#{cc_unit_person,jdbcType=VARCHAR},
+		#{cc_unit_personID,jdbcType=VARCHAR},
+		#{send_unit_department,jdbcType=VARCHAR},
+		#{send_unit_departmentID,jdbcType=VARCHAR},
+		#{state,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM  W_DISPATCH
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.dispatch.Dispatch">
+		UPDATE W_DISPATCH SET
+		F_COUNTERSIGN_PERSONID=#{countersign_personID,jdbcType=VARCHAR},
+		F_DISPATCH_ID=#{dispatch_id,jdbcType=VARCHAR},
+		F_TIME=#{time,jdbcType=DATE},
+		F_TITLE=#{title,jdbcType=VARCHAR},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_URGENCY_DEGREE=#{urgency_degree,jdbcType=VARCHAR},
+		F_KEYWORD=#{keyword,jdbcType=VARCHAR},
+		F_SECRET_LEVEL=#{secret_level,jdbcType=VARCHAR},
+		F_SEND_UNIT=#{send_unit,jdbcType=VARCHAR},
+		F_CC_UNIT=#{cc_unit,jdbcType=VARCHAR},
+		F_DISPATCH_CONTENT=#{dispatch_content,jdbcType=VARCHAR},
+		F_CHECK_PERSON=#{check_person,jdbcType=VARCHAR},
+		F_COUNTERSIGN_PERSON=#{countersign_person,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_DRAFT_PERSONID=#{draft_personID,jdbcType=VARCHAR},
+		F_DRAFT_PERSON=#{draft_person,jdbcType=VARCHAR},
+		F_disOrgs=#{disOrgs,jdbcType=VARCHAR},
+		F_cc_unit_departmentID=#{cc_unit_departmentID,jdbcType=VARCHAR},
+		F_cc_unit_department=#{cc_unit_department,jdbcType=VARCHAR},
+		F_send_unit_departmentID=#{send_unit_departmentID,jdbcType=VARCHAR},
+		F_send_unit_department=#{send_unit_department,jdbcType=VARCHAR},
+		F_cc_unit_person=#{cc_unit_person,jdbcType=VARCHAR},
+		F_cc_unit_personID=#{cc_unit_personID,jdbcType=VARCHAR},
+		F_send_unit_person=#{send_unit_person,jdbcType=VARCHAR},
+		F_send_unit_personID=#{send_unit_personID,jdbcType=VARCHAR},
+		F_STATE=#{state,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="Dispatch">
+		SELECT *
+		FROM W_DISPATCH 
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" parameterType="java.lang.Long" resultMap="Dispatch">
+		SELECT * FROM W_DISPATCH 
+	</select>
+	
+	<select id="getByYearAndType" resultMap="Dispatch">
+	SELECT
+		a.ID,F_COUNTERSIGN_PERSONID,F_DISPATCH_ID,F_TIME,F_TITLE,F_TYPE,F_URGENCY_DEGREE,F_KEYWORD,F_SECRET_LEVEL,F_SEND_UNIT,F_CC_UNIT,F_DISPATCH_CONTENT,F_CHECK_PERSON,F_COUNTERSIGN_PERSON,F_ATTACHMENT,F_DRAFT_PERSONID,F_DRAFT_PERSON
+		,F_CHECK_STATE,F_RED_STATE,F_EXAMINE_STATE,F_SEAL_STATE,F_SEND_STATE,F_disOrgs,
+		F_cc_unit_departmentID,F_cc_unit_department,F_send_unit_departmentID,F_send_unit_department,
+		F_cc_unit_person,F_cc_unit_personID,F_send_unit_person,F_send_unit_personID,F_STATE
+	FROM
+		w_dispatch a,w_doc_dic b
+	WHERE
+		a.ID = b.DISID  AND F_STATE=1 AND b.DICID = #{dicId} AND b.DOCID = #{docId}
+		order by F_TIME desc
+	</select>
+	
+	<select id="getRedChromatographyList" resultMap="Dispatch">
+		SELECT <include refid="columns"/>
+		FROM W_DISPATCH D LEFT JOIN SYS_DIC S ON D.F_TYPE = S.ITEMVALUE
+		WHERE F_STATE=1
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="checkList" resultMap="Dispatch">
+		SELECT <include refid="columns"/>
+		FROM W_DISPATCH D LEFT JOIN SYS_DIC S ON D.F_TYPE = S.ITEMVALUE
+		WHERE F_STATE=1 and F_RED_STATE = 1
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="examineList" resultMap="Dispatch">
+		SELECT <include refid="columns"/>
+		FROM W_DISPATCH D LEFT JOIN SYS_DIC S ON D.F_TYPE = S.ITEMVALUE
+		WHERE F_STATE=1 and F_RED_STATE = 1 and F_CHECK_STATE = 1
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="sendList" resultMap="Dispatch">
+		SELECT <include refid="columns"/>
+		FROM W_DISPATCH D LEFT JOIN SYS_DIC S ON D.F_TYPE = S.ITEMVALUE
+		WHERE F_STATE=1 and F_RED_STATE = 1 and F_CHECK_STATE = 1 and F_EXAMINE_STATE = 1 and F_SEAL_STATE = 1
+		<if test="@Ognl@isNotEmpty(draft_personID)"> AND F_DRAFT_PERSONID  LIKE '%${draft_personID}%'  </if>
+		<if test="@Ognl@isNotEmpty(draft_person)"> AND F_DRAFT_PERSON  LIKE '%${draft_person}%'  </if>
+		<if test="@Ognl@isNotEmpty(check_person)"> AND F_CHECK_PERSON  LIKE '%${check_person}%'  </if>
+		<if test="@Ognl@isNotEmpty(title)"> AND F_TITLE  LIKE '%${title}%'  </if>
+		<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  LIKE '%${type}%'  </if>
+		<if test="@Ognl@isNotEmpty(urgency_degree)"> AND F_URGENCY_DEGREE  LIKE '%${urgency_degree}%'  </if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getDraftByUser" resultMap="Dispatch">
+		SELECT <include refid="wfcolumns"/>  ,B.runId
+		FROM W_DISPATCH A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.director.DirectorAppointing">
+	<resultMap id="DirectorAppointing" type="com.hotent.makshi.model.director.DirectorAppointing">
+		<id property="id" column="ID" jdbcType="NUMERIC" />
+		<result property="applyer" column="F_applyer" jdbcType="VARCHAR" />
+		<result property="applyerID" column="F_applyerID" jdbcType="VARCHAR" />
+		<result property="department" column="F_department" jdbcType="NUMERIC" />
+		<result property="departmentID" column="F_departmentID" jdbcType="NUMERIC" />
+		<result property="apply_at" column="F_apply_at" jdbcType="VARCHAR" />
+		<result property="director_name" column="F_director_name" jdbcType="VARCHAR" />
+		<result property="director_nameID" column="F_director_nameID" jdbcType="VARCHAR" />
+		<result property="engineering" column="F_engineering" jdbcType="VARCHAR" />
+		<result property="register_num" column="F_register_num" jdbcType="VARCHAR" />
+		<result property="build_unit" column="F_build_unit" jdbcType="VARCHAR" />
+		<result property="engineer_name" column="F_engineer_name" jdbcType="VARCHAR" />
+		<result property="appointment" column="F_appointment" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="count" parameterType="map" resultType="java.lang.Integer" >
+		select count(1) from w_director_appointing 
+	</select>
+	
+	<select id="pages" parameterType="map" resultMap="DirectorAppointing">
+		select * from w_director_appointing order by id desc  limit #{begNum},#{pageSize}
+	</select>
+	
+	
+</mapper>

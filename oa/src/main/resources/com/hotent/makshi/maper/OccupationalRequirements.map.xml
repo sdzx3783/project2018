@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.title.OccupationalRequirements">
+	<resultMap id="OccupationalRequirements" type="com.hotent.makshi.model.title.OccupationalRequirements">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="occ_type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="occ_certificate_id" column="F_CERTIFICATE_ID" jdbcType="VARCHAR"/>
+		<result property="occ_get_date" column="F_GET_DATE" jdbcType="DATE"/>
+		<result property="occ_period_of_validity" column="F_PERIOD_OF_VALIDITY" jdbcType="DATE"/>
+		<result property="occ_major" column="F_MAJOR" jdbcType="VARCHAR"/>
+		<result property="occ_out_date" column="F_OUT_DATE" jdbcType="DATE"/>
+		<result property="occ_send_unit" column="F_SEND_UNIT" jdbcType="VARCHAR"/>
+		<result property="occ_type_work" column="F_TYPE_WORK" jdbcType="VARCHAR"/>
+		<result property="occ_degree_work" column="F_DEGREE_WORK" jdbcType="VARCHAR"/>
+		<result property="occ_contine_edu_comple" column="F_CONTINE_EDU_COMPLE" jdbcType="VARCHAR"/>
+		<result property="occ_elective" column="F_elective" jdbcType="VARCHAR"/>
+		<result property="occ_compulsory" column="F_compulsory" jdbcType="VARCHAR"/>
+		<result property="occ_period" column="F_period" jdbcType="VARCHAR"/>
+		<result property="occ_remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="occ_attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="refid" column="REFID" jdbcType="VARCHAR"/>
+		<result property="isBorrowed" column="F_ISBORROWED" jdbcType="VARCHAR"/>
+		<result property="borrower" column="F_borrower" jdbcType="VARCHAR"/>
+		<result property="userId" column="F_USERID" jdbcType="NUMERIC"/>
+		<result property="linkId" column="F_LINKID" jdbcType="NUMERIC"/>
+		<result property="userName" column="F_USERNAME" jdbcType="VARCHAR"/>
+		<result property="occ_secondMajor" column="F_SECONDMAJOR" jdbcType="VARCHAR"/>
+		<result property="account" column="F_account" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_TYPE,F_CERTIFICATE_ID,F_GET_DATE,F_PERIOD_OF_VALIDITY,F_MAJOR,F_OUT_DATE,F_SEND_UNIT,F_TYPE_WORK,F_DEGREE_WORK,F_CONTINE_EDU_COMPLE,F_REMARK,F_ATTACHMENT,F_ISBORROWED,F_borrower
+		,REFID,F_USERID,B.FULLNAME F_USERNAME,F_elective,F_compulsory,F_period,F_SECONDMAJOR,F_account
+	</sql>
+	<sql id="wfColumns">
+		ID,F_TYPE,F_CERTIFICATE_ID,F_GET_DATE,F_PERIOD_OF_VALIDITY,F_MAJOR,F_OUT_DATE,F_SEND_UNIT,F_TYPE_WORK,F_DEGREE_WORK,F_CONTINE_EDU_COMPLE,F_REMARK,F_ATTACHMENT,F_ISBORROWED,F_borrower
+		,REFID,F_USERID,B.FULLNAME F_USERNAME,F_elective,F_compulsory,F_period,F_SECONDMAJOR,F_account
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  LIKE '%${type}%'  </if>
+			<if test="@Ognl@isNotEmpty(certificate_id)"> AND F_CERTIFICATE_ID  LIKE '%${certificate_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(get_date)"> AND F_GET_DATE  =#{get_date} </if>
+			<if test="@Ognl@isNotEmpty(beginget_date)"> AND F_GET_DATE  >=#{beginget_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endget_date)"> AND F_GET_DATE <![CDATA[ <=#{endget_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(period_of_validity)"> AND F_PERIOD_OF_VALIDITY  =#{period_of_validity} </if>
+			<if test="@Ognl@isNotEmpty(beginperiod_of_validity)"> AND F_PERIOD_OF_VALIDITY  >=#{beginperiod_of_validity,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endperiod_of_validity)"> AND F_PERIOD_OF_VALIDITY <![CDATA[ <=#{endperiod_of_validity,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(major)"> AND F_MAJOR  LIKE '%${major}%'  </if>
+			<if test="@Ognl@isNotEmpty(out_date)"> AND F_OUT_DATE  =#{out_date} </if>
+			<if test="@Ognl@isNotEmpty(beginout_date)"> AND F_OUT_DATE  >=#{beginout_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endout_date)"> AND F_OUT_DATE <![CDATA[ <=#{endout_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(send_unit)"> AND F_SEND_UNIT  LIKE '%${send_unit}%'  </if>
+			<if test="@Ognl@isNotEmpty(type_work)"> AND F_TYPE_WORK  LIKE '%${type_work}%'  </if>
+			<if test="@Ognl@isNotEmpty(degree_work)"> AND F_DEGREE_WORK  LIKE '%${degree_work}%'  </if>
+			<if test="@Ognl@isNotEmpty(contine_edu_comple)"> AND F_CONTINE_EDU_COMPLE  LIKE '%${contine_edu_comple}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(refid)"> AND REFID  = #{refid}  </if>
+			<if test="@Ognl@isNotEmpty(userId)"> AND F_USERID  = #{userId}  </if>
+			<if test="@Ognl@isNotEmpty(linkId)"> AND F_LINKID  = #{linkId}  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.title.OccupationalRequirements">
+		INSERT INTO W_OCCUPATIONAL_REQUIREMENTS
+		(ID,REFID,F_LINKID,
+		F_TYPE,F_CERTIFICATE_ID,F_GET_DATE,F_PERIOD_OF_VALIDITY,F_MAJOR,
+		F_OUT_DATE,F_SEND_UNIT,F_TYPE_WORK,F_DEGREE_WORK,F_CONTINE_EDU_COMPLE,
+		F_REMARK,F_ATTACHMENT,F_USERID,F_elective,F_compulsory,F_period,F_SECONDMAJOR,F_account)
+		VALUES
+		(#{id,jdbcType=NUMERIC},#{refid,jdbcType=VARCHAR},#{linkId,jdbcType=NUMERIC},
+		#{occ_type,jdbcType=VARCHAR}, #{occ_certificate_id,jdbcType=VARCHAR}, #{occ_get_date,jdbcType=DATE}, #{occ_period_of_validity,jdbcType=DATE}, #{occ_major,jdbcType=VARCHAR}, 
+		#{occ_out_date,jdbcType=DATE},#{occ_send_unit,jdbcType=VARCHAR}, #{occ_type_work,jdbcType=VARCHAR}, #{occ_degree_work,jdbcType=VARCHAR}, #{occ_contine_edu_comple,jdbcType=VARCHAR},
+		#{occ_remark,jdbcType=VARCHAR},#{occ_attachment,jdbcType=VARCHAR},#{userId,jdbcType=NUMERIC}, #{occ_elective,jdbcType=VARCHAR}, #{occ_compulsory,jdbcType=VARCHAR}, 
+		#{occ_period,jdbcType=VARCHAR},#{occ_secondMajor,jdbcType=VARCHAR},#{account,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_OCCUPATIONAL_REQUIREMENTS 
+		WHERE
+		ID=#{id}
+	</delete>
+	<delete id="delByLinkId" parameterType="java.lang.Long">
+		DELETE FROM W_OCCUPATIONAL_REQUIREMENTS 
+		WHERE
+		F_LINKID=#{id}
+	</delete>
+
+	
+	<update id="update" parameterType="com.hotent.makshi.model.title.OccupationalRequirements">
+		UPDATE W_OCCUPATIONAL_REQUIREMENTS SET
+		F_TYPE=#{occ_type,jdbcType=VARCHAR},
+		F_CERTIFICATE_ID=#{occ_certificate_id,jdbcType=VARCHAR},
+		F_GET_DATE=#{occ_get_date,jdbcType=DATE},
+		F_PERIOD_OF_VALIDITY=#{occ_period_of_validity,jdbcType=DATE},
+		F_MAJOR=#{occ_major,jdbcType=VARCHAR},
+		F_OUT_DATE=#{occ_out_date,jdbcType=DATE},
+		F_SEND_UNIT=#{occ_send_unit,jdbcType=VARCHAR},
+		F_TYPE_WORK=#{occ_type_work,jdbcType=VARCHAR},
+		F_DEGREE_WORK=#{occ_degree_work,jdbcType=VARCHAR},
+		F_CONTINE_EDU_COMPLE=#{occ_contine_edu_comple,jdbcType=VARCHAR},
+		F_REMARK=#{occ_remark,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{occ_attachment,jdbcType=VARCHAR},
+		F_ISBORROWED=#{isBorrowed,jdbcType=VARCHAR},
+		F_borrower=#{borrower,jdbcType=VARCHAR},
+		F_elective=#{occ_elective,jdbcType=VARCHAR},
+		F_compulsory=#{occ_compulsory,jdbcType=VARCHAR},
+		F_period=#{occ_period,jdbcType=VARCHAR},
+		F_USERID = #{userId,jdbcType=NUMERIC},
+		F_account = #{account,jdbcType=VARCHAR},
+		F_SECONDMAJOR=#{occ_secondMajor,jdbcType=NUMERIC}
+		WHERE
+		ID=#{id}
+	</update>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="OccupationalRequirements">
+		SELECT <include refid="columns"/>
+		FROM W_OCCUPATIONAL_REQUIREMENTS A LEFT JOIN SYS_USER B
+		ON A.F_USERID = B.USERID
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getByUserId" parameterType="java.lang.Long" resultMap="OccupationalRequirements">
+		SELECT <include refid="columns"/>
+		FROM W_OCCUPATIONAL_REQUIREMENTS A LEFT JOIN SYS_USER B
+		ON A.F_USERID = B.USERID
+		WHERE
+		F_userId=#{userid}
+	</select>
+	
+	<select id="getAll" resultMap="OccupationalRequirements">
+		SELECT <include refid="columns"/>
+		FROM W_OCCUPATIONAL_REQUIREMENTS A LEFT JOIN SYS_USER B
+		ON A.F_USERID = B.USERID
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getByLinkId" parameterType="Long" resultMap="OccupationalRequirements">
+		SELECT <include refid="columns"/>
+		FROM W_OCCUPATIONAL_REQUIREMENTS A LEFT JOIN SYS_USER B
+		ON A.F_USERID = B.USERID
+		WHERE
+		F_LINKID=#{linkId}
+	</select>
+	
+	<select id="getAllInfo" resultMap="OccupationalRequirements">
+		SELECT 
+		*
+		FROM W_OCCUPATIONAL_REQUIREMENTS
+	</select>
+	<update id="completeInfo" parameterType="map" >
+		update W_OCCUPATIONAL_REQUIREMENTS set 
+		F_USERID = #{userId},
+		F_account = #{account}
+		where F_USERNAME = #{name}
+	</update>
+	<update id="backInfo" parameterType="String" >
+		update W_OCCUPATIONAL_REQUIREMENTS set 
+		F_USERID = null
+		where F_USERNAME = #{name}
+	</update>
+	
+</mapper>

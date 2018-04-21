@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.title.TitleDeclaration">
+	<resultMap id="TitleDeclaration" type="com.hotent.makshi.model.title.TitleDeclaration">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="gloalFlowNo" column="F_GLOALFLOWNO" jdbcType="VARCHAR"/>
+		<result property="issuing_authority" column="F_ISSUING_AUTHORITY" jdbcType="VARCHAR"/>
+		<result property="userNo" column="F_USERNO" jdbcType="VARCHAR"/>
+		<result property="title_professional" column="F_TITLE_PROFESSIONAL" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="issuing_time" column="F_ISSUING_TIME" jdbcType="DATE"/>
+		<result property="title_name" column="F_TITLE_NAME" jdbcType="VARCHAR"/>
+		<result property="jury" column="F_JURY" jdbcType="VARCHAR"/>
+		<result property="certificate_num" column="F_CERTIFICATE_NUM" jdbcType="VARCHAR"/>
+		<result property="review_time" column="F_REVIEW_TIME" jdbcType="DATE"/>
+		<result property="year" column="F_YEAR" jdbcType="VARCHAR"/>
+		<result property="content" column="F_CONTENT" jdbcType="VARCHAR"/>
+		<result property="hours" column="F_HOURS" jdbcType="VARCHAR"/>
+		<result property="file" column="F_FILE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_GLOALFLOWNO,F_ISSUING_AUTHORITY,F_USERNO,F_TITLE_PROFESSIONAL,F_NAME,F_ISSUING_TIME,F_TITLE_NAME,F_JURY,F_CERTIFICATE_NUM,F_REVIEW_TIME,F_YEAR,F_CONTENT,F_HOURS,F_FILE
+	</sql>
+	<sql id="wfColumns">
+		ID,F_GLOALFLOWNO,F_ISSUING_AUTHORITY,F_USERNO,F_TITLE_PROFESSIONAL,F_NAME,F_ISSUING_TIME,F_TITLE_NAME,F_JURY,F_CERTIFICATE_NUM,F_REVIEW_TIME,F_YEAR,F_CONTENT,F_HOURS,F_FILE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(gloalFlowNo)"> AND F_GLOALFLOWNO  LIKE '%${gloalFlowNo}%'  </if>
+			<if test="@Ognl@isNotEmpty(issuing_authority)"> AND F_ISSUING_AUTHORITY  LIKE '%${issuing_authority}%'  </if>
+			<if test="@Ognl@isNotEmpty(userNo)"> AND F_USERNO  LIKE '%${userNo}%'  </if>
+			<if test="@Ognl@isNotEmpty(title_professional)"> AND F_TITLE_PROFESSIONAL  LIKE '%${title_professional}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(issuing_time)"> AND F_ISSUING_TIME  =#{issuing_time} </if>
+			<if test="@Ognl@isNotEmpty(beginissuing_time)"> AND F_ISSUING_TIME  >=#{beginissuing_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endissuing_time)"> AND F_ISSUING_TIME <![CDATA[ <=#{endissuing_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(title_name)"> AND F_TITLE_NAME  LIKE '%${title_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(jury)"> AND F_JURY  LIKE '%${jury}%'  </if>
+			<if test="@Ognl@isNotEmpty(certificate_num)"> AND F_CERTIFICATE_NUM  LIKE '%${certificate_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(review_time)"> AND F_REVIEW_TIME  =#{review_time} </if>
+			<if test="@Ognl@isNotEmpty(beginreview_time)"> AND F_REVIEW_TIME  >=#{beginreview_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endreview_time)"> AND F_REVIEW_TIME <![CDATA[ <=#{endreview_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(year)"> AND F_YEAR  LIKE '%${year}%'  </if>
+			<if test="@Ognl@isNotEmpty(content)"> AND F_CONTENT  LIKE '%${content}%'  </if>
+			<if test="@Ognl@isNotEmpty(hours)"> AND F_HOURS  LIKE '%${hours}%'  </if>
+			<if test="@Ognl@isNotEmpty(file)"> AND F_FILE  LIKE '%${file}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.title.TitleDeclaration">
+		INSERT INTO W_TITLE_DECLARATION
+		(ID,
+		F_GLOALFLOWNO,F_ISSUING_AUTHORITY,F_USERNO,F_TITLE_PROFESSIONAL,F_NAME,F_ISSUING_TIME,F_TITLE_NAME,F_JURY,F_CERTIFICATE_NUM,F_REVIEW_TIME,F_YEAR,F_CONTENT,F_HOURS,F_FILE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{gloalFlowNo,jdbcType=VARCHAR}, #{issuing_authority,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, #{title_professional,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{issuing_time,jdbcType=DATE}, #{title_name,jdbcType=VARCHAR}, #{jury,jdbcType=VARCHAR}, #{certificate_num,jdbcType=VARCHAR}, #{review_time,jdbcType=DATE}, #{year,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{hours,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_TITLE_DECLARATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.title.TitleDeclaration">
+		UPDATE W_TITLE_DECLARATION SET
+		F_GLOALFLOWNO=#{gloalFlowNo,jdbcType=VARCHAR},
+		F_ISSUING_AUTHORITY=#{issuing_authority,jdbcType=VARCHAR},
+		F_USERNO=#{userNo,jdbcType=VARCHAR},
+		F_TITLE_PROFESSIONAL=#{title_professional,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_ISSUING_TIME=#{issuing_time,jdbcType=DATE},
+		F_TITLE_NAME=#{title_name,jdbcType=VARCHAR},
+		F_JURY=#{jury,jdbcType=VARCHAR},
+		F_CERTIFICATE_NUM=#{certificate_num,jdbcType=VARCHAR},
+		F_REVIEW_TIME=#{review_time,jdbcType=DATE},
+		F_YEAR=#{year,jdbcType=VARCHAR},
+		F_CONTENT=#{content,jdbcType=VARCHAR},
+		F_HOURS=#{hours,jdbcType=VARCHAR},
+		F_FILE=#{file,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="TitleDeclaration">
+		SELECT <include refid="columns"/>
+		FROM W_TITLE_DECLARATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="TitleDeclaration">
+		SELECT <include refid="columns"/>
+		FROM W_TITLE_DECLARATION   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

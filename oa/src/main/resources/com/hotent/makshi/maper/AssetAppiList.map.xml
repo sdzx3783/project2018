@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.assetapplicationall.AssetAppiList">
+	<resultMap id="AssetAppiList" type="com.hotent.makshi.model.assetapplicationall.AssetAppiList">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="card_number" column="F_CARD_NUMBER" jdbcType="VARCHAR"/>
+		<result property="assetId" column="F_ASSETID" jdbcType="VARCHAR"/>
+		<result property="remarks" column="F_REMARKS" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_CARD_NUMBER,F_ASSETID,F_REMARKS
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_CARD_NUMBER,F_ASSETID,F_REMARKS
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(card_number)"> AND F_CARD_NUMBER  LIKE '%${card_number}%'  </if>
+			<if test="@Ognl@isNotEmpty(assetId)"> AND F_ASSETID  LIKE '%${assetId}%'  </if>
+			<if test="@Ognl@isNotEmpty(remarks)"> AND F_REMARKS  LIKE '%${remarks}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.assetapplicationall.AssetAppiList">
+		INSERT INTO W_ASSET_APPI_LIST
+		(ID,REFID,
+		F_CARD_NUMBER,F_ASSETID,F_REMARKS)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{card_number,jdbcType=VARCHAR}, #{assetId,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_ASSET_APPI_LIST 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.assetapplicationall.AssetAppiList">
+		UPDATE W_ASSET_APPI_LIST SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		F_CARD_NUMBER=#{card_number,jdbcType=VARCHAR},
+		F_ASSETID=#{assetId,jdbcType=VARCHAR},
+		F_REMARKS=#{remarks,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_ASSET_APPI_LIST
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getAssetAppiListList" resultMap="AssetAppiList">
+	    SELECT <include refid="columns"/>
+	    FROM W_ASSET_APPI_LIST 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="AssetAppiList">
+		SELECT <include refid="columns"/>
+		FROM W_ASSET_APPI_LIST
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="AssetAppiList">
+		SELECT <include refid="columns"/>
+		FROM W_ASSET_APPI_LIST   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

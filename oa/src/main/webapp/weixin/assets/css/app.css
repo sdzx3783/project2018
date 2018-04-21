@@ -1,0 +1,75 @@
+html,body{height:100%}
+
+/* 自定义选择器样式  */
+.custom-selector {
+	float: left;
+	position: relative;
+	max-width: 100%;
+	padding-right: 15px;
+	overflow: hidden;
+	margin: 4px 8px 4px 0;
+}
+.custom-selector .fa-remove {
+	position: absolute;	
+	top: 0;
+	right: 0;
+}
+.custom-selector .am-btn {
+	white-space: normal;
+    max-width: 100%;
+    font-size: 1.4rem;
+    display: block;
+    padding: .5rem;
+    line-height: 1.4em;
+    word-break: break-all;
+    text-align: left;
+}
+.custom-selector-r {
+	padding-right: 0;
+}
+/* 自定义选择器样式  */
+
+.am-thumbnails li{
+	text-decoration: none;
+	text-align: center;
+	
+}
+
+.am-thumbnails a{
+	text-decoration: none;
+}
+
+.am-icon-btn.am-lg{
+	 width: 60px;
+  height: 60px;
+  font-size:36px;
+  line-height: 60px;
+}
+
+
+.am-icon-share-alt-square{ 
+	margin-bottom:5px;
+  .am-icon-font; 
+  content: @fa-var-share-alt-square;
+}
+
+.am-navbar-nav  li a  span{
+	margin-top: 5px;
+}
+
+
+.am-list  a::after{
+	display:inline-block;
+	font:normal normal normal 1.6rem/1 FontAwesome,sans-serif;
+	font-size:inherit;
+	text-rendering:auto;
+	-webkit-font-smoothing:antialiased;
+	-moz-osx-font-smoothing:grayscale;
+	transform:translate(0,0);
+	content:"\f054";
+	position:absolute;
+	right:10px;
+	color:#ccc;
+	top:50%;
+	margin-top:-8px
+}

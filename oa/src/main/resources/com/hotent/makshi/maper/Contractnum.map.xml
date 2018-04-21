@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.contract.Contractnum" >
+  <resultMap id="BaseResultMap" type="com.hotent.makshi.model.contract.Contractnum" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="contracttype" property="contracttype" jdbcType="VARCHAR" />
+    <result column="contract_num" property="contractNum" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
+    <result column="isdelete" property="isdelete" jdbcType="TINYINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, contracttype, contract_num, `year`,num, isdelete, ctime
+  </sql>
+  
+  <sql id="dynamicWhere">
+	<where>
+		<if test="@Ognl@isNotEmpty(contracttype)"> AND contracttype  LIKE '%${contracttype}%'  </if>
+	</where>
+  </sql>
+	
+  <select id="getAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from w_contractnum
+   <include refid="dynamicWhere" />
+  </select>
+  
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from w_contractnum
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getBpmDataCountByContractnum" resultType="long" >
+    SELECT
+		COUNT(*)
+	FROM
+		w_contract_seal_application a
+	INNER JOIN bpm_pro_run_his run ON a.ID = run.BUSINESSKEY
+	AND a.F_isdelete = 0
+	AND run.`STATUS` != 4
+	WHERE
+		a.F_contract_num=#{contractNum,jdbcType=VARCHAR}
+		and run.runid!=#{runid,jdbcType=BIGINT} 
+  </select>
+  <delete id="delById" parameterType="java.lang.Long" >
+    update  w_contractnum  set F_isdelete = 1
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <select id="getByContractNum" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />  from w_contractnum  
+    where contract_num=#{contractNum,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="delByYearAndNum">
+    update  w_contractnum
+    set isdelete=1 where `year` = #{year,jdbcType=VARCHAR} and  num = #{num,jdbcType=VARCHAR}
+    and contracttype = #{contracttype,jdbcType=VARCHAR}
+    
+  </select>
+  
+  <insert id="add" parameterType="com.hotent.makshi.model.contract.Contractnum" useGeneratedKeys="true" keyProperty="id">
+    insert IGNORE into w_contractnum (id, contracttype, contract_num, 
+      `year`,num, isdelete, ctime
+      )
+    values (#{id,jdbcType=BIGINT}, #{contracttype,jdbcType=VARCHAR}, #{contractNum,jdbcType=VARCHAR}, 
+      #{year,jdbcType=VARCHAR}, #{num,jdbcType=VARCHAR}, #{isdelete,jdbcType=TINYINT}, #{ctime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <select id="getByContracttype" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from w_contractnum w
+    where w.`year` = #{year,jdbcType=VARCHAR} and w.contracttype = #{contracttype,jdbcType=VARCHAR}
+    and w.isdelete=0
+	and NOT EXISTS(SELECT * from w_contractinfo c where c.F_contract_num=w.contract_num)
+    order by cast(num AS signed)
+  </select>
+  <update id="update" parameterType="com.hotent.makshi.model.contract.Contractnum" >
+    update w_contractnum
+    <set >
+      <if test="contracttype != null" >
+        contracttype = #{contracttype,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNum != null" >
+        contract_num = #{contractNum,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        `year` = #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        num = #{num,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null" >
+        isdelete = #{isdelete,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateContractnum" >
+    update w_contractnum
+    	set isdelete = 1
+    where contract_num = #{contractNum,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateContractFlowNo" >
+    UPDATE w_contract_num_admin 
+ 		set F_flowNo=F_flowNo+1
+	WHERE
+	F_type = #{contracttype,jdbcType=VARCHAR} and F_flowNo=SUBSTRING_INDEX(#{contractNum,jdbcType=VARCHAR},'-',-1)
+  </update>
+</mapper>

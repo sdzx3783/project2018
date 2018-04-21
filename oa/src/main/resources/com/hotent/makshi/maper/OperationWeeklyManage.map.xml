@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.operation.OperationWeeklyManage">
+	<resultMap id="OperationWeeklyManage" type="com.hotent.makshi.model.operation.OperationWeeklyManage">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="editerID" column="F_EDITERID" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="content" column="F_CONTENT" jdbcType="VARCHAR"/>
+		<result property="item" column="F_ITEM" jdbcType="VARCHAR"/>
+		<result property="grop" column="F_GROP" jdbcType="VARCHAR"/>
+		<result property="start" column="F_START" jdbcType="DATE"/>
+		<result property="end" column="F_END" jdbcType="DATE"/>
+		<result property="editer" column="F_EDITER" jdbcType="VARCHAR"/>
+		<result property="edit_date" column="F_EDIT_DATE" jdbcType="DATE"/>
+		<result property="remarks" column="F_REMARKS" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_EDITERID,F_NAME,F_CONTENT,F_ITEM,F_GROP,F_START,F_END,F_EDITER,F_EDIT_DATE,F_REMARKS,F_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_EDITERID,F_NAME,F_CONTENT,F_ITEM,F_GROP,F_START,F_END,F_EDITER,F_EDIT_DATE,F_REMARKS,F_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(editerID)"> AND F_EDITERID  LIKE '%${editerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(content)"> AND F_CONTENT  LIKE '%${content}%'  </if>
+			<if test="@Ognl@isNotEmpty(item)"> AND F_ITEM  LIKE '%${item}%'  </if>
+			<if test="@Ognl@isNotEmpty(grop)"> AND F_GROP  LIKE '%${grop}%'  </if>
+			<if test="@Ognl@isNotEmpty(start)"> AND F_START  =#{start} </if>
+			<if test="@Ognl@isNotEmpty(beginstart)"> AND F_START  >=#{beginstart,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstart)"> AND F_START <![CDATA[ <=#{endstart,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(end)"> AND F_END  =#{end} </if>
+			<if test="@Ognl@isNotEmpty(beginend)"> AND F_END  >=#{beginend,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endend)"> AND F_END <![CDATA[ <=#{endend,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(editer)"> AND F_EDITER  LIKE '%${editer}%'  </if>
+			<if test="@Ognl@isNotEmpty(edit_date)"> AND F_EDIT_DATE  =#{edit_date} </if>
+			<if test="@Ognl@isNotEmpty(beginedit_date)"> AND F_EDIT_DATE  >=#{beginedit_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endedit_date)"> AND F_EDIT_DATE <![CDATA[ <=#{endedit_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(remarks)"> AND F_REMARKS  LIKE '%${remarks}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.operation.OperationWeeklyManage">
+		INSERT INTO W_OPERATION_WEEKLY_MANAGE
+		(ID,
+		F_EDITERID,F_NAME,F_CONTENT,F_ITEM,F_GROP,F_START,F_END,F_EDITER,F_EDIT_DATE,F_REMARKS,F_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{editerID,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{item,jdbcType=VARCHAR}, #{grop,jdbcType=VARCHAR}, #{start,jdbcType=DATE}, #{end,jdbcType=DATE}, #{editer,jdbcType=VARCHAR}, #{edit_date,jdbcType=DATE}, #{remarks,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_OPERATION_WEEKLY_MANAGE 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.operation.OperationWeeklyManage">
+		UPDATE W_OPERATION_WEEKLY_MANAGE SET
+		F_EDITERID=#{editerID,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_CONTENT=#{content,jdbcType=VARCHAR},
+		F_ITEM=#{item,jdbcType=VARCHAR},
+		F_GROP=#{grop,jdbcType=VARCHAR},
+		F_START=#{start,jdbcType=DATE},
+		F_END=#{end,jdbcType=DATE},
+		F_EDITER=#{editer,jdbcType=VARCHAR},
+		F_EDIT_DATE=#{edit_date,jdbcType=DATE},
+		F_REMARKS=#{remarks,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="OperationWeeklyManage">
+		SELECT <include refid="columns"/>
+		FROM W_OPERATION_WEEKLY_MANAGE
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="OperationWeeklyManage">
+		SELECT <include refid="columns"/>
+		FROM W_OPERATION_WEEKLY_MANAGE   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

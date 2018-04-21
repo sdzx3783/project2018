@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.waterprotectpark.RiverExperiment">
+	<resultMap id="RiverExperiment" type="com.hotent.makshi.model.waterprotectpark.RiverExperiment">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="experimenterID" column="F_EXPERIMENTERID" jdbcType="VARCHAR"/>
+		<result property="sampleManID" column="F_SAMPLEMANID" jdbcType="VARCHAR"/>
+		<result property="chargerID" column="F_CHARGERID" jdbcType="VARCHAR"/>
+		<result property="orgleaderID" column="F_ORGLEADERID" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="experimenter" column="F_EXPERIMENTER" jdbcType="VARCHAR"/>
+		<result property="samlpeTime" column="F_SAMLPETIME" jdbcType="TIMESTAMP"/>
+		<result property="sampleMan" column="F_SAMPLEMAN" jdbcType="VARCHAR"/>
+		<result property="experiTime" column="F_EXPERITIME" jdbcType="TIMESTAMP"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		<result property="charger" column="F_CHARGER" jdbcType="VARCHAR"/>
+		<result property="orgleader" column="F_ORGLEADER" jdbcType="VARCHAR"/>
+		<result property="from" column="F_FROM" jdbcType="INTEGER"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_EXPERIMENTERID,F_SAMPLEMANID,F_CHARGERID,F_ORGLEADERID,F_NAME,F_EXPERIMENTER,F_SAMLPETIME,F_SAMPLEMAN,F_EXPERITIME,F_REMARK,F_ATTACHMENT,F_CHARGER,F_ORGLEADER
+	</sql>
+	<sql id="wfColumns">
+		ID,F_EXPERIMENTERID,F_SAMPLEMANID,F_CHARGERID,F_ORGLEADERID,F_NAME,F_EXPERIMENTER,F_SAMLPETIME,F_SAMPLEMAN,F_EXPERITIME,F_REMARK,F_ATTACHMENT,F_CHARGER,F_ORGLEADER
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(experimenterID)"> AND F_EXPERIMENTERID  LIKE '%${experimenterID}%'  </if>
+			<if test="@Ognl@isNotEmpty(sampleManID)"> AND F_SAMPLEMANID  LIKE '%${sampleManID}%'  </if>
+			<if test="@Ognl@isNotEmpty(chargerID)"> AND F_CHARGERID  LIKE '%${chargerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(orgleaderID)"> AND F_ORGLEADERID  LIKE '%${orgleaderID}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(experimenter)"> AND F_EXPERIMENTER  LIKE '%${experimenter}%'  </if>
+			<if test="@Ognl@isNotEmpty(samlpeTime)"> AND F_SAMLPETIME  =#{samlpeTime} </if>
+			<if test="@Ognl@isNotEmpty(beginsamlpeTime)"> AND F_SAMLPETIME  >=#{beginsamlpeTime,jdbcType=TIMESTAMP} </if>
+			<if test="@Ognl@isNotEmpty(endsamlpeTime)"> AND F_SAMLPETIME <![CDATA[ <=#{endsamlpeTime,jdbcType=TIMESTAMP}]]> </if>
+			<if test="@Ognl@isNotEmpty(sampleMan)"> AND F_SAMPLEMAN  LIKE '%${sampleMan}%'  </if>
+			<if test="@Ognl@isNotEmpty(experiTime)"> AND F_EXPERITIME  =#{experiTime} </if>
+			<if test="@Ognl@isNotEmpty(beginexperiTime)"> AND F_EXPERITIME  >=#{beginexperiTime,jdbcType=TIMESTAMP} </if>
+			<if test="@Ognl@isNotEmpty(endexperiTime)"> AND F_EXPERITIME <![CDATA[ <=#{endexperiTime,jdbcType=TIMESTAMP}]]> </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+			<if test="@Ognl@isNotEmpty(charger)"> AND F_CHARGER  LIKE '%${charger}%'  </if>
+			<if test="@Ognl@isNotEmpty(orgleader)"> AND F_ORGLEADER  LIKE '%${orgleader}%'  </if>
+			 and F_isDelete=0 and (F_isFinished=1 or F_FROM=1)
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.waterprotectpark.RiverExperiment">
+		INSERT INTO W_RIVER_EXPERIMENT
+		(ID,
+		F_EXPERIMENTERID,F_SAMPLEMANID,F_CHARGERID,F_ORGLEADERID,F_NAME,F_EXPERIMENTER,F_SAMLPETIME,F_SAMPLEMAN,F_EXPERITIME,F_REMARK,F_ATTACHMENT,F_CHARGER,F_ORGLEADER,F_FROM)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{experimenterID,jdbcType=VARCHAR}, #{sampleManID,jdbcType=VARCHAR}, #{chargerID,jdbcType=VARCHAR}, #{orgleaderID,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{experimenter,jdbcType=VARCHAR}, #{samlpeTime,jdbcType=TIMESTAMP}, #{sampleMan,jdbcType=VARCHAR}, #{experiTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR}, #{charger,jdbcType=VARCHAR}, #{orgleader,jdbcType=VARCHAR}, #{from,jdbcType=INTEGER})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		update  W_RIVER_EXPERIMENT  set F_isDelete=1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.waterprotectpark.RiverExperiment">
+		UPDATE W_RIVER_EXPERIMENT SET
+		F_EXPERIMENTERID=#{experimenterID,jdbcType=VARCHAR},
+		F_SAMPLEMANID=#{sampleManID,jdbcType=VARCHAR},
+		F_CHARGERID=#{chargerID,jdbcType=VARCHAR},
+		F_ORGLEADERID=#{orgleaderID,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_EXPERIMENTER=#{experimenter,jdbcType=VARCHAR},
+		F_SAMLPETIME=#{samlpeTime,jdbcType=TIMESTAMP},
+		F_SAMPLEMAN=#{sampleMan,jdbcType=VARCHAR},
+		F_EXPERITIME=#{experiTime,jdbcType=TIMESTAMP},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR},
+		F_CHARGER=#{charger,jdbcType=VARCHAR},
+		F_ORGLEADER=#{orgleader,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="RiverExperiment">
+		SELECT <include refid="columns"/>
+		FROM W_RIVER_EXPERIMENT
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="RiverExperiment">
+		SELECT <include refid="columns"/>
+		FROM W_RIVER_EXPERIMENT   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

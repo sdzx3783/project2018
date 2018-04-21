@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.bidding.BiddingSchemeExamine">
+	<resultMap id="BiddingSchemeExamine" type="com.hotent.makshi.model.bidding.BiddingSchemeExamine">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="scheme_first_check_personID" column="F_SCHEME_FIRST_CHECK_PERSONID" jdbcType="VARCHAR"/>
+		<result property="scheme_name" column="F_SCHEME_NAME" jdbcType="VARCHAR"/>
+		<result property="scheme_evidence" column="F_SCHEME_EVIDENCE" jdbcType="VARCHAR"/>
+		<result property="scheme_content" column="F_SCHEME_CONTENT" jdbcType="VARCHAR"/>
+		<result property="scheme_contract_num" column="F_SCHEME_CONTRACT_NUM" jdbcType="VARCHAR"/>
+		<result property="scheme_contract_name" column="F_SCHEME_CONTRACT_NAME" jdbcType="VARCHAR"/>
+		<result property="scheme_applicant" column="F_SCHEME_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="scheme_appli_date" column="F_SCHEME_APPLI_DATE" jdbcType="DATE"/>
+		<result property="scheme_first_check_person" column="F_SCHEME_FIRST_CHECK_PERSON" jdbcType="VARCHAR"/>
+		<result property="scheme_attachment" column="F_SCHEME_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.bidding.BiddingSchemeExamine" id="ExtBiddingSchemeExamine" extends="BiddingSchemeExamine">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_SCHEME_FIRST_CHECK_PERSONID,F_SCHEME_NAME,F_SCHEME_EVIDENCE,F_SCHEME_CONTENT,F_SCHEME_CONTRACT_NUM,F_SCHEME_CONTRACT_NAME,F_SCHEME_APPLICANT,F_SCHEME_APPLI_DATE,F_SCHEME_FIRST_CHECK_PERSON,F_SCHEME_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_SCHEME_FIRST_CHECK_PERSONID,F_SCHEME_NAME,F_SCHEME_EVIDENCE,F_SCHEME_CONTENT,F_SCHEME_CONTRACT_NUM,F_SCHEME_CONTRACT_NAME,F_SCHEME_APPLICANT,F_SCHEME_APPLI_DATE,F_SCHEME_FIRST_CHECK_PERSON,F_SCHEME_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			finish = 1 AND deleted = 0
+			<if test="@Ognl@isNotEmpty(scheme_first_check_personID)"> AND F_SCHEME_FIRST_CHECK_PERSONID  LIKE '%${scheme_first_check_personID}%'  </if>
+			<if test="@Ognl@isNotEmpty(scheme_name)"> AND F_SCHEME_NAME  LIKE '%${scheme_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(scheme_evidence)"> AND F_SCHEME_EVIDENCE  LIKE '%${scheme_evidence}%'  </if>
+			<if test="@Ognl@isNotEmpty(scheme_content)"> AND F_SCHEME_CONTENT  LIKE '%${scheme_content}%'  </if>
+			<if test="@Ognl@isNotEmpty(scheme_contract_num)"> AND (F_SCHEME_CONTRACT_NUM  LIKE '%${scheme_contract_num}%' or F_SCHEME_CONTRACT_NUM  LIKE '%${contractNumHis}%')  </if>
+			<if test="@Ognl@isNotEmpty(scheme_contract_name)"> AND F_SCHEME_CONTRACT_NAME  LIKE '%${scheme_contract_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(scheme_applicant)"> AND F_SCHEME_APPLICANT  LIKE '%${scheme_applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(scheme_appli_date)"> AND F_SCHEME_APPLI_DATE  =#{scheme_appli_date} </if>
+			<if test="@Ognl@isNotEmpty(beginscheme_appli_date)"> AND F_SCHEME_APPLI_DATE  >=#{beginscheme_appli_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endscheme_appli_date)"> AND F_SCHEME_APPLI_DATE <![CDATA[ <=#{endscheme_appli_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(scheme_first_check_person)"> AND F_SCHEME_FIRST_CHECK_PERSON  LIKE '%${scheme_first_check_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(scheme_attachment)"> AND F_SCHEME_ATTACHMENT  LIKE '%${scheme_attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.bidding.BiddingSchemeExamine">
+		INSERT INTO W_BIDDING_SCHEME_EXAMINE
+		(ID,
+		F_SCHEME_FIRST_CHECK_PERSONID,F_SCHEME_NAME,F_SCHEME_EVIDENCE,F_SCHEME_CONTENT,F_SCHEME_CONTRACT_NUM,F_SCHEME_CONTRACT_NAME,F_SCHEME_APPLICANT,F_SCHEME_APPLI_DATE,F_SCHEME_FIRST_CHECK_PERSON,F_SCHEME_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{scheme_first_check_personID,jdbcType=VARCHAR}, #{scheme_name,jdbcType=VARCHAR}, #{scheme_evidence,jdbcType=VARCHAR}, #{scheme_content,jdbcType=VARCHAR}, #{scheme_contract_num,jdbcType=VARCHAR}, #{scheme_contract_name,jdbcType=VARCHAR}, #{scheme_applicant,jdbcType=VARCHAR}, #{scheme_appli_date,jdbcType=DATE}, #{scheme_first_check_person,jdbcType=VARCHAR}, #{scheme_attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		<!-- DELETE FROM W_BIDDING_SCHEME_EXAMINE 
+		WHERE
+		ID=#{id} -->
+		UPDATE W_BIDDING_SCHEME_EXAMINE SET
+		DELETED = 1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.bidding.BiddingSchemeExamine">
+		UPDATE W_BIDDING_SCHEME_EXAMINE SET
+		F_SCHEME_FIRST_CHECK_PERSONID=#{scheme_first_check_personID,jdbcType=VARCHAR},
+		F_SCHEME_NAME=#{scheme_name,jdbcType=VARCHAR},
+		F_SCHEME_EVIDENCE=#{scheme_evidence,jdbcType=VARCHAR},
+		F_SCHEME_CONTENT=#{scheme_content,jdbcType=VARCHAR},
+		F_SCHEME_CONTRACT_NUM=#{scheme_contract_num,jdbcType=VARCHAR},
+		F_SCHEME_CONTRACT_NAME=#{scheme_contract_name,jdbcType=VARCHAR},
+		F_SCHEME_APPLICANT=#{scheme_applicant,jdbcType=VARCHAR},
+		F_SCHEME_APPLI_DATE=#{scheme_appli_date,jdbcType=DATE},
+		F_SCHEME_FIRST_CHECK_PERSON=#{scheme_first_check_person,jdbcType=VARCHAR},
+		F_SCHEME_ATTACHMENT=#{scheme_attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="BiddingSchemeExamine">
+		SELECT <include refid="columns"/>
+		FROM W_BIDDING_SCHEME_EXAMINE
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="BiddingSchemeExamine">
+		SELECT <include refid="columns"/>
+		FROM W_BIDDING_SCHEME_EXAMINE   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="BiddingSchemeExamine">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_BIDDING_SCHEME_EXAMINE A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtBiddingSchemeExamine">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_SCHEME_EXAMINE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_SCHEME_EXAMINE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_SCHEME_EXAMINE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_SCHEME_EXAMINE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_SCHEME_EXAMINE A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="BiddingSchemeExamine">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_BIDDING_SCHEME_EXAMINE A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

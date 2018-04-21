@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.project.Project" >
+  <resultMap id="BaseResultMap" type="com.hotent.makshi.model.project.Project" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="classifyLibraryId" property="classifylibraryid" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="applicantID" property="applicantID" jdbcType="VARCHAR" />
+    <result column="member" property="member" jdbcType="VARCHAR" />
+    <result column="memberID" property="memberID" jdbcType="VARCHAR" />
+    <result column="appTime" property="apptime" jdbcType="DATE" />
+    <result column="contractNum" property="contractnum" jdbcType="VARCHAR" />
+    <result column="contractName" property="contractname" jdbcType="VARCHAR" />
+    <result column="contractMoney" property="contractmoney" jdbcType="VARCHAR" />
+    <result column="constructNature" property="constructnature" jdbcType="VARCHAR" />
+    <result column="reportTime" property="reporttime" jdbcType="DATE" />
+    <result column="firstMoney" property="firstmoney" jdbcType="VARCHAR" />
+    <result column="reportPerson" property="reportperson" jdbcType="VARCHAR" />
+    <result column="reportPersonID" property="reportPersonID" jdbcType="VARCHAR" />
+    <result column="proResouce" property="proresouce" jdbcType="INTEGER" />
+    <result column="expectStartTime" property="expectstarttime" jdbcType="DATE" />
+    <result column="expectEndTime" property="expectendtime" jdbcType="DATE" />
+    <result column="charger" property="charger" jdbcType="VARCHAR" />
+    <result column="chargerID" property="chargerID" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="proCompany" property="procompany" jdbcType="VARCHAR" />
+    <result column="legalPerson" property="legalperson" jdbcType="VARCHAR" />
+    <result column="legalPersonID" property="legalPersonID" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="approvalNumber" property="approvalnumber" jdbcType="VARCHAR" />
+    <result column="approvalTime" property="approvaltime" jdbcType="TIMESTAMP" />
+    <result column="field" property="field" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="isDelete" property="isdelete" jdbcType="INTEGER" />
+    <result column="cTime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="cUser" property="cuser" jdbcType="VARCHAR" />
+    <result column="uTime" property="utime" jdbcType="TIMESTAMP" />
+    <result column="uUser" property="uuser" jdbcType="VARCHAR" />
+    <result column="classifyLibName" property="classifyLibName" jdbcType="VARCHAR" />
+    <result column="procompanyLinker" property="procompanyLinker" jdbcType="VARCHAR" />
+    <result column="procompanyLinkerPhone" property="procompanyLinkerPhone" jdbcType="VARCHAR" />
+    <result column="proYear" property="proYear" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="columns">
+		id, classifyLibraryId, name, applicant, applicantID, member, memberID, appTime, contractNum, 
+    contractName,contractMoney, constructNature, reportTime, firstMoney, reportPerson, reportPersonID, 
+    proResouce, expectStartTime, expectEndTime, charger, chargerID, status, proCompany, 
+    legalPerson, legalPersonID, tel, approvalNumber, approvalTime, field, remark, isDelete, 
+    cTime, cUser, uTime, uUser, procompanyLinker, procompanyLinkerPhone,proYear
+	</sql>
+	
+	<sql id="wp_columns">
+		wp.id, wp.classifyLibraryId, wp.name, wp.applicant, wp.applicantID, wp.member, wp.memberID, wp.appTime, wp.contractNum, 
+    wp.contractName, wp.constructNature, wp.reportTime, wp.firstMoney, wp.reportPerson, wp.reportPersonID, 
+    wp.proResouce, wp.expectStartTime, wp.expectEndTime, wp.charger, wp.chargerID, wp.status, wp.proCompany, 
+    wp.legalPerson, wp.legalPersonID, wp.tel, wp.approvalNumber, wp.approvalTime, wp.field, wp.remark, wp.isDelete, 
+    wp.cTime, wp.cUser, wp.uTime, wp.uUser, wp.procompanyLinker, wp.procompanyLinkerPhone,wp.proYear
+	</sql>
+	
+	<sql id="p_columns">
+		p.id, p.classifyLibraryId, p.name, p.applicant, p.applicantID, p.member, p.memberID, p.appTime, p.contractNum, 
+    p.contractName,p.contractMoney, p.constructNature, p.reportTime, p.firstMoney, p.reportPerson, p.reportPersonID, 
+    p.proResouce, p.expectStartTime, p.expectEndTime, p.charger, p.chargerID, p.status, p.proCompany, 
+    p.legalPerson, p.legalPersonID, p.tel, p.approvalNumber, p.approvalTime, p.field, p.remark, p.isDelete, 
+    p.cTime, p.cUser, p.uTime, p.uUser, p.procompanyLinker, p.procompanyLinkerPhone,p.proYear
+	</sql>
+	
+	<sql id="wfColumns">
+		id, classifyLibraryId, name, applicant, applicantID, member, memberID, appTime, contractNum, field,
+    constructNature, reportTime, firstMoney, reportPerson, reportPersonID, proResouce, expectEndTime,proCompany,
+    isDelete, cTime, cUser, uTime, uUser, procompanyLinker, procompanyLinkerPhone ,proYear
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(classifylibraryid)"> AND classifyLibraryId =#{classifylibraryid}  </if>
+			and isDelete=0
+			<if test="@Ognl@isNotEmpty(participant)"> AND ( FIND_IN_SET(#{participant,jdbcType=VARCHAR},applicantID) 
+			 	or FIND_IN_SET(#{participant,jdbcType=VARCHAR},memberID))
+			 </if>
+			 <if test="@Ognl@isNotEmpty(name)"> AND name like #{name}  </if>
+			 <if test="@Ognl@isNotEmpty(status)"> AND status =#{status}  </if>
+			 <if test="@Ognl@isNotEmpty(applicant)"> AND applicant like#{applicant}  </if>
+		</where>
+	</sql> 
+	
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.hotent.makshi.model.project.Project">
+		 insert into w_project (id, classifyLibraryId, name, 
+      applicant, applicantID, member, 
+      memberID, appTime, contractNum, 
+      contractName, contractMoney,constructNature, reportTime, 
+      firstMoney, reportPerson, reportPersonID, 
+      proResouce, expectStartTime, expectEndTime, 
+      charger, chargerID, status, 
+      proCompany, legalPerson, legalPersonID, 
+      tel, approvalNumber, approvalTime, 
+      field, remark, isDelete, 
+      cTime, cUser, uTime, 
+      uUser, procompanyLinker, procompanyLinkerPhone,proYear)
+    values (#{id,jdbcType=INTEGER}, #{classifylibraryid,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{applicant,jdbcType=VARCHAR}, #{applicantID,jdbcType=VARCHAR}, #{member,jdbcType=VARCHAR}, 
+      #{memberID,jdbcType=VARCHAR}, #{apptime,jdbcType=DATE}, #{contractnum,jdbcType=VARCHAR}, 
+      #{contractname,jdbcType=VARCHAR},#{contractmoney,jdbcType=VARCHAR}, #{constructnature,jdbcType=VARCHAR}, #{reporttime,jdbcType=DATE}, 
+      #{firstmoney,jdbcType=VARCHAR}, #{reportperson,jdbcType=VARCHAR}, #{reportPersonID,jdbcType=VARCHAR}, 
+      #{proresouce,jdbcType=INTEGER}, #{expectstarttime,jdbcType=DATE}, #{expectendtime,jdbcType=DATE}, 
+      #{charger,jdbcType=VARCHAR}, #{chargerID,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{procompany,jdbcType=VARCHAR}, #{legalperson,jdbcType=VARCHAR}, #{legalPersonID,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{approvalnumber,jdbcType=VARCHAR}, #{approvaltime,jdbcType=TIMESTAMP}, 
+      #{field,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER}, 
+      #{ctime,jdbcType=TIMESTAMP}, #{cuser,jdbcType=VARCHAR}, #{utime,jdbcType=TIMESTAMP}, 
+      #{uuser,jdbcType=VARCHAR},#{procompanyLinker,jdbcType=VARCHAR},#{procompanyLinkerPhone,jdbcType=VARCHAR},#{proYear,jdbcType=VARCHAR})
+	</insert>
+	
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM w_project
+    	where id = #{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.project.Project">
+		update w_project
+    <set >
+      <if test="classifylibraryid != null" >
+        classifyLibraryId = #{classifylibraryid,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null" >
+        applicant = #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantID != null" >
+        applicantID = #{applicantID,jdbcType=VARCHAR},
+      </if>
+      <if test="member != null" >
+        member = #{member,jdbcType=VARCHAR},
+      </if>
+      <if test="memberID != null" >
+        memberID = #{memberID,jdbcType=VARCHAR},
+      </if>
+      <if test="apptime != null" >
+        appTime = #{apptime,jdbcType=DATE},
+      </if>
+      <if test="contractnum != null" >
+        contractNum = #{contractnum,jdbcType=VARCHAR},
+      </if>
+      <if test="contractname != null" >
+        contractName = #{contractname,jdbcType=VARCHAR},
+      </if>
+      <if test="contractmoney != null" >
+        contractMoney = #{contractmoney,jdbcType=VARCHAR},
+      </if>
+      <if test="constructnature != null" >
+        constructNature = #{constructnature,jdbcType=VARCHAR},
+      </if>
+      <if test="reporttime != null" >
+        reportTime = #{reporttime,jdbcType=DATE},
+      </if>
+      <if test="firstmoney != null" >
+        firstMoney = #{firstmoney,jdbcType=VARCHAR},
+      </if>
+      <if test="reportperson != null" >
+        reportPerson = #{reportperson,jdbcType=VARCHAR},
+      </if>
+      <if test="reportPersonID != null" >
+        reportPersonID = #{reportPersonID,jdbcType=VARCHAR},
+      </if>
+      <if test="proresouce != null" >
+        proResouce = #{proresouce,jdbcType=INTEGER},
+      </if>
+        expectStartTime = #{expectstarttime,jdbcType=DATE},
+        expectEndTime = #{expectendtime,jdbcType=DATE},
+      <if test="charger != null" >
+        charger = #{charger,jdbcType=VARCHAR},
+      </if>
+      <if test="chargerID != null" >
+        chargerID = #{chargerID,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="procompany != null" >
+        proCompany = #{procompany,jdbcType=VARCHAR},
+      </if>
+      <if test="legalperson != null" >
+        legalPerson = #{legalperson,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonID != null" >
+        legalPersonID = #{legalPersonID,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalnumber != null" >
+        approvalNumber = #{approvalnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="approvaltime != null" >
+        approvalTime = #{approvaltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="field != null" >
+        field = #{field,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null" >
+        isDelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        cTime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuser != null" >
+        cUser = #{cuser,jdbcType=VARCHAR},
+      </if>
+      <if test="utime != null" >
+        uTime = #{utime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uuser != null" >
+        uUser = #{uuser,jdbcType=VARCHAR},
+      </if>
+      <if test="procompanyLinker != null" >
+        procompanyLinker = #{procompanyLinker,jdbcType=VARCHAR},
+      </if>
+      <if test="procompanyLinkerPhone != null" >
+        procompanyLinkerPhone = #{procompanyLinkerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="proYear != null" >
+        proYear = #{proYear,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT <include refid="columns"/>
+		FROM w_project
+    	where id = #{id}
+	</select>
+	
+	<select id="getAll" resultMap="BaseResultMap">
+		SELECT <include refid="columns"/>
+		FROM w_project   
+		<include refid="dynamicWhere" />
+		order by `status`, ID  desc
+	</select>
+	
+	<select id="getMyProList" resultMap="BaseResultMap">
+		SELECT distinct wl.id as wid, <include refid="wp_columns"/>,wl.`name` as classifyLibName from w_project wp INNER JOIN w_classify_library wl on wp.classifyLibraryId=wl.id and wp.isDelete=0 
+		INNER JOIN w_project_stage ws on 
+					wp.id=ws.proId INNER JOIN w_project_stage_task wt on ws.id=wt.proStageId and wt.isDelete=0 
+		where 1=1
+		<if test="@Ognl@isNotEmpty(name)"> AND wp.name like #{name}  </if>
+			 <if test="@Ognl@isNotEmpty(status)"> AND wp.status =#{status}  </if>
+			 <if test="@Ognl@isNotEmpty(applicant)"> AND wp.applicant like#{applicant}  </if>
+			 and
+		 (
+		 	FIND_IN_SET(#{participant,jdbcType=VARCHAR},wp.applicantID) or  FIND_IN_SET(#{participant,jdbcType=VARCHAR},wp.memberID) or  FIND_IN_SET(#{participant,jdbcType=VARCHAR},wt.chargeID)
+		)
+	</select>
+	<select id="getProsByContractnum" resultMap="BaseResultMap">
+		SELECT <include refid="columns"/> from w_project WHERE contractNum = #{contractnum} AND isDelete=0
+	</select>
+	<select id="getProList" resultMap="BaseResultMap">
+		SELECT distinct wl.id as wid, <include refid="wp_columns"/>,wl.`name` as classifyLibName from w_project wp INNER JOIN w_classify_library wl on wp.classifyLibraryId=wl.id and wp.isDelete=0 
+		where 1=1
+		<if test="@Ognl@isNotEmpty(name)"> AND wp.name like #{name}  </if>
+			 <if test="@Ognl@isNotEmpty(status)"> AND wp.status in
+			 	<foreach collection="status" index="index" item="item" open="(" separator="," close=")">
+          			#{item}
+     			</foreach>
+			 </if>
+			 <if test="@Ognl@isNotEmpty(applicant)"> AND wp.applicant like #{applicant}  </if>
+			 <if test="@Ognl@isNotEmpty(select_time)"> AND (wp.expectStartTime is null or wp.expectStartTime &lt;=#{select_time} ) </if>
+			 <if test="@Ognl@isNotEmpty(select_time)"> AND (wp.expectEndTime is null or wp.expectEndTime &gt;=#{select_time}  )</if>
+			 and
+		 (
+		 	FIND_IN_SET(#{participant,jdbcType=VARCHAR},wp.applicantID) or  FIND_IN_SET(#{participant,jdbcType=VARCHAR},wp.memberID) 
+		)
+	</select>
+	
+	<select id="getCountByClassifyLibId" resultType="long">
+		SELECT count(*)
+		FROM w_project   
+		where  classifyLibraryId = #{classifylibraryid,jdbcType=BIGINT} 
+		and  isDelete = 0
+	</select>
+	
+	<select id="getByClassifyLibId" resultMap="BaseResultMap">
+		SELECT <include refid="columns"/>
+		FROM w_project   
+		where  classifyLibraryId = #{classifylibraryid,jdbcType=BIGINT} 
+	</select>
+	
+	
+	<select id="getCountByClassifyLibIdAndStatus" resultType="long">
+		SELECT count(*)
+		FROM w_project   
+		where  classifyLibraryId = #{classifylibraryid,jdbcType=BIGINT} 
+		and `status` =#{status}
+		and  isDelete = 0
+	</select>
+	
+	<select id="getCollectionedProject" resultMap="BaseResultMap">
+		SELECT <include refid="p_columns"/>
+		FROM w_project p INNER JOIN w_project_collection c on p.isDelete=0 and p.id=c.project_id and c.state=1 and c.user_id= #{userId,jdbcType=BIGINT}
+		where 1=1
+		<if test="@Ognl@isNotEmpty(name)"> AND p.name like #{name}  </if>
+		<if test="@Ognl@isNotEmpty(status)"> AND p.status =#{status}  </if>
+		<if test="@Ognl@isNotEmpty(applicant)"> AND p.applicant like#{applicant}  </if>
+		
+		ORDER BY c.ctime desc
+	</select>
+
+	<select id="getProByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+		select * 
+		FROM w_project p 
+		where isDelete = 0 and name=#{proname}
+		
+	</select>
+</mapper>

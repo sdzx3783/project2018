@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.msgscheduler.SchedulerParams">
+	<resultMap id="SchedulerParams" type="com.hotent.makshi.model.msgscheduler.SchedulerParams">
+		<id property="id" column="id" jdbcType="NUMERIC"/>
+		<result property="jobName" column="jobName" jdbcType="VARCHAR"/>
+		<result property="trigger" column="triggerName" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<sql id="columns">
+		id,jobName,triggerName
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.msgscheduler.SchedulerParams">
+		insert into w_scheduler_parms
+		(id,jobName,triggerName)
+		VALUES
+		(#{id,jdbcType=NUMERIC},#{jobName,jdbcType=VARCHAR},#{trigger,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		delete from w_scheduler_parms 
+		WHERE
+		id=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.msgscheduler.SchedulerParams">
+		update w_scheduler_parms set
+		jobName=#{refId,jdbcType=VARCHAR},
+		triggerName=#{userId,jdbcType=VARCHAR}
+		WHERE
+		id=#{id}
+	</update>
+	
+	<select id="getById" parameterType="java.lang.Long" resultMap="SchedulerParams">
+		select <include refid="columns"/>
+		from w_scheduler_parms
+		where
+		id=#{id}
+	</select>
+	
+	<select id="getByTriggerName" parameterType="java.lang.Long" resultMap="SchedulerParams">
+		select <include refid="columns"/>
+		from w_scheduler_parms
+		where
+		triggerName=#{triggerName}
+	</select>
+	
+	<select id="getAll" resultMap="SchedulerParams">
+		select <include refid="columns"/>
+		from w_scheduler_parms  
+		order by ID  desc
+	</select>
+	
+</mapper>

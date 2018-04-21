@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.operation.GoodsPurchase">
+	<resultMap id="GoodsPurchase" type="com.hotent.makshi.model.operation.GoodsPurchase">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="appli_departmentID" column="F_APPLI_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="recipients_userID" column="F_RECIPIENTS_USERID" jdbcType="VARCHAR"/>
+		<result property="recipients_user" column="F_RECIPIENTS_USER" jdbcType="VARCHAR"/>
+		<result property="recipients_departmentID" column="F_RECIPIENTS_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="recipients_department" column="F_RECIPIENTS_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="appli_date" column="F_APPLI_DATE" jdbcType="DATE"/>
+		<result property="appli_department" column="F_APPLI_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="remarks" column="F_REMARKS" jdbcType="VARCHAR"/>
+		<result property="purchase_date" column="F_PURCHASE_DATE" jdbcType="DATE"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+		
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="specification" column="F_SPECIFICATION" jdbcType="VARCHAR"/>
+		<result property="number" column="F_NUMBER" jdbcType="VARCHAR"/>
+		<result property="price" column="F_PRICE" jdbcType="VARCHAR"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="standard" column="F_STANDARD" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="columns">
+		ID,F_APPLICANTID,F_APPLI_DEPARTMENTID,F_RECIPIENTS_USERID,F_RECIPIENTS_DEPARTMENTID,F_APPLICANT,F_APPLI_DATE,F_APPLI_DEPARTMENT,F_REMARKS,F_RECIPIENTS_USER,F_RECIPIENTS_DEPARTMENT,F_PURCHASE_DATE
+		,REFID,F_NAME,F_SPECIFICATION,F_NUMBER,F_PRICE,F_TYPE,F_STANDARD,F_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPLICANTID,F_APPLI_DEPARTMENTID,F_RECIPIENTS_USERID,F_RECIPIENTS_DEPARTMENTID,F_APPLICANT,F_APPLI_DATE,F_APPLI_DEPARTMENT,F_REMARKS,F_RECIPIENTS_USER,F_RECIPIENTS_DEPARTMENT,F_PURCHASE_DATE
+		,F_ATTACHMENT,F_TYPE,F_STANDARD
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(appli_departmentID)"> AND F_APPLI_DEPARTMENTID  LIKE '%${appli_departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(recipients_userID)"> AND F_RECIPIENTS_USERID  LIKE '%${recipients_userID}%'  </if>
+			<if test="@Ognl@isNotEmpty(recipients_departmentID)"> AND F_RECIPIENTS_DEPARTMENTID  LIKE '%${recipients_departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(appli_date)"> AND F_APPLI_DATE  =#{appli_date} </if>
+			<if test="@Ognl@isNotEmpty(beginappli_date)"> AND F_APPLI_DATE  >=#{beginappli_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endappli_date)"> AND F_APPLI_DATE <![CDATA[ <=#{endappli_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(appli_department)"> AND F_APPLI_DEPARTMENT  LIKE '%${appli_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(remarks)"> AND F_REMARKS  LIKE '%${remarks}%'  </if>
+			<if test="@Ognl@isNotEmpty(recipients_user)"> AND F_RECIPIENTS_USER  LIKE '%${recipients_user}%'  </if>
+			<if test="@Ognl@isNotEmpty(recipients_department)"> AND F_RECIPIENTS_DEPARTMENT  LIKE '%${recipients_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(purchase_date)"> AND F_PURCHASE_DATE  =#{purchase_date} </if>
+			<if test="@Ognl@isNotEmpty(beginpurchase_date)"> AND F_PURCHASE_DATE  >=#{beginpurchase_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endpurchase_date)"> AND F_PURCHASE_DATE <![CDATA[ <=#{endpurchase_date,jdbcType=DATE}]]> </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.operation.GoodsPurchase">
+		INSERT INTO W_GOODS_PURCHASE
+		(ID,
+		F_APPLICANTID,F_APPLI_DEPARTMENTID,F_RECIPIENTS_USERID,F_RECIPIENTS_USER,F_RECIPIENTS_DEPARTMENTID,F_APPLICANT,F_APPLI_DATE,F_APPLI_DEPARTMENT,F_REMARKS,F_RECIPIENTS_DEPARTMENT,F_PURCHASE_DATE
+		,F_ATTACHMENT,F_TYPE,F_STANDARD,finish)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{applicantID,jdbcType=VARCHAR}, #{appli_departmentID,jdbcType=VARCHAR}, #{recipients_userID,jdbcType=VARCHAR}, #{recipients_user,jdbcType=VARCHAR}, #{recipients_departmentID,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{appli_date,jdbcType=DATE}, #{appli_department,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{recipients_department,jdbcType=VARCHAR}, #{purchase_date,jdbcType=DATE}
+		,#{attachment,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{standard,jdbcType=VARCHAR},1)
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		UPDATE W_GOODS_PURCHASE SET
+		DELETED = 1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.operation.GoodsPurchase">
+		UPDATE W_GOODS_PURCHASE SET
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_APPLI_DEPARTMENTID=#{appli_departmentID,jdbcType=VARCHAR},
+		F_RECIPIENTS_USERID=#{recipients_userID,jdbcType=VARCHAR},
+		F_RECIPIENTS_DEPARTMENTID=#{recipients_departmentID,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_APPLI_DATE=#{appli_date,jdbcType=DATE},
+		F_APPLI_DEPARTMENT=#{appli_department,jdbcType=VARCHAR},
+		F_REMARKS=#{remarks,jdbcType=VARCHAR},
+		F_RECIPIENTS_USER=#{recipients_user,jdbcType=VARCHAR},
+		F_RECIPIENTS_DEPARTMENT=#{recipients_department,jdbcType=VARCHAR},
+		F_PURCHASE_DATE=#{purchase_date,jdbcType=DATE},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_STANDARD=#{standard,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="GoodsPurchase">
+		SELECT <include refid="columns"/>
+		FROM operationGoodsList
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="GoodsPurchase">
+		SELECT <include refid="columns"/>
+		FROM operationGoodsList   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

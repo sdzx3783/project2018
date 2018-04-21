@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.operation.TestReport">
+	<resultMap id="TestReport" type="com.hotent.makshi.model.operation.TestReport">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="editorID" column="F_EDITORID" jdbcType="VARCHAR"/>
+		<result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="project" column="F_PROJECT" jdbcType="VARCHAR"/>
+		<result property="editor" column="F_EDITOR" jdbcType="VARCHAR"/>
+		<result property="startDate" column="F_STARTDATE" jdbcType="DATE"/>
+		<result property="endDate" column="F_ENDDATE" jdbcType="DATE"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="appliDate" column="F_APPLIDATE" jdbcType="DATE"/>
+		<result property="printDate" column="F_PRINTDATE" jdbcType="DATE"/>
+		<result property="sealDate" column="F_SEALDATE" jdbcType="DATE"/>
+		<result property="transferDate" column="F_TRANSFERDATE" jdbcType="DATE"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_EDITORID,F_APPLICANTID,F_NAME,F_PROJECT,F_EDITOR,F_STARTDATE,F_ENDDATE,F_APPLICANT,F_APPLIDATE,F_PRINTDATE,F_SEALDATE,F_TRANSFERDATE,F_REMARK,F_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_EDITORID,F_APPLICANTID,F_NAME,F_PROJECT,F_EDITOR,F_STARTDATE,F_ENDDATE,F_APPLICANT,F_APPLIDATE,F_PRINTDATE,F_SEALDATE,F_TRANSFERDATE,F_REMARK,F_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+		finish = 1 AND deleted = 0
+			<if test="@Ognl@isNotEmpty(editorID)"> AND F_EDITORID  LIKE '%${editorID}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(project)"> AND F_PROJECT  LIKE '%${project}%'  </if>
+			<if test="@Ognl@isNotEmpty(editor)"> AND F_EDITOR  LIKE '%${editor}%'  </if>
+			<if test="@Ognl@isNotEmpty(startDate)"> AND F_STARTDATE  =#{startDate} </if>
+			<if test="@Ognl@isNotEmpty(beginstartDate)"> AND F_STARTDATE  >=#{beginstartDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstartDate)"> AND F_STARTDATE <![CDATA[ <=#{endstartDate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(endDate)"> AND F_ENDDATE  =#{endDate} </if>
+			<if test="@Ognl@isNotEmpty(beginendDate)"> AND F_ENDDATE  >=#{beginendDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endendDate)"> AND F_ENDDATE <![CDATA[ <=#{endendDate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(appliDate)"> AND F_APPLIDATE  =#{appliDate} </if>
+			<if test="@Ognl@isNotEmpty(beginappliDate)"> AND F_APPLIDATE  >=#{beginappliDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endappliDate)"> AND F_APPLIDATE <![CDATA[ <=#{endappliDate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(printDate)"> AND F_PRINTDATE  =#{printDate} </if>
+			<if test="@Ognl@isNotEmpty(beginprintDate)"> AND F_PRINTDATE  >=#{beginprintDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endprintDate)"> AND F_PRINTDATE <![CDATA[ <=#{endprintDate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(sealDate)"> AND F_SEALDATE  =#{sealDate} </if>
+			<if test="@Ognl@isNotEmpty(beginsealDate)"> AND F_SEALDATE  >=#{beginsealDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endsealDate)"> AND F_SEALDATE <![CDATA[ <=#{endsealDate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(transferDate)"> AND F_TRANSFERDATE  =#{transferDate} </if>
+			<if test="@Ognl@isNotEmpty(begintransferDate)"> AND F_TRANSFERDATE  >=#{begintransferDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endtransferDate)"> AND F_TRANSFERDATE <![CDATA[ <=#{endtransferDate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.operation.TestReport">
+		INSERT INTO W_TEST_REPORT
+		(ID,
+		F_EDITORID,F_APPLICANTID,F_NAME,F_PROJECT,F_EDITOR,F_STARTDATE,F_ENDDATE,F_APPLICANT,F_APPLIDATE,F_PRINTDATE,F_SEALDATE,F_TRANSFERDATE,F_REMARK,F_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{editorID,jdbcType=VARCHAR}, #{applicantID,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{project,jdbcType=VARCHAR}, #{editor,jdbcType=VARCHAR}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, #{applicant,jdbcType=VARCHAR}, #{appliDate,jdbcType=DATE}, #{printDate,jdbcType=DATE}, #{sealDate,jdbcType=DATE}, #{transferDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		UPDATE W_TEST_REPORT SET
+		DELETED = 1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.operation.TestReport">
+		UPDATE W_TEST_REPORT SET
+		F_EDITORID=#{editorID,jdbcType=VARCHAR},
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_PROJECT=#{project,jdbcType=VARCHAR},
+		F_EDITOR=#{editor,jdbcType=VARCHAR},
+		F_STARTDATE=#{startDate,jdbcType=DATE},
+		F_ENDDATE=#{endDate,jdbcType=DATE},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_APPLIDATE=#{appliDate,jdbcType=DATE},
+		F_PRINTDATE=#{printDate,jdbcType=DATE},
+		F_SEALDATE=#{sealDate,jdbcType=DATE},
+		F_TRANSFERDATE=#{transferDate,jdbcType=DATE},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="TestReport">
+		SELECT <include refid="columns"/>
+		FROM W_TEST_REPORT
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="TestReport">
+		SELECT <include refid="columns"/>
+		FROM W_TEST_REPORT   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

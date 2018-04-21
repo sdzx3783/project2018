@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.summary.SummaryCompanyVip" >
+  <resultMap id="SummaryCompanyVip" type="com.hotent.makshi.model.summary.SummaryCompanyVip" >
+    <id property="id" column="ID" jdbcType="NUMERIC"/>
+    <result column="organization" property="organization" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="VARCHAR" />
+    <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR" />
+    <result column="duties" property="duties" jdbcType="VARCHAR" />
+    <result column="membership_time" property="membershipTime" jdbcType="VARCHAR" />
+    <result column="payment_standard" property="paymentStandard" jdbcType="DOUBLE" />
+    <result column="vip_years" property="vipYears" jdbcType="INTEGER" />
+    <result column="certification_date" property="certificationDate" jdbcType="VARCHAR" />
+    <result column="certeffective_time" property="certeffectiveTime" jdbcType="VARCHAR" />
+    <result column="department_id" property="departmentID" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="contactser" property="contactser" jdbcType="VARCHAR" />
+    <result column="contacts_phone" property="contactsPhone" jdbcType="VARCHAR" />
+    <result column="isdelete" property="isdelete" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="attachment" property="attachment" jdbcType="VARCHAR" />
+  </resultMap>
+   
+  <sql id="Base_Column_List" >
+   id, organization, level, certificate_no, duties, membership_time, payment_standard, 
+    vip_years, certification_date, certeffective_time, department_id, department, 
+    contactser, contacts_phone, isdelete, remark, attachment
+  </sql>
+  
+  <delete id="delById" parameterType="java.lang.Long">
+		update w_summary_company_vip set isdelete=1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<select id="getById" parameterType="java.lang.Long" resultMap="SummaryCompanyVip">
+		SELECT <include refid="Base_Column_List"/>
+		FROM w_summary_company_vip
+		WHERE
+		ID=#{id}
+	</select>
+
+
+	<select id="getAll" resultMap="SummaryCompanyVip">
+		select
+		<include refid="Base_Column_List" />
+		from w_summary_company_vip t
+		<where>
+		    <if test="organization != null and organization != ''">
+				and organization like #{organization}
+		    </if>
+		    <if test="level != null and level != ''">
+				and level like #{level}
+		    </if>
+		    <if test="certificateNo != null and certificateNo != ''">
+				and certificate_no like #{certificateNo}
+		    </if>
+		    <if test="certificationDate != null and certificationDate != ''">
+				and certification_date = #{certificationDate}
+		    </if>
+		    <if test="certeffectiveTime != null and certeffectiveTime != ''">
+				and certeffective_time = #{certeffectiveTime}
+		    </if>
+		    <if test="departmentID != null and departmentID != ''">
+				and department_id = #{departmentID}
+		    </if>
+		    and isdelete=0
+		</where>
+	</select>
+	
+  <insert id="add" parameterType="com.hotent.makshi.model.summary.SummaryCompanyVip" >
+    insert into w_summary_company_vip (id, organization, level, 
+      certificate_no, duties, membership_time, 
+      payment_standard, vip_years, certification_date, 
+      certeffective_time, department_id, department, 
+      contactser, contacts_phone,  
+      remark,attachment)
+    values (#{id,jdbcType=DECIMAL}, #{organization,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, 
+      #{certificateNo,jdbcType=VARCHAR}, #{duties,jdbcType=VARCHAR}, #{membershipTime,jdbcType=VARCHAR}, 
+      #{paymentStandard,jdbcType=DOUBLE}, #{vipYears,jdbcType=INTEGER}, #{certificationDate,jdbcType=VARCHAR}, 
+      #{certeffectiveTime,jdbcType=VARCHAR}, #{departmentID,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+      #{contactser,jdbcType=VARCHAR}, #{contactsPhone,jdbcType=VARCHAR},  
+      #{remark,jdbcType=VARCHAR},#{attachment,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="com.hotent.makshi.model.summary.SummaryCompanyVip">
+		update w_summary_company_vip
+    	set organization = #{organization,jdbcType=VARCHAR},
+      level = #{level,jdbcType=VARCHAR},
+      certificate_no = #{certificateNo,jdbcType=VARCHAR},
+      duties = #{duties,jdbcType=VARCHAR},
+      membership_time = #{membershipTime,jdbcType=VARCHAR},
+      payment_standard = #{paymentStandard,jdbcType=DOUBLE},
+      vip_years = #{vipYears,jdbcType=INTEGER},
+      certification_date = #{certificationDate,jdbcType=VARCHAR},
+      certeffective_time = #{certeffectiveTime,jdbcType=VARCHAR},
+      department_id = #{departmentID,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      contactser = #{contactser,jdbcType=VARCHAR},
+      contacts_phone = #{contactsPhone,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      attachment = #{attachment,jdbcType=VARCHAR}
+	    where id = #{id,jdbcType=DECIMAL}
+	</update>
+	
+</mapper>

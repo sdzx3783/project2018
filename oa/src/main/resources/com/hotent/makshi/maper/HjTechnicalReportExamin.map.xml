@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hj.HjTechnicalReportExamin">
+	<resultMap id="HjTechnicalReportExamin" type="com.hotent.makshi.model.hj.HjTechnicalReportExamin">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="nameID" column="F_NAMEID" jdbcType="VARCHAR"/>
+		<result property="departmentID" column="F_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="checkfirstID" column="F_CHECKFIRSTID" jdbcType="VARCHAR"/>
+		<result property="checksecondID" column="F_CHECKSECONDID" jdbcType="VARCHAR"/>
+		<result property="checkthirdID" column="F_CHECKTHIRDID" jdbcType="VARCHAR"/>
+		<result property="checkfourthID" column="F_CHECKFOURTHID" jdbcType="VARCHAR"/>
+		<result property="checkfifthID" column="F_CHECKFIFTHID" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="uploadTime" column="F_UPLOADTIME" jdbcType="DATE"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="itemName" column="F_ITEMNAME" jdbcType="VARCHAR"/>
+		<result property="reportName" column="F_REPORTNAME" jdbcType="VARCHAR"/>
+		<result property="reportContent" column="F_REPORTCONTENT" jdbcType="VARCHAR"/>
+		<result property="tag" column="F_TAG" jdbcType="VARCHAR"/>
+		<result property="checkfirst" column="F_CHECKFIRST" jdbcType="VARCHAR"/>
+		<result property="checksecond" column="F_CHECKSECOND" jdbcType="VARCHAR"/>
+		<result property="checkthird" column="F_CHECKTHIRD" jdbcType="VARCHAR"/>
+		<result property="checkfourth" column="F_CHECKFOURTH" jdbcType="VARCHAR"/>
+		<result property="checkfifth" column="F_CHECKFIFTH" jdbcType="VARCHAR"/>
+		<result property="projectTaskId" column="F_PROJECTTASKID" jdbcType="VARCHAR"/>
+		<result property="enclosure" column="F_ENCLOSURE" jdbcType="VARCHAR"/>
+		<result property="validation" column="F_VALIDATION" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.hj.HjTechnicalReportExamin" id="ExtHjTechnicalReportExamin" extends="HjTechnicalReportExamin">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_NAMEID,F_DEPARTMENTID,F_CHECKFIRSTID,F_CHECKSECONDID,F_CHECKTHIRDID,F_CHECKFOURTHID,F_CHECKFIFTHID,F_NAME,F_UPLOADTIME,F_DEPARTMENT,F_ITEMNAME,F_REPORTNAME,F_REPORTCONTENT,F_TAG,F_CHECKFIRST,F_CHECKSECOND,F_CHECKTHIRD,F_CHECKFOURTH,F_CHECKFIFTH,F_PROJECTTASKID,F_ENCLOSURE,F_VALIDATION
+	</sql>
+	<sql id="wfColumns">
+		ID,F_NAMEID,F_DEPARTMENTID,F_CHECKFIRSTID,F_CHECKSECONDID,F_CHECKTHIRDID,F_CHECKFOURTHID,F_CHECKFIFTHID,F_NAME,F_UPLOADTIME,F_DEPARTMENT,F_ITEMNAME,F_REPORTNAME,F_REPORTCONTENT,F_TAG,F_CHECKFIRST,F_CHECKSECOND,F_CHECKTHIRD,F_CHECKFOURTH,F_CHECKFIFTH,F_PROJECTTASKID,F_ENCLOSURE,F_VALIDATION
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(nameID)"> AND F_NAMEID  LIKE '%${nameID}%'  </if>
+			<if test="@Ognl@isNotEmpty(departmentID)"> AND F_DEPARTMENTID  LIKE '%${departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(checkfirstID)"> AND F_CHECKFIRSTID  LIKE '%${checkfirstID}%'  </if>
+			<if test="@Ognl@isNotEmpty(checksecondID)"> AND F_CHECKSECONDID  LIKE '%${checksecondID}%'  </if>
+			<if test="@Ognl@isNotEmpty(checkthirdID)"> AND F_CHECKTHIRDID  LIKE '%${checkthirdID}%'  </if>
+			<if test="@Ognl@isNotEmpty(checkfourthID)"> AND F_CHECKFOURTHID  LIKE '%${checkfourthID}%'  </if>
+			<if test="@Ognl@isNotEmpty(checkfifthID)"> AND F_CHECKFIFTHID  LIKE '%${checkfifthID}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(uploadTime)"> AND F_UPLOADTIME  =#{uploadTime} </if>
+			<if test="@Ognl@isNotEmpty(beginuploadTime)"> AND F_UPLOADTIME  >=#{beginuploadTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(enduploadTime)"> AND F_UPLOADTIME <![CDATA[ <=#{enduploadTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(itemName)"> AND F_ITEMNAME  LIKE '%${itemName}%'  </if>
+			<if test="@Ognl@isNotEmpty(reportName)"> AND F_REPORTNAME  LIKE '%${reportName}%'  </if>
+			<if test="@Ognl@isNotEmpty(reportContent)"> AND F_REPORTCONTENT  LIKE '%${reportContent}%'  </if>
+			<if test="@Ognl@isNotEmpty(tag)"> AND F_TAG  LIKE '%${tag}%'  </if>
+			<if test="@Ognl@isNotEmpty(checkfirst)"> AND F_CHECKFIRST  LIKE '%${checkfirst}%'  </if>
+			<if test="@Ognl@isNotEmpty(checksecond)"> AND F_CHECKSECOND  LIKE '%${checksecond}%'  </if>
+			<if test="@Ognl@isNotEmpty(checkthird)"> AND F_CHECKTHIRD  LIKE '%${checkthird}%'  </if>
+			<if test="@Ognl@isNotEmpty(checkfourth)"> AND F_CHECKFOURTH  LIKE '%${checkfourth}%'  </if>
+			<if test="@Ognl@isNotEmpty(checkfifth)"> AND F_CHECKFIFTH  LIKE '%${checkfifth}%'  </if>
+			<if test="@Ognl@isNotEmpty(projectTaskId)"> AND F_PROJECTTASKID  LIKE '%${projectTaskId}%'  </if>
+			<if test="@Ognl@isNotEmpty(enclosure)"> AND F_ENCLOSURE  LIKE '%${enclosure}%'  </if>
+			<if test="@Ognl@isNotEmpty(validation)"> AND F_VALIDATION  LIKE '%${validation}%'  </if>
+		              and finish = 1
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.hj.HjTechnicalReportExamin">
+		INSERT INTO W_HJ_TECHNICAL_REPORT_EXAMIN
+		(ID,
+		F_NAMEID,F_DEPARTMENTID,F_CHECKFIRSTID,F_CHECKSECONDID,F_CHECKTHIRDID,F_CHECKFOURTHID,F_CHECKFIFTHID,F_NAME,F_UPLOADTIME,F_DEPARTMENT,F_ITEMNAME,F_REPORTNAME,F_REPORTCONTENT,F_TAG,F_CHECKFIRST,F_CHECKSECOND,F_CHECKTHIRD,F_CHECKFOURTH,F_CHECKFIFTH,F_PROJECTTASKID,F_ENCLOSURE,F_VALIDATION,finish)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{nameID,jdbcType=VARCHAR}, #{departmentID,jdbcType=VARCHAR}, #{checkfirstID,jdbcType=VARCHAR}, #{checksecondID,jdbcType=VARCHAR}, #{checkthirdID,jdbcType=VARCHAR}, #{checkfourthID,jdbcType=VARCHAR}, #{checkfifthID,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{uploadTime,jdbcType=DATE}, #{department,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{reportName,jdbcType=VARCHAR}, #{reportContent,jdbcType=VARCHAR}, #{tag,jdbcType=VARCHAR}, #{checkfirst,jdbcType=VARCHAR}, #{checksecond,jdbcType=VARCHAR}, #{checkthird,jdbcType=VARCHAR}, #{checkfourth,jdbcType=VARCHAR}, #{checkfifth,jdbcType=VARCHAR}, #{projectTaskId,jdbcType=VARCHAR}, #{enclosure,jdbcType=VARCHAR}, #{validation,jdbcType=VARCHAR},1)
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_HJ_TECHNICAL_REPORT_EXAMIN 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hj.HjTechnicalReportExamin">
+		UPDATE W_HJ_TECHNICAL_REPORT_EXAMIN SET
+		F_NAMEID=#{nameID,jdbcType=VARCHAR},
+		F_DEPARTMENTID=#{departmentID,jdbcType=VARCHAR},
+		F_CHECKFIRSTID=#{checkfirstID,jdbcType=VARCHAR},
+		F_CHECKSECONDID=#{checksecondID,jdbcType=VARCHAR},
+		F_CHECKTHIRDID=#{checkthirdID,jdbcType=VARCHAR},
+		F_CHECKFOURTHID=#{checkfourthID,jdbcType=VARCHAR},
+		F_CHECKFIFTHID=#{checkfifthID,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_UPLOADTIME=#{uploadTime,jdbcType=DATE},
+		F_DEPARTMENT=#{department,jdbcType=VARCHAR},
+		F_ITEMNAME=#{itemName,jdbcType=VARCHAR},
+		F_REPORTNAME=#{reportName,jdbcType=VARCHAR},
+		F_REPORTCONTENT=#{reportContent,jdbcType=VARCHAR},
+		F_TAG=#{tag,jdbcType=VARCHAR},
+		F_CHECKFIRST=#{checkfirst,jdbcType=VARCHAR},
+		F_CHECKSECOND=#{checksecond,jdbcType=VARCHAR},
+		F_CHECKTHIRD=#{checkthird,jdbcType=VARCHAR},
+		F_CHECKFOURTH=#{checkfourth,jdbcType=VARCHAR},
+		F_CHECKFIFTH=#{checkfifth,jdbcType=VARCHAR},
+		F_PROJECTTASKID=#{projectTaskId,jdbcType=VARCHAR},
+		F_ENCLOSURE=#{enclosure,jdbcType=VARCHAR},
+		F_VALIDATION=#{validation,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="HjTechnicalReportExamin">
+		SELECT <include refid="columns"/>
+		FROM W_HJ_TECHNICAL_REPORT_EXAMIN
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="HjTechnicalReportExamin">
+		SELECT <include refid="columns"/>
+		FROM W_HJ_TECHNICAL_REPORT_EXAMIN   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="HjTechnicalReportExamin">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HJ_TECHNICAL_REPORT_EXAMIN A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtHjTechnicalReportExamin">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HJ_TECHNICAL_REPORT_EXAMIN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HJ_TECHNICAL_REPORT_EXAMIN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HJ_TECHNICAL_REPORT_EXAMIN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HJ_TECHNICAL_REPORT_EXAMIN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_HJ_TECHNICAL_REPORT_EXAMIN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="HjTechnicalReportExamin">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_HJ_TECHNICAL_REPORT_EXAMIN A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.finance.CustomTaskHour">
+	<resultMap id="CustomTaskHour" type="com.hotent.makshi.model.finance.CustomTaskHour">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="taskName" column="F_TASKNAME" jdbcType="VARCHAR"/>
+		<result property="work_content" column="F_WORK_CONTENT" jdbcType="VARCHAR"/>
+		<result property="work_hour" column="F_WORK_HOUR" jdbcType="VARCHAR"/>
+		<result property="overtime_hour" column="F_OVERTIME_HOUR" jdbcType="VARCHAR"/>
+		<result property="progress_rate" column="F_PROGRESS_RATE" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="task_work_rate" column="F_task_work_rate" jdbcType="INTEGER"/>
+		
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_TASKNAME,F_WORK_CONTENT,F_WORK_HOUR,F_OVERTIME_HOUR,F_PROGRESS_RATE,F_REMARK,F_task_work_rate
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_TASKNAME,F_WORK_CONTENT,F_WORK_HOUR,F_OVERTIME_HOUR,F_PROGRESS_RATE,F_REMARK,F_task_work_rate
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(taskName)"> AND F_TASKNAME  LIKE '%${taskName}%'  </if>
+			<if test="@Ognl@isNotEmpty(work_content)"> AND F_WORK_CONTENT  LIKE '%${work_content}%'  </if>
+			<if test="@Ognl@isNotEmpty(work_hour)"> AND F_WORK_HOUR  LIKE '%${work_hour}%'  </if>
+			<if test="@Ognl@isNotEmpty(overtime_hour)"> AND F_OVERTIME_HOUR  LIKE '%${overtime_hour}%'  </if>
+			<if test="@Ognl@isNotEmpty(progress_rate)"> AND F_PROGRESS_RATE  LIKE '%${progress_rate}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.finance.CustomTaskHour">
+		INSERT INTO W_CUSTOM_TASK_HOUR
+		(ID,REFID,
+		F_TASKNAME,F_WORK_CONTENT,F_WORK_HOUR,F_OVERTIME_HOUR,F_PROGRESS_RATE,F_REMARK,F_task_work_rate)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{taskName,jdbcType=VARCHAR}, #{work_content,jdbcType=VARCHAR}, #{work_hour,jdbcType=VARCHAR}, #{overtime_hour,jdbcType=VARCHAR}, #{progress_rate,jdbcType=VARCHAR}
+		, #{remark,jdbcType=VARCHAR},#{task_work_rate,jdbcType=INTEGER})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CUSTOM_TASK_HOUR 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.finance.CustomTaskHour">
+		UPDATE W_CUSTOM_TASK_HOUR SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		F_TASKNAME=#{taskName,jdbcType=VARCHAR},
+		F_WORK_CONTENT=#{work_content,jdbcType=VARCHAR},
+		F_WORK_HOUR=#{work_hour,jdbcType=VARCHAR},
+		F_OVERTIME_HOUR=#{overtime_hour,jdbcType=VARCHAR},
+		F_PROGRESS_RATE=#{progress_rate,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR},
+		F_task_work_rate=#{task_work_rate,jdbcType=INTEGER}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_CUSTOM_TASK_HOUR
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getCustomTaskHourList" resultMap="CustomTaskHour">
+	    SELECT <include refid="columns"/>
+	    FROM W_CUSTOM_TASK_HOUR 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="CustomTaskHour">
+		SELECT <include refid="columns"/>
+		FROM W_CUSTOM_TASK_HOUR
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="CustomTaskHour">
+		SELECT <include refid="columns"/>
+		FROM W_CUSTOM_TASK_HOUR   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

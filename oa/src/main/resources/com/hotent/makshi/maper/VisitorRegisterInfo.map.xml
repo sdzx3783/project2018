@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.waterprotectpark.VisitorRegisterInfo">
+	<resultMap id="VisitorRegisterInfo" type="com.hotent.makshi.model.waterprotectpark.VisitorRegisterInfo">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="chargerID" column="F_CHARGERID" jdbcType="VARCHAR"/>
+		<result property="greeterID" column="F_GREETERID" jdbcType="VARCHAR"/>
+		<result property="batch" column="F_BATCH" jdbcType="VARCHAR"/>
+		<result property="visitTime" column="F_VISITTIME" jdbcType="DATE"/>
+		<result property="teamName" column="F_TEAMNAME" jdbcType="VARCHAR"/>
+		<result property="type" column="F_TYPE" jdbcType="VARCHAR"/>
+		<result property="registerTime" column="F_REGISTERTIME" jdbcType="DATE"/>
+		<result property="xq" column="F_XQ" jdbcType="VARCHAR"/>
+		<result property="charger" column="F_CHARGER" jdbcType="VARCHAR"/>
+		<result property="tel" column="F_TEL" jdbcType="VARCHAR"/>
+		<result property="visitorNum" column="F_VISITORNUM" jdbcType="INTEGER"/>
+		<result property="isLetter" column="F_ISLETTER" jdbcType="VARCHAR"/>
+		<result property="greeter" column="F_GREETER" jdbcType="VARCHAR"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_CHARGERID,F_GREETERID,F_BATCH,F_VISITTIME,F_TEAMNAME,F_TYPE,F_REGISTERTIME,F_XQ,F_CHARGER,F_TEL,F_VISITORNUM,F_ISLETTER,F_GREETER,F_REMARK
+	</sql>
+	<sql id="wfColumns">
+		ID,F_CHARGERID,F_GREETERID,F_BATCH,F_VISITTIME,F_TEAMNAME,F_TYPE,F_REGISTERTIME,F_XQ,F_CHARGER,F_TEL,F_VISITORNUM,F_ISLETTER,F_GREETER,F_REMARK
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(chargerID)"> AND F_CHARGERID  LIKE '%${chargerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(greeterID)"> AND F_GREETERID  LIKE '%${greeterID}%'  </if>
+			<if test="@Ognl@isNotEmpty(batch)"> AND F_BATCH  LIKE '%${batch}%'  </if>
+			<if test="@Ognl@isNotEmpty(visitTime)"> AND F_VISITTIME  =#{visitTime} </if>
+			<if test="@Ognl@isNotEmpty(beginvisitTime)"> AND F_VISITTIME  >=#{beginvisitTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endvisitTime)"> AND F_VISITTIME <![CDATA[ <=#{endvisitTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(teamName)"> AND F_TEAMNAME  LIKE '%${teamName}%'  </if>
+			<if test="@Ognl@isNotEmpty(type)"> AND F_TYPE  LIKE '%${type}%'  </if>
+			<if test="@Ognl@isNotEmpty(registerTime)"> AND F_REGISTERTIME  =#{registerTime} </if>
+			<if test="@Ognl@isNotEmpty(beginregisterTime)"> AND F_REGISTERTIME  >=#{beginregisterTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endregisterTime)"> AND F_REGISTERTIME <![CDATA[ <=#{endregisterTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(xq)"> AND F_XQ  LIKE '%${xq}%'  </if>
+			<if test="@Ognl@isNotEmpty(charger)"> AND F_CHARGER  LIKE '%${charger}%'  </if>
+			<if test="@Ognl@isNotEmpty(tel)"> AND F_TEL  LIKE '%${tel}%'  </if>
+			<if test="@Ognl@isNotEmpty(visitorNum)"> AND F_VISITORNUM  = '#{visitorNum,jdbcType=INTEGER}'  </if>
+			<if test="@Ognl@isNotEmpty(isLetter)"> AND F_ISLETTER  LIKE '%${isLetter}%'  </if>
+			<if test="@Ognl@isNotEmpty(greeter)"> AND F_GREETER  LIKE '%${greeter}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			and F_isDelete=0
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.waterprotectpark.VisitorRegisterInfo">
+		INSERT INTO W_VISITOR_REGISTER_INFO
+		(ID,
+		F_CHARGERID,F_GREETERID,F_BATCH,F_VISITTIME,F_TEAMNAME,F_TYPE,F_REGISTERTIME,F_XQ,F_CHARGER,F_TEL,F_VISITORNUM,F_ISLETTER,F_GREETER,F_REMARK)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{chargerID,jdbcType=VARCHAR}, #{greeterID,jdbcType=VARCHAR}, #{batch,jdbcType=VARCHAR}, #{visitTime,jdbcType=DATE}, #{teamName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{registerTime,jdbcType=DATE}, #{xq,jdbcType=VARCHAR}, #{charger,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{visitorNum,jdbcType=INTEGER}, #{isLetter,jdbcType=VARCHAR}, #{greeter,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		update W_VISITOR_REGISTER_INFO set F_isDelete=1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.waterprotectpark.VisitorRegisterInfo">
+		UPDATE W_VISITOR_REGISTER_INFO SET
+		F_CHARGERID=#{chargerID,jdbcType=VARCHAR},
+		F_GREETERID=#{greeterID,jdbcType=VARCHAR},
+		F_BATCH=#{batch,jdbcType=VARCHAR},
+		F_VISITTIME=#{visitTime,jdbcType=DATE},
+		F_TEAMNAME=#{teamName,jdbcType=VARCHAR},
+		F_TYPE=#{type,jdbcType=VARCHAR},
+		F_REGISTERTIME=#{registerTime,jdbcType=DATE},
+		F_XQ=#{xq,jdbcType=VARCHAR},
+		F_CHARGER=#{charger,jdbcType=VARCHAR},
+		F_TEL=#{tel,jdbcType=VARCHAR},
+		F_VISITORNUM=#{visitorNum,jdbcType=INTEGER},
+		F_ISLETTER=#{isLetter,jdbcType=VARCHAR},
+		F_GREETER=#{greeter,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="VisitorRegisterInfo">
+		SELECT <include refid="columns"/>
+		FROM W_VISITOR_REGISTER_INFO
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="VisitorRegisterInfo">
+		SELECT <include refid="columns"/>
+		FROM W_VISITOR_REGISTER_INFO   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.doc.DocCollection">
+	<resultMap id="DocCollection" type="com.hotent.makshi.model.doc.DocCollection">
+		<id property="id" column="id" jdbcType="NUMERIC"/>
+		<result property="docid" column="doc_id" jdbcType="BIGINT"/>
+		<result property="state" column="state" jdbcType="INTEGER"/>
+		<result property="userid" column="user_id" jdbcType="BIGINT"/>
+		<result property="type" column="type" jdbcType="INTEGER"/>
+		<result property="ctime" column="ctime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		id,doc_id,state,user_id,type,ctime
+	</sql>
+	
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(docid)"> AND doc_id  =#{docid} </if>
+			<if test="@Ognl@isNotEmpty(state)"> AND state  =#{state} </if>
+			<if test="@Ognl@isNotEmpty(userid)"> AND user_id  =#{userid} </if>
+			<if test="@Ognl@isNotEmpty(type)"> AND type  =#{type} </if>
+			<if test="@Ognl@isNotEmpty(ctime)"> AND ctime  LIKE '%${ctime}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.doc.DocCollection">
+		INSERT INTO w_doc_collection
+		(id,
+		doc_id,state,user_id,type,ctime)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{docid,jdbcType=NUMERIC}, #{state,jdbcType=NUMERIC}, #{userid,jdbcType=NUMERIC}, #{type,jdbcType=NUMERIC}, #{ctime,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM w_doc_collection 
+		WHERE
+		id=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.doc.DocCollection">
+		UPDATE w_doc_collection SET
+		doc_id=#{docid,jdbcType=NUMERIC},
+		state=#{state,jdbcType=NUMERIC},
+		user_id=#{userid,jdbcType=NUMERIC},
+		type=#{type,jdbcType=NUMERIC},
+		ctime=#{ctime,jdbcType=VARCHAR}
+		WHERE
+		id=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="DocCollection">
+		SELECT <include refid="columns"/>
+		FROM w_doc_collection
+		WHERE
+		id=#{id}
+	</select>
+	
+	<select id="getByIdAndUserId" resultMap="DocCollection">
+		SELECT <include refid="columns"/>
+		FROM w_doc_collection   
+		where user_id=#{userid} and doc_id=#{id}
+	</select>
+	
+	
+	
+</mapper>

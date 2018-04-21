@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.task.Task" >
+  <resultMap id="BaseResultMap" type="com.hotent.makshi.model.task.Task" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="charger" property="charger" jdbcType="VARCHAR" />
+    <result column="chargerID" property="chargerID" jdbcType="VARCHAR" />
+    <result column="member" property="member" jdbcType="VARCHAR" />
+    <result column="memberID" property="memberID" jdbcType="VARCHAR" />
+    <result column="imports" property="imports" jdbcType="INTEGER" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="stage" property="stage" jdbcType="INTEGER" />
+    <result column="file" property="file" jdbcType="VARCHAR" />
+    <result column="cuser" property="cuser" jdbcType="VARCHAR" />
+    <result column="cuserID" property="cuserid" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="uuser" property="uuser" jdbcType="VARCHAR" />
+    <result column="uuserID" property="uuserid" jdbcType="VARCHAR" />
+    <result column="utime" property="utime" jdbcType="TIMESTAMP" />
+    <result column="isdelete" property="isdelete" jdbcType="INTEGER" />
+    <result column="ispub" property="ispub" jdbcType="INTEGER" />
+    <result column="sysplanid" property="sysplanid" jdbcType="NUMERIC" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.hotent.makshi.model.task.Task" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, charger, chargerID, member, memberID, imports, start_date, end_date, stage, 
+    file, cuser, cuserID, ctime, uuser, uuserID, utime, isdelete,ispub,sysplanid
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  
+  <sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(cuserID)"> AND cuserID =#{cuserID}  </if>
+			<if test="@Ognl@isNotEmpty(chargerID)"> AND chargerID =#{chargerID}  </if>
+			<if test="@Ognl@isNotEmpty(ispub)"> AND ispub =#{ispub}  </if>
+			<if test="@Ognl@isNotEmpty(join)"> AND (chargerID =#{join} or find_in_set(#{join},memberID))  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND name like #{name}  </if>
+			<if test="@Ognl@isNotEmpty(bstartDate)"> AND start_date>=#{bstartDate}</if>
+			<if test="@Ognl@isNotEmpty(estartDate)"> AND start_date &lt;=#{estartDate}</if>
+			<if test="@Ognl@isNotEmpty(bendDate)"> AND end_date>=#{bendDate}</if>
+			<if test="@Ognl@isNotEmpty(eendDate)"> AND end_date &lt;=#{eendDate}</if>
+			<if test="@Ognl@isNotEmpty(stage)"> AND stage =#{stage}</if>
+			<if test="logstage == 3"> AND id not in(SELECT task_id from w_task_log where cuserID=#{loguserid} and commited=1)</if>
+			<if test="logstage == 4"> AND id in(SELECT task_id from w_task_log where cuserID=#{loguserid} and commited=1)</if>
+			and isDelete=0
+		</where>
+	</sql>
+  
+  <select id="getAll" resultMap="ResultMapWithBLOBs">
+		SELECT
+	    <include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+		FROM w_task   
+		<include refid="dynamicWhere" />
+		order by ctime desc
+	</select>
+  
+  <select id="getById" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from w_task
+    where id = #{id}
+  </select>
+  <delete id="delById" parameterType="java.lang.Long" >
+    delete from w_task
+    where id = #{id}
+  </delete>
+  <insert id="add" parameterType="com.hotent.makshi.model.task.Task" >
+    insert into w_task (id, name, charger, 
+      chargerID, member, memberID, 
+      imports, start_date, end_date, 
+      stage, file, cuser, 
+      cuserID, ctime, uuser, 
+      uuserID, utime, isdelete, ispub,sysplanid,
+      content)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{charger,jdbcType=VARCHAR}, 
+      #{chargerID,jdbcType=VARCHAR}, #{member,jdbcType=VARCHAR}, #{memberID,jdbcType=VARCHAR}, 
+      #{imports,jdbcType=INTEGER}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
+      #{stage,jdbcType=INTEGER}, #{file,jdbcType=VARCHAR}, #{cuser,jdbcType=VARCHAR}, 
+      #{cuserid,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, #{uuser,jdbcType=VARCHAR}, 
+      #{uuserid,jdbcType=VARCHAR}, #{utime,jdbcType=TIMESTAMP}, #{isdelete,jdbcType=INTEGER}, 
+      #{ispub,jdbcType=INTEGER},#{sysplanid,jdbcType=NUMERIC},#{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="update" parameterType="com.hotent.makshi.model.task.Task" >
+    update w_task
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="charger != null" >
+        charger = #{charger,jdbcType=VARCHAR},
+      </if>
+      <if test="chargerID != null" >
+        chargerID = #{chargerID,jdbcType=VARCHAR},
+      </if>
+      <if test="member != null" >
+        member = #{member,jdbcType=VARCHAR},
+      </if>
+      <if test="memberID != null" >
+        memberID = #{memberID,jdbcType=VARCHAR},
+      </if>
+      <if test="imports != null" >
+        imports = #{imports,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="stage != null" >
+        stage = #{stage,jdbcType=INTEGER},
+      </if>
+      <if test="file != null" >
+        file = #{file,jdbcType=VARCHAR},
+      </if>
+      <if test="cuser != null" >
+        cuser = #{cuser,jdbcType=VARCHAR},
+      </if>
+      <if test="cuserid != null" >
+        cuserID = #{cuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uuser != null" >
+        uuser = #{uuser,jdbcType=VARCHAR},
+      </if>
+      <if test="uuserid != null" >
+        uuserID = #{uuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="utime != null" >
+        utime = #{utime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdelete != null" >
+        isdelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+       <if test="ispub != null" >
+        ispub = #{ispub,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="sysplanid != null" >
+        sysplanid = #{sysplanid,jdbcType=NUMERIC},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.project.ProjectTaskLogs" >
+  <resultMap id="BaseResultMap" type="com.hotent.makshi.model.project.ProjectTaskLogs" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="taskId" property="taskid" jdbcType="INTEGER" />
+    <result column="runId" property="runid" jdbcType="BIGINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="name" property="projectName" jdbcType="VARCHAR" />
+    <result column="taskName" property="taskName" jdbcType="VARCHAR" />
+    <result column="uploadFile" property="uploadFile" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+ 
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, taskId, runId, ctime
+  </sql>
+  <sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(projectName)"> AND wp.name  LIKE '%${projectName}%'  </if>
+			<if test="@Ognl@isNotEmpty(taskName)"> AND wt.taskName  LIKE '%${taskName}%'  </if>
+			<if test="@Ognl@isNotEmpty(beginsubmitDate)"> AND wl.ctime  >=#{beginsubmitDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endsubmitDate)"> AND wl.ctime <![CDATA[ <#{endsubmitDate,jdbcType=DATE}]]> </if>
+			and (wl.runId is null or exists(select * from  bpm_pro_run_his rh where rh.runid=wl.runId) )
+		</where>
+	</sql>
+  <select id="getAll" resultMap="BaseResultMap" >
+    SELECT wl.taskId,wl.ctime,wl.type,wl.runId,wp.`name`,wt.taskName,wt.uploadFile FROM w_project_task_logs wl
+     INNER JOIN w_project_stage_task wt on wl.taskId=wt.id and wt.isDelete=0
+     INNER JOIN w_project_stage ws ON wt.proStageId=ws.id 
+     INNER JOIN w_project wp on ws.proId=wp.id and wp.isDelete=0
+      INNER JOIN w_classify_library wc on wp.classifyLibraryId=wc.id and wc.isDelete=0
+      and wc.orgID=#{orgId,jdbcType=BIGINT}
+      <include refid="dynamicWhere" />
+    order by wl.ctime desc
+  </select>
+  
+  
+  <select id="getByCtimeAndOrg" resultMap="BaseResultMap" >
+    SELECT a.* from w_project_task_logs a
+	LEFT JOIN w_project_stage_task b on a.taskId=b.id
+	left JOIN w_project_stage c on b.proStageId = c.id
+	LEFT JOIN w_project d on c.proId = d.id
+	LEFT JOIN w_classify_library e on d.classifyLibraryId = e.id
+	where a.ctime like #{date} and e.orgID=#{orgId}
+	and e.isUsed=1 and e.isDelete=0 and d.isDelete=0 and b.isDelete=0
+  </select>
+  
+  <select id="getByCtimeAndOrgAndStatus" resultMap="BaseResultMap" >
+    SELECT a.* from w_project_task_logs a
+	LEFT JOIN w_project_stage_task b on a.taskId=b.id
+	left JOIN w_project_stage c on b.proStageId = c.id
+	LEFT JOIN w_project d on c.proId = d.id
+	LEFT JOIN w_classify_library e on d.classifyLibraryId = e.id
+	where a.ctime like #{date} and e.orgID=#{orgId}
+	and e.isUsed=1 and e.isDelete=0 and d.isDelete=0 and b.isDelete=0
+	and d.`status`=#{status}
+  </select>
+  
+  
+  <select id="getByCtimeAndClassifyId" resultMap="BaseResultMap" >
+    SELECT a.* from w_project_task_logs a
+	LEFT JOIN w_project_stage_task b on a.taskId=b.id
+	left JOIN w_project_stage c on b.proStageId = c.id
+	LEFT JOIN w_project d on c.proId = d.id
+	LEFT JOIN w_classify_library e on d.classifyLibraryId = e.id
+	where a.ctime like #{date} and e.id=#{classifyId}
+	and e.isUsed=1 and e.isDelete=0 and d.isDelete=0 and b.isDelete=0
+	<if test="@Ognl@isNotEmpty(status)"> AND d.`status` =#{status}  </if>
+  </select>
+  
+  <insert id="add" parameterType="com.hotent.makshi.model.project.ProjectTaskLogs" useGeneratedKeys="true" keyProperty="id" >
+    insert into w_project_task_logs (taskId, runId, ctime ,type
+      )
+    values (#{taskid,jdbcType=INTEGER}, #{runid,jdbcType=BIGINT}, #{ctime,jdbcType=TIMESTAMP},#{type,jdbcType=INTEGER}
+      )
+  </insert>
+  
+</mapper>

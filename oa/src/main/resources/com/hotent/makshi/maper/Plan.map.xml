@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.plan.Plan" >
+  <resultMap id="BaseResultMap" type="com.hotent.makshi.model.plan.Plan" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cycle" property="cycle" jdbcType="INTEGER" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="date_range" property="dateRange" jdbcType="VARCHAR" />
+    <result column="file" property="file" jdbcType="VARCHAR" />
+    <result column="summary" property="summary" jdbcType="VARCHAR" />
+    <result column="cuser" property="cuser" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="uuser" property="uuser" jdbcType="VARCHAR" />
+    <result column="utime" property="utime" jdbcType="TIMESTAMP" />
+    <result column="ispub" property="ispub" jdbcType="INTEGER" />
+    <result column="isdelete" property="isdelete" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.hotent.makshi.model.plan.Plan" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, cycle, date, date_range, file, summary, cuser, ctime, uuser, utime,ispub,isdelete
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  
+  <sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(cuser)"> AND cuser =#{cuser}  </if>
+			<if test="@Ognl@isNotEmpty(cycle)"> AND cycle =#{cycle}  </if>
+			<if test="@Ognl@isNotEmpty(beginctime)"> AND ctime>=#{beginctime}</if>
+			<if test="@Ognl@isNotEmpty(endctime)"> AND ctime &lt;=#{endctime}</if>
+			and isDelete=0
+		</where>
+	</sql> 
+	
+	<select id="getAll" resultMap="ResultMapWithBLOBs">
+		SELECT
+	    <include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+		FROM w_plan   
+		<include refid="dynamicWhere" />
+		order by ctime desc
+	</select>
+	
+	<select id="getUnderPlan" resultMap="ResultMapWithBLOBs" >
+		SELECT p.id, p.cycle, p.date, p.date_range, p.file, p.summary,b.fullname as cuser, p.ctime, p.uuser, p.utime,p.ispub,p.isdelete,p.content
+		FROM SYS_USER_UNDER a
+		left JOIN SYS_USER b on a.UNDERUSERID=b.userId
+		LEFT JOIN w_plan p on a.UNDERUSERID=p.cuser
+		where a.USERID=#{userId} 
+		and p.isdelete = 0 and p.ispub=1
+		<if test="@Ognl@isNotEmpty(cycle)"> AND p.cycle =#{cycle}  </if>
+		<if test="@Ognl@isNotEmpty(beginctime)"> AND p.ctime>=#{beginctime}</if>
+		<if test="@Ognl@isNotEmpty(endctime)"> AND p.ctime &lt;=#{endctime}</if>
+		order by ctime desc
+	</select>
+  
+  <select id="getById" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from w_plan
+    where id = #{id}
+  </select>
+  <delete id="delById" parameterType="java.lang.Long" >
+    delete from w_plan
+    where id = #{id}
+  </delete>
+  <insert id="add" parameterType="com.hotent.makshi.model.plan.Plan" useGeneratedKeys="true" keyProperty="id" >
+    insert into w_plan (id, cycle, date, 
+      date_range, file, summary, 
+      cuser, ctime, uuser, 
+      utime, content,ispub,isdelete)
+    values (#{id,jdbcType=INTEGER}, #{cycle,jdbcType=INTEGER}, #{date,jdbcType=DATE}, 
+      #{dateRange,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR}, #{summary,jdbcType=VARCHAR}, 
+      #{cuser,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, #{uuser,jdbcType=VARCHAR}, 
+      #{utime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR},#{ispub,jdbcType=INTEGER},#{isdelete,jdbcType=INTEGER})
+  </insert>
+  <update id="update" parameterType="com.hotent.makshi.model.plan.Plan" >
+    update w_plan
+    <set >
+      <if test="cycle != null" >
+        cycle = #{cycle,jdbcType=INTEGER},
+      </if>
+      <if test="date != null" >
+        date = #{date,jdbcType=DATE},
+      </if>
+      <if test="dateRange != null" >
+        date_range = #{dateRange,jdbcType=VARCHAR},
+      </if>
+      <if test="file != null" >
+        file = #{file,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null" >
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="cuser != null" >
+        cuser = #{cuser,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uuser != null" >
+        uuser = #{uuser,jdbcType=VARCHAR},
+      </if>
+      <if test="utime != null" >
+        utime = #{utime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="ispub != null" >
+        ispub = #{ispub,jdbcType=INTEGER},
+      </if>
+      <if test="isdelete != null" >
+        isdelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

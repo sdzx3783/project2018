@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.contract.ContractBorrowApplication">
+	<resultMap id="ContractBorrowApplication" type="com.hotent.makshi.model.contract.ContractBorrowApplication">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="contract_num" column="F_CONTRACT_NUM" jdbcType="VARCHAR"/>
+		<result property="contract_name" column="F_CONTRACT_NAME" jdbcType="VARCHAR"/>
+		<result property="borrower" column="F_BORROWER" jdbcType="VARCHAR"/>
+		<result property="borrowerID" column="F_BORROWERID" jdbcType="VARCHAR"/>
+		<result property="borrow_date" column="F_BORROW_DATE" jdbcType="DATE"/>
+		<result property="contract_amount" column="F_contract_amount" jdbcType="DATE"/>
+		<result property="borrow_reason" column="F_borrow_reason" jdbcType="DATE"/>
+		<result property="expected_return_date" column="F_EXPECTED_RETURN_DATE" jdbcType="DATE"/>
+		<result property="remark" column="F_REMARK" jdbcType="VARCHAR"/>
+		<result property="return_date" column="F_RETURN_DATE" jdbcType="DATE"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.contract.ContractBorrowApplication" id="ExtContractBorrowApplication" extends="ContractBorrowApplication">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_BORROWERID,F_CONTRACT_NUM,F_BORROW_DATE,F_CONTRACT_NAME,F_EXPECTED_RETURN_DATE,F_RETURN_DATE,F_BORROWER,F_REMARK
+		,F_contract_amount,
+		F_borrow_reason 
+	</sql>
+	<sql id="wfColumns">
+		ID,F_BORROWERID,F_CONTRACT_NUM,F_BORROW_DATE,F_CONTRACT_NAME,F_EXPECTED_RETURN_DATE,F_RETURN_DATE,F_BORROWER,F_REMARK
+		,F_contract_amount,
+		F_borrow_reason 
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(borrowerID)"> AND F_BORROWERID  LIKE '%${borrowerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(contract_num)"> AND F_CONTRACT_NUM  LIKE '%${contract_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(borrow_date)"> AND F_BORROW_DATE  =#{borrow_date} </if>
+			<if test="@Ognl@isNotEmpty(beginborrow_date)"> AND F_BORROW_DATE  >=#{beginborrow_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endborrow_date)"> AND F_BORROW_DATE <![CDATA[ <=#{endborrow_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(contract_name)"> AND F_CONTRACT_NAME  LIKE '%${contract_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(expected_return_date)"> AND F_EXPECTED_RETURN_DATE  =#{expected_return_date} </if>
+			<if test="@Ognl@isNotEmpty(beginexpected_return_date)"> AND F_EXPECTED_RETURN_DATE  >=#{beginexpected_return_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endexpected_return_date)"> AND F_EXPECTED_RETURN_DATE <![CDATA[ <=#{endexpected_return_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(borrower)"> AND F_BORROWER  LIKE '%${borrower}%'  </if>
+			<if test="@Ognl@isNotEmpty(remark)"> AND F_REMARK  LIKE '%${remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(globalflowno)"> AND b.GLOBALFLOWNO  LIKE #{globalflowno}  </if>
+			<if test="@Ognl@isNotEmpty(creator)"> AND b.CREATOR  LIKE '%${creator}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.contract.ContractBorrowApplication">
+		INSERT INTO W_CONTRACT_BORROW_APPLICATION
+		(ID,
+		F_BORROWERID,F_CONTRACT_NUM,F_BORROW_DATE,F_CONTRACT_NAME,F_EXPECTED_RETURN_DATE,F_RETURN_DATE,F_BORROWER,F_REMARK
+		,F_contract_amount,
+		F_borrow_reason )
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{borrowerID,jdbcType=VARCHAR}, #{contract_num,jdbcType=VARCHAR}, #{borrow_date,jdbcType=DATE}, #{contract_name,jdbcType=VARCHAR}, #{expected_return_date,jdbcType=DATE},#{return_date,jdbcType=DATE}, #{borrower,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+		,#{contract_amount,jdbcType=VARCHAR},
+		#{borrow_reason,jdbcType=VARCHAR} )
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CONTRACT_BORROW_APPLICATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.contract.ContractBorrowApplication">
+		UPDATE W_CONTRACT_BORROW_APPLICATION SET
+		F_BORROWERID=#{borrowerID,jdbcType=VARCHAR},
+		F_CONTRACT_NUM=#{contract_num,jdbcType=VARCHAR},
+		F_BORROW_DATE=#{borrow_date,jdbcType=DATE},
+		F_CONTRACT_NAME=#{contract_name,jdbcType=VARCHAR},
+		F_EXPECTED_RETURN_DATE=#{expected_return_date,jdbcType=DATE},
+		F_RETURN_DATE=#{return_date,jdbcType=DATE},
+		F_BORROWER=#{borrower,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR}
+		,F_contract_amount=#{contract_amount,jdbcType=VARCHAR},
+		F_borrow_reason=#{borrow_reason,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ContractBorrowApplication">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_BORROW_APPLICATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="ContractBorrowApplication">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_BORROW_APPLICATION   a   
+		left join bpm_pro_run_his b on a.id=b.BUSINESSKEY
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="ContractBorrowApplication">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_CONTRACT_BORROW_APPLICATION A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtContractBorrowApplication">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_CONTRACT_BORROW_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_CONTRACT_BORROW_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_CONTRACT_BORROW_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_CONTRACT_BORROW_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_CONTRACT_BORROW_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="ContractBorrowApplication">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_CONTRACT_BORROW_APPLICATION A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+	<select id="getByUid" parameterType="java.lang.Long" resultMap="ContractBorrowApplication">
+		SELECT <include refid="columns"/>
+		FROM W_CONTRACT_BORROW_APPLICATION
+		WHERE
+		F_borrowerID=#{uid}
+	</select>
+	
+</mapper>

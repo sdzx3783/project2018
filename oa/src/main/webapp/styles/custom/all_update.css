@@ -1,0 +1,207 @@
+/*修改范围 http://192.168.3.113:8090/platform/console/main.ht 左侧主树*/
+#layoutMain .l-layout-header{
+    display: none !important;
+}
+#layoutMain .l-layout-left{
+    border: 0;
+}
+.main__ztree{
+    padding: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    background: #30343f !important;
+}
+.main__ztree li ul{
+    padding: 0 0 0 10px;
+}
+.main__ztree li span{
+    height: 34px;
+    color: #fff;
+    line-height: 34px;
+}
+.main__ztree .l-layout-header{
+    display: none;
+}
+.main__ztree li a{
+    padding: 3px;
+    margin: 0;
+    cursor: pointer;
+    height: 34px;
+    color: #333;
+    background-color: transparent;
+    text-decoration: none;
+    vertical-align: top;
+    display: inline-block;
+    margin-left: -300px;
+    padding-left: 300px;
+    width: 90%;
+}
+.main__ztree li a.curSelectedNode {
+    padding-top: 3px;
+    background-color: #9ca1a7;
+    color: black;
+    height: 34px;
+    border: 0;
+    opacity: 0.8;
+}
+.main__ztree li a:hover {
+    text-decoration: none;
+    background: #9ca1a7;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+}
+
+.main__ztree li span.button{
+    height: 34px;
+    background-position: center center !important;
+}
+
+.main__ztree .switch{
+    height: 40px !important;
+    background:url("/images/menu_icon/close_icon.png") no-repeat !important;
+    background-size: 8px 8px !important;
+}
+.main__ztree li span.button.noline_docu {
+    background: none !important;
+}
+.main__ztree li span.button.noline_open{ 
+   background-image: url(/images/menu_icon/open_icon.png) !important;  
+   background-size: 8px 8px !important;
+}
+
+/*所有页面的按钮样式*/
+.panel-toolbar{
+    background: #fff;
+    border: 0;
+}
+.panel-toolbar a.link{
+    text-align: left;
+    border: 0;
+    color: #fff;
+    padding: 3px 15px 3px 15px;
+    background: #478de4 !important;
+    -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+}
+.panel-search .title {
+    color: #657386;
+}
+.panel-search {
+    border-top: 1px solid #dadfed;
+}
+.panel-search .drop a {
+    color: #478de4;
+
+}
+.panel-table{
+    border-color: #dadfed !important;
+}
+.table-grid th {
+    border-bottom: 1px solid #dadfed;
+    border-right: 0;
+    color: #464646;
+    font-size: 14px;
+    font-weight: bold;
+    height: 44px;
+    text-align: left;
+    padding-left: 10px;
+    white-space: nowrap;
+    background: #fff;
+}
+.table-grid td {
+    border-bottom: 0;
+    border-right: 1px solid #eefef7;
+    height: 30px;
+    padding: 4px 4px 4px 5px;
+    word-break: break-all;
+}
+.table-grid .odd {
+    background: none repeat scroll 0 0 #f5f6f6;
+    height: 22px;
+}
+.table-grid .over {
+    /* background: url(../images/content_bg_hover.jpg); */
+    background: #eef1f7;
+}
+
+span.green {
+    color: #6ccd8a;
+}
+
+#searchForm,
+.inputText.date,
+.row select{
+    color: #657386;
+}
+.inputText,
+.row select{
+    border-color: #dadfed;
+}
+
+
+.ops_itemDiv {
+    background-color: #FFFFFF;
+    border: 0;
+    border-radius: 0;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.18);
+    display: none;
+}
+.ops_itemDiv ul {
+    padding: 0;
+}
+
+.ops_itemDiv ul li {
+     padding: 0; 
+}
+a.ops_more {
+    display: block;
+}
+.area-export{
+    border: 0;
+}
+
+
+/*分页条*/
+.panel-page{
+     border: 1px solid #dadfed;
+     border-top: 0;
+}
+.l-bar-group-right{
+    margin-left: 120px;
+}
+.btn-go {
+    color: #fff;
+    width: 43px;
+    height: 21px;
+    font-size: 15px;
+    font-family: Verdana, Geneva, sans-serif;
+    background: #478de4;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+
+
+/*二级树*/
+.ztree{
+    background: #e1e5f0;
+    color: #657386;
+}
+
+.ztree span{
+    color: #657386;
+}
+
+.tree-toolbar{
+    background: #e1e5f0;
+}
+
+
+/*主树*/
+.level0 .button.ico_close,
+.level0 .button.ico_docu, 
+.level0 .button.ico_open{
+    margin-right: 10px !important;
+}

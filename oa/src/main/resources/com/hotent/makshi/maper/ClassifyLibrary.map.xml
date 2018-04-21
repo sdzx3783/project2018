@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.project.ClassifyLibrary" >
+  <resultMap id="BaseResultMap" type="com.hotent.makshi.model.project.ClassifyLibrary" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="charger" property="charger" jdbcType="VARCHAR" />
+    <result column="chargerID" property="chargerID" jdbcType="VARCHAR" />
+    <result column="org" property="org" jdbcType="VARCHAR" />
+    <result column="orgID" property="orgID" jdbcType="BIGINT" />
+    <result column="isUsed" property="isused" jdbcType="INTEGER" />
+    <result column="isDelete" property="isdelete" jdbcType="INTEGER" />
+    <result column="cTime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="cUser" property="cuser" jdbcType="BIGINT" />
+    <result column="uTime" property="utime" jdbcType="TIMESTAMP" />
+    <result column="uUser" property="uuser" jdbcType="BIGINT" />
+    <result column="order" property="order" jdbcType="INTEGER" />
+    <result property="supid" column="supid" jdbcType="BIGINT"/>
+	<result property="path" column="path" jdbcType="VARCHAR"/>
+	<result property="pathname" column="pathname" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, `name`, charger, chargerID, org, orgID, isUsed, isDelete, cTime, cUser, uTime, 
+    uUser,`order`,supid,path,pathname
+  </sql>
+   <sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(orgID)"> AND orgID  =#{orgID} </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND name like #{name} </if>
+			<if test="@Ognl@isNotEmpty(isUsed)"> AND isUsed  =#{isUsed} </if>
+			<if test="@Ognl@isNotEmpty(supid)"> AND supid  =#{supid} </if>
+	
+			 AND isDelete  =0 
+		</where>
+  </sql>
+  <select id="getAll" resultMap="BaseResultMap">
+		SELECT <include refid="Base_Column_List"/>,(select count(*) from w_classify_library t where t.supid=w.id and t.isDelete=0) isLeaf
+		from w_classify_library w
+		<include refid="dynamicWhere" />
+		
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		<!-- order by isUsed desc,`order` asc,cTime asc -->
+		order by `order` asc,cTime asc
+		</if>
+	</select>
+  
+  <select id="getByCatePath" resultMap="BaseResultMap">
+		select * from w_classify_library where path LIKE #{path} and isDelete=0 order by path asc, `order` asc 
+	</select>
+	 <select id="getByNameAndOrgId" resultMap="BaseResultMap">
+		select * from w_classify_library where name = #{name,jdbcType=VARCHAR} and orgID=#{orgId,jdbcType=BIGINT} and  isDelete  =0 
+	</select>
+	
+	<select id="getBySupid" resultMap="BaseResultMap">
+		select * from w_classify_library where supid=#{supid} and isDelete=0 order by `order` desc 
+	</select>
+	<update id="updateAddOrder">
+		update  w_classify_library  set `order`=`order`+1  where  supid=#{targetsupid,jdbcType=BIGINT} and `order` &lt;= #{recordOrder,jdbcType=BIGINT}   and id!=#{dragId,jdbcType=BIGINT}
+	</update>
+	<update id="updateDecOrder">
+		update  w_classify_library  set `order`=`order`-1  where  supid=#{targetsupid,jdbcType=BIGINT} and `order` &gt;= #{recordOrder,jdbcType=BIGINT}  and id!=#{dragId,jdbcType=BIGINT}
+	</update>
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from w_classify_library
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="delById" parameterType="java.lang.Long" >
+    update  w_classify_library set isDelete=1
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="add" parameterType="com.hotent.makshi.model.project.ClassifyLibrary" >
+    insert into w_classify_library (id, `name`, charger, 
+      chargerID, org, orgID, 
+      isUsed, isDelete, cTime, 
+      cUser, uTime, uUser,`order`,supid,path,pathname
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{charger,jdbcType=VARCHAR}, 
+      #{chargerID,jdbcType=VARCHAR}, #{org,jdbcType=VARCHAR}, #{orgID,jdbcType=BIGINT}, 
+      #{isused,jdbcType=INTEGER}, #{isdelete,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{cuser,jdbcType=BIGINT}, #{utime,jdbcType=TIMESTAMP}, #{uuser,jdbcType=BIGINT},
+      #{order,jdbcType=INTEGER},#{supid,jdbcType=INTEGER},#{path,jdbcType=VARCHAR},
+      #{pathname,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <update id="update" parameterType="com.hotent.makshi.model.project.ClassifyLibrary" >
+    update w_classify_library
+    <set >
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="charger != null" >
+        charger = #{charger,jdbcType=VARCHAR},
+      </if>
+      <if test="chargerID != null" >
+        chargerID = #{chargerID,jdbcType=VARCHAR},
+      </if>
+      <if test="org != null" >
+        org = #{org,jdbcType=VARCHAR},
+      </if>
+      <if test="orgID != null" >
+        orgID = #{orgID,jdbcType=BIGINT},
+      </if>
+      <if test="isused != null" >
+        isUsed = #{isused,jdbcType=INTEGER},
+      </if>
+      <if test="isdelete != null" >
+        isDelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        cTime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cuser != null" >
+        cUser = #{cuser,jdbcType=BIGINT},
+      </if>
+      <if test="utime != null" >
+        uTime = #{utime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uuser != null" >
+        uUser = #{uuser,jdbcType=BIGINT},
+      </if>
+      <if test="order != null" >
+        `order` = #{order,jdbcType=INTEGER},
+      </if>
+      <if test="supid != null" >
+        supid = #{supid,jdbcType=INTEGER},
+      </if>
+      <if test="@Ognl@isNotEmpty(path)">
+			path=#{path,jdbcType=VARCHAR},
+		</if>
+		<if test="@Ognl@isNotEmpty(pathname)">
+			pathname=#{pathname,jdbcType=VARCHAR},
+		</if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="getClassifyByCateId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  		SELECT <include refid="Base_Column_List"/>
+		from w_classify_library wl  where isDelete  =0 and exists(
+			select * from w_project wp where wp.isDelete=0 and wp.categoryid=#{categoryid} and wp.classifyLibraryId=wl.id
+		)
+  </select>
+</mapper>

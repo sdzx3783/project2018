@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.questionnaire.QuestionnaireResult">
+	<resultMap id="AssetAbandonment"
+		type="com.hotent.makshi.model.questionnaire.QuestionnaireResult">
+		<id property="id" column="ID" jdbcType="NUMERIC" />
+		<result property="user" column="F_user" jdbcType="VARCHAR" />
+		<result property="user_id" column="F_user_id" jdbcType="VARCHAR" />
+		<result property="questionnaire_id" column="F_questionnaire_id"
+			jdbcType="NUMERIC" />
+		<result property="questionnaire_ques_id" column="F_questionnaire_ques_id" jdbcType="NUMERIC" />
+		<result property="result" column="F_result" jdbcType="VARCHAR" />
+		<result property="ip" column="F_ip" jdbcType="VARCHAR" />
+		<result property="ctime" column="F_ctime" jdbcType="TIMESTAMP" />
+		<result property="mtime" column="F_mtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		ID,
+		F_user,
+		F_user_id,
+		F_questionnaire_id,
+		F_questionnaire_ques_id,
+		F_result,
+		F_ip,
+		F_ctime,
+		F_mtime
+	</sql>
+
+	<sql id="dynamicWhere">
+		<where>
+		<if test="@Ognl@isNotEmpty(ip)"> AND F_ip =#{ip} </if>
+		<if test="@Ognl@isNotEmpty(user_id)"> AND F_user_id =#{user_id} </if>
+		<if test="@Ognl@isNotEmpty(questionnaire_id)"> AND F_questionnaire_id =#{questionnaire_id} </if>
+		<if test="@Ognl@isNotEmpty(questionnaire_ques_id)"> AND F_questionnaire_ques_id =#{questionnaire_ques_id} </if>
+			<if test="@Ognl@isNotEmpty(result_like)"> AND F_result LIKE '%${result_like}%'  </if>
+			<if test="@Ognl@isNotEmpty(buy_date)"> AND F_BUY_DATE =#{buy_date} </if>
+			<if test="@Ognl@isNotEmpty(application_time_begin)"> AND F_APPLICATION_TIME
+				>=#{application_time_begin,jdbcType=DATE}
+			</if>
+			<if test="@Ognl@isNotEmpty(application_time_end)">
+				AND F_APPLICATION_TIME  <![CDATA[ <=#{application_time_end,jdbcType=DATE}]]>
+			</if>
+		</where>
+	</sql>
+
+	<insert id="add"
+		parameterType="com.hotent.makshi.model.questionnaire.QuestionnaireResult">
+		INSERT INTO w_questionnaire_result
+		(ID,
+		F_user,
+		F_user_id,
+		F_questionnaire_id,
+		F_questionnaire_ques_id,
+		F_result,
+		F_ip,
+		F_ctime)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{user,jdbcType=VARCHAR},
+		#{user_id,jdbcType=VARCHAR},
+		#{questionnaire_id,jdbcType=NUMERIC},
+		#{questionnaire_ques_id,jdbcType=NUMERIC},
+		#{result,jdbcType=VARCHAR},
+		#{ip,jdbcType=VARCHAR},
+		now()
+		)
+	</insert>
+
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM
+		w_questionnaire_result
+		WHERE
+		ID=#{id}
+	</delete>
+
+	<update id="update"
+		parameterType="com.hotent.makshi.model.questionnaire.QuestionnaireResult">
+		UPDATE w_questionnaire_result SET
+		F_user=#{user,jdbcType=VARCHAR},
+		F_user_id=#{user_id,jdbcType=VARCHAR},
+		F_questionnaire_id=#{questionnaire_id,jdbcType=NUMERIC},
+		F_questionnaire_ques_id=#{questionnaire_ques_id,jdbcType=NUMERIC},
+		F_result=#{result,jdbcType=VARCHAR},
+		F_ip=#{ip,jdbcType=VARCHAR},
+		F_mtime=now()
+		}
+		WHERE
+		ID=#{id}
+	</update>
+
+	<select id="getById" parameterType="java.lang.Long" resultMap="AssetAbandonment">
+		SELECT
+		<include refid="columns" />
+		FROM w_questionnaire_result
+		WHERE
+		ID=#{id}
+	</select>
+
+	<select id="getAll" resultMap="AssetAbandonment">
+		SELECT
+		<include refid="columns" />
+		FROM w_questionnaire_result
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by ID desc
+		</if>
+	</select>
+
+</mapper>

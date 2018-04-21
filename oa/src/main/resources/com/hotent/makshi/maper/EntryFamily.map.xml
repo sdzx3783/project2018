@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.userinfo.EntryFamily">
+	<resultMap id="EntryFamily" type="com.hotent.makshi.model.userinfo.EntryFamily">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="relationship" column="F_RELATIONSHIP" jdbcType="VARCHAR"/>
+		<result property="person_name" column="F_PERSON_NAME" jdbcType="VARCHAR"/>
+		<result property="person_sex" column="F_PERSON_SEX" jdbcType="VARCHAR"/>
+		<result property="person_birthday_year" column="F_PERSON_BIRTHDAY_YEAR" jdbcType="VARCHAR"/>
+		<result property="person_workspace" column="F_PERSON_WORKSPACE" jdbcType="VARCHAR"/>
+		<result property="person_phone" column="F_PERSON_PHONE" jdbcType="VARCHAR"/>
+		<result property="person_attachment" column="F_PERSON_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_RELATIONSHIP,F_PERSON_NAME,F_PERSON_SEX,F_PERSON_BIRTHDAY_YEAR,F_PERSON_WORKSPACE,F_PERSON_PHONE,F_PERSON_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_RELATIONSHIP,F_PERSON_NAME,F_PERSON_SEX,F_PERSON_BIRTHDAY_YEAR,F_PERSON_WORKSPACE,F_PERSON_PHONE,F_PERSON_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(relationship)"> AND F_RELATIONSHIP  LIKE '%${relationship}%'  </if>
+			<if test="@Ognl@isNotEmpty(person_name)"> AND F_PERSON_NAME  LIKE '%${person_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(person_sex)"> AND F_PERSON_SEX  LIKE '%${person_sex}%'  </if>
+			<if test="@Ognl@isNotEmpty(person_birthday_year)"> AND F_PERSON_BIRTHDAY_YEAR  LIKE '%${person_birthday_year}%'  </if>
+			<if test="@Ognl@isNotEmpty(person_workspace)"> AND F_PERSON_WORKSPACE  LIKE '%${person_workspace}%'  </if>
+			<if test="@Ognl@isNotEmpty(person_phone)"> AND F_PERSON_PHONE  LIKE '%${person_phone}%'  </if>
+			<if test="@Ognl@isNotEmpty(person_attachment)"> AND F_PERSON_ATTACHMENT  LIKE '%${person_attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.userinfo.EntryFamily">
+		INSERT INTO W_ENTRY_FAMILY
+		(ID,REFID,
+		F_RELATIONSHIP,F_PERSON_NAME,F_PERSON_SEX,F_PERSON_BIRTHDAY_YEAR,F_PERSON_WORKSPACE,F_PERSON_PHONE,F_PERSON_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{relationship,jdbcType=VARCHAR}, #{person_name,jdbcType=VARCHAR}, #{person_sex,jdbcType=VARCHAR}, #{person_birthday_year,jdbcType=VARCHAR}, #{person_workspace,jdbcType=VARCHAR}, #{person_phone,jdbcType=VARCHAR}, #{person_attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_ENTRY_FAMILY 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.userinfo.EntryFamily">
+		UPDATE W_ENTRY_FAMILY SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		F_RELATIONSHIP=#{relationship,jdbcType=VARCHAR},
+		F_PERSON_NAME=#{person_name,jdbcType=VARCHAR},
+		F_PERSON_SEX=#{person_sex,jdbcType=VARCHAR},
+		F_PERSON_BIRTHDAY_YEAR=#{person_birthday_year,jdbcType=VARCHAR},
+		F_PERSON_WORKSPACE=#{person_workspace,jdbcType=VARCHAR},
+		F_PERSON_PHONE=#{person_phone,jdbcType=VARCHAR},
+		F_PERSON_ATTACHMENT=#{person_attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_ENTRY_FAMILY
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getEntryFamilyList" resultMap="EntryFamily">
+	    SELECT <include refid="columns"/>
+	    FROM W_ENTRY_FAMILY 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="EntryFamily">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY_FAMILY
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="EntryFamily">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY_FAMILY   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

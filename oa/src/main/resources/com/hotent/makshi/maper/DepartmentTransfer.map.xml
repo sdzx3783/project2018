@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hr.DepartmentTransfer">
+	<resultMap id="DepartmentTransfer" type="com.hotent.makshi.model.hr.DepartmentTransfer">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="in_departmentID" column="F_IN_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="in_department_managerID" column="F_IN_DEPARTMENT_MANAGERID" jdbcType="VARCHAR"/>
+		<result property="user_name" column="F_USER_NAME" jdbcType="VARCHAR"/>
+		<result property="out_department" column="F_OUT_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="user_id" column="F_USER_ID" jdbcType="NUMERIC"/>
+		<result property="short_phone_number" column="F_SHORT_PHONE_NUMBER" jdbcType="VARCHAR"/>
+		<result property="out_month" column="F_OUT_MONTH" jdbcType="VARCHAR"/>
+		<result property="professional" column="F_PROFESSIONAL" jdbcType="VARCHAR"/>
+		<result property="transfer_reason" column="F_TRANSFER_REASON" jdbcType="CLOB"/>
+		<result property="in_department" column="F_IN_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="in_department_manager" column="F_IN_DEPARTMENT_MANAGER" jdbcType="VARCHAR"/>
+		<result property="post" column="F_POST" jdbcType="VARCHAR"/>
+		<result property="post_salary" column="F_POST_SALARY" jdbcType="NUMERIC"/>
+		<result property="base_salary" column="F_BASE_SALARY" jdbcType="NUMERIC"/>
+		<result property="communication_standard" column="F_COMMUNICATION_STANDARD" jdbcType="VARCHAR"/>
+		<result property="in_postID" column="F_IN_POSTID" jdbcType="VARCHAR"/>
+		<result property="in_post" column="F_IN_POST" jdbcType="VARCHAR"/>
+		<result property="in_post_salary" column="F_IN_POST_SALARY" jdbcType="NUMERIC"/>
+		<result property="in_base_salary" column="F_IN_BASE_SALARY" jdbcType="NUMERIC"/>
+		<result property="in_communication_standard" column="F_IN_COMMUNICATION_STANDARD" jdbcType="VARCHAR"/>
+		<result property="user_option" column="F_USER_OPTION" jdbcType="VARCHAR"/>
+		<result property="beforePost" column="F_beforePost" jdbcType="VARCHAR"/>
+		<result property="beforePostID" column="F_beforePostID" jdbcType="VARCHAR"/>
+		<result property="account" column="F_account" jdbcType="VARCHAR"/>
+		<result property="file" column="F_file" jdbcType="VARCHAR"/>
+		<result property="leader" column="F_leader" jdbcType="VARCHAR"/>
+		<result property="leaderID" column="F_leaderID" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.hr.DepartmentTransfer" id="ExtDepartmentTransfer" extends="DepartmentTransfer">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_IN_DEPARTMENTID,F_IN_DEPARTMENT_MANAGERID,F_USER_NAME,F_OUT_DEPARTMENT,F_USER_ID,F_SHORT_PHONE_NUMBER,F_OUT_MONTH,F_PROFESSIONAL,F_TRANSFER_REASON,F_IN_DEPARTMENT,F_IN_DEPARTMENT_MANAGER,F_POST,F_POST_SALARY,F_BASE_SALARY,F_COMMUNICATION_STANDARD,F_IN_POSTID,F_IN_POST,F_IN_POST_SALARY,F_IN_BASE_SALARY,F_IN_COMMUNICATION_STANDARD,F_USER_OPTION,F_beforePost,F_beforePostID,F_account,F_file,F_leader,F_leaderID
+	</sql>
+	<sql id="wfColumns">
+		ID,F_IN_DEPARTMENTID,F_IN_DEPARTMENT_MANAGERID,F_USER_NAME,F_OUT_DEPARTMENT,F_USER_ID,F_SHORT_PHONE_NUMBER,F_OUT_MONTH,F_PROFESSIONAL,F_TRANSFER_REASON,F_IN_DEPARTMENT,F_IN_DEPARTMENT_MANAGER,F_POST,F_POST_SALARY,F_BASE_SALARY,F_COMMUNICATION_STANDARD,F_IN_POSTID,F_IN_POST,F_IN_POST_SALARY,F_IN_BASE_SALARY,F_IN_COMMUNICATION_STANDARD,F_USER_OPTION,F_beforePost,F_beforePostID,F_account,F_file,F_leader,F_leaderID
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(in_departmentID)"> AND F_IN_DEPARTMENTID  LIKE '%${in_departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(in_department_managerID)"> AND F_IN_DEPARTMENT_MANAGERID  LIKE '%${in_department_managerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_name)"> AND F_USER_NAME  LIKE '%${user_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(out_department)"> AND F_OUT_DEPARTMENT  LIKE '%${out_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_id)"> AND F_USER_ID  =#{user_id} </if>
+			<if test="@Ognl@isNotEmpty(short_phone_number)"> AND F_SHORT_PHONE_NUMBER  LIKE '%${short_phone_number}%'  </if>
+			<if test="@Ognl@isNotEmpty(out_month)"> AND F_OUT_MONTH  LIKE '%${out_month}%'  </if>
+			<if test="@Ognl@isNotEmpty(professional)"> AND F_PROFESSIONAL  LIKE '%${professional}%'  </if>
+			<if test="@Ognl@isNotEmpty(transfer_reason)"> AND F_TRANSFER_REASON  =#{transfer_reason} </if>
+			<if test="@Ognl@isNotEmpty(in_department)"> AND F_IN_DEPARTMENT  LIKE '%${in_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(in_department_manager)"> AND F_IN_DEPARTMENT_MANAGER  LIKE '%${in_department_manager}%'  </if>
+			<if test="@Ognl@isNotEmpty(post)"> AND F_POST  LIKE '%${post}%'  </if>
+			<if test="@Ognl@isNotEmpty(post_salary)"> AND F_POST_SALARY  =#{post_salary} </if>
+			<if test="@Ognl@isNotEmpty(base_salary)"> AND F_BASE_SALARY  =#{base_salary} </if>
+			<if test="@Ognl@isNotEmpty(communication_standard)"> AND F_COMMUNICATION_STANDARD  LIKE '%${communication_standard}%'  </if>
+			<if test="@Ognl@isNotEmpty(in_postID)"> AND F_IN_POSTID  LIKE '%${in_postID}%'  </if>
+			<if test="@Ognl@isNotEmpty(in_post)"> AND F_IN_POST  LIKE '%${in_post}%'  </if>
+			<if test="@Ognl@isNotEmpty(in_post_salary)"> AND F_IN_POST_SALARY  =#{in_post_salary} </if>
+			<if test="@Ognl@isNotEmpty(in_base_salary)"> AND F_IN_BASE_SALARY  =#{in_base_salary} </if>
+			<if test="@Ognl@isNotEmpty(in_communication_standard)"> AND F_IN_COMMUNICATION_STANDARD  LIKE '%${in_communication_standard}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_option)"> AND F_USER_OPTION  LIKE '%${user_option}%'  </if>
+			<if test="@Ognl@isNotEmpty(globalflowno)"> AND b.GLOBALFLOWNO  LIKE #{globalflowno}  </if>
+			<if test="@Ognl@isNotEmpty(creator)"> AND b.CREATOR  LIKE '%${creator}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.hr.DepartmentTransfer">
+		INSERT INTO W_DEPARTMENT_TRANSFER
+		(ID,
+		F_IN_DEPARTMENTID,F_IN_DEPARTMENT_MANAGERID,F_USER_NAME,F_OUT_DEPARTMENT,F_USER_ID,F_SHORT_PHONE_NUMBER,F_OUT_MONTH,F_PROFESSIONAL,F_TRANSFER_REASON,F_IN_DEPARTMENT,F_IN_DEPARTMENT_MANAGER,F_POST,F_POST_SALARY,F_BASE_SALARY,F_COMMUNICATION_STANDARD,F_IN_POSTID,F_IN_POST,F_IN_POST_SALARY,F_IN_BASE_SALARY,F_IN_COMMUNICATION_STANDARD,F_USER_OPTION,F_beforePost,F_beforePostID,F_account,F_file,F_leader,F_leaderID)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{in_departmentID,jdbcType=VARCHAR}, #{in_department_managerID,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, #{out_department,jdbcType=VARCHAR}, #{user_id,jdbcType=NUMERIC}, #{short_phone_number,jdbcType=VARCHAR}, #{out_month,jdbcType=VARCHAR}, #{professional,jdbcType=VARCHAR}, #{transfer_reason,jdbcType=CLOB}, #{in_department,jdbcType=VARCHAR}, #{in_department_manager,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR}, #{post_salary,jdbcType=NUMERIC}, #{base_salary,jdbcType=NUMERIC}, #{communication_standard,jdbcType=VARCHAR}, #{in_postID,jdbcType=VARCHAR}, #{in_post,jdbcType=VARCHAR}, #{in_post_salary,jdbcType=NUMERIC}, #{in_base_salary,jdbcType=NUMERIC}, #{in_communication_standard,jdbcType=VARCHAR}, #{user_option,jdbcType=VARCHAR}, #{beforePost,jdbcType=VARCHAR}, #{beforePostID,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR}, #{leader,jdbcType=VARCHAR}, #{leaderID,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_DEPARTMENT_TRANSFER 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hr.DepartmentTransfer">
+		UPDATE W_DEPARTMENT_TRANSFER SET
+		F_IN_DEPARTMENTID=#{in_departmentID,jdbcType=VARCHAR},
+		F_IN_DEPARTMENT_MANAGERID=#{in_department_managerID,jdbcType=VARCHAR},
+		F_USER_NAME=#{user_name,jdbcType=VARCHAR},
+		F_OUT_DEPARTMENT=#{out_department,jdbcType=VARCHAR},
+		F_USER_ID=#{user_id,jdbcType=NUMERIC},
+		F_SHORT_PHONE_NUMBER=#{short_phone_number,jdbcType=VARCHAR},
+		F_OUT_MONTH=#{out_month,jdbcType=VARCHAR},
+		F_PROFESSIONAL=#{professional,jdbcType=VARCHAR},
+		F_TRANSFER_REASON=#{transfer_reason,jdbcType=CLOB},
+		F_IN_DEPARTMENT=#{in_department,jdbcType=VARCHAR},
+		F_IN_DEPARTMENT_MANAGER=#{in_department_manager,jdbcType=VARCHAR},
+		F_POST=#{post,jdbcType=VARCHAR},
+		F_POST_SALARY=#{post_salary,jdbcType=NUMERIC},
+		F_BASE_SALARY=#{base_salary,jdbcType=NUMERIC},
+		F_COMMUNICATION_STANDARD=#{communication_standard,jdbcType=VARCHAR},
+		F_IN_POSTID=#{in_postID,jdbcType=VARCHAR},
+		F_IN_POST=#{in_post,jdbcType=VARCHAR},
+		F_IN_POST_SALARY=#{in_post_salary,jdbcType=NUMERIC},
+		F_IN_BASE_SALARY=#{in_base_salary,jdbcType=NUMERIC},
+		F_IN_COMMUNICATION_STANDARD=#{in_communication_standard,jdbcType=VARCHAR},
+		F_USER_OPTION=#{user_option,jdbcType=VARCHAR},
+		F_beforePost=#{beforePost,jdbcType=VARCHAR},
+		F_beforePostID=#{beforePostID,jdbcType=VARCHAR},
+		F_account=#{account,jdbcType=VARCHAR},
+		F_file=#{file,jdbcType=VARCHAR},
+		F_leader=#{leader,jdbcType=VARCHAR},
+		F_leaderID=#{leaderID,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="DepartmentTransfer">
+		SELECT <include refid="columns"/>
+		FROM W_DEPARTMENT_TRANSFER
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="DepartmentTransfer">
+		SELECT <include refid="columns"/>
+		FROM W_DEPARTMENT_TRANSFER   a   
+		left join bpm_pro_run_his b on a.id=b.BUSINESSKEY
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="DepartmentTransfer">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_DEPARTMENT_TRANSFER A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtDepartmentTransfer">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_DEPARTMENT_TRANSFER A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_DEPARTMENT_TRANSFER A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_DEPARTMENT_TRANSFER A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_DEPARTMENT_TRANSFER A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_DEPARTMENT_TRANSFER A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="DepartmentTransfer">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_DEPARTMENT_TRANSFER A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

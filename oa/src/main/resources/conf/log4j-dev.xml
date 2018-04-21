@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="[BPM] %-d{yyyy-MM-dd HH:mm:ss} %p [%t] %c{1}.%M(%L) | %m%n"/>
+        </layout>
+    </appender>  
+ 
+     <appender name="APPLOGFILE" class="org.apache.log4j.DailyRollingFileAppender">
+    	<param name="encoding" value="UTF-8" />
+	    <param name="File" value="${webapp.root1}/../logs/bpm.log" />
+	    <param name="DatePattern" value="'.'yyyy-MM-dd" />
+	    <param name="Append" value="true" />
+	    <layout class="org.apache.log4j.PatternLayout">
+	      <param name="ConversionPattern" value="[BPM] %-d{yyyy-MM-dd HH:mm:ss} %-5p %-15c{1}: %m%n"/>
+	    </layout>
+     </appender>
+     <appender name="APPPUSHLOGFILE" class="org.apache.log4j.RollingFileAppender">
+     	<param name="encoding" value="UTF-8" />
+		<param name="File" value="${webapp.root1}/../logs/APPPUSH.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <param name="MaxFileSize" value="2MB" />
+        <param name="Append" value="true" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[BPM] %-d{yyyy-MM-dd HH:mm:ss} %-5p %-15c{1}: %m%n"/>
+        </layout>
+    </appender>
+     
+    <logger name="java.sql">
+        <level value="INFO" />
+    </logger>
+    
+    <logger name="org.apache.ibatis">
+        <level value="INFO" />
+    </logger>
+    
+     <logger name="com.hotent.app.push" additivity="true">  
+        <!-- <level value="ERROR" />  --> 
+        <level value="INFO" />
+        <appender-ref ref="APPPUSHLOGFILE" />  
+    </logger>  
+    
+    <logger name="com.hotent.core.web.filter">
+    	<level value="DEBUG"/>
+    </logger>
+    
+     <logger name="com.hotent.core.web.servlet.SpringMvcServlet">
+    	<level value="DEBUG" />
+    </logger>
+    
+    <logger name="com.hotent">
+        <level value="DEBUG"/>
+    </logger>
+    <root>
+        <level value="ERROR"/>
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="APPLOGFILE"/>
+    </root>
+
+</log4j:configuration>

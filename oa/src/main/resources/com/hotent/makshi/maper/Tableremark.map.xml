@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.bpmremark.Tableremark">
+	<resultMap id="Tableremark" type="com.hotent.makshi.model.bpmremark.Tableremark">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="tableBpmRemark" column="tableBpmRemark" jdbcType="VARCHAR"/>
+		<result property="appDepartment" column="appDepartment" jdbcType="VARCHAR"/>
+		
+	</resultMap>
+
+	<select id="getRemarkById" parameterType="map" resultMap="Tableremark">
+		SELECT ${tableRemark} tableBpmRemark
+		FROM ${tableName}
+		WHERE
+		ID=#{id}
+	</select>
+	
+	
+	
+</mapper>

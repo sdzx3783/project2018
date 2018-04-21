@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.dispatch.Dic">
+	<resultMap id="Dic" type="com.hotent.makshi.model.dispatch.Dic">
+		<id property="dicId" column="DICID" jdbcType="NUMERIC"/>
+		<result property="docId" column="DOCID" jdbcType="NUMERIC"/>
+		<result property="dicName" column="DISNAME" jdbcType="VARCHAR"/>
+		
+	</resultMap>
+
+	<sql id="columns">DICID,DOCID,DISNAME</sql>
+	
+	<insert id="add" parameterType="com.hotent.makshi.model.dispatch.Dic">
+		INSERT INTO W_DIC
+		(DICID,DOCID,DICNAME)
+		VALUES
+		(#{dicId,jdbcType=NUMERIC},#{docId,jdbcType=NUMERIC},#{dicName,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM  W_DIC
+		WHERE
+		DICID=#{dicId}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.dispatch.Dic">
+		UPDATE W_DOC_DIC SET
+		DOCID=#{docId,jdbcType=NUMERIC},
+		DISNAME=#{dicName,jdbcType=VARCHAR}
+		WHERE
+		DICID=#{dicId}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="Dic">
+		SELECT *
+		FROM W_DIC 
+		WHERE
+		DICID=#{dicId}
+	</select>
+	
+	<select id="getByDocId" parameterType="java.lang.Long" resultMap="Dic">
+		SELECT *
+		FROM W_DIC 
+		WHERE
+		DOCID=#{docId}
+	</select>
+	
+	<select id="getByDocIdAndDicName" parameterType="String" resultMap="Dic">
+		SELECT *
+		FROM W_DIC 
+		WHERE
+		DICNAME=#{dicName} AND	DOCID=#{docId}
+	</select>
+	
+	<select id="getAll" resultMap="Dic">
+		SELECT <include refid="columns"/> FROM W_DIC
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+</mapper>

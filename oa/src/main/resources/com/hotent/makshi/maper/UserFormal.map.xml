@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hr.UserFormal">
+	<resultMap id="UserFormal" type="com.hotent.makshi.model.hr.UserFormal">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="posnameID" column="F_POSNAMEID" jdbcType="VARCHAR"/>
+		<result property="user_name" column="F_USER_NAME" jdbcType="VARCHAR"/>
+		<result property="agreement_date_to_formal" column="F_AGREEMENT_DATE_TO_FORMAL" jdbcType="DATE"/>
+		<result property="user_id" column="F_USER_ID" jdbcType="VARCHAR"/>
+		<result property="positional" column="F_POSITIONAL" jdbcType="VARCHAR"/>
+		<result property="entry_date" column="F_ENTRY_DATE" jdbcType="DATE"/>
+		<result property="major" column="F_MAJOR" jdbcType="VARCHAR"/>
+		<result property="department" column="F_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="education" column="F_EDUCATION" jdbcType="VARCHAR"/>
+		<result property="posname" column="F_POSNAME" jdbcType="VARCHAR"/>
+		<result property="salary" column="F_SALARY" jdbcType="VARCHAR"/>
+		<result property="formalDate" column="F_suggestion_date" jdbcType="DATE"/>
+		
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.hr.UserFormal" id="ExtUserFormal" extends="UserFormal">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_POSNAMEID,F_USER_NAME,F_AGREEMENT_DATE_TO_FORMAL,F_USER_ID,F_POSITIONAL,F_ENTRY_DATE,F_MAJOR,F_DEPARTMENT,F_EDUCATION,F_POSNAME,F_SALARY,F_suggestion_date
+	</sql>
+	<sql id="wfColumns">
+		ID,F_POSNAMEID,F_USER_NAME,F_AGREEMENT_DATE_TO_FORMAL,F_USER_ID,F_POSITIONAL,F_ENTRY_DATE,F_MAJOR,F_DEPARTMENT,F_EDUCATION,F_POSNAME,F_SALARY,F_suggestion_date
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(posnameID)"> AND F_POSNAMEID  LIKE '%${posnameID}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_name)"> AND F_USER_NAME  LIKE '%${user_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(agreement_date_to_formal)"> AND F_AGREEMENT_DATE_TO_FORMAL  LIKE '%${agreement_date_to_formal}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_id)"> AND F_USER_ID  LIKE '%${user_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(positional)"> AND F_POSITIONAL  LIKE '%${positional}%'  </if>
+			<if test="@Ognl@isNotEmpty(entry_date)"> AND F_ENTRY_DATE  LIKE '%${entry_date}%'  </if>
+			<if test="@Ognl@isNotEmpty(major)"> AND F_MAJOR  LIKE '%${major}%'  </if>
+			<if test="@Ognl@isNotEmpty(department)"> AND F_DEPARTMENT  LIKE '%${department}%'  </if>
+			<if test="@Ognl@isNotEmpty(education)"> AND F_EDUCATION  LIKE '%${education}%'  </if>
+			<if test="@Ognl@isNotEmpty(posname)"> AND F_POSNAME  LIKE '%${posname}%'  </if>
+			<if test="@Ognl@isNotEmpty(salary)"> AND F_SALARY  LIKE '%${salary}%'  </if>
+			<if test="@Ognl@isNotEmpty(globalflowno)"> AND b.GLOBALFLOWNO  LIKE #{globalflowno}  </if>
+			<if test="@Ognl@isNotEmpty(creator)"> AND b.CREATOR  LIKE '%${creator}%'  </if>
+		</where>
+	</sql>
+
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_USER_FORMAL 
+		WHERE
+		ID=#{id}
+	</delete>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="UserFormal">
+		SELECT <include refid="columns"/>
+		FROM W_USER_FORMAL
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="UserFormal">
+		SELECT <include refid="columns"/>
+		FROM W_USER_FORMAL    a   
+		left join bpm_pro_run_his b on a.id=b.BUSINESSKEY
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

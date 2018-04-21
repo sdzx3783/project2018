@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.seal.RegistrationSeal">
+	<resultMap id="RegistrationSeal" type="com.hotent.makshi.model.seal.RegistrationSeal">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="borrowerID" column="F_BORROWERID" jdbcType="VARCHAR"/>
+		<result property="regist_seal_id" column="F_REGIST_SEAL_ID" jdbcType="VARCHAR"/>
+		<result property="borrower" column="F_BORROWER" jdbcType="VARCHAR"/>
+		<result property="userId" column="F_USERID" jdbcType="NUMERIC"/>
+		<result property="deleted" column="F_DELETED" jdbcType="VARCHAR"/>
+		<result property="seal_name" column="F_SEAL_NAME" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_BORROWERID,F_REGIST_SEAL_ID,F_BORROWER,F_USERID,F_DELETED,F_SEAL_NAME
+	</sql>
+	<sql id="wfColumns">
+		ID,F_BORROWERID,F_REGIST_SEAL_ID,F_BORROWER,F_USERID,F_DELETED,F_SEAL_NAME
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(borrowerID)"> AND F_BORROWERID  LIKE '%${borrowerID}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_seal_id)"> AND F_REGIST_SEAL_ID  LIKE '%${regist_seal_id}%'  </if>
+			<if test="@Ognl@isNotEmpty(borrower)"> AND F_BORROWER  LIKE '%${borrower}%'  </if>
+			<if test="@Ognl@isNotEmpty(userId)"> AND F_USERID  LIKE '%${userId}%'  </if>
+			<if test="@Ognl@isNotEmpty(deleted)"> AND F_DELETED  LIKE '%${deleted}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.seal.RegistrationSeal">
+		INSERT INTO W_REGISTRATION_SEAL
+		(ID,
+		F_BORROWERID,F_REGIST_SEAL_ID,F_BORROWER,F_USERID,F_DELETED)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{borrowerID,jdbcType=VARCHAR}, #{regist_seal_id,jdbcType=VARCHAR}, #{borrower,jdbcType=VARCHAR}, #{userId,jdbcType=NUMERIC}, #{deleted,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_REGISTRATION_SEAL 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.seal.RegistrationSeal">
+		UPDATE W_REGISTRATION_SEAL SET
+		F_BORROWERID=#{borrowerID,jdbcType=VARCHAR},
+		F_REGIST_SEAL_ID=#{regist_seal_id,jdbcType=VARCHAR},
+		F_BORROWER=#{borrower,jdbcType=VARCHAR},
+		F_USERID=#{userId,jdbcType=NUMERIC},
+		F_DELETED=#{deleted,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="RegistrationSeal">
+		SELECT <include refid="columns"/>
+		FROM W_REGISTRATION_SEAL
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getByCertificateId" parameterType="String" resultMap="RegistrationSeal">
+		SELECT B.F_certificate_type,A.* 
+		FROM w_registration_seal A 
+		LEFT JOIN w_personal_qualification_regist B
+		ON A.F_regist_seal_id = B.F_seal_id
+		AND A.F_deleted = 0
+		WHERE
+		f_regist_seal_id=#{certificateId}
+	</select>
+	
+	<select id="getAll" resultMap="RegistrationSeal">
+		SELECT B.F_certificate_type,A.* 
+		FROM w_registration_seal A 
+		LEFT JOIN w_personal_qualification_regist B
+		ON A.F_regist_seal_id = B.F_seal_id
+		AND A.F_deleted = 0
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

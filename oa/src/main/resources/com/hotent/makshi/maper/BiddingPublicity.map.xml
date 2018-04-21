@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.bidding.BiddingPublicity">
+	<resultMap id="BiddingPublicity" type="com.hotent.makshi.model.bidding.BiddingPublicity">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="publicity_first_check_personID" column="F_PUBLICITY_FIRST_CHECK_PERSONID" jdbcType="VARCHAR"/>
+		<result property="publicity_name" column="F_PUBLICITY_NAME" jdbcType="VARCHAR"/>
+		<result property="publicity_evidence" column="F_PUBLICITY_EVIDENCE" jdbcType="VARCHAR"/>
+		<result property="publicity_content" column="F_PUBLICITY_CONTENT" jdbcType="VARCHAR"/>
+		<result property="publicity_contract_num" column="F_PUBLICITY_CONTRACT_NUM" jdbcType="VARCHAR"/>
+		<result property="publicity_contract_name" column="F_PUBLICITY_CONTRACT_NAME" jdbcType="VARCHAR"/>
+		<result property="publicity_applicant" column="F_PUBLICITY_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="publicity_appli_date" column="F_PUBLICITY_APPLI_DATE" jdbcType="DATE"/>
+		<result property="publicity_first_check_person" column="F_PUBLICITY_FIRST_CHECK_PERSON" jdbcType="VARCHAR"/>
+		<result property="publicity_attachment" column="F_PUBLICITY_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.bidding.BiddingPublicity" id="ExtBiddingPublicity" extends="BiddingPublicity">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_PUBLICITY_FIRST_CHECK_PERSONID,F_PUBLICITY_NAME,F_PUBLICITY_EVIDENCE,F_PUBLICITY_CONTENT,F_PUBLICITY_CONTRACT_NUM,F_PUBLICITY_CONTRACT_NAME,F_PUBLICITY_APPLICANT,F_PUBLICITY_APPLI_DATE,F_PUBLICITY_FIRST_CHECK_PERSON,F_PUBLICITY_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_PUBLICITY_FIRST_CHECK_PERSONID,F_PUBLICITY_NAME,F_PUBLICITY_EVIDENCE,F_PUBLICITY_CONTENT,F_PUBLICITY_CONTRACT_NUM,F_PUBLICITY_CONTRACT_NAME,F_PUBLICITY_APPLICANT,F_PUBLICITY_APPLI_DATE,F_PUBLICITY_FIRST_CHECK_PERSON,F_PUBLICITY_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			finish = 1 AND deleted = 0
+			<if test="@Ognl@isNotEmpty(publicity_first_check_personID)"> AND F_PUBLICITY_FIRST_CHECK_PERSONID  LIKE '%${publicity_first_check_personID}%'  </if>
+			<if test="@Ognl@isNotEmpty(publicity_name)"> AND F_PUBLICITY_NAME  LIKE '%${publicity_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(publicity_evidence)"> AND F_PUBLICITY_EVIDENCE  LIKE '%${publicity_evidence}%'  </if>
+			<if test="@Ognl@isNotEmpty(publicity_content)"> AND F_PUBLICITY_CONTENT  LIKE '%${publicity_content}%'  </if>
+			<if test="@Ognl@isNotEmpty(publicity_contract_num)"> AND (F_PUBLICITY_CONTRACT_NUM  LIKE '%${publicity_contract_num}%' OR F_PUBLICITY_CONTRACT_NUM  LIKE '%${contractNumHis}%')  </if>
+			<if test="@Ognl@isNotEmpty(publicity_contract_name)"> AND F_PUBLICITY_CONTRACT_NAME  LIKE '%${publicity_contract_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(publicity_applicant)"> AND F_PUBLICITY_APPLICANT  LIKE '%${publicity_applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(publicity_appli_date)"> AND F_PUBLICITY_APPLI_DATE  =#{publicity_appli_date} </if>
+			<if test="@Ognl@isNotEmpty(beginpublicity_appli_date)"> AND F_PUBLICITY_APPLI_DATE  >=#{beginpublicity_appli_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endpublicity_appli_date)"> AND F_PUBLICITY_APPLI_DATE <![CDATA[ <=#{endpublicity_appli_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(publicity_first_check_person)"> AND F_PUBLICITY_FIRST_CHECK_PERSON  LIKE '%${publicity_first_check_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(publicity_attachment)"> AND F_PUBLICITY_ATTACHMENT  LIKE '%${publicity_attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.bidding.BiddingPublicity">
+		INSERT INTO W_BIDDING_PUBLICITY
+		(ID,
+		F_PUBLICITY_FIRST_CHECK_PERSONID,F_PUBLICITY_NAME,F_PUBLICITY_EVIDENCE,F_PUBLICITY_CONTENT,F_PUBLICITY_CONTRACT_NUM,F_PUBLICITY_CONTRACT_NAME,F_PUBLICITY_APPLICANT,F_PUBLICITY_APPLI_DATE,F_PUBLICITY_FIRST_CHECK_PERSON,F_PUBLICITY_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{publicity_first_check_personID,jdbcType=VARCHAR}, #{publicity_name,jdbcType=VARCHAR}, #{publicity_evidence,jdbcType=VARCHAR}, #{publicity_content,jdbcType=VARCHAR}, #{publicity_contract_num,jdbcType=VARCHAR}, #{publicity_contract_name,jdbcType=VARCHAR}, #{publicity_applicant,jdbcType=VARCHAR}, #{publicity_appli_date,jdbcType=DATE}, #{publicity_first_check_person,jdbcType=VARCHAR}, #{publicity_attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		UPDATE W_BIDDING_PUBLICITY SET
+		DELETED = 1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.bidding.BiddingPublicity">
+		UPDATE W_BIDDING_PUBLICITY SET
+		F_PUBLICITY_FIRST_CHECK_PERSONID=#{publicity_first_check_personID,jdbcType=VARCHAR},
+		F_PUBLICITY_NAME=#{publicity_name,jdbcType=VARCHAR},
+		F_PUBLICITY_EVIDENCE=#{publicity_evidence,jdbcType=VARCHAR},
+		F_PUBLICITY_CONTENT=#{publicity_content,jdbcType=VARCHAR},
+		F_PUBLICITY_CONTRACT_NUM=#{publicity_contract_num,jdbcType=VARCHAR},
+		F_PUBLICITY_CONTRACT_NAME=#{publicity_contract_name,jdbcType=VARCHAR},
+		F_PUBLICITY_APPLICANT=#{publicity_applicant,jdbcType=VARCHAR},
+		F_PUBLICITY_APPLI_DATE=#{publicity_appli_date,jdbcType=DATE},
+		F_PUBLICITY_FIRST_CHECK_PERSON=#{publicity_first_check_person,jdbcType=VARCHAR},
+		F_PUBLICITY_ATTACHMENT=#{publicity_attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="BiddingPublicity">
+		SELECT <include refid="columns"/>
+		FROM W_BIDDING_PUBLICITY
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="BiddingPublicity">
+		SELECT <include refid="columns"/>
+		FROM W_BIDDING_PUBLICITY   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="BiddingPublicity">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_BIDDING_PUBLICITY A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtBiddingPublicity">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_PUBLICITY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_PUBLICITY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_PUBLICITY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_PUBLICITY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_PUBLICITY A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="BiddingPublicity">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_BIDDING_PUBLICITY A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

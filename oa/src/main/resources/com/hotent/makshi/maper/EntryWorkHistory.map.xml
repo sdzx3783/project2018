@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.userinfo.EntryWorkHistory">
+	<resultMap id="EntryWorkHistory" type="com.hotent.makshi.model.userinfo.EntryWorkHistory">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="refId" column="REFID" jdbcType="NUMERIC"/>
+		<result property="startDate" column="F_start_date" jdbcType="DATE"/>
+		<result property="endDate" column="F_END_DATE" jdbcType="DATE"/>
+		<result property="workplace" column="F_WORKPLACE" jdbcType="VARCHAR"/>
+		<result property="department_post" column="F_DEPARTMENT_POST" jdbcType="VARCHAR"/>
+		<result property="positions" column="F_POSITIONS" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,REFID,F_start_date,F_END_DATE,F_WORKPLACE,F_DEPARTMENT_POST,F_POSITIONS,F_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,REFID,F_start_date,F_END_DATE,F_WORKPLACE,F_DEPARTMENT_POST,F_POSITIONS,F_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(start_to_end_time)"> AND F_start_date  LIKE '%${start_to_end_time}%'  </if>
+			<if test="@Ognl@isNotEmpty(workplace)"> AND F_WORKPLACE  LIKE '%${workplace}%'  </if>
+			<if test="@Ognl@isNotEmpty(department_post)"> AND F_DEPARTMENT_POST  LIKE '%${department_post}%'  </if>
+			<if test="@Ognl@isNotEmpty(positions)"> AND F_POSITIONS  LIKE '%${positions}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.userinfo.EntryWorkHistory">
+		INSERT INTO W_ENTRY_WORK_HISTORY
+		(ID,REFID,
+		F_start_date,F_END_DATE,F_WORKPLACE,F_DEPARTMENT_POST,F_POSITIONS,F_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		#{startDate,jdbcType=DATE},#{endDate,jdbcType=DATE}, #{workplace,jdbcType=VARCHAR}, #{department_post,jdbcType=VARCHAR}, #{positions,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_ENTRY_WORK_HISTORY 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.userinfo.EntryWorkHistory">
+		UPDATE W_ENTRY_WORK_HISTORY SET
+		REFID=#{refId,jdbcType=NUMERIC},
+		#{refId,jdbcType=NUMERIC},
+		F_start_date=#{startDate,jdbcType=DATE},
+		F_END_DATE=#{endDate,jdbcType=DATE},
+		F_WORKPLACE=#{workplace,jdbcType=VARCHAR},
+		F_DEPARTMENT_POST=#{department_post,jdbcType=VARCHAR},
+		F_POSITIONS=#{positions,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+	<delete id="delByMainId">
+	    DELETE FROM W_ENTRY_WORK_HISTORY
+	    WHERE
+	    REFID=#{refId}
+	</delete>    
+	
+	<select id="getEntryWorkHistoryList" resultMap="EntryWorkHistory">
+	    SELECT <include refid="columns"/>
+	    FROM W_ENTRY_WORK_HISTORY 
+	    WHERE REFID=#{refId}
+	</select>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="EntryWorkHistory">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY_WORK_HISTORY
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="EntryWorkHistory">
+		SELECT <include refid="columns"/>
+		FROM W_ENTRY_WORK_HISTORY   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

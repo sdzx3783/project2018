@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.operation.CarUse">
+	<resultMap id="CarUse" type="com.hotent.makshi.model.operation.CarUse">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="applicantID" column="F_APPLICANTID" jdbcType="VARCHAR"/>
+		<result property="driverID" column="F_DRIVERID" jdbcType="VARCHAR"/>
+		<result property="applicar" column="F_APPLICAR" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="appliDate" column="F_APPLIDATE" jdbcType="DATE"/>
+		<result property="address" column="F_ADDRESS" jdbcType="VARCHAR"/>
+		<result property="down" column="F_DOWN" jdbcType="VARCHAR"/>
+		<result property="startTime" column="F_STARTTIME" jdbcType="TIMESTAMP"/>
+		<result property="endTime" column="F_ENDTIME" jdbcType="TIMESTAMP"/>
+		<result property="reason" column="F_REASON" jdbcType="VARCHAR"/>
+		<result property="carName" column="F_CARNAME" jdbcType="VARCHAR"/>
+		<result property="carNameId" column="F_CARNAMEID" jdbcType="VARCHAR"/>
+		<result property="driver" column="F_DRIVER" jdbcType="VARCHAR"/>
+		<result property="attachment" column="F_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_APPLICANTID,F_DRIVERID,F_APPLICAR,F_APPLICANT,F_APPLIDATE,F_ADDRESS,F_DOWN,F_STARTTIME,F_ENDTIME,F_REASON,F_CARNAME,F_CARNAMEID,F_DRIVER,F_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_APPLICANTID,F_DRIVERID,F_APPLICAR,F_APPLICANT,F_APPLIDATE,F_ADDRESS,F_DOWN,F_STARTTIME,F_ENDTIME,F_REASON,F_CARNAME,F_CARNAMEID,F_DRIVER,F_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(applicantID)"> AND F_APPLICANTID  LIKE '%${applicantID}%'  </if>
+			<if test="@Ognl@isNotEmpty(driverID)"> AND F_DRIVERID  LIKE '%${driverID}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicar)"> AND F_APPLICAR  LIKE '%${applicar}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(appliDate)"> AND F_APPLIDATE  =#{appliDate} </if>
+			<if test="@Ognl@isNotEmpty(beginappliDate)"> AND F_APPLIDATE  >=#{beginappliDate,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endappliDate)"> AND F_APPLIDATE <![CDATA[ <=#{endappliDate,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(address)"> AND F_ADDRESS  LIKE '%${address}%'  </if>
+			<if test="@Ognl@isNotEmpty(down)"> AND F_DOWN  LIKE '%${down}%'  </if>
+			<if test="@Ognl@isNotEmpty(startTime)"> AND F_STARTTIME  =#{startTime} </if>
+			<if test="@Ognl@isNotEmpty(beginstartTime)"> AND F_STARTTIME  >=#{beginstartTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endstartTime)"> AND F_STARTTIME <![CDATA[ <=#{endstartTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(endTime)"> AND F_ENDTIME  =#{endTime} </if>
+			<if test="@Ognl@isNotEmpty(beginendTime)"> AND F_ENDTIME  >=#{beginendTime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endendTime)"> AND F_ENDTIME <![CDATA[ <=#{endendTime,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(reason)"> AND F_REASON  LIKE '%${reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(carName)"> AND F_CARNAME  LIKE '%${carName}%'  </if>
+			<if test="@Ognl@isNotEmpty(driver)"> AND F_DRIVER  LIKE '%${driver}%'  </if>
+			<if test="@Ognl@isNotEmpty(attachment)"> AND F_ATTACHMENT  LIKE '%${attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.operation.CarUse">
+		INSERT INTO W_CAR_USE
+		(ID,
+		F_APPLICANTID,F_DRIVERID,F_APPLICAR,F_APPLICANT,F_APPLIDATE,F_ADDRESS,F_DOWN,F_STARTTIME,F_ENDTIME,F_REASON,F_CARNAME,F_DRIVER,F_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{applicantID,jdbcType=VARCHAR}, #{driverID,jdbcType=VARCHAR}, #{applicar,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{appliDate,jdbcType=DATE}, #{address,jdbcType=VARCHAR}, #{down,jdbcType=VARCHAR}, #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE}, #{reason,jdbcType=VARCHAR}, #{carName,jdbcType=VARCHAR}, #{driver,jdbcType=VARCHAR}, #{attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_CAR_USE 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.operation.CarUse">
+		UPDATE W_CAR_USE SET
+		F_APPLICANTID=#{applicantID,jdbcType=VARCHAR},
+		F_DRIVERID=#{driverID,jdbcType=VARCHAR},
+		F_APPLICAR=#{applicar,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_APPLIDATE=#{appliDate,jdbcType=DATE},
+		F_ADDRESS=#{address,jdbcType=VARCHAR},
+		F_DOWN=#{down,jdbcType=VARCHAR},
+		F_STARTTIME=#{startTime,jdbcType=DATE},
+		F_ENDTIME=#{endTime,jdbcType=DATE},
+		F_REASON=#{reason,jdbcType=VARCHAR},
+		F_CARNAME=#{carName,jdbcType=VARCHAR},
+		F_DRIVER=#{driver,jdbcType=VARCHAR},
+		F_ATTACHMENT=#{attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="CarUse">
+		SELECT <include refid="columns"/>
+		FROM W_CAR_USE
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="CarUse">
+		SELECT <include refid="columns"/>
+		FROM W_CAR_USE   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	<select id="getAllByTime" resultMap="CarUse">
+		SELECT <include refid="columns"/>
+		FROM W_CAR_USE   
+		where
+		F_startTime  &lt; NOW() AND
+		F_endTime &gt; NOW()
+		order by ID  desc
+	</select>
+	<select id="getUnuseCar" parameterType="map" resultMap="CarUse">
+	SELECT a.* FROM
+	(select * from
+	w_car_use
+	where finish = 1 and deleted = 0) a left join w_car_regist b on a.F_carnameid = b.id
+	WHERE 
+	   (F_startTime&lt;#{endTime,jdbcType=TIMESTAMP} and  F_startTime&gt;=#{startTime,jdbcType=TIMESTAMP}) 
+	OR (F_endTime&gt;#{startTime,jdbcType=TIMESTAMP} AND F_endTime&lt;#{endTime,jdbcType=TIMESTAMP})
+	OR (F_endTime&gt;#{endTime,jdbcType=TIMESTAMP} AND F_startTime&lt;=#{startTime,jdbcType=TIMESTAMP})
+	</select>
+</mapper>

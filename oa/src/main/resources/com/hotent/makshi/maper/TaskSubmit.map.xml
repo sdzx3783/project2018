@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.task.TaskSubmit" >
+  <resultMap id="BaseResultMap" type="com.hotent.makshi.model.task.TaskSubmit" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="INTEGER" />
+    <result column="progress" property="progress" jdbcType="VARCHAR" />
+    <result column="feedback" property="feedback" jdbcType="VARCHAR" />
+    <result column="file" property="file" jdbcType="VARCHAR" />
+    <result column="cuser" property="cuser" jdbcType="VARCHAR" />
+    <result column="cuserID" property="cuserid" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, task_id, progress, feedback, file, cuser, cuserID, ctime
+  </sql>
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from w_task_submit
+    where id = #{id}
+  </select>
+  <delete id="delById" parameterType="java.lang.Long" >
+    delete from w_task_submit
+    where id = #{id}
+  </delete>
+  <insert id="add" parameterType="com.hotent.makshi.model.task.TaskSubmit" >
+    insert into w_task_submit (id, task_id, progress, 
+      feedback, file, cuser, 
+      cuserID, ctime)
+    values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{progress,jdbcType=VARCHAR}, 
+      #{feedback,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR}, #{cuser,jdbcType=VARCHAR}, 
+      #{cuserid,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="update" parameterType="com.hotent.makshi.model.task.TaskSubmit" >
+    update w_task_submit
+    <set >
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="progress != null" >
+        progress = #{progress,jdbcType=VARCHAR},
+      </if>
+      <if test="feedback != null" >
+        feedback = #{feedback,jdbcType=VARCHAR},
+      </if>
+      <if test="file != null" >
+        file = #{file,jdbcType=VARCHAR},
+      </if>
+      <if test="cuser != null" >
+        cuser = #{cuser,jdbcType=VARCHAR},
+      </if>
+      <if test="cuserid != null" >
+        cuserID = #{cuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getSubmitByTaskId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from w_task_submit
+    where task_id = #{taskId}
+    order by ctime desc
+  </select>
+</mapper>

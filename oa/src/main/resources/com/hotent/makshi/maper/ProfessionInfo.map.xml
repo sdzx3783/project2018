@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.title.ProfessionInfo">
+	<resultMap id="ProfessionInfo" type="com.hotent.makshi.model.title.ProfessionInfo">
+		<!-- <id property="id" column="ID" jdbcType="NUMERIC"/> -->
+		<result property="userId" column="userId" jdbcType="VARCHAR"/>
+		<result property="orgName" column="orgName" jdbcType="VARCHAR"/>
+		<result property="num" column="num" jdbcType="VARCHAR"/>
+		<result property="account" column="account" jdbcType="VARCHAR"/>
+		<result property="name" column="name" jdbcType="VARCHAR"/>
+		<result property="sex" column="sex" jdbcType="VARCHAR"/>
+		<result property="age" column="age" jdbcType="VARCHAR"/>
+		<result property="idcard" column="idcard" jdbcType="VARCHAR"/>
+		<result property="education" column="education" jdbcType="VARCHAR"/>
+		<result property="school" column="school" jdbcType="VARCHAR"/>
+		<result property="profession" column="profession" jdbcType="VARCHAR"/>
+		<result property="title" column="title" jdbcType="VARCHAR"/>
+		<result property="intime" column="intime" jdbcType="DATE"/>
+		<result property="buildSupervisionEngineer" column="buildSupervisionEngineer" jdbcType="VARCHAR"/>
+		<result property="buildCostEngineer" column="buildCostEngineer" jdbcType="VARCHAR"/>
+		<result property="waterSupervisionEngineer" column="waterSupervisionEngineer" jdbcType="VARCHAR"/>
+		<result property="waterCostEngineer" column="waterCostEngineer" jdbcType="VARCHAR"/>
+		<result property="waterDirector" column="waterDirector" jdbcType="VARCHAR"/>
+		<result property="firstBuilder" column="firstBuilder" jdbcType="VARCHAR"/>
+		<result property="secondBuilder" column="secondBuilder" jdbcType="VARCHAR"/>
+		<result property="consultingEngineer" column="consultingEngineer" jdbcType="VARCHAR"/>
+		<result property="informationEngineer" column="informationEngineer" jdbcType="VARCHAR"/>
+		<result property="registeredEquipmentEngineer" column="registeredEquipmentEngineer" jdbcType="VARCHAR"/>
+		<result property="registeredSafetyEngineer" column="registeredSafetyEngineer" jdbcType="VARCHAR"/>
+		<result property="registeredUtilityEngineer" column="registeredUtilityEngineer" jdbcType="VARCHAR"/>
+		<result property="bidder" column="bidder" jdbcType="VARCHAR"/>
+		<result property="projectManagementEngineer" column="projectManagementEngineer" jdbcType="VARCHAR"/>
+		<result property="remark" column="remark" jdbcType="VARCHAR"/>
+		
+		<result property="supervisor" column="supervisor" jdbcType="VARCHAR"/>
+		<result property="firstStructuralEngineer" column="firstStructuralEngineer" jdbcType="VARCHAR"/>
+		<result property="secondStructuralEngineer" column="secondStructuralEngineer" jdbcType="VARCHAR"/>
+		<result property="investmentSubjectManage" column="investmentSubjectManage" jdbcType="VARCHAR"/>
+		<result property="cartographers" column="cartographers" jdbcType="VARCHAR"/>
+		
+	</resultMap>
+	
+	<sql id="dynamicWhere">
+		<where>
+			a.USERSTATUS ='正式员工' and  po.F_userId is not NULL and
+			a.account &lt;&gt; 'admin' and a.status &lt;&gt; -1
+			<if test="@Ognl@isNotEmpty(orgName)"> AND orgName LIKE '%${orgName}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND fullName  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(profession)"> AND F_major  LIKE '%${profession}%'  </if>
+			<if test="@Ognl@isNotEmpty(title)"> AND F_positional  LIKE '%${title}%'  </if>
+			<if test="@Ognl@isNotEmpty(sex)"> AND sex  LIKE '%${sex}%'  </if>
+			<if test="@Ognl@isNotEmpty(professionName)"> AND ${professionName} = 1 </if>
+		</where>
+	</sql> 
+
+	<select id="getAll" resultMap="ProfessionInfo">
+	SELECT 
+		    o.ORGNAME AS orgName,
+			fullName `name`,
+			a.account,
+			a.sex,
+			a.ENTRYDATE intime,
+			u.F_graduate_school school,
+			u.F_identification_id idcard,
+			u.F_major profession,
+			u.F_positional title,
+			po.*
+    FROM
+    sys_user a 
+	LEFT JOIN w_user_infomation u  ON u.F_userId = a.USERID 
+	LEFT JOIN sys_user_pos b on a.userid = b.userid and b.ISDELETE=0 and  b.USERPOSID=(select b1.USERPOSID from sys_user_pos b1 where b1.userid=b.userid and b1.isdelete=0 order by ISCHARGE desc LIMIT 1)
+	LEFT JOIN sys_org o ON b.ORGID = o.ORGID 	
+	LEFT JOIN (
+		SELECT  F_userId,id,
+		max(buildSupervisionEngineer) buildSupervisionEngineer, 
+		max(buildCostEngineer) buildCostEngineer, 
+		max(waterSupervisionEngineer) waterSupervisionEngineer, 
+		max(waterCostEngineer) waterCostEngineer, 
+		max(waterDirector) waterDirector, 
+		max(firstBuilder) firstBuilder, 
+		max(secondBuilder) secondBuilder, 
+		max(consultingEngineer) consultingEngineer, 
+		max(informationEngineer) informationEngineer, 
+		max(registeredEquipmentEngineer) registeredEquipmentEngineer, 
+		max(registeredSafetyEngineer) registeredSafetyEngineer, 
+		max(registeredUtilityEngineer) registeredUtilityEngineer, 
+		max(bidder) bidder, 
+		max(projectManagementEngineer) projectManagementEngineer, 
+		max(supervisor) supervisor, 
+		max(firstStructuralEngineer) firstStructuralEngineer, 
+		max(secondStructuralEngineer) secondStructuralEngineer, 
+		max(investmentSubjectManage) investmentSubjectManage, 
+		max(cartographers) cartographers
+		FROM
+		(
+			SELECT
+				q.F_name `qname`,
+				q.F_userId,
+				q.id,
+				CASE WHEN q.F_certificate_type = '建设部监理工程师' THEN
+					1
+				ELSE
+					0
+				END buildSupervisionEngineer,
+				CASE WHEN q.F_certificate_type ='建设部造价工程师' THEN
+					1
+				ELSE
+					0
+				END buildCostEngineer,
+				CASE WHEN q.F_certificate_type ='水利部监理工程师' THEN
+					1
+				ELSE
+					0
+				END waterSupervisionEngineer,
+				CASE WHEN q.F_certificate_type ='水利部造价工程师' THEN
+					1
+				ELSE
+					0
+				END waterCostEngineer,
+				CASE WHEN q.F_certificate_type ='水利部总监' THEN
+					1
+				ELSE
+					0
+				END waterDirector,
+				CASE WHEN q.F_certificate_type ='一级建造师' THEN
+					1
+				ELSE
+					0
+				END firstBuilder,
+				CASE WHEN q.F_certificate_type ='二级建造师' THEN
+					1
+				ELSE
+					0
+				END secondBuilder,
+				CASE WHEN q.F_certificate_type ='咨询工程师(投资)' THEN
+					1
+				ELSE
+					0
+				END consultingEngineer,
+				CASE WHEN q.F_certificate_type ='信息监理工程师' THEN
+					1
+				ELSE
+					0
+				END informationEngineer,
+				CASE WHEN q.F_certificate_type ='注册设备监理工程师' THEN
+					1
+				ELSE
+					0
+				END registeredEquipmentEngineer,
+				CASE WHEN q.F_certificate_type ='注册安全工程师' THEN
+					1
+				ELSE
+					0
+				END registeredSafetyEngineer,
+			
+				CASE WHEN q.F_certificate_type ='注册公用设备工程师' THEN
+					1
+				ELSE
+					0
+				END registeredUtilityEngineer,
+				CASE WHEN q.F_certificate_type ='招标师' THEN
+					1
+				ELSE
+					0
+				END  bidder,
+				CASE WHEN q.F_certificate_type ='系统集成项目管理工程师' THEN
+					1
+				ELSE
+					0
+				END projectManagementEngineer,
+				CASE WHEN q.F_certificate_type ='水利部监理员' THEN
+					1
+				ELSE
+					0
+				END supervisor,
+				CASE WHEN q.F_certificate_type ='一级结构工程师' THEN
+					1
+				ELSE
+					0
+				END firstStructuralEngineer,
+				CASE WHEN q.F_certificate_type ='二级结构工程师' THEN
+					1
+				ELSE
+					0
+				END secondStructuralEngineer,
+				CASE WHEN q.F_certificate_type ='投资项目管理师' THEN
+					1
+				ELSE
+					0
+				END investmentSubjectManage,
+				CASE WHEN q.F_certificate_type ='测绘师' THEN
+					1
+				ELSE
+					0
+				END  cartographers
+			FROM w_personal_qualification_regist q 
+		 	where
+			 F_certificate_type is NOT NULL and F_certificate_type &lt;&gt;'' AND (q.switchs is NULL or q.switchs = 1) 
+			 and q.deleted = 0 and (F_isregist = 1)
+			) t GROUP BY qName
+		) po ON a.USERID = po.F_userId
+		<include refid="dynamicWhere"/>
+	</select>
+
+
+
+	<!-- <sql id="columns">
+		ID,F_SEAL_NUM,F_SEAL_NAME,F_BORROWER,F_HOLDER,F_STATUS,F_REMARK
+	</sql>
+	<sql id="wfColumns">
+		ID,F_SEAL_NUM,F_SEAL_NAME,F_BORROWER,F_HOLDER,F_STATUS,F_REMARK
+	</sql>
+	
+	-->
+
+	<!-- <insert id="add" parameterType="com.hotent.makshi.model.title.PersonalSeal">
+		INSERT INTO W_PERSONAL_SEAL
+		(ID,
+		F_SEAL_NUM,F_SEAL_NAME,F_BORROWER,F_HOLDER,F_STATUS,F_REMARK)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{seal_num,jdbcType=VARCHAR}, #{seal_name,jdbcType=VARCHAR}, #{borrower,jdbcType=VARCHAR}, #{holder,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_PERSONAL_SEAL 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.title.PersonalSeal">
+		UPDATE W_PERSONAL_SEAL SET
+		F_SEAL_NUM=#{seal_num,jdbcType=VARCHAR},
+		F_SEAL_NAME=#{seal_name,jdbcType=VARCHAR},
+		F_BORROWER=#{borrower,jdbcType=VARCHAR},
+		F_HOLDER=#{holder,jdbcType=VARCHAR},
+		F_STATUS=#{status,jdbcType=VARCHAR},
+		F_REMARK=#{remark,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="PersonalSeal">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_SEAL
+		WHERE
+		ID=#{id}
+	</select> -->
+	
+	
+	
+	
+	
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotent.makshi.model.title.CertificatePerson">
+	<resultMap id="CertificatePerson" type="com.hotent.makshi.model.title.CertificatePerson">
+		<result property="certificate_type" column="certificate_type" jdbcType="VARCHAR" />
+		<result property="existNum" column="existNum" jdbcType="INTEGER" />
+		<result property="registNum" column="registNum" jdbcType="INTEGER" />
+		<result property="inNum" column="inNum" jdbcType="INTEGER" />
+		<result property="outNum" column="outNum" jdbcType="INTEGER" />
+		<result property="trainingNum" column="trainingNum" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="getAllinfo" parameterType="map" resultMap="CertificatePerson">
+		SELECT '建设部监理工程师' certificate_type,(SELECT count(*) FROM w_personal_qualification_regist WHERE (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '建设部监理工程师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear} AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '建设部监理工程师' AND deleted = 0 ) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '建设部监理工程师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear} AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '建设部监理工程师' AND deleted = 0) outNum,
+												0 trainingNum
+										UNION
+										SELECT '建设部造价工程师' certificate_type,(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '建设部造价工程师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear} AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear})  AND F_certificate_type = '建设部造价工程师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '建设部造价工程师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '建设部造价工程师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '一级建造师' certificate_type,(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '一级建造师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '一级建造师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '一级建造师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '一级建造师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '二级建造师' certificate_type,(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '二级建造师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '二级建造师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '二级建造师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '二级建造师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '水利部总监' certificate_type,(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部总监' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部总监' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部总监' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '水利部总监' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '水利部监理工程师' certificate_type,(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部监理工程师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部监理工程师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部监理工程师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '水利部监理工程师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '水利部造价工程师' certificate_type,(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部造价工程师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部造价工程师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部造价工程师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '水利部造价工程师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '水利部监理员' certificate_type,(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部监理员' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部监理员' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '水利部监理员' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '水利部监理员' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '一级结构工程师' certificate_type,(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '一级结构工程师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '一级结构工程师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '一级结构工程师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '一级结构工程师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '二级结构工程师' certificate_type,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '二级结构工程师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '二级结构工程师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '二级结构工程师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '二级结构工程师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '招标师' certificate_type,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '招标师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '招标师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '招标师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '招标师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '注册设备监理工程师' certificate_type,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '注册设备监理工程师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '注册设备监理工程师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '注册设备监理工程师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '注册设备监理工程师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '注册公用设备工程师' certificate_type,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '注册公用设备工程师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '注册公用设备工程师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '注册公用设备工程师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '注册公用设备工程师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '注册安全工程师' certificate_type,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '注册安全工程师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '注册安全工程师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '注册安全工程师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '注册安全工程师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '咨询工程师(投资)' certificate_type,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '咨询工程师(投资)' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '咨询工程师(投资)' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '咨询工程师(投资)' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '咨询工程师(投资)' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '投资项目管理师' certificate_type,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '投资项目管理师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '投资项目管理师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '投资项目管理师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '投资项目管理师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '测绘师' certificate_type,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '测绘师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '测绘师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '测绘师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '测绘师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '信息监理工程师' certificate_type,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '信息监理工程师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '信息监理工程师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '信息监理工程师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '信息监理工程师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT '系统集成项目管理工程师' certificate_type,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE  (YEAR (F_regist_date) &lt;=#{selectYear} or YEAR (F_in_date)&lt;=#{selectYear}) AND (F_regist_out_date IS NULL OR YEAR (F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '系统集成项目管理工程师' AND deleted = 0 AND (F_isregist = 1)) existNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '系统集成项目管理工程师' AND deleted = 0) registNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_in_date)=#{selectYear}  AND (F_regist_out_date IS NULL OR Year(F_regist_out_date) &gt;#{selectYear}) AND F_certificate_type = '系统集成项目管理工程师' AND deleted = 0) inNum,
+												(SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_regist_out_date)=#{selectYear}AND (F_in_date is NOT NULL OR F_regist_date is NOT NULL) AND F_certificate_type = '系统集成项目管理工程师' AND deleted = 0) outNum,
+												0 trainingNum
+											UNION
+											SELECT  '三类人员安全生产考核合格证' certificate_type,
+													ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND (YEAR (F_occ_in_date) &lt;= #{selectYear} OR YEAR (F_OCC_GET_DATE) &lt;= #{selectYear}) AND ( F_occ_out_date IS NULL OR YEAR (F_occ_out_date) &gt;#{selectYear} ) AND F_OCC_TYPE = 1 AND deleted = 0),0) existNum,
+													  0 registNum,
+													  (SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_occ_in_date)=#{selectYear}  AND (F_occ_out_date IS NULL OR Year(F_occ_out_date) &gt;#{selectYear}) AND F_OCC_TYPE = 1 AND deleted = 0)  inNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' and F_occ_out_date IS NOT NULL AND Year(F_occ_out_date) = #{selectYear} AND F_OCC_TYPE=1  AND deleted = 0),0) outNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND F_regist_out_date IS NULL AND Year(F_OCC_GET_DATE)=#{selectYear} AND F_OCC_TYPE=1  AND deleted = 0),0) trainingNum
+											UNION
+											SELECT  '深圳市监理工程师' certificate_type,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND (YEAR (F_occ_in_date) &lt;= #{selectYear} OR YEAR (F_OCC_GET_DATE) &lt;= #{selectYear}) AND ( F_occ_out_date IS NULL OR YEAR (F_occ_out_date) &gt;#{selectYear} ) AND F_OCC_TYPE = 3 AND deleted = 0),0)  existNum,
+													  0 registNum,
+													  (SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_occ_in_date)=#{selectYear}  AND (F_occ_out_date IS NULL OR Year(F_occ_out_date) &gt;#{selectYear}) AND F_OCC_TYPE = 3 AND deleted = 0)  inNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' and F_occ_out_date IS NOT NULL AND Year(F_occ_out_date) = #{selectYear} AND F_OCC_TYPE=3  AND deleted = 0),0) outNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND F_regist_out_date IS NULL AND Year(F_OCC_GET_DATE)=#{selectYear} AND F_OCC_TYPE=3  AND deleted = 0),0) trainingNum
+											UNION
+											SELECT  '深圳市监理员' certificate_type,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND (YEAR (F_occ_in_date) &lt;= #{selectYear} OR YEAR (F_OCC_GET_DATE) &lt;= #{selectYear}) AND ( F_occ_out_date IS NULL OR YEAR (F_occ_out_date) &gt;#{selectYear} ) AND F_OCC_TYPE = 2 AND deleted = 0),0)  existNum,
+													  0 registNum,
+													  (SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_occ_in_date)=#{selectYear}  AND (F_occ_out_date IS NULL OR Year(F_occ_out_date) &gt;#{selectYear}) AND F_OCC_TYPE = 2 AND deleted = 0)  inNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' and F_occ_out_date IS NOT NULL AND Year(F_occ_out_date) = #{selectYear} AND F_OCC_TYPE=2  AND deleted = 0),0) outNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND F_regist_out_date IS NULL AND Year(F_OCC_GET_DATE)=#{selectYear}  AND F_OCC_TYPE=2  AND deleted = 0),0) trainingNum
+											UNION
+											SELECT  '水利部监理工程师信用手册' certificate_type,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND (YEAR (F_occ_in_date) &lt;= #{selectYear} OR YEAR (F_OCC_GET_DATE) &lt;= #{selectYear}) AND ( F_occ_out_date IS NULL OR YEAR (F_occ_out_date) &gt;#{selectYear} ) AND F_OCC_TYPE = 4 AND deleted = 0),0)  existNum,
+													  0 registNum,
+													  (SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_occ_in_date)=#{selectYear}  AND (F_occ_out_date IS NULL OR Year(F_occ_out_date) &gt;#{selectYear}) AND F_OCC_TYPE = 4 AND deleted = 0)  inNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' and F_occ_out_date IS NOT NULL AND Year(F_occ_out_date) = #{selectYear} AND F_OCC_TYPE=4  AND deleted = 0),0) outNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND F_regist_out_date IS NULL AND Year(F_OCC_GET_DATE)=#{selectYear}  AND F_OCC_TYPE=4  AND deleted = 0),0) trainingNum
+											UNION
+											SELECT  '建设部监理工程师信用手册' certificate_type,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND (YEAR (F_occ_in_date) &lt;= #{selectYear} OR YEAR (F_OCC_GET_DATE) &lt;= #{selectYear}) AND ( F_occ_out_date IS NULL OR YEAR (F_occ_out_date) &gt;#{selectYear} ) AND F_OCC_TYPE = 5 AND deleted = 0),0)  existNum,
+													  0 registNum,
+													  (SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_occ_in_date)=#{selectYear}  AND (F_occ_out_date IS NULL OR Year(F_occ_out_date) &gt;#{selectYear}) AND F_OCC_TYPE = 5 AND deleted = 0)  inNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' and F_occ_out_date IS NOT NULL AND Year(F_occ_out_date) = #{selectYear} AND F_OCC_TYPE=5  AND deleted = 0),0) outNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND F_regist_out_date IS NULL AND Year(F_OCC_GET_DATE)=#{selectYear}  AND F_OCC_TYPE=5  AND deleted = 0),0) trainingNum
+											UNION
+											SELECT  '深圳市档案员' certificate_type,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND (YEAR (F_occ_in_date) &lt;= #{selectYear} OR YEAR (F_OCC_GET_DATE) &lt;= #{selectYear}) AND ( F_occ_out_date IS NULL OR YEAR (F_occ_out_date) &gt;#{selectYear} ) AND F_OCC_TYPE = 6 AND deleted = 0),0)  existNum,
+													  0 registNum,
+													  (SELECT count(*) FROM w_personal_qualification_regist WHERE Year(F_occ_in_date)=#{selectYear}  AND (F_occ_out_date IS NULL OR Year(F_occ_out_date) &gt;#{selectYear}) AND F_OCC_TYPE = 6 AND deleted = 0) inNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' and F_occ_out_date IS NOT NULL AND Year(F_occ_out_date) = #{selectYear} AND F_OCC_TYPE=6  AND deleted = 0),0) outNum,
+													  ifNUll((SELECT count(*) FROM w_personal_qualification_regist WHERE F_OCC_TYPE &lt;&gt; '' AND F_regist_out_date IS NULL AND Year(F_OCC_GET_DATE)=#{selectYear}  AND F_OCC_TYPE=6  AND deleted = 0),0) trainingNum
+
+	</select>
+</mapper>

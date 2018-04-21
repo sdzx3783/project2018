@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.template.RuleManager">
+	<resultMap id="RuleManager" type="com.hotent.makshi.model.template.RuleManager">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="creator" column="F_CREATOR" jdbcType="VARCHAR"/>
+		<result property="creatorID" column="F_CREATORID" jdbcType="NUMERIC"/>
+		<result property="ctime" column="F_CTIME" jdbcType="DATE"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_NAME,F_CREATOR,F_CREATORID,F_CTIME
+	</sql>
+	<sql id="wfColumns">
+		ID,F_NAME,F_CREATOR,F_CREATORID,F_CTIME
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(creator)"> AND F_CREATOR  LIKE '%${creator}%'  </if>
+			<if test="@Ognl@isNotEmpty(creatorID)"> AND F_CREATORID  =#{creatorID} </if>
+			<if test="@Ognl@isNotEmpty(ctime)"> AND F_CTIME  =#{ctime} </if>
+			<if test="@Ognl@isNotEmpty(beginctime)"> AND F_CTIME  >=#{beginctime,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endctime)"> AND F_CTIME <![CDATA[ <=#{endctime,jdbcType=DATE}]]> </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.template.RuleManager">
+		INSERT INTO W_RULE_MANAGER
+		(ID,
+		F_NAME,F_CREATOR,F_CREATORID,F_CTIME)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{name,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{creatorID,jdbcType=NUMERIC}, #{ctime,jdbcType=DATE})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_RULE_MANAGER 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.template.RuleManager">
+		UPDATE W_RULE_MANAGER
+		<set >
+	      <if test="name != null" >
+	        F_NAME = #{name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="creator != null" >
+	        F_CREATOR = #{creator,jdbcType=VARCHAR},
+	      </if>
+	      <if test="creatorID != null" >
+	        F_CREATORID = #{creatorID,jdbcType=BIGINT},
+	      </if>
+	    </set>
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="RuleManager">
+		SELECT <include refid="columns"/>
+		FROM W_RULE_MANAGER
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="RuleManager">
+		SELECT <include refid="columns"/>
+		FROM W_RULE_MANAGER   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

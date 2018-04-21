@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.contract.ContractNumYear">
+	<resultMap id="ContractNumYear" type="com.hotent.makshi.model.contract.ContractNumYear">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="year" column="year" jdbcType="VARCHAR"/>
+		<result property="contractId" column="contractId" jdbcType="NUMERIC"/>
+		<result property="flowNo" column="F_FLOWNO" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		id,year,contractId,flowNo
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.contract.ContractNumYear">
+		insert into w_contract_num_year(id,year,contractId,flowNo)
+		values
+		(#{id,jdbcType=NUMERIC},
+		 #{year,jdbcType=VARCHAR},
+		 #{contractId,jdbcType=NUMERIC}, 
+		 #{flowNo,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM w_contract_num_year 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.contract.ContractNumYear">
+		UPDATE w_contract_num_year SET
+		year=#{year,jdbcType=VARCHAR},
+		contractId=#{contractId,jdbcType=NUMERIC},
+		flowNo=#{flowNo,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="ContractNumYear">
+		SELECT <include refid="columns"/>
+		FROM w_contract_num_year
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getByRefId" parameterType="java.lang.Long" resultMap="ContractNumYear">
+		SELECT <include refid="columns"/>
+		FROM w_contract_num_year
+		WHERE
+		contractId=#{contractId}
+	</select>
+	
+	<select id="getByRefIdAndYear" parameterType="map" resultMap="ContractNumYear">
+		SELECT <include refid="columns"/>
+		FROM w_contract_num_year
+		WHERE
+		contractId=#{contractId}  AND year = #{year}
+	</select>
+	
+	<select id="updateFlowNo" parameterType="java.lang.Long">
+		UPDATE w_contract_num_year 
+			SET flowNo = flowNo + 1
+		WHERE
+		ID=#{id}
+	</select>
+	
+</mapper>

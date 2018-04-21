@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.title.PersonalQualificationOut">
+	<resultMap id="PersonalQualificationOut" type="com.hotent.makshi.model.title.PersonalQualificationOut">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="nameID" column="F_NAMEID" jdbcType="VARCHAR"/>
+		<result property="name" column="F_NAME" jdbcType="VARCHAR"/>
+		<result property="idcard" column="F_IDCARD" jdbcType="VARCHAR"/>
+		<result property="practis_certificate_type" column="F_PRACTIS_CERTIFICATE_TYPE" jdbcType="VARCHAR"/>
+		<result property="major" column="F_MAJOR" jdbcType="VARCHAR"/>
+		<result property="practis_certificate_num" column="F_PRACTIS_CERTIFICATE_NUM" jdbcType="VARCHAR"/>
+		<result property="practis_certificate_issue_date" column="F_PRACTIS_CERTIFICATE_ISSUE_DATE" jdbcType="DATE"/>
+		<result property="practis_certificate_com" column="F_PRACTIS_CERTIFICATE_COM" jdbcType="VARCHAR"/>
+		<result property="practis_certificate_remark" column="F_PRACTIS_CERTIFICATE_REMARK" jdbcType="VARCHAR"/>
+		<result property="practis_certificate_file" column="F_PRACTIS_CERTIFICATE_FILE" jdbcType="VARCHAR"/>
+		<result property="regist_certificate_num" column="F_REGIST_CERTIFICATE_NUM" jdbcType="VARCHAR"/>
+		<result property="regist_num" column="F_REGIST_NUM" jdbcType="VARCHAR"/>
+		<result property="regist_certificate_issue_date" column="F_REGIST_CERTIFICATE_ISSUE_DATE" jdbcType="DATE"/>
+		<result property="regist_certificate_effective_date" column="F_REGIST_CERTIFICATE_EFFECTIVE_DATE" jdbcType="DATE"/>
+		<result property="regist_major" column="F_REGIST_MAJOR" jdbcType="VARCHAR"/>
+		<result property="seal_num" column="F_SEAL_NUM" jdbcType="VARCHAR"/>
+		<result property="out_date" column="F_OUT_DATE" jdbcType="DATE"/>
+		<result property="regist_certificate_com" column="F_REGIST_CERTIFICATE_COM" jdbcType="VARCHAR"/>
+		<result property="regist_type" column="F_REGIST_TYPE" jdbcType="VARCHAR"/>
+		<result property="regist_date" column="F_REGIST_DATE" jdbcType="DATE"/>
+		<result property="contine_edu_comple" column="F_CONTINE_EDU_COMPLE" jdbcType="VARCHAR"/>
+		<result property="regist_remark" column="F_REGIST_REMARK" jdbcType="VARCHAR"/>
+		<result property="regist_file" column="F_REGIST_FILE" jdbcType="VARCHAR"/>
+		<result property="dispatch_content" column="F_DISPATCH_CONTENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+
+	<sql id="columns">
+		ID,F_NAMEID,F_NAME,F_IDCARD,F_PRACTIS_CERTIFICATE_TYPE,F_MAJOR,F_PRACTIS_CERTIFICATE_NUM,F_PRACTIS_CERTIFICATE_ISSUE_DATE,F_PRACTIS_CERTIFICATE_COM,F_PRACTIS_CERTIFICATE_REMARK,F_PRACTIS_CERTIFICATE_FILE,F_REGIST_CERTIFICATE_NUM,F_REGIST_NUM,F_REGIST_CERTIFICATE_ISSUE_DATE,F_REGIST_CERTIFICATE_EFFECTIVE_DATE,F_REGIST_MAJOR,F_SEAL_NUM,F_OUT_DATE,F_REGIST_CERTIFICATE_COM,F_REGIST_TYPE,F_REGIST_DATE,F_CONTINE_EDU_COMPLE,F_REGIST_REMARK,F_REGIST_FILE,F_DISPATCH_CONTENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_NAMEID,F_NAME,F_IDCARD,F_PRACTIS_CERTIFICATE_TYPE,F_MAJOR,F_PRACTIS_CERTIFICATE_NUM,F_PRACTIS_CERTIFICATE_ISSUE_DATE,F_PRACTIS_CERTIFICATE_COM,F_PRACTIS_CERTIFICATE_REMARK,F_PRACTIS_CERTIFICATE_FILE,F_REGIST_CERTIFICATE_NUM,F_REGIST_NUM,F_REGIST_CERTIFICATE_ISSUE_DATE,F_REGIST_CERTIFICATE_EFFECTIVE_DATE,F_REGIST_MAJOR,F_SEAL_NUM,F_OUT_DATE,F_REGIST_CERTIFICATE_COM,F_REGIST_TYPE,F_REGIST_DATE,F_CONTINE_EDU_COMPLE,F_REGIST_REMARK,F_REGIST_FILE,F_DISPATCH_CONTENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(nameID)"> AND F_NAMEID  LIKE '%${nameID}%'  </if>
+			<if test="@Ognl@isNotEmpty(name)"> AND F_NAME  LIKE '%${name}%'  </if>
+			<if test="@Ognl@isNotEmpty(idcard)"> AND F_IDCARD  LIKE '%${idcard}%'  </if>
+			<if test="@Ognl@isNotEmpty(practis_certificate_type)"> AND F_PRACTIS_CERTIFICATE_TYPE  LIKE '%${practis_certificate_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(major)"> AND F_MAJOR  LIKE '%${major}%'  </if>
+			<if test="@Ognl@isNotEmpty(practis_certificate_num)"> AND F_PRACTIS_CERTIFICATE_NUM  LIKE '%${practis_certificate_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(practis_certificate_issue_date)"> AND F_PRACTIS_CERTIFICATE_ISSUE_DATE  =#{practis_certificate_issue_date} </if>
+			<if test="@Ognl@isNotEmpty(beginpractis_certificate_issue_date)"> AND F_PRACTIS_CERTIFICATE_ISSUE_DATE  >=#{beginpractis_certificate_issue_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endpractis_certificate_issue_date)"> AND F_PRACTIS_CERTIFICATE_ISSUE_DATE <![CDATA[ <=#{endpractis_certificate_issue_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(practis_certificate_com)"> AND F_PRACTIS_CERTIFICATE_COM  LIKE '%${practis_certificate_com}%'  </if>
+			<if test="@Ognl@isNotEmpty(practis_certificate_remark)"> AND F_PRACTIS_CERTIFICATE_REMARK  LIKE '%${practis_certificate_remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(practis_certificate_file)"> AND F_PRACTIS_CERTIFICATE_FILE  LIKE '%${practis_certificate_file}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_certificate_num)"> AND F_REGIST_CERTIFICATE_NUM  LIKE '%${regist_certificate_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_num)"> AND F_REGIST_NUM  LIKE '%${regist_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_certificate_issue_date)"> AND F_REGIST_CERTIFICATE_ISSUE_DATE  =#{regist_certificate_issue_date} </if>
+			<if test="@Ognl@isNotEmpty(beginregist_certificate_issue_date)"> AND F_REGIST_CERTIFICATE_ISSUE_DATE  >=#{beginregist_certificate_issue_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endregist_certificate_issue_date)"> AND F_REGIST_CERTIFICATE_ISSUE_DATE <![CDATA[ <=#{endregist_certificate_issue_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(regist_certificate_effective_date)"> AND F_REGIST_CERTIFICATE_EFFECTIVE_DATE  =#{regist_certificate_effective_date} </if>
+			<if test="@Ognl@isNotEmpty(beginregist_certificate_effective_date)"> AND F_REGIST_CERTIFICATE_EFFECTIVE_DATE  >=#{beginregist_certificate_effective_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endregist_certificate_effective_date)"> AND F_REGIST_CERTIFICATE_EFFECTIVE_DATE <![CDATA[ <=#{endregist_certificate_effective_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(regist_major)"> AND F_REGIST_MAJOR  LIKE '%${regist_major}%'  </if>
+			<if test="@Ognl@isNotEmpty(seal_num)"> AND F_SEAL_NUM  LIKE '%${seal_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(out_date)"> AND F_OUT_DATE  =#{out_date} </if>
+			<if test="@Ognl@isNotEmpty(beginout_date)"> AND F_OUT_DATE  >=#{beginout_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endout_date)"> AND F_OUT_DATE <![CDATA[ <=#{endout_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(regist_certificate_com)"> AND F_REGIST_CERTIFICATE_COM  LIKE '%${regist_certificate_com}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_type)"> AND F_REGIST_TYPE  LIKE '%${regist_type}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_date)"> AND F_REGIST_DATE  =#{regist_date} </if>
+			<if test="@Ognl@isNotEmpty(beginregist_date)"> AND F_REGIST_DATE  >=#{beginregist_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endregist_date)"> AND F_REGIST_DATE <![CDATA[ <=#{endregist_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(contine_edu_comple)"> AND F_CONTINE_EDU_COMPLE  LIKE '%${contine_edu_comple}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_remark)"> AND F_REGIST_REMARK  LIKE '%${regist_remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(regist_file)"> AND F_REGIST_FILE  LIKE '%${regist_file}%'  </if>
+			<if test="@Ognl@isNotEmpty(dispatch_content)"> AND F_DISPATCH_CONTENT  LIKE '%${dispatch_content}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.title.PersonalQualificationOut">
+		INSERT INTO W_PERSONAL_QUALIFICATION_OUT
+		(ID,
+		F_NAMEID,F_NAME,F_IDCARD,F_PRACTIS_CERTIFICATE_TYPE,F_MAJOR,F_PRACTIS_CERTIFICATE_NUM,F_PRACTIS_CERTIFICATE_ISSUE_DATE,F_PRACTIS_CERTIFICATE_COM,F_PRACTIS_CERTIFICATE_REMARK,F_PRACTIS_CERTIFICATE_FILE,F_REGIST_CERTIFICATE_NUM,F_REGIST_NUM,F_REGIST_CERTIFICATE_ISSUE_DATE,F_REGIST_CERTIFICATE_EFFECTIVE_DATE,F_REGIST_MAJOR,F_SEAL_NUM,F_OUT_DATE,F_REGIST_CERTIFICATE_COM,F_REGIST_TYPE,F_REGIST_DATE,F_CONTINE_EDU_COMPLE,F_REGIST_REMARK,F_REGIST_FILE,F_DISPATCH_CONTENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{nameID,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, #{practis_certificate_type,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, #{practis_certificate_num,jdbcType=VARCHAR}, #{practis_certificate_issue_date,jdbcType=DATE}, #{practis_certificate_com,jdbcType=VARCHAR}, #{practis_certificate_remark,jdbcType=VARCHAR}, #{practis_certificate_file,jdbcType=VARCHAR}, #{regist_certificate_num,jdbcType=VARCHAR}, #{regist_num,jdbcType=VARCHAR}, #{regist_certificate_issue_date,jdbcType=DATE}, #{regist_certificate_effective_date,jdbcType=DATE}, #{regist_major,jdbcType=VARCHAR}, #{seal_num,jdbcType=VARCHAR}, #{out_date,jdbcType=DATE}, #{regist_certificate_com,jdbcType=VARCHAR}, #{regist_type,jdbcType=VARCHAR}, #{regist_date,jdbcType=DATE}, #{contine_edu_comple,jdbcType=VARCHAR}, #{regist_remark,jdbcType=VARCHAR}, #{regist_file,jdbcType=VARCHAR}, #{dispatch_content,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_PERSONAL_QUALIFICATION_OUT 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.title.PersonalQualificationOut">
+		UPDATE W_PERSONAL_QUALIFICATION_OUT SET
+		F_NAMEID=#{nameID,jdbcType=VARCHAR},
+		F_NAME=#{name,jdbcType=VARCHAR},
+		F_IDCARD=#{idcard,jdbcType=VARCHAR},
+		F_PRACTIS_CERTIFICATE_TYPE=#{practis_certificate_type,jdbcType=VARCHAR},
+		F_MAJOR=#{major,jdbcType=VARCHAR},
+		F_PRACTIS_CERTIFICATE_NUM=#{practis_certificate_num,jdbcType=VARCHAR},
+		F_PRACTIS_CERTIFICATE_ISSUE_DATE=#{practis_certificate_issue_date,jdbcType=DATE},
+		F_PRACTIS_CERTIFICATE_COM=#{practis_certificate_com,jdbcType=VARCHAR},
+		F_PRACTIS_CERTIFICATE_REMARK=#{practis_certificate_remark,jdbcType=VARCHAR},
+		F_PRACTIS_CERTIFICATE_FILE=#{practis_certificate_file,jdbcType=VARCHAR},
+		F_REGIST_CERTIFICATE_NUM=#{regist_certificate_num,jdbcType=VARCHAR},
+		F_REGIST_NUM=#{regist_num,jdbcType=VARCHAR},
+		F_REGIST_CERTIFICATE_ISSUE_DATE=#{regist_certificate_issue_date,jdbcType=DATE},
+		F_REGIST_CERTIFICATE_EFFECTIVE_DATE=#{regist_certificate_effective_date,jdbcType=DATE},
+		F_REGIST_MAJOR=#{regist_major,jdbcType=VARCHAR},
+		F_SEAL_NUM=#{seal_num,jdbcType=VARCHAR},
+		F_OUT_DATE=#{out_date,jdbcType=DATE},
+		F_REGIST_CERTIFICATE_COM=#{regist_certificate_com,jdbcType=VARCHAR},
+		F_REGIST_TYPE=#{regist_type,jdbcType=VARCHAR},
+		F_REGIST_DATE=#{regist_date,jdbcType=DATE},
+		F_CONTINE_EDU_COMPLE=#{contine_edu_comple,jdbcType=VARCHAR},
+		F_REGIST_REMARK=#{regist_remark,jdbcType=VARCHAR},
+		F_REGIST_FILE=#{regist_file,jdbcType=VARCHAR},
+		F_DISPATCH_CONTENT=#{dispatch_content,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="PersonalQualificationOut">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_QUALIFICATION_OUT
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="PersonalQualificationOut">
+		SELECT <include refid="columns"/>
+		FROM W_PERSONAL_QUALIFICATION_OUT   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+</mapper>

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.hr.RecruitmentApplication">
+	<resultMap id="RecruitmentApplication" type="com.hotent.makshi.model.hr.RecruitmentApplication">
+	<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="declare_departmentID" column="F_DECLARE_DEPARTMENTID" jdbcType="VARCHAR"/>
+		<result property="account" column="F_ACCOUNT" jdbcType="VARCHAR"/>
+		<result property="applicant" column="F_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="declare_department" column="F_DECLARE_DEPARTMENT" jdbcType="VARCHAR"/>
+		<result property="declare_time" column="F_DECLARE_TIME" jdbcType="DATE"/>
+		<result property="recruitment_method" column="F_RECRUITMENT_METHOD" jdbcType="VARCHAR"/>
+		<result property="position_whereabouts" column="F_POSITION_WHEREABOUTS" jdbcType="VARCHAR"/>
+		<result property="recruitment_number" column="F_RECRUITMENT_NUMBER" jdbcType="NUMERIC"/>
+		<result property="recruitment_professional" column="F_RECRUITMENT_PROFESSIONAL" jdbcType="VARCHAR"/>
+		<result property="user_num" column="F_USER_NUM" jdbcType="VARCHAR"/>
+		<result property="appli_reason" column="F_APPLI_REASON" jdbcType="VARCHAR"/>
+		<result property="sex" column="F_SEX" jdbcType="VARCHAR"/>
+		<result property="marriage_status" column="F_MARRIAGE_STATUS" jdbcType="VARCHAR"/>
+		<result property="birthplace" column="F_BIRTHPLACE" jdbcType="VARCHAR"/>
+		<result property="political_status" column="F_POLITICAL_STATUS" jdbcType="VARCHAR"/>
+		<result property="edu_requirement" column="F_EDU_REQUIREMENT" jdbcType="VARCHAR"/>
+		<result property="language_reqirement" column="F_LANGUAGE_REQIREMENT" jdbcType="VARCHAR"/>
+		<result property="degree_requirement" column="F_DEGREE_REQUIREMENT" jdbcType="VARCHAR"/>
+		<result property="experience_reqirement" column="F_EXPERIENCE_REQIREMENT" jdbcType="VARCHAR"/>
+		<result property="skill_requirement" column="F_SKILL_REQUIREMENT" jdbcType="VARCHAR"/>
+		<result property="character_requirement" column="F_CHARACTER_REQUIREMENT" jdbcType="VARCHAR"/>
+		<result property="other_requirement" column="F_OTHER_REQUIREMENT" jdbcType="VARCHAR"/>
+		<result property="other_remark" column="F_OTHER_REMARK" jdbcType="VARCHAR"/>
+		<result property="other_reason_content" column="F_OTHER_REASON_CONTENT" jdbcType="VARCHAR"/>
+		<result property="age_limit" column="F_AGE_LIMIT" jdbcType="VARCHAR"/>
+		<result property="age_least" column="F_AGE_LEAST" jdbcType="NUMERIC"/>
+		<result property="age_most" column="F_AGE_MOST" jdbcType="NUMERIC"/>
+		<result property="graduation_year" column="F_GRADUATION_YEAR" jdbcType="VARCHAR"/>
+		<result property="graduation_date" column="F_GRADUATION_DATE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.hr.RecruitmentApplication" id="ExtRecruitmentApplication" extends="RecruitmentApplication">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_DECLARE_DEPARTMENTID,F_ACCOUNT,F_APPLICANT,F_DECLARE_DEPARTMENT,F_DECLARE_TIME,F_RECRUITMENT_METHOD,F_POSITION_WHEREABOUTS,F_RECRUITMENT_NUMBER,F_RECRUITMENT_PROFESSIONAL,F_USER_NUM,F_APPLI_REASON,F_SEX,F_MARRIAGE_STATUS,F_BIRTHPLACE,F_POLITICAL_STATUS,F_EDU_REQUIREMENT,F_LANGUAGE_REQIREMENT,F_DEGREE_REQUIREMENT,F_EXPERIENCE_REQIREMENT,F_SKILL_REQUIREMENT,F_CHARACTER_REQUIREMENT,F_OTHER_REQUIREMENT,F_OTHER_REMARK,F_OTHER_REASON_CONTENT,F_AGE_LIMIT,F_AGE_LEAST,F_AGE_MOST,F_GRADUATION_YEAR,F_GRADUATION_DATE
+	</sql>
+	<sql id="wfColumns">
+		ID,F_DECLARE_DEPARTMENTID,F_ACCOUNT,F_APPLICANT,F_DECLARE_DEPARTMENT,F_DECLARE_TIME,F_RECRUITMENT_METHOD,F_POSITION_WHEREABOUTS,F_RECRUITMENT_NUMBER,F_RECRUITMENT_PROFESSIONAL,F_USER_NUM,F_APPLI_REASON,F_SEX,F_MARRIAGE_STATUS,F_BIRTHPLACE,F_POLITICAL_STATUS,F_EDU_REQUIREMENT,F_LANGUAGE_REQIREMENT,F_DEGREE_REQUIREMENT,F_EXPERIENCE_REQIREMENT,F_SKILL_REQUIREMENT,F_CHARACTER_REQUIREMENT,F_OTHER_REQUIREMENT,F_OTHER_REMARK,F_OTHER_REASON_CONTENT,F_AGE_LIMIT,F_AGE_LEAST,F_AGE_MOST,F_GRADUATION_YEAR,F_GRADUATION_DATE
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="@Ognl@isNotEmpty(declare_departmentID)"> AND F_DECLARE_DEPARTMENTID  LIKE '%${declare_departmentID}%'  </if>
+			<if test="@Ognl@isNotEmpty(account)"> AND F_ACCOUNT  LIKE '%${account}%'  </if>
+			<if test="@Ognl@isNotEmpty(applicant)"> AND F_APPLICANT  LIKE '%${applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(declare_department)"> AND F_DECLARE_DEPARTMENT  LIKE '%${declare_department}%'  </if>
+			<if test="@Ognl@isNotEmpty(declare_time)"> AND F_DECLARE_TIME  =#{declare_time} </if>
+			<if test="@Ognl@isNotEmpty(begindeclare_time)"> AND F_DECLARE_TIME  >=#{begindeclare_time,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(enddeclare_time)"> AND F_DECLARE_TIME <![CDATA[ <=#{enddeclare_time,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(recruitment_method)"> AND F_RECRUITMENT_METHOD  LIKE '%${recruitment_method}%'  </if>
+			<if test="@Ognl@isNotEmpty(position_whereabouts)"> AND F_POSITION_WHEREABOUTS  LIKE '%${position_whereabouts}%'  </if>
+			<if test="@Ognl@isNotEmpty(recruitment_number)"> AND F_RECRUITMENT_NUMBER  =#{recruitment_number} </if>
+			<if test="@Ognl@isNotEmpty(recruitment_professional)"> AND F_RECRUITMENT_PROFESSIONAL  LIKE '%${recruitment_professional}%'  </if>
+			<if test="@Ognl@isNotEmpty(user_num)"> AND F_USER_NUM  LIKE '%${user_num}%'  </if>
+			<if test="@Ognl@isNotEmpty(appli_reason)"> AND F_APPLI_REASON  LIKE '%${appli_reason}%'  </if>
+			<if test="@Ognl@isNotEmpty(sex)"> AND F_SEX  LIKE '%${sex}%'  </if>
+			<if test="@Ognl@isNotEmpty(marriage_status)"> AND F_MARRIAGE_STATUS  LIKE '%${marriage_status}%'  </if>
+			<if test="@Ognl@isNotEmpty(birthplace)"> AND F_BIRTHPLACE  LIKE '%${birthplace}%'  </if>
+			<if test="@Ognl@isNotEmpty(political_status)"> AND F_POLITICAL_STATUS  LIKE '%${political_status}%'  </if>
+			<if test="@Ognl@isNotEmpty(edu_requirement)"> AND F_EDU_REQUIREMENT  LIKE '%${edu_requirement}%'  </if>
+			<if test="@Ognl@isNotEmpty(language_reqirement)"> AND F_LANGUAGE_REQIREMENT  LIKE '%${language_reqirement}%'  </if>
+			<if test="@Ognl@isNotEmpty(degree_requirement)"> AND F_DEGREE_REQUIREMENT  LIKE '%${degree_requirement}%'  </if>
+			<if test="@Ognl@isNotEmpty(experience_reqirement)"> AND F_EXPERIENCE_REQIREMENT  LIKE '%${experience_reqirement}%'  </if>
+			<if test="@Ognl@isNotEmpty(skill_requirement)"> AND F_SKILL_REQUIREMENT  LIKE '%${skill_requirement}%'  </if>
+			<if test="@Ognl@isNotEmpty(character_requirement)"> AND F_CHARACTER_REQUIREMENT  LIKE '%${character_requirement}%'  </if>
+			<if test="@Ognl@isNotEmpty(other_requirement)"> AND F_OTHER_REQUIREMENT  LIKE '%${other_requirement}%'  </if>
+			<if test="@Ognl@isNotEmpty(other_remark)"> AND F_OTHER_REMARK  LIKE '%${other_remark}%'  </if>
+			<if test="@Ognl@isNotEmpty(other_reason_content)"> AND F_OTHER_REASON_CONTENT  LIKE '%${other_reason_content}%'  </if>
+			<if test="@Ognl@isNotEmpty(age_limit)"> AND F_AGE_LIMIT  LIKE '%${age_limit}%'  </if>
+			<if test="@Ognl@isNotEmpty(age_least)"> AND F_AGE_LEAST  =#{age_least} </if>
+			<if test="@Ognl@isNotEmpty(age_most)"> AND F_AGE_MOST  =#{age_most} </if>
+			<if test="@Ognl@isNotEmpty(graduation_year)"> AND F_GRADUATION_YEAR  LIKE '%${graduation_year}%'  </if>
+			<if test="@Ognl@isNotEmpty(graduation_date)"> AND F_GRADUATION_DATE  LIKE '%${graduation_date}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.hr.RecruitmentApplication">
+		INSERT INTO W_RECRUITMENT_APPLICATION
+		(ID,
+		F_DECLARE_DEPARTMENTID,F_ACCOUNT,F_APPLICANT,F_DECLARE_DEPARTMENT,F_DECLARE_TIME,F_RECRUITMENT_METHOD,F_POSITION_WHEREABOUTS,F_RECRUITMENT_NUMBER,F_RECRUITMENT_PROFESSIONAL,F_USER_NUM,F_APPLI_REASON,F_SEX,F_MARRIAGE_STATUS,F_BIRTHPLACE,F_POLITICAL_STATUS,F_EDU_REQUIREMENT,F_LANGUAGE_REQIREMENT,F_DEGREE_REQUIREMENT,F_EXPERIENCE_REQIREMENT,F_SKILL_REQUIREMENT,F_CHARACTER_REQUIREMENT,F_OTHER_REQUIREMENT,F_OTHER_REMARK,F_OTHER_REASON_CONTENT,F_AGE_LIMIT,F_AGE_LEAST,F_AGE_MOST,F_GRADUATION_YEAR,F_GRADUATION_DATE)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{declare_departmentID,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{declare_department,jdbcType=VARCHAR}, #{declare_time,jdbcType=DATE}, #{recruitment_method,jdbcType=VARCHAR}, #{position_whereabouts,jdbcType=VARCHAR}, #{recruitment_number,jdbcType=NUMERIC}, #{recruitment_professional,jdbcType=VARCHAR}, #{user_num,jdbcType=VARCHAR}, #{appli_reason,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{marriage_status,jdbcType=VARCHAR}, #{birthplace,jdbcType=VARCHAR}, #{political_status,jdbcType=VARCHAR}, #{edu_requirement,jdbcType=VARCHAR}, #{language_reqirement,jdbcType=VARCHAR}, #{degree_requirement,jdbcType=VARCHAR}, #{experience_reqirement,jdbcType=VARCHAR}, #{skill_requirement,jdbcType=VARCHAR}, #{character_requirement,jdbcType=VARCHAR}, #{other_requirement,jdbcType=VARCHAR}, #{other_remark,jdbcType=VARCHAR}, #{other_reason_content,jdbcType=VARCHAR}, #{age_limit,jdbcType=VARCHAR}, #{age_least,jdbcType=NUMERIC}, #{age_most,jdbcType=NUMERIC}, #{graduation_year,jdbcType=VARCHAR}, #{graduation_date,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		DELETE FROM W_RECRUITMENT_APPLICATION 
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.hr.RecruitmentApplication">
+		UPDATE W_RECRUITMENT_APPLICATION SET
+		F_DECLARE_DEPARTMENTID=#{declare_departmentID,jdbcType=VARCHAR},
+		F_ACCOUNT=#{account,jdbcType=VARCHAR},
+		F_APPLICANT=#{applicant,jdbcType=VARCHAR},
+		F_DECLARE_DEPARTMENT=#{declare_department,jdbcType=VARCHAR},
+		F_DECLARE_TIME=#{declare_time,jdbcType=DATE},
+		F_RECRUITMENT_METHOD=#{recruitment_method,jdbcType=VARCHAR},
+		F_POSITION_WHEREABOUTS=#{position_whereabouts,jdbcType=VARCHAR},
+		F_RECRUITMENT_NUMBER=#{recruitment_number,jdbcType=NUMERIC},
+		F_RECRUITMENT_PROFESSIONAL=#{recruitment_professional,jdbcType=VARCHAR},
+		F_USER_NUM=#{user_num,jdbcType=VARCHAR},
+		F_APPLI_REASON=#{appli_reason,jdbcType=VARCHAR},
+		F_SEX=#{sex,jdbcType=VARCHAR},
+		F_MARRIAGE_STATUS=#{marriage_status,jdbcType=VARCHAR},
+		F_BIRTHPLACE=#{birthplace,jdbcType=VARCHAR},
+		F_POLITICAL_STATUS=#{political_status,jdbcType=VARCHAR},
+		F_EDU_REQUIREMENT=#{edu_requirement,jdbcType=VARCHAR},
+		F_LANGUAGE_REQIREMENT=#{language_reqirement,jdbcType=VARCHAR},
+		F_DEGREE_REQUIREMENT=#{degree_requirement,jdbcType=VARCHAR},
+		F_EXPERIENCE_REQIREMENT=#{experience_reqirement,jdbcType=VARCHAR},
+		F_SKILL_REQUIREMENT=#{skill_requirement,jdbcType=VARCHAR},
+		F_CHARACTER_REQUIREMENT=#{character_requirement,jdbcType=VARCHAR},
+		F_OTHER_REQUIREMENT=#{other_requirement,jdbcType=VARCHAR},
+		F_OTHER_REMARK=#{other_remark,jdbcType=VARCHAR},
+		F_OTHER_REASON_CONTENT=#{other_reason_content,jdbcType=VARCHAR},
+		F_AGE_LIMIT=#{age_limit,jdbcType=VARCHAR},
+		F_AGE_LEAST=#{age_least,jdbcType=NUMERIC},
+		F_AGE_MOST=#{age_most,jdbcType=NUMERIC},
+		F_GRADUATION_YEAR=#{graduation_year,jdbcType=VARCHAR},
+		F_GRADUATION_DATE=#{graduation_date,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="RecruitmentApplication">
+		SELECT <include refid="columns"/>
+		FROM W_RECRUITMENT_APPLICATION
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="RecruitmentApplication">
+		SELECT <include refid="columns"/>
+		FROM W_RECRUITMENT_APPLICATION a   
+		left join bpm_pro_run_his b on a.id=b.BUSINESSKEY
+		left join act_ru_task c on b.actinstid= c.PROC_INST_ID_
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="RecruitmentApplication">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_RECRUITMENT_APPLICATION A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtRecruitmentApplication">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_RECRUITMENT_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_RECRUITMENT_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_RECRUITMENT_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_RECRUITMENT_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_RECRUITMENT_APPLICATION A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="RecruitmentApplication">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_RECRUITMENT_APPLICATION A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

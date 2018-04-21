@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hotent.makshi.model.bidding.BiddingComplain">
+	<resultMap id="BiddingComplain" type="com.hotent.makshi.model.bidding.BiddingComplain">
+		<id property="id" column="ID" jdbcType="NUMERIC"/>
+		<result property="complain_first_check_personID" column="F_COMPLAIN_FIRST_CHECK_PERSONID" jdbcType="VARCHAR"/>
+		<result property="complain_name" column="F_COMPLAIN_NAME" jdbcType="VARCHAR"/>
+		<result property="complain_content" column="F_COMPLAIN_CONTENT" jdbcType="VARCHAR"/>
+		<result property="complain_unit" column="F_COMPLAIN_UNIT" jdbcType="VARCHAR"/>
+		<result property="complain_applicant" column="F_COMPLAIN_APPLICANT" jdbcType="VARCHAR"/>
+		<result property="complain_appli_date" column="F_COMPLAIN_APPLI_DATE" jdbcType="DATE"/>
+		<result property="complain_remarks" column="F_COMPLAIN_REMARKS" jdbcType="VARCHAR"/>
+		<result property="complain_first_check_person" column="F_COMPLAIN_FIRST_CHECK_PERSON" jdbcType="VARCHAR"/>
+		<result property="complain_attachment" column="F_COMPLAIN_ATTACHMENT" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<resultMap type="com.hotent.makshi.model.bidding.BiddingComplain" id="ExtBiddingComplain" extends="BiddingComplain">
+		<id property="taskId" column="TASK_ID" jdbcType="NUMERIC"/>
+		<id property="nodeId" column="TASK_DEF_KEY_" jdbcType="VARCHAR"/>
+		<id property="nodeName" column="NODE_NAME_" jdbcType="VARCHAR"/>
+		<id property="runId" column="FLOW_RUNID" jdbcType="NUMERIC"/>
+		<id property="actInstId" column="PROC_INST_ID_" jdbcType="NUMERIC"/>
+	</resultMap>
+
+	<sql id="columns">
+		ID,F_COMPLAIN_FIRST_CHECK_PERSONID,F_COMPLAIN_NAME,F_COMPLAIN_CONTENT,F_COMPLAIN_UNIT, F_COMPLAIN_APPLICANT,F_COMPLAIN_APPLI_DATE,F_COMPLAIN_REMARKS,F_COMPLAIN_FIRST_CHECK_PERSON,F_COMPLAIN_ATTACHMENT
+	</sql>
+	<sql id="wfColumns">
+		ID,F_COMPLAIN_FIRST_CHECK_PERSONID,F_COMPLAIN_NAME,F_COMPLAIN_CONTENT,F_COMPLAIN_UNIT,F_COMPLAIN_APPLICANT,F_COMPLAIN_APPLI_DATE,F_COMPLAIN_REMARKS,F_COMPLAIN_FIRST_CHECK_PERSON,F_COMPLAIN_ATTACHMENT
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+		finish = 1 AND deleted = 0
+			<if test="@Ognl@isNotEmpty(complain_first_check_personID)"> AND F_COMPLAIN_FIRST_CHECK_PERSONID  LIKE '%${complain_first_check_personID}%'  </if>
+			<if test="@Ognl@isNotEmpty(complain_name)"> AND F_COMPLAIN_NAME  LIKE '%${complain_name}%'  </if>
+			<if test="@Ognl@isNotEmpty(complain_content)"> AND F_COMPLAIN_CONTENT  LIKE '%${complain_content}%'  </if>
+			<if test="@Ognl@isNotEmpty(complain_unit)"> AND F_COMPLAIN_UNIT  LIKE '%${complain_unit}%'  </if>
+			<if test="@Ognl@isNotEmpty(complain_applicant)"> AND F_COMPLAIN_APPLICANT  LIKE '%${complain_applicant}%'  </if>
+			<if test="@Ognl@isNotEmpty(complain_appli_date)"> AND F_COMPLAIN_APPLI_DATE  =#{complain_appli_date} </if>
+			<if test="@Ognl@isNotEmpty(begincomplain_appli_date)"> AND F_COMPLAIN_APPLI_DATE  >=#{begincomplain_appli_date,jdbcType=DATE} </if>
+			<if test="@Ognl@isNotEmpty(endcomplain_appli_date)"> AND F_COMPLAIN_APPLI_DATE <![CDATA[ <=#{endcomplain_appli_date,jdbcType=DATE}]]> </if>
+			<if test="@Ognl@isNotEmpty(complain_remarks)"> AND F_COMPLAIN_REMARKS  LIKE '%${complain_remarks}%'  </if>
+			<if test="@Ognl@isNotEmpty(complain_first_check_person)"> AND F_COMPLAIN_FIRST_CHECK_PERSON  LIKE '%${complain_first_check_person}%'  </if>
+			<if test="@Ognl@isNotEmpty(complain_attachment)"> AND F_COMPLAIN_ATTACHMENT  LIKE '%${complain_attachment}%'  </if>
+		</where>
+	</sql>
+
+	<insert id="add" parameterType="com.hotent.makshi.model.bidding.BiddingComplain">
+		INSERT INTO W_BIDDING_COMPLAIN
+		(ID,
+		F_COMPLAIN_FIRST_CHECK_PERSONID,F_COMPLAIN_NAME,F_COMPLAIN_CONTENT,F_COMPLAIN_UNIT,F_COMPLAIN_APPLICANT,F_COMPLAIN_APPLI_DATE,F_COMPLAIN_REMARKS,F_COMPLAIN_FIRST_CHECK_PERSON,F_COMPLAIN_ATTACHMENT)
+		VALUES
+		(#{id,jdbcType=NUMERIC},
+		#{complain_first_check_personID,jdbcType=VARCHAR}, #{complain_name,jdbcType=VARCHAR}, #{complain_content,jdbcType=VARCHAR}, #{complain_unit,jdbcType=VARCHAR}, #{complain_applicant,jdbcType=VARCHAR}, #{complain_appli_date,jdbcType=DATE}, #{complain_remarks,jdbcType=VARCHAR}, #{complain_first_check_person,jdbcType=VARCHAR}, #{complain_attachment,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="delById" parameterType="java.lang.Long">
+		UPDATE W_BIDDING_COMPLAIN SET
+		DELETED = 1
+		WHERE
+		ID=#{id}
+	</delete>
+	
+	<update id="update" parameterType="com.hotent.makshi.model.bidding.BiddingComplain">
+		UPDATE W_BIDDING_COMPLAIN SET
+		F_COMPLAIN_FIRST_CHECK_PERSONID=#{complain_first_check_personID,jdbcType=VARCHAR},
+		F_COMPLAIN_NAME=#{complain_name,jdbcType=VARCHAR},
+		F_COMPLAIN_CONTENT=#{complain_content,jdbcType=VARCHAR},
+		F_COMPLAIN_UNIT=#{complain_unit,jdbcType=VARCHAR},
+		F_COMPLAIN_APPLICANT=#{complain_applicant,jdbcType=VARCHAR},
+		F_COMPLAIN_APPLI_DATE=#{complain_appli_date,jdbcType=DATE},
+		F_COMPLAIN_REMARKS=#{complain_remarks,jdbcType=VARCHAR},
+		F_COMPLAIN_FIRST_CHECK_PERSON=#{complain_first_check_person,jdbcType=VARCHAR},
+		F_COMPLAIN_ATTACHMENT=#{complain_attachment,jdbcType=VARCHAR}
+		WHERE
+		ID=#{id}
+	</update>
+	
+		    
+	<select id="getById" parameterType="java.lang.Long" resultMap="BiddingComplain">
+		SELECT <include refid="columns"/>
+		FROM W_BIDDING_COMPLAIN
+		WHERE
+		ID=#{id}
+	</select>
+	
+	<select id="getAll" resultMap="BiddingComplain">
+		SELECT <include refid="columns"/>
+		FROM W_BIDDING_COMPLAIN   
+		<include refid="dynamicWhere" />
+		<if test="@Ognl@isNotEmpty(orderField)">
+		order by ${orderField} ${orderSeq}
+		</if>
+		<if test="@Ognl@isEmpty(orderField)">
+		order by ID  desc
+		</if>
+	</select>
+	
+	
+	
+	<select id="getDraftByUser" resultMap="BiddingComplain">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_BIDDING_COMPLAIN A,BPM_PRO_RUN B
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.STATUS=4
+		and B.CREATORID=#{userId}
+		order by B.CREATETIME DESC
+	</select>
+	
+	
+	<select id="getMyTodoTask" resultMap="ExtBiddingComplain">
+		SELECT * FROM (
+		SELECT <include refid="wfColumns"/> ,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_COMPLAIN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ AND C.ASSIGNEE_=#{userId}
+		
+		union
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_COMPLAIN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ AND D.USER_ID_ = #{userId}
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_COMPLAIN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'org' and D.group_id_ in (select uo.orgid from SYS_USER_POS uo  where uo.userid= #{userId} )
+		
+		UNION
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_COMPLAIN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'role' and D.group_id_ in (select ur.roleid from sys_user_role ur where ur.userid=#{userId} )
+		
+		union 
+		
+		SELECT <include refid="wfColumns"/>,
+		C.ID_ TASK_ID,C.TASK_DEF_KEY_,B.RUNID FLOW_RUNID,C.PROC_INST_ID_,
+		C.NAME_ NODE_NAME_,C.CREATE_TIME_ TASK_CREATE_TIME_
+		FROM W_BIDDING_COMPLAIN A,BPM_PRO_RUN B ,
+		ACT_RU_TASK C,
+		ACT_RU_IDENTITYLINK D
+		WHERE A.ID=B.BUSINESSKEY_NUM AND B.ACTINSTID=C.PROC_INST_ID_ 
+		AND C.id_ = D.TASK_ID_ 
+		AND C.ASSIGNEE_ =0 and C.DESCRIPTION_!='39' 
+		AND D.type_ = 'pos' and D.group_id_ in (select up.posid from sys_user_pos up where up.userid= #{userId} )
+		
+		) tmp
+		
+		<where>
+			<if test="@Ognl@isNotEmpty(subject)"> AND upper(tmp.subject) LIKE #{subject}   </if>
+			<if test="@Ognl@isNotEmpty(processName)"> AND upper(tmp.processName) LIKE #{processName} </if>
+			<if test="@Ognl@isNotEmpty(creatorId)">AND tmp.creatorId =#{creatorId} </if>
+			<if test="@Ognl@isNotEmpty(beginCreateTime)">and tmp.TASK_CREATE_TIME_>=#{beginCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(endCreateTime)">and tmp.TASK_CREATE_TIME_ &lt;=#{endCreateTime,jdbcType=TIMESTAMP}</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				AND tmp.description_ = #{type}
+			</if>	
+			
+		</where>
+		<if test="@Ognl@isEmpty(orderField)">
+			order by tmp.TASK_CREATE_TIME_ desc
+		</if>
+		<if test="@Ognl@isNotEmpty(orderField)">
+			order by ${orderField} ${orderSeq}
+		</if>
+	</select>
+	
+	
+	<select id="getEndByUser" resultMap="BiddingComplain">
+		SELECT <include refid="wfColumns"/>  ,B.runId
+		FROM W_BIDDING_COMPLAIN A,BPM_PRO_RUN_HIS B
+		WHERE A.ID=B.BUSINESSKEY_NUM 
+		and B.CREATORID=#{userId} and B.STATUS=2
+		order by B.ENDTIME DESC
+	</select>
+	
+</mapper>

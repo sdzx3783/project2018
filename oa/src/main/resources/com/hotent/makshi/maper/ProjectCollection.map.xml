@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotent.makshi.model.project.ProjectCollection" >
+  <resultMap id="BaseResultMap" type="com.hotent.makshi.model.project.ProjectCollection" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, `state`, user_id, ctime
+  </sql>
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from w_project_collection
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="delById" parameterType="java.lang.Integer" >
+    delete from w_project_collection
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="add" parameterType="com.hotent.makshi.model.project.ProjectCollection" useGeneratedKeys="true" keyProperty="id" >
+    insert into w_project_collection (project_id, `state`, user_id, 
+      ctime)
+    values (#{projectId,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, 
+      #{ctime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="update" parameterType="com.hotent.makshi.model.project.ProjectCollection" >
+    update w_project_collection
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getByProjectIdAndUserId" resultMap="BaseResultMap">
+		SELECT <include refid="Base_Column_List"/>
+		FROM w_project_collection
+		where user_id=#{userId,jdbcType=BIGINT} and project_id=#{projectId,jdbcType=INTEGER}
+	</select>
+  
+</mapper>
